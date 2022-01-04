@@ -49,7 +49,7 @@
                 max-width="100%"
                 height="692"
                 class="auth-3d-group"
-                :src="require(`@/assets/images/3d-characters/group-${$vuetify.theme.dark ? 'dark' : 'light'}.png`)"
+                :src="require(`@/assets/images/3d-characters/illustration-forgot-password-${$vuetify.theme.dark ? 'dark' : 'light'}.png`)"
               ></v-img>
             </div>
           </div>
@@ -77,19 +77,19 @@
                   </p>
                 </v-card-text>
 
-                <v-card-text>
-                  <v-alert
-                    text
-                    color="primary"
-                  >
-                    <small class="d-block mb-1">
-                      Admin Email: <strong>admin@materio.com</strong> / Pass: <strong>admin</strong>
-                    </small>
-                    <small>
-                      Client Email: <strong>client@materio.com</strong> / Pass: <strong>client</strong>
-                    </small>
-                  </v-alert>
-                </v-card-text>
+<!--                <v-card-text>-->
+<!--                  <v-alert-->
+<!--                    text-->
+<!--                    color="primary"-->
+<!--                  >-->
+<!--                    <small class="d-block mb-1">-->
+<!--                      Admin Email: <strong>admin@materio.com</strong> / Pass: <strong>admin</strong>-->
+<!--                    </small>-->
+<!--                    <small>-->
+<!--                      Client Email: <strong>client@materio.com</strong> / Pass: <strong>client</strong>-->
+<!--                    </small>-->
+<!--                  </v-alert>-->
+<!--                </v-card-text>-->
 
                 <!-- login form -->
                 <v-card-text>
@@ -131,12 +131,12 @@
                       </v-checkbox>
 
                       <!-- forget link -->
-                      <router-link
-                        :to="{name:'auth-forgot-password'}"
-                        class="ms-3"
-                      >
-                        Forgot Password?
-                      </router-link>
+<!--                      <router-link-->
+<!--                        :to="{name:'auth-forgot-password'}"-->
+<!--                        class="ms-3"-->
+<!--                      >-->
+<!--                        Forgot Password?-->
+<!--                      </router-link>-->
                     </div>
 
                     <v-btn
@@ -151,35 +151,35 @@
                 </v-card-text>
 
                 <!-- create new account  -->
-                <v-card-text class="d-flex align-center justify-center flex-wrap mt-2">
-                  <p class="mb-0 me-2">
-                    New on our platform?
-                  </p>
-                  <router-link :to="{name:'auth-register'}">
-                    Create an account
-                  </router-link>
-                </v-card-text>
+<!--                <v-card-text class="d-flex align-center justify-center flex-wrap mt-2">-->
+<!--                  <p class="mb-0 me-2">-->
+<!--                    New on our platform?-->
+<!--                  </p>-->
+<!--                  <router-link :to="{name:'auth-register'}">-->
+<!--                    Create an account-->
+<!--                  </router-link>-->
+<!--                </v-card-text>-->
 
                 <!-- divider -->
-                <v-card-text class="d-flex align-center mt-2">
-                  <v-divider></v-divider>
-                  <span class="mx-5">or</span>
-                  <v-divider></v-divider>
-                </v-card-text>
+<!--                <v-card-text class="d-flex align-center mt-2">-->
+<!--                  <v-divider></v-divider>-->
+<!--                  <span class="mx-5">or</span>-->
+<!--                  <v-divider></v-divider>-->
+<!--                </v-card-text>-->
 
                 <!-- socail links -->
-                <v-card-actions class="d-flex justify-center">
-                  <v-btn
-                    v-for="link in socialLink"
-                    :key="link.icon"
-                    icon
-                    class="ms-1"
-                  >
-                    <v-icon :color="$vuetify.theme.dark ? link.colorInDark:link.color">
-                      {{ link.icon }}
-                    </v-icon>
-                  </v-btn>
-                </v-card-actions>
+<!--                <v-card-actions class="d-flex justify-center">-->
+<!--                  <v-btn-->
+<!--                    v-for="link in socialLink"-->
+<!--                    :key="link.icon"-->
+<!--                    icon-->
+<!--                    class="ms-1"-->
+<!--                  >-->
+<!--                    <v-icon :color="$vuetify.theme.dark ? link.colorInDark:link.color">-->
+<!--                      {{ link.icon }}-->
+<!--                    </v-icon>-->
+<!--                  </v-btn>-->
+<!--                </v-card-actions>-->
               </v-card>
             </v-col>
           </v-row>

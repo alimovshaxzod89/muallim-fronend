@@ -95,6 +95,20 @@ export const lengthValidator = (value, length) => {
 
   return value.length === length || `The Min Character field must be at least ${length} characters`
 }
+export const minLengthValidator = (value, length) => {
+  if (isEmpty(value)) {
+    return true
+  }
+
+  return value.length >= length || `Uzunlik belgilangan uzunlikdan kam bo'lmasligi kerak: ${length}`
+}
+export const maxLengthValidator = (value, length) => {
+  if (isEmpty(value)) {
+    return true
+  }
+
+  return value.length <= length || `Uzunlik belgilangan uzunlikdan ko'p bo'lmasligi kerak: ${length}`
+}
 export const alphaDashValidator = value => {
   if (isEmpty(value)) {
     return true

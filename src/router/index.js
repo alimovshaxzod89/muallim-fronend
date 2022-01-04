@@ -1,10 +1,11 @@
 import { canNavigate } from '@/plugins/acl/routeProtection'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import apps from './apps'
+// import apps from './apps'
 import dashboard from './dashboard'
-import pages from './pages'
-import userInterface from './user-interface'
+// import pages from './pages'
+import views from './views'
+// import userInterface from './user-interface'
 
 Vue.use(VueRouter)
 
@@ -17,10 +18,25 @@ const routes = [
       const userData = JSON.parse(localStorage.getItem('userData'))
       const userRole = userData && userData.role ? userData.role : null
 
-      if (userRole === 'admin') return { name: 'dashboard-crm' }
+      if (userRole === 'admin') return { name: 'dashboard-eCommerce' }
       if (userRole === 'client') return { name: 'page-access-control' }
 
       return { name: 'auth-login', query: to.query }
+    },
+  },
+  {
+    path: '/blank',
+    name: 'blank',
+    component: () => import('@/views/Blank.vue'),
+    meta: {
+      pageTitle: 'Jarayonda',
+      breadcrumb: [
+        {
+          text: 'Jarayonda',
+          active: true,
+        },
+      ],
+      protected: true,
     },
   },
   {
@@ -42,30 +58,41 @@ const routes = [
       redirectIfLoggedIn: true,
     },
   },
+  ...views,
+  // {
+  //   path: '/register',
+  //   name: 'auth-register',
+  //   component: () => import('@/views/Register.vue'),
+  //   meta: {
+  //     layout: 'blank',
+  //     resource: 'Public',
+  //     redirectIfLoggedIn: true,
+  //   },
+  // },
+  // {
+  //   path: '/forgot-password',
+  //   name: 'auth-forgot-password',
+  //   component: () => import('@/views/ForgotPassword.vue'),
+  //   meta: {
+  //     layout: 'blank',
+  //     resource: 'Public',
+  //     redirectIfLoggedIn: true,
+  //   },
+  // },
+  // ...dashboard,
+  // ...userInterface,
+  // ...apps,
+  // ...pages,
   {
-    path: '/register',
-    name: 'auth-register',
-    component: () => import('@/views/Register.vue'),
+    path: '/link',
+    name: 'link',
+    component: () => import('@/views/AdminLink.vue'),
     meta: {
-      layout: 'blank',
-      resource: 'Public',
-      redirectIfLoggedIn: true,
+      // protected: true,
+      layout: 'content',
+      // roles: ['admin', 'manager', 'operator']
     },
   },
-  {
-    path: '/forgot-password',
-    name: 'auth-forgot-password',
-    component: () => import('@/views/ForgotPassword.vue'),
-    meta: {
-      layout: 'blank',
-      resource: 'Public',
-      redirectIfLoggedIn: true,
-    },
-  },
-  ...dashboard,
-  ...userInterface,
-  ...apps,
-  ...pages,
   {
     path: '*',
     redirect: 'error-404',

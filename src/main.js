@@ -8,8 +8,11 @@ import './plugins/acl'
 import vuetify from './plugins/vuetify'
 import router from './router'
 import store from './store'
+import Toast from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
 
 Vue.config.productionTip = false
+Vue.use(Toast)
 
 new Vue({
   router,
