@@ -1,0 +1,268 @@
+<template>
+  <!-- form dialog -->
+  <v-dialog
+    v-model="show"
+    @keydown.esc="close()"
+    @click:outside="close()"
+    @keydown.enter="onSubmit()"
+    max-width="800px"
+    width="800px"
+  >
+    <v-card>
+      <v-form ref="form">
+        <v-card-title>
+          <span class="headline">Talabalar</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="4" class="pos-relative">
+                <span class="text-required">*</span>
+                <v-text-field
+                  type="text"
+                  label="FAMILIYA"
+                  v-model="formData.last_name"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="4">
+                <v-text-field
+                  type="text"
+                  label="ISM"
+                  v-model="formData.first_name"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="4">
+                <v-text-field
+                  type="text"
+                  label="SHARIFI"
+                  v-model="formData.middle_name"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="6">
+                <v-text-field
+                  type="phone"
+                  label="TELEFON"
+                  v-model="formData.phone"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="6">
+                <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                    class="my-date-picker"
+                      v-model="formData.birthday"
+                      label="TUG'ILGAN KUN"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      :rules="[required]"
+                      outlined
+                      clearable
+                      :append-icon="icons.mdiCalendar"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="formData.birthday"
+                    color="primary"
+                    @input="isDate = false"
+                    no-title
+                    :first-day-of-week="1"
+                    locale="ru-ru"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+
+              <v-col cols="6">
+                <v-autocomplete
+                  v-model="formData.region_id"
+                  item-text="name"
+                  item-value="id"
+                  label="TUMAN"
+                  dense
+                  outlined
+                  clearable
+                  class="align-start"
+                ></v-autocomplete>
+              </v-col>
+
+              <v-col cols="6">
+                <v-autocomplete
+                  v-model="formData.permanent_region"
+                  item-text="name"
+                  item-value="id"
+                  label="D.Y. TUMAN"
+                  dense
+                  outlined
+                  clearable
+                  class="align-start"
+                ></v-autocomplete>
+              </v-col>
+
+              <v-col cols="6">
+                <v-text-field
+                  type="text"
+                  label="MANZIL"
+                  v-model="formData.address"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="6">
+                <v-text-field
+                  type="text"
+                  label="D.Y. MANZILI"
+                  v-model="formData.permanent_address"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12">
+                <h4>Jinsi <span class="text-required">*</span></h4>
+                <v-radio-group
+                  v-model="radioGroup"
+                  class="mt-0"
+                  hide-details
+                >
+                  <v-radio
+                    v-for="n in 2"
+                    :key="n"
+                    :label="`Radio ${n}`"
+                    :value="n"
+                  ></v-radio>
+                </v-radio-group>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
+
+          <v-btn color="success" type="submit" @click.prevent="onSubmit()">Saqlash</v-btn>
+        </v-card-actions>
+      </v-form>
+    </v-card>
+  </v-dialog>
+</template>
+
+<script>
+import { mdiCalendar } from '@mdi/js'
+
+import store from '@/store'
+
+import { ref } from '@vue/composition-api'
+import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
+
+export default {
+  props: {
+    MODULE_NAME: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props, { emit }) {
+    //show, hide
+    const show = ref(false)
+    const formData = ref({ ...emptyFormData })
+    const form = ref(null)
+    const emptyFormData = {
+      id: null,
+    }
+    const picker = new Date().toISOString().substr(0, 10)
+    const isDate = ref(false)
+
+    const validate = () => {
+      form.value.validate()
+    }
+    const open = (id = null) => {
+      show.value = true
+      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](id)))
+    }
+    const close = () => {
+      show.value = false
+      formData.value = { ...emptyFormData }
+      form.value.resetValidation()
+    }
+    // on form submit
+    const onSubmit = () => {
+      if (formData.value.id) {
+        if (formData.value.rate.length >= 3 && formData.value.rate.length <= 6 && formData.value.date) {
+          store
+            .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
+            .then(message => {
+              close()
+              // emit('notify', { type: 'success', text: message })
+            })
+            .catch(error => {
+              console.log(error)
+              emit('notify', { type: 'error', text: error.message })
+            })
+        } else {
+          emit('notify', {
+            type: 'warning',
+            text: "Bo'limda xatolik! Bo'limlarni to'g'ri to'ldiring!",
+          })
+        }
+      } else {
+        if (formData.value.rate.length >= 3 && formData.value.rate.length <= 6 && formData.value.date) {
+          store
+            .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
+            .then(message => {
+              close()
+              // emit('notify', { type: 'success', text: message })
+            })
+            .catch(error => {
+              console.log(error)
+              emit('notify', { type: 'error', text: error.message })
+            })
+        } else {
+          emit('notify', {
+            type: 'warning',
+            text: "Bo'limda xatolik! Bo'limlarni to'gri to'ldiring!",
+          })
+        }
+      }
+    }
+
+    return {
+      form,
+      picker,
+      isDate,
+      required,
+      minLengthValidator,
+      maxLengthValidator,
+      formData,
+      validate,
+      show,
+      onSubmit,
+      open,
+      close,
+
+      icons: {
+        mdiCalendar,
+      },
+    }
+  },
+}
+</script>

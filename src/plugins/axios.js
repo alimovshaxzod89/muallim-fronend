@@ -1,11 +1,12 @@
 // axios
+import { baseUrl } from '@/App.vue'
 import axios from 'axios'
 import Vue from 'vue'
 
 const axiosIns = axios.create({
   // You can add your headers here
   // ================================
-  // baseURL: 'https://some-domain.com/api/',
+  baseURL: baseUrl,
   // timeout: 1000,
   // headers: {'X-Custom-Header': 'foobar'}
 })

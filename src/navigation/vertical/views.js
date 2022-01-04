@@ -1,23 +1,13 @@
 import {
-  mdiHomeOutline,
-  mdiClipboardEditOutline,
+  mdiAccountCheckOutline,
+  mdiAccountMultiple,
   mdiClipboardOutline,
   mdiFactory,
   mdiFileDocumentEdit,
-  mdiStoreOutline,
-  mdiDatabaseArrowLeftOutline,
-  mdiCurrencyUsd,
-  mdiAccountArrowLeftOutline,
-  mdiRecycle,
-  mdiBookmarkCheck,
+  mdiHomeOutline,
   mdiScaleBalance,
   mdiShieldAccount,
-  mdiUndoVariant,
-  mdiCartVariant,
   mdiViewHeadline,
-  mdiAccountReactivateOutline,
-  mdiAccountCheckOutline,
-  mdiAccountMultiple
 } from '@mdi/js'
 
 export default [
@@ -27,7 +17,7 @@ export default [
     to: 'dashboard-eCommerce',
   },
   {
-    title: 'Ro\'yxatlar',
+    title: "Ro'yxatlar",
     icon: mdiViewHeadline,
     children: [
       {
@@ -41,7 +31,7 @@ export default [
         to: 'manufacturer',
       },
       {
-        title: 'O\'lchov birliklari',
+        title: "O'lchov birliklari",
         icon: mdiScaleBalance,
         to: 'units',
       },
@@ -55,7 +45,7 @@ export default [
         icon: mdiAccountMultiple,
         to: 'clients',
       },
-    ]
+    ],
   },
   {
     title: 'Markaz ulushi',
@@ -68,9 +58,14 @@ export default [
     to: 'rate',
   },
   {
+    title: 'Talabalar',
+    icon: mdiFileDocumentEdit,
+    to: 'students',
+  },
+  {
     subheader: '#',
     badge: 'New',
-    bageColor: 'success'
+    bageColor: 'success',
   },
   {
     title: 'Admin',

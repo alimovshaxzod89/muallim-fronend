@@ -16,6 +16,14 @@ const views = [
     },
   },
   {
+    path: '/students',
+    name: 'students',
+    component: () => import('@/views/lists/students/StudentList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/center-profit',
     name: 'center-profit',
     component: () => import('@/views/report/CenterProfit.vue'),

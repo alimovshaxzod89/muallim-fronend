@@ -14,6 +14,8 @@
 </template>
 
 <script>
+export const baseUrl = 'http://127.0.0.1:8000/'
+
 // eslint-disable-next-line object-curly-newline
 import { computed } from '@vue/composition-api'
 // eslint-disable-next-line import/no-unresolved
@@ -59,3 +61,33 @@ export default {
   },
 }
 </script>
+
+<style>
+.my-date-picker {
+  height: 65px;
+}
+.my-date-picker .v-input__slot {
+  min-height: 40px !important;
+  margin-bottom: 4px;
+}
+.my-date-picker .v-input__control {
+  display: grid !important;
+  flex-direction: column !important;
+  height: 40px !important;
+}
+.my-date-picker .v-input__append-inner {
+  margin: auto;
+}
+.my-date-picker .v-label {
+  top: 10px;
+}
+.my-date-picker .v-label--active {
+  transform: translateY(-17px) scale(0.75);
+}
+.text-required {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #ea5455 !important;
+}
+</style>

@@ -1,8 +1,6 @@
 import { canNavigate } from '@/plugins/acl/routeProtection'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import apps from './apps'
-import dashboard from './dashboard'
 // import pages from './pages'
 import views from './views'
 // import userInterface from './user-interface'
