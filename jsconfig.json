@@ -11,6 +11,9 @@
             "@themeConfig": [
                 "themeConfig.js"
             ],
+            "@envParams": [
+                ".env.js"
+            ],
             "@axios": [
                 "src/plugins/axios.js"
             ],

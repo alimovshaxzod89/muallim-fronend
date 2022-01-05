@@ -14,7 +14,6 @@
 </template>
 
 <script>
-export const baseUrl = 'http://127.0.0.1:8000/'
 
 // eslint-disable-next-line object-curly-newline
 import { computed } from '@vue/composition-api'

@@ -9,6 +9,7 @@ module.exports = {
     resolve: {
       alias: {
         '@themeConfig': path.resolve(__dirname, 'themeConfig.js'),
+        '@envParams': path.resolve(__dirname, '.env.js'),
         '@core': path.resolve(__dirname, 'src/@core'),
         '@axios': path.resolve(__dirname, 'src/plugins/axios.js'),
         '@user-variables': path.resolve(__dirname, 'src/styles/variables.scss'),
