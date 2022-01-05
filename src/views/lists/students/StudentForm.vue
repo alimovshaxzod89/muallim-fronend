@@ -16,12 +16,12 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="4" class="pos-relative">
-                <span class="text-required">*</span>
+              <v-col cols="4">
+                <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-text-field
                   type="text"
-                  label="FAMILIYA"
-                  v-model="formData.last_name"
+                  label="ISM"
+                  v-model="formData.first_name"
                   outlined
                   dense
                   required
@@ -29,10 +29,11 @@
               </v-col>
 
               <v-col cols="4">
+                <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-text-field
                   type="text"
-                  label="ISM"
-                  v-model="formData.first_name"
+                  label="FAMILIYA"
+                  v-model="formData.last_name"
                   outlined
                   dense
                   required
@@ -52,6 +53,7 @@
 
               <v-col cols="6">
                 <v-text-field
+                  prefix="+998"
                   type="phone"
                   label="TELEFON"
                   v-model="formData.phone"
@@ -66,7 +68,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                     class="my-date-picker"
-                      v-model="formData.birthday"
+                      v-model="formData.birth_date"
                       label="TUG'ILGAN KUN"
                       readonly
                       v-bind="attrs"
@@ -78,7 +80,7 @@
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    v-model="formData.birthday"
+                    v-model="formData.birth_date"
                     color="primary"
                     @input="isDate = false"
                     no-title
@@ -91,6 +93,7 @@
               <v-col cols="6">
                 <v-autocomplete
                   v-model="formData.region_id"
+                  :items="regions"
                   item-text="name"
                   item-value="id"
                   label="TUMAN"
@@ -103,7 +106,8 @@
 
               <v-col cols="6">
                 <v-autocomplete
-                  v-model="formData.permanent_region"
+                  v-model="formData.permanent_region_id"
+                  :items="regions"
                   item-text="name"
                   item-value="id"
                   label="D.Y. TUMAN"
@@ -129,27 +133,50 @@
                 <v-text-field
                   type="text"
                   label="D.Y. MANZILI"
-                  v-model="formData.permanent_address"
+									v-model="formData.permanent_address"
                   outlined
                   dense
                   required
-                ></v-text-field>
+								></v-text-field>
               </v-col>
 
               <v-col cols="12">
-                <h4>Jinsi <span class="text-required">*</span></h4>
+                <h4 class="text-required">Jinsi <span>*</span></h4>
                 <v-radio-group
-                  v-model="radioGroup"
-                  class="mt-0"
+									v-model="formData.gender"
+									column
+                  hide-details=""
+									class="mt-0"
+								>
+									<v-radio
+										label="Erkak"
+										:value="1"
+									></v-radio>
+									<v-radio
+										label="Ayol"
+										:value="2"
+									></v-radio>
+								</v-radio-group>
+              </v-col>
+
+              <v-col cols="12">
+                <v-checkbox
+                  v-model="formData.sale"
                   hide-details
-                >
-                  <v-radio
-                    v-for="n in 2"
-                    :key="n"
-                    :label="`Radio ${n}`"
-                    :value="n"
-                  ></v-radio>
-                </v-radio-group>
+                  label="CHEGIRMA"
+                  @change="changeSale()"
+                ></v-checkbox>
+              </v-col>
+
+              <v-col cols="12" v-if="formData.sale">
+                <v-textarea
+                  v-model="formData.sale_cause"
+                  label="CHEGIRMA SABABI"
+                  hide-details
+                  outlined
+                  clearable
+                  class="mt-0"
+                ></v-textarea>
               </v-col>
             </v-row>
           </v-container>
@@ -158,7 +185,6 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-
           <v-btn color="success" type="submit" @click.prevent="onSubmit()">Saqlash</v-btn>
         </v-card-actions>
       </v-form>
@@ -170,8 +196,9 @@
 import { mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
+import axios from '@axios'
 
-import { ref } from '@vue/composition-api'
+import { ref, onMounted } from '@vue/composition-api'
 import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
 
 export default {
@@ -188,6 +215,18 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
+      first_name: null,
+      last_name: null,
+      middle_name: null,
+      phone: null,
+      birth_date: null,
+      region_id: null,
+      permanent_region_id: null,
+      address: null,
+      permanent_address: null,
+      gender: null,
+      sale: false,
+      sale_cause: null,
     }
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
@@ -207,7 +246,7 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.rate.length >= 3 && formData.value.rate.length <= 6 && formData.value.date) {
+        if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
             .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
@@ -225,7 +264,7 @@ export default {
           })
         }
       } else {
-        if (formData.value.rate.length >= 3 && formData.value.rate.length <= 6 && formData.value.date) {
+        if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
             .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
             .then(message => {
@@ -244,6 +283,26 @@ export default {
         }
       }
     }
+    // Load regions
+    const regions = ref()
+    const loadRegions = () => {
+      axios.get('/api/regions').then(response => {
+        if (response.data.success) {
+          regions.value = response.data.data
+        }
+      })
+    }
+
+    onMounted(() => {
+      loadRegions()
+    })
+
+    // Watch
+    const changeSale = () => {
+      if (formData.value.sale === false) {
+        formData.value.sale_cause = ''
+      }
+    }
 
     return {
       form,
@@ -258,6 +317,8 @@ export default {
       onSubmit,
       open,
       close,
+      regions,
+      changeSale,
 
       icons: {
         mdiCalendar,

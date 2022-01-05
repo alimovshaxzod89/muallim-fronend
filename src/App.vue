@@ -62,7 +62,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .my-date-picker {
   height: 65px;
 }
@@ -85,9 +85,21 @@ export default {
   transform: translateY(-17px) scale(0.75);
 }
 .text-required {
+  position: relative;
+  display: inline-block;
+  span {
+    position: absolute;
+    top: 0;
+    right: -10px;
+    color: #ea5455 !important;
+  }
+}
+.no-texts {
   position: absolute;
-  top: 0;
-  right: 0;
-  color: #ea5455 !important;
+  width: 0;
+  height: 0;
+  span {
+    top: -18px;
+  }
 }
 </style>

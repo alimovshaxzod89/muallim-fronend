@@ -64,7 +64,7 @@
           <!-- image -->
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="openPhoto(item.id)">
                 <v-icon size="18">
                   {{ icons.mdiImageEditOutline }}
                 </v-icon>
@@ -79,6 +79,14 @@
         {{ item.gender === 1 ? 'Erkak' : 'Ayol' }}
       </template>
 
+      <template #[`item.photo`]="{ item }">
+        <img
+          class="img-user"
+          :src="item.photo ? 'storage/' + item.photo : require(`@/assets/images/user-image.png`)"
+          alt="Avatar"
+        />
+      </template>
+
       <template #[`item.sale`]="{ item }">
         {{ item.sale ? 'Ha' : 'Yo\'q' }}
       </template>
@@ -88,6 +96,12 @@
 
     <student-form
       ref="studentForm"
+      :MODULE_NAME="MODULE_NAME"
+      v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
+    />
+
+    <student-photo
+      ref="studentPhoto"
       :MODULE_NAME="MODULE_NAME"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
@@ -114,11 +128,13 @@ import StudentStoreModule from './StudentStoreModule'
 // composition function
 import useStudentList from './useStudentList'
 import StudentForm from './StudentForm'
+import StudentPhoto from './StudentPhoto'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 export default {
   components: {
     StudentForm,
+    StudentPhoto,
     DialogConfirm,
   },
   setup() {
@@ -163,6 +179,12 @@ export default {
       studentForm.value.open(id)
     }
 
+    //Photo
+    const studentPhoto = ref(null)
+    const openPhoto = id => {
+      studentPhoto.value.open(id)
+    }
+
     //Delete Confirm Dialog
     const dialogConfirm = ref(null)
     const confirmDelete = id => {
@@ -192,7 +214,9 @@ export default {
       confirmDelete,
 
       studentForm,
+      studentPhoto,
       openForm,
+      openPhoto,
 
       MODULE_NAME,
 
@@ -224,5 +248,11 @@ export default {
   .data-list-search {
     max-width: 10.625rem;
   }
+}
+.img-user {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  object-fit: cover;
 }
 </style>
