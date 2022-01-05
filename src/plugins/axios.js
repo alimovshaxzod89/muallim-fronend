@@ -3,8 +3,8 @@ import envParams from '@envParams'
 import axios from 'axios'
 import Vue from 'vue'
 
-console.log(envParams.BASE_URL)
-console.log(process.env.VUE_APP_SOMEKEY)
+// console.log(envParams.BASE_URL)
+// console.log(process.env.VUE_APP_SOMEKEY)
 
 const axiosIns = axios.create({
   // You can add your headers here
