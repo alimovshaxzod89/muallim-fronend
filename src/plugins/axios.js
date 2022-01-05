@@ -28,6 +28,19 @@ axiosIns.interceptors.request.use(
   error => Promise.reject(error),
 )
 
+axiosIns.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 401) {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('userData')
+      localStorage.removeItem('userAbility')
+    } else {
+      Promise.reject(error)
+    }
+  },
+)
+
 Vue.prototype.$http = axiosIns
 
 export default axiosIns

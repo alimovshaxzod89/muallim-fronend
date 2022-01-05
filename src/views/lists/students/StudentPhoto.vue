@@ -24,9 +24,7 @@
                   <canvas v-show="!visibleCamera" ref="canvas"></canvas>
                 </div>
                 <img class="user-src" :src="this.url" alt="Avatar" v-if="!cameraShow" v-show="this.url" />
-                <button class="btn btn-danger delete-image" v-show="selectedAvatar && !cameraShow" @click="deleteImage">
-                  <feather-icon icon="TrashIcon" />
-                </button>
+                <button class="btn btn-danger delete-image" v-show="selectedAvatar && !cameraShow" @click="deleteImage"></button>
               </div>
               <div class="webcam-buttons">
                 <button v-show="!visibleCamera" class="btn btn-warning" @click="reCapture">Qayta olish</button>
@@ -37,7 +35,7 @@
                   Suratga olish bo'limi
                 </button>
                 <input id="fileUpload" type="file" accept="image/*" hidden @click="fileUpload" @change="fileUpload" />
-                <label class="btn btn-outline-info" for="fileUpload" v-show="visibleCamera">
+                <label class="outlined secondary" for="fileUpload" v-show="visibleCamera">
                   Tanlash
                 </label>
               </div>
@@ -254,6 +252,9 @@ export default {
       fileUpload,
       deleteImage,
       submitPhoto,
+      getBase64,
+      hideCamera,
+      openUserImage,
     }
   },
 }

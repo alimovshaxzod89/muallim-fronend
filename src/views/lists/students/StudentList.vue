@@ -70,7 +70,7 @@
                 </v-icon>
               </v-btn>
             </template>
-            <span>Rasm tanlash</span>
+            <span>Suratni tanlash</span>
           </v-tooltip>
         </div>
       </template>
