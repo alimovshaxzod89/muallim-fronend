@@ -1,12 +1,15 @@
 // axios
-import { baseUrl } from '@/App.vue'
+import envParams from '@envParams'
 import axios from 'axios'
 import Vue from 'vue'
+
+console.log(envParams.BASE_URL)
+console.log(process.env.VUE_APP_SOMEKEY)
 
 const axiosIns = axios.create({
   // You can add your headers here
   // ================================
-  baseURL: baseUrl,
+  baseURL: envParams.BASE_URL,
   // timeout: 1000,
   // headers: {'X-Custom-Header': 'foobar'}
 })
