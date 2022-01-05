@@ -1,6 +1,7 @@
 <template>
   <!-- photo dialog -->
   <v-dialog
+    ref="studentPhoto"
     v-model="show"
     @click:outside="close()"
     @keydown.esc="close()"
@@ -23,31 +24,27 @@
                   <video v-show="visibleCamera" ref="video" width="400" height="300" autoplay></video>
                   <canvas v-show="!visibleCamera" ref="canvas"></canvas>
                 </div>
-                <img class="user-src" :src="this.url" alt="Avatar" v-if="!cameraShow" v-show="this.url" />
-                <button class="btn btn-danger delete-image" v-show="selectedAvatar && !cameraShow" @click="deleteImage"></button>
+                <img class="user-src" :src="url" alt="Avatar" v-if="!cameraShow" v-show="url" />
+                <v-btn class="error delete-image" v-show="selectedAvatar && !cameraShow" @click="deleteImage">O'chirish</v-btn>
               </div>
               <div class="webcam-buttons">
-                <button v-show="!visibleCamera" class="btn btn-warning" @click="reCapture">Qayta olish</button>
-                <button v-if="cameraShow" v-show="visibleCamera" class="btn btn-success" @click="capturePhoto">
-                  Suratga olish
-                </button>
-                <button v-if="!cameraShow" v-show="visibleCamera" class="btn btn-success" @click="startWebCamera">
-                  Suratga olish bo'limi
-                </button>
+                <v-btn v-show="!visibleCamera" class="warning" @click.prevent="reCapture">QAYTA OLISH</v-btn>
+                <v-btn v-if="cameraShow" v-show="visibleCamera" class="primary" @click="capturePhoto">SURATGA OLISH</v-btn>
+                <v-btn v-if="!cameraShow" v-show="visibleCamera" class="primary" @click="startWebCamera">SURATGA OLISH BO'LIMI</v-btn>
                 <input id="fileUpload" type="file" accept="image/*" hidden @click="fileUpload" @change="fileUpload" />
-                <label class="outlined secondary" for="fileUpload" v-show="visibleCamera">
-                  Tanlash
-                </label>
+                <v-btn color="info" outlined v-show="visibleCamera">
+									<label class="photo-label" for="fileUpload">TANLASH</label>
+								</v-btn>
               </div>
 
             </v-row>
           </v-container>
         </v-card-text>
-
-        <v-card-actions>
+				<hr>
+        <v-card-actions class="pt-5">
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-          <v-btn color="success" type="submit" @click.prevent="onSubmit()">Saqlash</v-btn>
+          <v-btn color="success" type="submit" @click.prevent="submitPhoto()">Saqlash</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -56,6 +53,7 @@
 
 <script>
 import store from '@/store'
+import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
 
@@ -70,10 +68,10 @@ export default {
     //show, hide
     const show = ref(false)
     const form = ref(null)
-    const open = (id = null) => {
-      show.value = true
-      // if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](id)))
-    }
+    // const open = (id = null) => {
+    //   show.value = true
+    //   if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](id)))
+    // }
     const close = () => {
       show.value = false
     }
@@ -87,6 +85,7 @@ export default {
 
     const camera = ref(null)
     const canvas = ref(null)
+    const video = ref(null)
     const avatar = ref(null)
     const studentInfo = ref(null)
 
@@ -100,49 +99,49 @@ export default {
       })
     }
     const fileUpload = e => {
-      this.hideCamera()
-      this.cameraShow = false
-      this.camera = null
-      this.canvas = null
-      this.visibleCamera = true
+      hideCamera()
+      cameraShow.value = false
+      camera.value = null
+      canvas.value = null
+      visibleCamera.value = true
 
       let file = e.target.files[0]
-      this.getBase64(file).then(data => ((this.avatar = data), (this.url = URL.createObjectURL(file))))
+      getBase64(file).then(data => ((avatar.value = data), (url.value = URL.createObjectURL(file))))
     }
     const hideCamera = () => {
-      if (this.camera ? this.camera.srcObject.getTracks()[0] : false) {
-        this.camera.srcObject.getTracks()[0].stop()
+      if (camera.value ? camera.value.srcObject.getTracks()[0] : false) {
+        camera.value.srcObject.getTracks()[0].stop()
       }
-      if (this.camera ? this.camera.srcObject.getTracks()[1] : false) {
-        this.camera.srcObject.getTracks()[1].stop()
+      if (camera.value ? camera.value.srcObject.getTracks()[1] : false) {
+        camera.value.srcObject.getTracks()[1].stop()
       }
     }
     const openUserImage = student => {
-      this.studentInfo = student
-      this.$refs['my-photo-modal'].show()
+      studentInfo.value = student
+      show.value = true
       if (student.photo) {
-        this.url = 'storage/' + student.photo
-        this.selectedAvatar = true
+        url.value = 'storage/' + student.photo
+        selectedAvatar.value = true
       } else {
-        this.url = require(`@/assets/images/user-image.png`)
-        this.selectedAvatar = false
+        url.value = require(`@/assets/images/user-image.png`)
+        selectedAvatar.value = false
       }
     }
     const startWebCamera = () => {
-      this.cameraShow = true
+      cameraShow.value = true
       const modalShow = new Promise(resolve => {
-        this.$refs['my-photo-modal'].show()
+        show.value = true
         resolve()
       })
 
       modalShow.then(res => {
-        this.camera = this.$refs['video']
+        camera.value = video.value
 
         if (navigator.mediaDevices.getUserMedia) {
           navigator.mediaDevices
             .getUserMedia({ video: true })
             .then(stream => {
-              this.camera.srcObject = stream
+              camera.value.srcObject = stream
             })
             .catch(error => {
               console.log('Something went wrong!', error)
@@ -151,42 +150,40 @@ export default {
       })
     }
     const stopWebCamera = () => {
-      this.$refs['my-photo-modal'].hide()
+      show.value = false
 
-      this.hideCamera()
+      hideCamera()
 
-      this.url = null
-      this.cameraShow = false
-      this.camera = null
-      this.canvas = null
-      this.avatar = null
-      this.visibleCamera = true
-      this.studentInfo = null
-      this.selectedAvatar = false
+      url.value = null
+      cameraShow.value = false
+      camera.value = null
+      canvas.value = null
+      avatar.value = null
+      visibleCamera.value = true
+      studentInfo.value = null
+      selectedAvatar.value = false
     }
     const capturePhoto = () => {
-      let canvas = this.$refs['canvas']
+      canvas.value.width = 400
+      canvas.value.height = 300
+      canvas.value.getContext('2d').drawImage(camera.value, 0, 0, 400, 300)
+      avatar.value = canvas.value.toDataURL('image/png')
 
-      canvas.width = 400
-      canvas.height = 300
-      canvas.getContext('2d').drawImage(this.camera, 0, 0, 400, 300)
-      this.avatar = canvas.toDataURL('image/png')
-
-      if (canvas.width) {
-        this.visibleCamera = false
-        this.hideCamera()
+      if (canvas.value.width) {
+        visibleCamera.value = false
+        hideCamera()
       }
     }
     const reCapture = () => {
-      this.visibleCamera = true
-      this.avatar = null
-      this.camera = this.$refs['video']
+      visibleCamera.value = true
+      avatar.value = null
+      camera.value = video.value
 
       if (navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices
           .getUserMedia({ video: true })
           .then(stream => {
-            this.camera.srcObject = stream
+            camera.value.srcObject = stream
           })
           .catch(error => {
             console.log('Something went wrong!', error)
@@ -194,38 +191,59 @@ export default {
       }
     }
     const submitPhoto = () => {
-      if (this.studentInfo && this.avatar) {
-        put('/students/' + this.studentInfo.id, {
-          first_name: this.studentInfo.first_name,
-          image: this.avatar ? this.avatar : null,
-        }).then(res => {
-          if (res.data.success) {
-            this.stopWebCamera()
-            this.loadStudents((this.page - 1) * this.limit)
-            this.nofity('Success', 'Muvaffaqiyatli', 'success')
-          }
-        })
-      } else if (!this.avatar) {
-        this.stopWebCamera()
-        this.loadStudents((this.page - 1) * this.limit)
-        this.nofity('Success', 'Muvaffaqiyatli', 'success')
+      if (studentInfo.value && avatar.value) {
+        console.log(studentInfo)
+        const newInfo = {
+          ...studentInfo.value,
+          // photo: avatar.value ? avatar.value : null,
+          photo: url.value ? url.value : null,
+        }
+        console.log(newInfo)
+        store
+          .dispatch(`${props.MODULE_NAME}/updateRow`, newInfo)
+          .then(res => {
+            stopWebCamera()
+            emit('notify', { type: 'success', text: 'Muvaffaqiyatli' })
+          })
+          .catch(error => {
+            console.log(error)
+            emit('notify', { type: 'error', text: error.message })
+          })
+        // axios
+        //   .put('students/' + studentInfo.value.id, {
+        //     first_name: studentInfo.value.first_name,
+        //     image: avatar.value ? avatar.value : null,
+        //   })
+        //   .then(res => {
+        //     if (res.data.success) {
+        //       stopWebCamera()
+        //       // loadStudents((page.value - 1) * limit.value)
+        //       emit('notify', { type: 'success', text: 'Muvaffaqiyatli' })
+        //     }
+        //   })
+      } else if (!avatar.value) {
+        stopWebCamera()
+        // loadStudents((this.page - 1) * this.limit)
+        emit('notify', { type: 'success', text: 'Muvaffaqiyatli' })
       } else {
-        this.nofity('Xato', 'Suratga olinmadi!', 'danger')
+        emit('notify', { type: 'warning', text: 'Suratga olinmadi!' })
       }
     }
     const deleteImage = () => {
-      put('/students/' + this.studentInfo.id, {
-        first_name: this.studentInfo.first_name,
-        photo: null,
-      }).then(response => {
-        if (response.data.success) {
-          this.nofity('Success', 'Muvaffaqiyatli', 'success')
-          this.url = require(`@/assets/images/user-image.png`)
-          this.$refs['my-modal'].hide()
-          this.selectedAvatar = false
-          this.avatar = null
-        }
-      })
+      axios
+        .put('students/' + studentInfo.value.id, {
+          first_name: studentInfo.value.first_name,
+          photo: null,
+        })
+        .then(response => {
+          if (response.data.success) {
+            emit('notify', { type: 'success', text: 'Muvaffaqiyatli' })
+            url.value = require(`@/assets/images/user-image.png`)
+            // $refs['my-modal'].hide()
+            selectedAvatar.value = false
+            avatar.value = null
+          }
+        })
     }
 
     return {
@@ -242,6 +260,7 @@ export default {
       camera,
       canvas,
       avatar,
+      video,
       studentInfo,
 
       // Photo functions
@@ -298,5 +317,21 @@ label[for='fileUpload'] {
   top: 10px;
   right: 40px;
   border: 3px solid #fff !important;
+}
+
+.image-center {
+  width: 100%;
+}
+.photo-label {
+  cursor: pointer;
+}
+.webcam-buttons {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 20px auto 5px auto;
+}
+.webcam-buttons button {
+  margin-right: 15px;
 }
 </style>

@@ -64,7 +64,7 @@
           <!-- image -->
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openPhoto(item.id)">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="openPhoto(item)">
                 <v-icon size="18">
                   {{ icons.mdiImageEditOutline }}
                 </v-icon>
@@ -181,8 +181,8 @@ export default {
 
     //Photo
     const studentPhoto = ref(null)
-    const openPhoto = id => {
-      studentPhoto.value.open(id)
+    const openPhoto = item => {
+      studentPhoto.value.openUserImage(item)
     }
 
     //Delete Confirm Dialog
