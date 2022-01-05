@@ -76,160 +76,160 @@ import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 
 export default {
-	name: 'TeacherPaidForm',
-	components: {
-		BTable,
-		BFormSelect,
-		BCard,
-		BButton,
-		BFormGroup,
-		BFormInput,
-		BModal,
-		BFormDatepicker,
-		Multiselect
-	},
-	data() {
-		return {
-			date: null,
-			note: null,
-			amount: null,
-			teacher_id: null,
-			teacher_paid_id: null,
-			errors: {
-				amount: null,
-				date: null,
-				teacher_id: null
-			},
-			options: {
-				teachers: []
-			},
-			date: null
-		}
-	},
-	watch: {
-		amount() {
-			this.resetErrors()
-		},
-		date() {
-			this.resetErrors()
-			// this.$parent.filters.month = new Date(this.date).getMonth() + 1
-			// this.$parent.loadTeacherPaids()
-		},
-		teacher_id() {
-			this.resetErrors()
-			// this.$parent.filters.teacher_id = this.teacher_id
-			// this.$parent.loadTeacherPaids()
-		}
-	},
-	mounted() {
-		this.loadTeachers()
-	},
-	methods: {
-		clearDate(input) {
-			this[input] = null
-		},
-		resetErrors() {
-			this.errors.teacher_id = this.errors.date = this.errors.amount = null
-		},
-		loadTeachers() {
-			axios.get('/api/teachers').then(response => {
-				if (response.status === 200) {
-					this.options.teachers = response.data.data
-				}
-			})
-		},
-		open(attr = {}) {
-			this.$refs['my-modal'].show()
-			if (attr) {
-				this.teacher_id = attr.teacher_id
-				this.date = attr.date
-				this.amount = attr.amount
-				this.note = attr.note
-				this.teacher_paid_id = attr.teacher_paid_id
-			}
-		},
-		storePaid(params) {
-			axios
-				.post('/api/teacher-paids', params)
-				.then(res => {
-					if (res.status === 200) {
-						this.$refs['my-modal'].hide()
-						this.$parent.loadTeacherPaids()
-						this.$toast({
-							component: ToastificationContent,
-							props: {
-								title: 'Notification',
-								icon: 'BellIcon',
-								text: 'Muvaffaqiyatli',
-								variant: 'success'
-							}
-						})
-					}
-				})
-				.catch(err => {
-					console.log(err)
-				})
-		},
-		resetModal() {
-			this.date = null
-			this.amount = null
-			this.note = null
-			this.teacher_id = null
-			this.teacher_paid_id = null
-		},
-		updatePaid(params) {
-			axios
-				.put(`/api/teacher-paids/${this.teacher_paid_id}`, params)
-				.then(res => {
-					if (res.status === 200) {
-						this.$refs['my-modal'].hide()
-						this.$parent.loadTeacherPaids()
-						this.$toast({
-							component: ToastificationContent,
-							props: {
-								title: 'Notification',
-								icon: 'BellIcon',
-								text: 'Muvaffaqiyatli',
-								variant: 'success'
-							}
-						})
-						this.resetModal()
-					}
-				})
-				.catch(err => {
-					console.log(err)
-				})
-		},
-		handleForm(e) {
-			e.preventDefault()
-			if (!this.amount) this.errors.amount = "Summa ni to'ldiring"
-			if (!this.date) this.errors.date = "Sa'na ni to'ldiring"
-			if (!this.teacher_id) this.errors.teacher_id = "O'qituvchi ni tanlang"
-			if (this.errors.amount || this.errors.date || this.errors.teacher_id) {
-				this.$toast({
-					component: ToastificationContent,
-					props: {
-						title: 'Xatolik',
-						icon: 'BellIcon',
-						text: "Iltimos xato to'g'irlang",
-						variant: 'danger'
-					}
-				})
-				return
-			}
+  name: 'TeacherPaidForm',
+  components: {
+    BTable,
+    BFormSelect,
+    BCard,
+    BButton,
+    BFormGroup,
+    BFormInput,
+    BModal,
+    BFormDatepicker,
+    Multiselect,
+  },
+  data() {
+    return {
+      date: null,
+      note: null,
+      amount: null,
+      teacher_id: null,
+      teacher_paid_id: null,
+      errors: {
+        amount: null,
+        date: null,
+        teacher_id: null,
+      },
+      options: {
+        teachers: [],
+      },
+      date: null,
+    }
+  },
+  watch: {
+    amount() {
+      this.resetErrors()
+    },
+    date() {
+      this.resetErrors()
+      // this.$parent.filters.month = new Date(this.date).getMonth() + 1
+      // this.$parent.loadTeacherPaids()
+    },
+    teacher_id() {
+      this.resetErrors()
+      // this.$parent.filters.teacher_id = this.teacher_id
+      // this.$parent.loadTeacherPaids()
+    },
+  },
+  mounted() {
+    this.loadTeachers()
+  },
+  methods: {
+    clearDate(input) {
+      this[input] = null
+    },
+    resetErrors() {
+      this.errors.teacher_id = this.errors.date = this.errors.amount = null
+    },
+    loadTeachers() {
+      axios.get('teachers').then(response => {
+        if (response.status === 200) {
+          this.options.teachers = response.data.data
+        }
+      })
+    },
+    open(attr = {}) {
+      this.$refs['my-modal'].show()
+      if (attr) {
+        this.teacher_id = attr.teacher_id
+        this.date = attr.date
+        this.amount = attr.amount
+        this.note = attr.note
+        this.teacher_paid_id = attr.teacher_paid_id
+      }
+    },
+    storePaid(params) {
+      axios
+        .post('teacher-paids', params)
+        .then(res => {
+          if (res.status === 200) {
+            this.$refs['my-modal'].hide()
+            this.$parent.loadTeacherPaids()
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Notification',
+                icon: 'BellIcon',
+                text: 'Muvaffaqiyatli',
+                variant: 'success',
+              },
+            })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    resetModal() {
+      this.date = null
+      this.amount = null
+      this.note = null
+      this.teacher_id = null
+      this.teacher_paid_id = null
+    },
+    updatePaid(params) {
+      axios
+        .put(`teacher-paids/${this.teacher_paid_id}`, params)
+        .then(res => {
+          if (res.status === 200) {
+            this.$refs['my-modal'].hide()
+            this.$parent.loadTeacherPaids()
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Notification',
+                icon: 'BellIcon',
+                text: 'Muvaffaqiyatli',
+                variant: 'success',
+              },
+            })
+            this.resetModal()
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    handleForm(e) {
+      e.preventDefault()
+      if (!this.amount) this.errors.amount = "Summa ni to'ldiring"
+      if (!this.date) this.errors.date = "Sa'na ni to'ldiring"
+      if (!this.teacher_id) this.errors.teacher_id = "O'qituvchi ni tanlang"
+      if (this.errors.amount || this.errors.date || this.errors.teacher_id) {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Xatolik',
+            icon: 'BellIcon',
+            text: "Iltimos xato to'g'irlang",
+            variant: 'danger',
+          },
+        })
+        return
+      }
 
-			const params = {
-				teacher_id: this.teacher_id.id,
-				date: this.date,
-				note: this.note,
-				amount: parseInt(this.amount)
-			}
-			if (this.teacher_paid_id) {
-				this.updatePaid(params)
-			} else {
-				this.storePaid(params)
-			}
-		}
-	}
+      const params = {
+        teacher_id: this.teacher_id.id,
+        date: this.date,
+        note: this.note,
+        amount: parseInt(this.amount),
+      }
+      if (this.teacher_paid_id) {
+        this.updatePaid(params)
+      } else {
+        this.storePaid(params)
+      }
+    },
+  },
 }
 </script>

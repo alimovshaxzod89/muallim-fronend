@@ -251,8 +251,8 @@ export default {
 		loadPayments() {
 			if (this.filters.year) {
 				const url = this.filters.month
-					? `/api/center-income/${this.filters.year.value}/${this.filters.month.id}`
-					: `/api/center-income/${this.filters.year.value}`
+					? `center-income/${this.filters.year.value}/${this.filters.month.id}`
+					: `center-income/${this.filters.year.value}`
 				axios.get(url).then(response => {
 					if (response.status === 200) {
 						this.teacher_payments = response.data

@@ -47,143 +47,143 @@ import axios from 'axios'
 import ToastificationContent from '@core/components/toastification/ToastificationContent'
 
 export default {
-	name: 'CostsForm',
-	components: {
-		BTable,
-		BFormSelect,
-		BCard,
-		BButton,
-		BFormGroup,
-		BFormInput,
-		BModal,
-		BFormDatepicker
-	},
-	data() {
-		return {
-			date: null,
-			note: null,
-			amount: null,
-			errors: {
-				amount: null,
-				date: null,
-				note: null
-			}
-		}
-	},
-	watch: {
-		amount() {
-			this.resetErrors()
-		},
-		date() {
-			this.resetErrors()
-			this.$parent.filters.month = new Date(this.date).getMonth() + 1
-			this.$parent.filters.day = new Date(this.date).getDay() + 1
-			this.$parent.loadTeacherPaids()
-		},
-		note() {
-			this.resetErrors()
-			this.$parent.filters.note = this.note
-			this.$parent.loadTeacherPaids()
-		}
-	},
-	mounted() {
-		this.loadTeachers()
-	},
-	methods: {
-		clearDate(input) {
-			this[input] = null
-		},
-		resetErrors() {
-			this.errors.note = this.errors.date = this.errors.amount = null
-		},
-		loadTeachers() {
-			axios.get('/api/teachers').then(response => {
-				if (response.status === 200) {
-					this.options.days = response.data.data
-				}
-			})
-		},
-		open(attr = {}) {
-			this.$refs['my-modal'].show()
-			if (attr) {
-				this.date = attr.date
-				this.amount = attr.amount
-				this.note = attr.note
-			}
-		},
-		storePaid(params) {
-			axios
-				.post('/api/teacher-paids', params)
-				.then(res => {
-					if (res.status === 200) {
-						this.$refs['my-modal'].hide()
-						this.$parent.loadTeacherPaids()
-						this.$toast({
-							component: ToastificationContent,
-							props: {
-								title: 'Notification',
-								icon: 'BellIcon',
-								text: 'Muvaffaqiyatli',
-								variant: 'success'
-							}
-						})
-					}
-				})
-				.catch(err => {
-					console.log(err)
-				})
-		},
-		updatePaid(params) {
-			axios
-				.put(`/api/teacher-paids/${this.teacher_paid_id}`, params)
-				.then(res => {
-					if (res.status === 200) {
-						this.$refs['my-modal'].hide()
-						this.$parent.loadTeacherPaids()
-						this.$toast({
-							component: ToastificationContent,
-							props: {
-								title: 'Notification',
-								icon: 'BellIcon',
-								text: 'Muvaffaqiyatli',
-								variant: 'success'
-							}
-						})
-					}
-				})
-				.catch(err => {
-					console.log(err)
-				})
-		},
-		handleForm(e) {
-			e.preventDefault()
-			if (!this.amount) this.errors.amount = "Summa ni to'ldiring"
-			if (!this.date) this.errors.date = "Sa'na ni to'ldiring"
-			if (!this.note) this.errors.note = "Izoh ni to'ldiring"
-			if (this.errors.amount || this.errors.date || this.errors.note) {
-				this.$toast({
-					component: ToastificationContent,
-					props: {
-						title: 'Xatolik',
-						icon: 'BellIcon',
-						text: "Iltimos xato to'g'irlang",
-						variant: 'danger'
-					}
-				})
-				return
-			}
+  name: 'CostsForm',
+  components: {
+    BTable,
+    BFormSelect,
+    BCard,
+    BButton,
+    BFormGroup,
+    BFormInput,
+    BModal,
+    BFormDatepicker,
+  },
+  data() {
+    return {
+      date: null,
+      note: null,
+      amount: null,
+      errors: {
+        amount: null,
+        date: null,
+        note: null,
+      },
+    }
+  },
+  watch: {
+    amount() {
+      this.resetErrors()
+    },
+    date() {
+      this.resetErrors()
+      this.$parent.filters.month = new Date(this.date).getMonth() + 1
+      this.$parent.filters.day = new Date(this.date).getDay() + 1
+      this.$parent.loadTeacherPaids()
+    },
+    note() {
+      this.resetErrors()
+      this.$parent.filters.note = this.note
+      this.$parent.loadTeacherPaids()
+    },
+  },
+  mounted() {
+    this.loadTeachers()
+  },
+  methods: {
+    clearDate(input) {
+      this[input] = null
+    },
+    resetErrors() {
+      this.errors.note = this.errors.date = this.errors.amount = null
+    },
+    loadTeachers() {
+      axios.get('teachers').then(response => {
+        if (response.status === 200) {
+          this.options.days = response.data.data
+        }
+      })
+    },
+    open(attr = {}) {
+      this.$refs['my-modal'].show()
+      if (attr) {
+        this.date = attr.date
+        this.amount = attr.amount
+        this.note = attr.note
+      }
+    },
+    storePaid(params) {
+      axios
+        .post('/teacher-paids', params)
+        .then(res => {
+          if (res.status === 200) {
+            this.$refs['my-modal'].hide()
+            this.$parent.loadTeacherPaids()
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Notification',
+                icon: 'BellIcon',
+                text: 'Muvaffaqiyatli',
+                variant: 'success',
+              },
+            })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    updatePaid(params) {
+      axios
+        .put(`teacher-paids/${this.teacher_paid_id}`, params)
+        .then(res => {
+          if (res.status === 200) {
+            this.$refs['my-modal'].hide()
+            this.$parent.loadTeacherPaids()
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Notification',
+                icon: 'BellIcon',
+                text: 'Muvaffaqiyatli',
+                variant: 'success',
+              },
+            })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    handleForm(e) {
+      e.preventDefault()
+      if (!this.amount) this.errors.amount = "Summa ni to'ldiring"
+      if (!this.date) this.errors.date = "Sa'na ni to'ldiring"
+      if (!this.note) this.errors.note = "Izoh ni to'ldiring"
+      if (this.errors.amount || this.errors.date || this.errors.note) {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Xatolik',
+            icon: 'BellIcon',
+            text: "Iltimos xato to'g'irlang",
+            variant: 'danger',
+          },
+        })
+        return
+      }
 
-			const params = {
-				date: parseInt(this.date),
-				note: parseInt(this.note),
-				amount: parseInt(this.amount)
-			}
-			if (this.teacher_paid_id) {
-				this.updatePaid(params)
-			} else {
-				this.storePaid(params)
-			}
-		}
-	}
+      const params = {
+        date: parseInt(this.date),
+        note: parseInt(this.note),
+        amount: parseInt(this.amount),
+      }
+      if (this.teacher_paid_id) {
+        this.updatePaid(params)
+      } else {
+        this.storePaid(params)
+      }
+    },
+  },
 }
 </script>

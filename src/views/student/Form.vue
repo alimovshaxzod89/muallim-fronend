@@ -58,224 +58,222 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 require('moment/locale/uz-latn')
 
 export default {
-	name: 'StudentPayment',
-	components: {
-		BFormSelect,
-		BFormGroup,
-		BFormInput,
-		BModal,
-		BFormDatepicker
-	},
-	data() {
-		return {
-			paid_id: null,
-			subject_id: null,
-			group_id: null,
-			student_id: null,
-			year: null,
-			month: null,
-			payment_id: null,
-			payments: [],
-			sum: null,
-			date: null,
-			options: {
-				groups: [],
-				subjects: [],
-				students: [],
-				monthsYears: [],
-				years: [
-					{ value: null, text: 'Yil' },
-					{ value: '2020', text: '2020' },
-					{ value: '2021', text: '2021' },
-					{ value: '2022', text: '2022' }
-				],
-				months: (function() {
-					const arr = [{ value: null, text: 'Oy' }]
-					for (let i = 1; i <= 12; i++) {
-						arr.push({ value: i, text: moment(`2000-${i}-01`).format('MMMM') })
-					}
-					return arr
-				})()
-			}
-		}
-	},
-	watch: {
-		subject_id() {
-			this.loadGroups()
-		},
-		group_id() {
-			this.loadStudents()
-		},
-		student_id() {
-			this.loadPayments()
-		},
-		payment_id() {
-			// todo fix on change modal payment_id refresh parent month/year
-			// this.$parent.filters.payment_id = this.payment_id
-		},
-		sum() {
-			console.log(this.sum)
-		}
-	},
-	created() {
-		const $this = this
-		axios.get('/api/subjects').then(response => {
-			$this.options.subjects = response.data.data
-		})
+  name: 'StudentPayment',
+  components: {
+    BFormSelect,
+    BFormGroup,
+    BFormInput,
+    BModal,
+    BFormDatepicker,
+  },
+  data() {
+    return {
+      paid_id: null,
+      subject_id: null,
+      group_id: null,
+      student_id: null,
+      year: null,
+      month: null,
+      payment_id: null,
+      payments: [],
+      sum: null,
+      date: null,
+      options: {
+        groups: [],
+        subjects: [],
+        students: [],
+        monthsYears: [],
+        years: [
+          { value: null, text: 'Yil' },
+          { value: '2020', text: '2020' },
+          { value: '2021', text: '2021' },
+          { value: '2022', text: '2022' },
+        ],
+        months: (function () {
+          const arr = [{ value: null, text: 'Oy' }]
+          for (let i = 1; i <= 12; i++) {
+            arr.push({ value: i, text: moment(`2000-${i}-01`).format('MMMM') })
+          }
+          return arr
+        })(),
+      },
+    }
+  },
+  watch: {
+    subject_id() {
+      this.loadGroups()
+    },
+    group_id() {
+      this.loadStudents()
+    },
+    student_id() {
+      this.loadPayments()
+    },
+    payment_id() {
+      // todo fix on change modal payment_id refresh parent month/year
+      // this.$parent.filters.payment_id = this.payment_id
+    },
+    sum() {
+      console.log(this.sum)
+    },
+  },
+  created() {
+    const $this = this
+    axios.get('subjects').then(response => {
+      $this.options.subjects = response.data.data
+    })
 
-		this.loadGroups()
-	},
-	methods: {
-		clearDate(input) {
-			this[input] = null
-		},
-		open(attr = {}) {
-			// this.resetForm()
+    this.loadGroups()
+  },
+  methods: {
+    clearDate(input) {
+      this[input] = null
+    },
+    open(attr = {}) {
+      // this.resetForm()
 
-			this.$refs['my-modal'].show()
+      this.$refs['my-modal'].show()
 
-			if (attr) {
-				if(attr.payment_id){
+      if (attr) {
+        if (attr.payment_id) {
+        } else {
+        }
+        this.group_id = attr.group_id
+        this.subject_id = attr.subject_id
+        this.student_id = attr.student_id
+        this.year = attr.year
+        this.month = attr.month
+        this.payment_id = attr.payment_id
+        this.paid_id = attr.paid_id
+        this.date = attr.date
+        this.sum = attr.amount
+      }
+    },
+    handleForm(e) {
+      e.preventDefault()
+      const params = {
+        payment_id: this.payment_id,
+        date: this.date,
+        amount: parseInt(this.sum),
+      }
+      if (this.paid_id) {
+        this.updatePaid(params)
+      } else {
+        this.storePaid(params)
+      }
+    },
+    storePaid(params) {
+      axios.post('payment-paids', params).then(res => {
+        if (res.data.success) {
+          this.$refs['my-modal'].hide()
+          this.$parent.loadPaids()
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Notification',
+              icon: 'BellIcon',
+              text: 'Успешно',
+              variant: 'success',
+            },
+          })
+        }
+      })
+    },
+    updatePaid(params) {
+      axios.put(`payment-paids/${this.paid_id}`, params).then(res => {
+        if (res.data.success) {
+          this.$refs['my-modal'].hide()
+          this.$parent.loadPaids()
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Notification',
+              icon: 'BellIcon',
+              text: 'Успешно',
+              variant: 'success',
+            },
+          })
+        }
+      })
+    },
+    resetForm() {
+      this.student_id = null
+      this.group_id = null
+      this.subject_id = null
+      this.payment_id = null
+      this.year = null
+      this.month = null
 
-				}else{
+      this.sum = null
+      this.date = null
 
-				}
-				this.group_id = attr.group_id
-				this.subject_id = attr.subject_id
-				this.student_id = attr.student_id
-				this.year = attr.year
-				this.month = attr.month
-				this.payment_id = attr.payment_id
-				this.paid_id = attr.paid_id
-				this.date = attr.date
-				this.sum = attr.amount
-			}
-		},
-		handleForm(e) {
-			e.preventDefault()
-			const params = {
-				payment_id: this.payment_id,
-				date: this.date,
-				amount: parseInt(this.sum)
-			}
-			if (this.paid_id) {
-				this.updatePaid(params)
-			} else {
-				this.storePaid(params)
-			}
-		},
-		storePaid(params) {
-			axios.post('/api/payment-paids', params).then(res => {
-				if (res.data.success) {
-					this.$refs['my-modal'].hide()
-					this.$parent.loadPaids()
-					this.$toast({
-						component: ToastificationContent,
-						props: {
-							title: 'Notification',
-							icon: 'BellIcon',
-							text: 'Успешно',
-							variant: 'success'
-						}
-					})
-				}
-			})
-		},
-		updatePaid(params) {
-			axios.put(`/api/payment-paids/${this.paid_id}`, params).then(res => {
-				if (res.data.success) {
-					this.$refs['my-modal'].hide()
-					this.$parent.loadPaids()
-					this.$toast({
-						component: ToastificationContent,
-						props: {
-							title: 'Notification',
-							icon: 'BellIcon',
-							text: 'Успешно',
-							variant: 'success'
-						}
-					})
-				}
-			})
-		},
-		resetForm() {
-			this.student_id = null
-			this.group_id = null
-			this.subject_id = null
-			this.payment_id = null
-			this.year = null
-			this.month = null
+      this.options.groups = []
+      this.options.students = []
+      this.options.monthsYears = []
+    },
+    loadGroups() {
+      const params = {}
 
-			this.sum = null
-			this.date = null
+      if (this.subject_id) params.subject_id = this.subject_id
 
-			this.options.groups = []
-			this.options.students = []
-			this.options.monthsYears = []
-		},
-		loadGroups() {
-			const params = {}
+      console.log(params)
 
-			if (this.subject_id) params.subject_id = this.subject_id
+      axios.get('groups', { params }).then(response => {
+        this.options.groups = response.data.data
+      })
+    },
+    loadStudents() {
+      const $this = this
+      const params = {}
+      if (this.group_id) params.group_id = this.group_id
+      axios.get('students', { params }).then(response => {
+        $this.options.students = response.data.data
+      })
+    },
+    loadPayments() {
+      const params = {}
+      if (this.subject_id) params.subject_id = this.subject_id
+      if (this.group_id) params.group_id = this.group_id
+      if (this.student_id) params.student_id = this.student_id
 
-			console.log(params)
+      // if (this.sElectedYear) params.year = this.sElectedYear
+      // if (this.sElectedMonth) params.month = this.sElectedMonth
 
-			axios.get('/api/groups', { params }).then(response => {
-				this.options.groups = response.data.data
-			})
-		},
-		loadStudents() {
-			const $this = this
-			const params = {}
-			if (this.group_id) params.group_id = this.group_id
-			axios.get('/api/students', { params }).then(response => {
-				$this.options.students = response.data.data
-			})
-		},
-		loadPayments() {
-			const params = {}
-			if (this.subject_id) params.subject_id = this.subject_id
-			if (this.group_id) params.group_id = this.group_id
-			if (this.student_id) params.student_id = this.student_id
+      axios.get('payments', { params }).then(response => {
+        if (response.data.success) {
+          this.payments = response.data.data
 
-			// if (this.sElectedYear) params.year = this.sElectedYear
-			// if (this.sElectedMonth) params.month = this.sElectedMonth
+          this.options.monthsYears = []
 
-			axios.get('/api/payments', { params }).then(response => {
-				if (response.data.success) {
-					this.payments = response.data.data
+          this.payments.forEach((item, i) => {
+            const date = new Date(item.date)
+            const year = date.getFullYear()
+            const month = date.getMonth() + 1
 
-					this.options.monthsYears = []
+            if (this.payment_id && this.payment_id == item.id) {
+              if (!this.sum) {
+                this.sum = item.amount
+              }
+            } else {
+              // year, month mosini tanlash
 
-					this.payments.forEach((item, i) => {
-						const date = new Date(item.date)
-						const year = date.getFullYear()
-						const month = date.getMonth() + 1
+              if (this.selectedYear == year && this.selectedMonth == month) {
+                this.payment_id = item.id
+              }
+            }
 
-						if (this.payment_id && this.payment_id == item.id) {
-							if (!this.sum) {
-								this.sum = item.amount
-							}
-						} else {
-							// year, month mosini tanlash
+            const payment = {
+              id: item.id,
+              value: `${moment(`${year}-${month}-01`).format('MMMM')}-${year}`,
+            }
 
-							if (this.selectedYear == year && this.selectedMonth == month) {
-								this.payment_id = item.id
-							}
-						}
-
-						const payment = {
-							id: item.id,
-							value: `${moment(`${year}-${month}-01`).format('MMMM')}-${year}`
-						}
-
-						// todo closed ni hisobga olish
-						// if (item.closed && item.paid !== 0) payment.disabled = true
-						this.options.monthsYears.push(payment)
-					})
-				}
-			})
-		}
-	}
+            // todo closed ni hisobga olish
+            // if (item.closed && item.paid !== 0) payment.disabled = true
+            this.options.monthsYears.push(payment)
+          })
+        }
+      })
+    },
+  },
 }
 </script>
