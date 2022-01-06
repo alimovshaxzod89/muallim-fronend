@@ -1,8 +1,4 @@
-import {
-  mdiFileDocumentEdit,
-  mdiHomeOutline, mdiShieldAccount,
-  mdiViewHeadline
-} from '@mdi/js'
+import { mdiFileDocumentEdit, mdiHomeOutline, mdiShieldAccount, mdiViewHeadline } from '@mdi/js'
 
 export default [
   {
@@ -21,7 +17,7 @@ export default [
       {
         title: 'Guruhlar',
         to: 'groups',
-      }
+      },
     ],
   },
   {
@@ -38,6 +34,11 @@ export default [
     title: 'Talabalar',
     icon: mdiFileDocumentEdit,
     to: 'student',
+  },
+  {
+    title: 'Guruhlar',
+    icon: mdiFileDocumentEdit,
+    to: 'group',
   },
   {
     subheader: '#',
