@@ -154,215 +154,215 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 require('moment/locale/uz-latn')
 
 export default {
-	name: 'Debt',
-	components: {
-		BCard,
-		BTable,
-		BButton,
-		BFormSelect,
-		BFormDatepicker,
-		BFormTimepicker,
-		BPagination,
-		Multiselect,
-		MaskedInput
-	},
-	data() {
-		return {
-			options: {
-				subjects: [],
-				groups: [],
-				students: [],
-				teachers: []
-			},
-			filters: {
-				week_day: null,
-				group: {},
-				time: null,
-				group_id: null,
-				student_id: null,
-				subject_id: null,
-				student_name: null
-			},
-			paids: [],
-			fields: [
-				{ key: 'index', label: '#' },
-				{ key: 'group.number', label: 'Guruh', sortable: true },
-				{ key: 'group.teacher.full_name', label: 'Ustoz', sortable: true },
-				{ key: 'student.first_name', label: 'Talaba', sortable: true, formatter: 'fullName' },
-				{ key: 'student.phone', label: 'Telefon', sortable: true },
-				{
-					key: 'amount',
-					label: "Oylik to'lov",
-					sortable: true,
-					tdClass: 'text-right nowrap',
-					formatter: 'formatNumber'
-				},
-				{ key: 'paid', label: "To'ladi", sortable: true, tdClass: 'text-right nowrap', formatter: 'formatNumber' },
-				{
-					key: 'debt',
-					label: 'Qarz',
-					formatter: (value, key, item) => this.formatNumber(item.amount - item.paid),
-					sortable: true,
-					sortByFormatted: true,
-					tdClass: 'text-right nowrap'
-				},
-				{ key: 'date', label: 'Oy', sortable: true, tdClass: 'text-center', formatter: 'formatDate' }
-			],
-			page: 1,
-			totalPages: null,
-			limit: 10
-		}
-	},
-	watch: {
-		// ['filters.group_id']() {
-		// 	this.loadPaids()
-		// },
-		// ['filters.teacher_id']() {
-		// 	this.loadPaids()
-		// 	this.loadGroups()
-		// },
-		// ['filters.student_id']() {
-		// 	this.loadPaids()
-		// },
-		// ['filters.subject_id']() {
-		// 	console.log('dsen')
-		// 	this.loadPaids()
-		// 	this.loadTeachers()
-		// },
-		// ['filters.student_name']() {
-		// 	this.loadPaids()
-		// },
-		// ['filters.time']() {
-		// 	this.loadPaids()
-		// },
-		// ['filters.week_day']() {
-		// 	this.loadPaids()
-		// },
-		['page']() {
-			this.loadPaids((this.page - 1) * this.limit)
-		},
-		limit() {
-			this.loadPaids()
-		},
-		['filters.teacher_id']() {
-			this.filters.group_id = null
-			this.loadGroups()
-			this.loadPaids()
-		}
-		// 'filters.time': function (){
-		// 	if (this.filters.time) {
-		// 		this.timeTesting('time')
-		// 	}
-		// }
-	},
-	created() {
-		this.loadGroups()
-		this.loadStudents()
-		this.loadSubjects()
-		this.loadTeachers()
-	},
-	methods: {
-		clearDate(input) {
-			if (this.filters[input] === 'year') {
-				this.filters[input] = moment().format('YYYY')
-				this.loadPaids()
-			} else if (this.filters[input] === 'month') {
-				this.filters[input] = moment().format('M')
-				this.loadPaids()
-			} else {
-				this.filters[input] = null
-				this.loadPaids()
-				this.loadGroups()
-			}
-		},
-		formatNumber(value) {
-			return this.$options.filters.formatNumber(value)
-		},
-		formatMonth(value) {
-			return moment(value).format('MMM YY')
-		},
-		formatDate(value) {
-			return moment(value).format('D MMM Y')
-		},
-		loadPaids(skip = 0) {
-			const params = { only_debt: 1 }
+  name: 'Debt',
+  components: {
+    BCard,
+    BTable,
+    BButton,
+    BFormSelect,
+    BFormDatepicker,
+    BFormTimepicker,
+    BPagination,
+    Multiselect,
+    MaskedInput,
+  },
+  data() {
+    return {
+      options: {
+        subjects: [],
+        groups: [],
+        students: [],
+        teachers: [],
+      },
+      filters: {
+        week_day: null,
+        group: {},
+        time: null,
+        group_id: null,
+        student_id: null,
+        subject_id: null,
+        student_name: null,
+      },
+      paids: [],
+      fields: [
+        { key: 'index', label: '#' },
+        { key: 'group.number', label: 'Guruh', sortable: true },
+        { key: 'group.teacher.full_name', label: 'Ustoz', sortable: true },
+        { key: 'student.first_name', label: 'Talaba', sortable: true, formatter: 'fullName' },
+        { key: 'student.phone', label: 'Telefon', sortable: true },
+        {
+          key: 'amount',
+          label: "Oylik to'lov",
+          sortable: true,
+          tdClass: 'text-right nowrap',
+          formatter: 'formatNumber',
+        },
+        { key: 'paid', label: "To'ladi", sortable: true, tdClass: 'text-right nowrap', formatter: 'formatNumber' },
+        {
+          key: 'debt',
+          label: 'Qarz',
+          formatter: (value, key, item) => this.formatNumber(item.amount - item.paid),
+          sortable: true,
+          sortByFormatted: true,
+          tdClass: 'text-right nowrap',
+        },
+        { key: 'date', label: 'Oy', sortable: true, tdClass: 'text-center', formatter: 'formatDate' },
+      ],
+      page: 1,
+      totalPages: null,
+      limit: 10,
+    }
+  },
+  watch: {
+    // ['filters.group_id']() {
+    // 	this.loadPaids()
+    // },
+    // ['filters.teacher_id']() {
+    // 	this.loadPaids()
+    // 	this.loadGroups()
+    // },
+    // ['filters.student_id']() {
+    // 	this.loadPaids()
+    // },
+    // ['filters.subject_id']() {
+    // 	console.log('dsen')
+    // 	this.loadPaids()
+    // 	this.loadTeachers()
+    // },
+    // ['filters.student_name']() {
+    // 	this.loadPaids()
+    // },
+    // ['filters.time']() {
+    // 	this.loadPaids()
+    // },
+    // ['filters.week_day']() {
+    // 	this.loadPaids()
+    // },
+    ['page']() {
+      this.loadPaids((this.page - 1) * this.limit)
+    },
+    limit() {
+      this.loadPaids()
+    },
+    ['filters.teacher_id']() {
+      this.filters.group_id = null
+      this.loadGroups()
+      this.loadPaids()
+    },
+    // 'filters.time': function (){
+    // 	if (this.filters.time) {
+    // 		this.timeTesting('time')
+    // 	}
+    // }
+  },
+  created() {
+    this.loadGroups()
+    this.loadStudents()
+    this.loadSubjects()
+    this.loadTeachers()
+  },
+  methods: {
+    clearDate(input) {
+      if (this.filters[input] === 'year') {
+        this.filters[input] = moment().format('YYYY')
+        this.loadPaids()
+      } else if (this.filters[input] === 'month') {
+        this.filters[input] = moment().format('M')
+        this.loadPaids()
+      } else {
+        this.filters[input] = null
+        this.loadPaids()
+        this.loadGroups()
+      }
+    },
+    formatNumber(value) {
+      return this.$options.filters.formatNumber(value)
+    },
+    formatMonth(value) {
+      return moment(value).format('MMM YY')
+    },
+    formatDate(value) {
+      return moment(value).format('D MMM Y')
+    },
+    loadPaids(skip = 0) {
+      const params = { only_debt: 1 }
 
-			params.limit = this.limit
-			params.skip = skip
+      params.limit = this.limit
+      params.skip = skip
 
-			if (this.filters.time) params.time = this.filters.time
+      if (this.filters.time) params.time = this.filters.time
 
-			if (this.filters.group_id) params.group_id = this.filters.group_id.id
+      if (this.filters.group_id) params.group_id = this.filters.group_id.id
 
-			if (this.filters.subject_id) params.subject_id = this.filters.subject_id.id
+      if (this.filters.subject_id) params.subject_id = this.filters.subject_id.id
 
-			if (this.filters.teacher_id) params.teacher_id = this.filters.teacher_id.id
+      if (this.filters.teacher_id) params.teacher_id = this.filters.teacher_id.id
 
-			if (this.filters.week_day) params.week_day = this.filters.week_day
+      if (this.filters.week_day) params.week_day = this.filters.week_day
 
-			if (this.filters.student_name) params.student_name = this.filters.student_name
+      if (this.filters.student_name) params.student_name = this.filters.student_name
 
-			if (
-				this.filters.week_day ||
-				this.filters.group_id ||
-				this.filters.student_name ||
-				this.filters.student_id ||
-				this.filters.teacher_id ||
-				this.filters.subject_id
-			) {
-				const $this = this
+      if (
+        this.filters.week_day ||
+        this.filters.group_id ||
+        this.filters.student_name ||
+        this.filters.student_id ||
+        this.filters.teacher_id ||
+        this.filters.subject_id
+      ) {
+        const $this = this
 
-				axios.get('/api/payments', { params }).then(response => {
-					$this.paids = response.data.data
-					$this.totalPages = response.data.total
-				})
-			} else {
-				this.paids = []
-			}
-		},
-		loadStudents() {
-			const $this = this
-			const params = {}
-			if (this.filters.group_id) params.group_id = this.filters.group_id
-			axios.get('/api/students', { params }).then(response => {
-				$this.options.students = response.data.data
-			})
-		},
-		loadTeachers() {
-			const $this = this
-			const params = {}
-			if (this.filters.subject_id) params.subject_id = this.filters.subject_id
-			axios.get('/api/teachers', { params }).then(response => {
-				$this.options.teachers = response.data.data
-			})
-		},
-		loadGroups() {
-			const params = {}
+        axios.get('payments', { params }).then(response => {
+          $this.paids = response.data.data
+          $this.totalPages = response.data.total
+        })
+      } else {
+        this.paids = []
+      }
+    },
+    loadStudents() {
+      const $this = this
+      const params = {}
+      if (this.filters.group_id) params.group_id = this.filters.group_id
+      axios.get('students', { params }).then(response => {
+        $this.options.students = response.data.data
+      })
+    },
+    loadTeachers() {
+      const $this = this
+      const params = {}
+      if (this.filters.subject_id) params.subject_id = this.filters.subject_id
+      axios.get('teachers', { params }).then(response => {
+        $this.options.teachers = response.data.data
+      })
+    },
+    loadGroups() {
+      const params = {}
 
-			if (this.filters.subject_id) params.subject_id = this.filters.subject_id.id
+      if (this.filters.subject_id) params.subject_id = this.filters.subject_id.id
 
-			if (this.filters.teacher_id) params.teacher_id = this.filters.teacher_id.id
+      if (this.filters.teacher_id) params.teacher_id = this.filters.teacher_id.id
 
-			axios.get('/api/groups', { params }).then(response => {
-				if (response.data.success) {
-					this.options.groups = response.data.data
-				}
-			})
-		},
-		loadSubjects() {
-			axios.get('/api/subjects').then(response => {
-				this.options.subjects = response.data.data
-			})
-		},
-		timeTesting(type) {
-			if (this.filters[type].length > 4) {
-				const firstTime = this.filters[type].slice(0, 2)
-				const secondTime = this.filters[type].slice(3, 5)
-				if (firstTime > 23 || secondTime > 59) {
-					this.filters[type] = '0000'
-				}
-			}
-		}
-	}
+      axios.get('groups', { params }).then(response => {
+        if (response.data.success) {
+          this.options.groups = response.data.data
+        }
+      })
+    },
+    loadSubjects() {
+      axios.get('subjects').then(response => {
+        this.options.subjects = response.data.data
+      })
+    },
+    timeTesting(type) {
+      if (this.filters[type].length > 4) {
+        const firstTime = this.filters[type].slice(0, 2)
+        const secondTime = this.filters[type].slice(3, 5)
+        if (firstTime > 23 || secondTime > 59) {
+          this.filters[type] = '0000'
+        }
+      }
+    },
+  },
 }
 </script>

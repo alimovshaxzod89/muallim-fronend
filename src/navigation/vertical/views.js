@@ -37,7 +37,7 @@ export default [
   {
     title: 'Talabalar',
     icon: mdiFileDocumentEdit,
-    to: 'students',
+    to: 'student',
   },
   {
     subheader: '#',

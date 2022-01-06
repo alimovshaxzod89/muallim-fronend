@@ -534,17 +534,17 @@ export default {
 	},
 	created() {
 		const $this = this
-		axios.get('/api/teachers').then(response => {
+		axios.get('teachers').then(response => {
 			$this.teachers = response.data.data
 		})
-		axios.get('/api/subjects').then(response => {
+		axios.get('subjects').then(response => {
 			$this.subjects = response.data.data
 		})
-		axios.get('/api/groups').then(response => {
+		axios.get('groups').then(response => {
 			$this.groups = response.data.data
 		})
 		this.init()
-		// axios.get('/api/payments').then(response => {
+		// axios.get('payments').then(response => {
 		// 	if (response.data.success) {
 		// 		response.data.data.forEach(item => {
 		// 			let date = new Date(item.date)
@@ -575,7 +575,7 @@ export default {
 				})
 			}
 			if (this.$route.query.subject_id) {
-				axios.get(`/api/subjects/${this.$route.query.subject_id}`).then(response => {
+				axios.get(`subjects/${this.$route.query.subject_id}`).then(response => {
 					if (response.status === 200) {
 						this.subject_id = response.data.data
 						// this.loadPayments()
@@ -583,7 +583,7 @@ export default {
 				})
 			}
 			if (this.$route.query.teacher_id) {
-				axios.get(`/api/teachers/${this.$route.query.teacher_id}`).then(response => {
+				axios.get(`teachers/${this.$route.query.teacher_id}`).then(response => {
 					if (response.status === 200) {
 						this.teacher_id = response.data.data
 						// this.loadPayments()
@@ -602,7 +602,7 @@ export default {
 				}
 			}
 			if (this.$route.query.group_id) {
-				axios.get(`/api/groups/${this.$route.query.group_id}`).then(response => {
+				axios.get(`groups/${this.$route.query.group_id}`).then(response => {
 					if (response.status === 200) {
 						this.group_id = response.data.data
 					}
@@ -635,7 +635,7 @@ export default {
 			if (amount === parseInt(event.target.value)) return
 
 			axios
-				.put(`/api/payments/${id}`, {
+				.put(`payments/${id}`, {
 					amount: event.target.value,
 					date,
 					group_id,
@@ -686,7 +686,7 @@ export default {
 
 			const $this = this
 
-			axios.get('/api/groups', { params }).then(response => {
+			axios.get('groups', { params }).then(response => {
 				$this.groups = response.data.data
 			})
 		},
@@ -711,7 +711,7 @@ export default {
 			if ((this.year && this.month) || this.group_id || this.student_name) {
 				const $this = this
 
-				axios.get('/api/payments', { params }).then(response => {
+				axios.get('payments', { params }).then(response => {
 					$this.payments = response.data.data
 					$this.totalPages = response.data.total
 				})

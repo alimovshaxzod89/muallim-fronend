@@ -2,21 +2,111 @@
   <v-card id="data-list">
     <!-- search -->
     <v-card-text class="d-flex align-center flex-wrap pb-0">
-      <div class="d-flex align-center pb-5">
+      <div class="d-flex align-center flex-wrap pb-5 my-filter">
         <v-text-field
           v-model="searchQuery"
           single-line
           dense
           outlined
           hide-details
-          placeholder="Qidiruv"
+          placeholder="FISH"
           class="data-list-search me-3"
         ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="TELEFON"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="TUMAN"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="MANZIL"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="D.Y. TUMAN"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="D.Y. MANZIL"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="JINSI"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="TUG'ILGAN SANA"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="CHEGIRMA"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="CHEGIRMA SABABI"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-spacer></v-spacer>
+
+				<v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
       </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
@@ -64,13 +154,13 @@
           <!-- image -->
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openPhoto(item.id)">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="openPhoto(item)">
                 <v-icon size="18">
                   {{ icons.mdiImageEditOutline }}
                 </v-icon>
               </v-btn>
             </template>
-            <span>Rasm tanlash</span>
+            <span>Suratni tanlash</span>
           </v-tooltip>
         </div>
       </template>
@@ -82,7 +172,7 @@
       <template #[`item.photo`]="{ item }">
         <img
           class="img-user"
-          :src="item.photo ? 'storage/' + item.photo : require(`@/assets/images/user-image.png`)"
+          :src="item.photo_link ? BASE_URL + item.photo_link : require(`@/assets/images/user-image.png`)"
           alt="Avatar"
         />
       </template>
@@ -121,6 +211,8 @@ import {
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
+
+import envParams from '@envParams'
 
 // store module
 import StudentStoreModule from './StudentStoreModule'
@@ -181,8 +273,8 @@ export default {
 
     //Photo
     const studentPhoto = ref(null)
-    const openPhoto = id => {
-      studentPhoto.value.open(id)
+    const openPhoto = item => {
+      studentPhoto.value.openUserImage(item)
     }
 
     //Delete Confirm Dialog
@@ -194,8 +286,11 @@ export default {
         .catch(() => {})
     }
 
+		const BASE_URL = envParams.BASE_URL
+
     // Return
     return {
+			BASE_URL,
       state,
 
       tableColumns,
@@ -254,5 +349,11 @@ export default {
   height: 50px;
   overflow: hidden;
   object-fit: cover;
+}
+
+.my-filter {
+  .v-input {
+    margin-bottom: 12px;
+  }
 }
 </style>

@@ -3,13 +3,13 @@ import envParams from '@envParams'
 import axios from 'axios'
 import Vue from 'vue'
 
-console.log(envParams.BASE_URL)
-console.log(process.env.VUE_APP_SOMEKEY)
+// console.log(envParams.BASE_URL)
+// console.log(process.env.VUE_APP_SOMEKEY)
 
 const axiosIns = axios.create({
   // You can add your headers here
   // ================================
-  baseURL: envParams.BASE_URL,
+  baseURL: envParams.API_URL,
   // timeout: 1000,
   // headers: {'X-Custom-Header': 'foobar'}
 })
@@ -26,6 +26,19 @@ axiosIns.interceptors.request.use(
     return config
   },
   error => Promise.reject(error),
+)
+
+axiosIns.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 401) {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('userData')
+      localStorage.removeItem('userAbility')
+    } else {
+      Promise.reject(error)
+    }
+  },
 )
 
 Vue.prototype.$http = axiosIns

@@ -286,7 +286,7 @@ export default {
     // Load regions
     const regions = ref()
     const loadRegions = () => {
-      axios.get('/api/regions').then(response => {
+      axios.get('regions').then(response => {
         if (response.data.success) {
           regions.value = response.data.data
         }

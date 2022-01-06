@@ -82,7 +82,7 @@
 								/>
 							</svg>
 						</button>
-						
+
 					</div>
 					<multiselect
 						class="table-select"
@@ -130,23 +130,23 @@
 							 @click="createForm()"
 				>Qo'shish
 				</b-button>
-				<b-button 
-				class="exportXlsx btn-sm"  
-				ok-title="Tasdiqlash" 
+				<b-button
+				class="exportXlsx btn-sm"
+				ok-title="Tasdiqlash"
 				variant="success"
 				@click="ExportExcel"
-				
+
 				>Jadvalni yuklab olish
 				</b-button
 				></div>
 			</div>
-			<b-table 
-			striped 
-			bordered 
-			hover 
-			responsive 
+			<b-table
+			striped
+			bordered
+			hover
+			responsive
 			text-center
-			:items="paids" 
+			:items="paids"
 			:fields="fields">
 				<!-- A virtual column -->
 				<template #cell(index)="data">
@@ -183,340 +183,338 @@
 <script>
 import Multiselect from 'vue-multiselect'
 import XLSX from 'xlsx'
-import {BTable, BFormSelect, BCard, BTr, BTh, BButton, BPagination} from 'bootstrap-vue'
+import { BTable, BFormSelect, BCard, BTr, BTh, BButton, BPagination } from 'bootstrap-vue'
 import moment from 'moment'
 import axios from 'axios'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import StudentPayment from './Form'
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
+import DatePicker from 'vue2-datepicker'
+import 'vue2-datepicker/index.css'
 
 require('moment/locale/uz-latn')
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 
 export default {
-	name: 'Studentpay',
-	components: {
-		BTable,
-		BFormSelect,
-		BCard,
-		BButton,
-		StudentPayment,
-		BPagination,
-		Multiselect,
-		DatePicker,
-		BTr,
-		BTh,
+  name: 'Studentpay',
+  components: {
+    BTable,
+    BFormSelect,
+    BCard,
+    BButton,
+    StudentPayment,
+    BPagination,
+    Multiselect,
+    DatePicker,
+    BTr,
+    BTh,
+  },
+  data() {
+    return {
+      time1: null,
+      time2: null,
+      time3: null,
+      name: '',
+      nameState: null,
+      dateState: null,
+      submittedNames: [],
+      // month: moment().format('M'),
+      options: {
+        yearOptions: [
+          // { value: '', text: '' },
+          { value: '2020', text: '2020' },
+          { value: '2021', text: '2021' },
+          { value: '2022', text: '2022' },
+        ],
+        monthOptions: (function () {
+          const arr = [{ value: '', text: '' }]
+          for (let i = 1; i <= 12; i++) {
+            arr.push({ value: i, text: moment(`2000-${i}-01`).format('MMMM') })
+          }
+          return arr
+        })(),
+        subjects: [],
+        groups: [],
+        students: [],
+      },
+      filters: {
+        year: moment().format('Y'),
+        month: 3,
+        group: {},
+        group_id: null,
+        student_id: null,
+        subject_id: null,
+        student_name: '',
+        payment_id: null,
+      },
+      paids: [],
+      fields: [
+        { key: 'index', label: '#' },
+        { key: 'payment.group.number', label: 'Guruh', sortable: true },
+        {
+          key: 'payment.date',
+          label: "To'lov oyi",
+          sortable: true,
+          tdClass: 'text-center',
+          formatter: 'formatMonth',
+        },
+        // {
+        //   key: 'payment', label: 'Guruh / Oy', sortable: true,
+        // },
+        { key: 'payment.student.full_name', label: 'Talaba', sortable: true },
+        {
+          key: 'amount',
+          label: "To'ladi",
+          sortable: true,
+          tdClass: 'text-right nowrap',
+          formatter: 'formatNumber',
+        },
+        {
+          key: 'date',
+          label: 'Sana',
+          sortable: true,
+          tdClass: 'nowrap',
+          formatter: 'formatDate',
+        },
+        {
+          key: 'action',
+          label: 'action',
+        },
+      ],
+      items: [],
+      page: 1,
+      totalPages: null,
+      limit: 10,
+      notLoadPaids: false,
+    }
+  },
+  created() {
+    this.loadFromQuery()
+    this.loadGroups()
+    this.loadStudents()
+    this.loadSubjects()
+  },
+  methods: {
+    clearDate(input) {
+      this.filters[input] = [input] !== 'year' ? null : moment().format('Y')
+    },
+    groupFilter() {
+      this.filters.group = this.filters.group_id
+    },
+    removePayment(data) {
+      const paymentId = data.item.id
+      axios
+        .delete(`payment-paids/${paymentId}`)
+        .then(res => {
+          if (res.data.success) {
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Notification',
+                icon: 'BellIcon',
+                text: 'Успешно',
+                variant: 'success',
+              },
+            })
+            this.loadPaids()
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    printCheck(data) {
+      var myWindow = window.open(
+        '/print/' + data.item.id,
+        'MsgWindow',
+        'toolbar=no,status=no,menubar=no,width=600,height=600',
+      )
+      //myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
+    },
+    editPayment(data) {
+      const params = {
+        subject_id: data.item.payment.group.subject_id,
+        student_id: data.item.payment.student_id,
+        group_id: data.item.payment.group_id,
+      }
+      params.month = new Date(data.item.date).getMonth() + 1
+      params.year = new Date(data.item.date).getFullYear()
+      params.payment_id = data.item.payment_id
+      params.date = data.item.date
+      params.amount = data.item.amount
+      params.paid_id = data.item.id
+      this.$refs.form.open(params)
+    },
+    createForm() {
+      this.$refs.form.open({
+        subject_id: this.filters.subject_id ? this.filters.subject_id.id : null,
+        student_id: this.filters.student_id ? this.filters.student_id.id : null,
+        group_id: this.filters.group_id ? this.filters.group_id.id : null,
+        month: this.filters.month.value,
+        year: this.filters.year.value,
+        payment_id: this.filters.payment_id,
+      })
+    },
+    ExportExcel(type, fn, dl) {
+      let items = document.querySelectorAll('.sr-only')
+      items.forEach(item => {
+        item.innerHTML = ''
+      })
 
-	},
-	data() {
-		return {
-			  time1: null,
-        time2: null,
-        time3: null,
-			name: '',
-			nameState: null,
-			dateState: null,
-			submittedNames: [],
-			// month: moment().format('M'),
-			options: {
-				yearOptions: [
-					// { value: '', text: '' },
-					{value: '2020', text: '2020'},
-					{value: '2021', text: '2021'},
-					{value: '2022', text: '2022'}
-				],
-				monthOptions: (function () {
-					const arr = [{value: '', text: ''}]
-					for (let i = 1; i <= 12; i++) {
-						arr.push({value: i, text: moment(`2000-${i}-01`).format('MMMM')})
-					}
-					return arr
-				})(),
-				subjects: [],
-				groups: [],
-				students: []
-			},
-			filters: {
-				year: moment().format('Y'),
-				month: 3,
-				group: {},
-				group_id: null,
-				student_id: null,
-				subject_id: null,
-				student_name: '',
-				payment_id: null
-			},
-			paids: [],
-			fields: [
-				{key: 'index', label: '#'},
-				{key: 'payment.group.number', label: 'Guruh', sortable: true},
-				{
-					key: 'payment.date',
-					label: "To'lov oyi",
-					sortable: true,
-					tdClass: 'text-center',
-					formatter: 'formatMonth'
-				},
-				// {
-				//   key: 'payment', label: 'Guruh / Oy', sortable: true,
-				// },
-				{key: 'payment.student.full_name', label: 'Talaba', sortable: true},
-				{
-					key: 'amount',
-					label: "To'ladi",
-					sortable: true,
-					tdClass: 'text-right nowrap',
-					formatter: 'formatNumber'
-				},
-				{
-					key: 'date',
-					label: 'Sana',
-					sortable: true,
-					tdClass: 'nowrap',
-					formatter: 'formatDate'
-				},
-				{
-					key: 'action',
-					label: 'action'
-				}
-			],
-			items: [],
-			page: 1,
-			totalPages: null,
-			limit: 10,
-			notLoadPaids: false,
-		}
-	},
-	created() {
-		this.loadFromQuery()
-		this.loadGroups()
-		this.loadStudents()
-		this.loadSubjects()
-	},
-	methods: {
-		clearDate(input) {
-			this.filters[input] = [input] !== 'year' ? null : moment().format('Y')
-		},
-		groupFilter() {
-			this.filters.group = this.filters.group_id
-		},
-		removePayment(data) {
-			const paymentId = data.item.id
-			axios
-				.delete(`/api/payment-paids/${paymentId}`)
-				.then(res => {
-					if (res.data.success) {
-						this.$toast({
-							component: ToastificationContent,
-							props: {
-								title: 'Notification',
-								icon: 'BellIcon',
-								text: 'Успешно',
-								variant: 'success'
-							}
-						})
-						this.loadPaids()
-					}
-				})
-				.catch(err => {
-					console.log(err)
-				})
-		},
-		printCheck(data) {
-			var myWindow = window.open('/print/' + data.item.id, 'MsgWindow', 'toolbar=no,status=no,menubar=no,width=600,height=600')
-			//myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
-		},
-		editPayment(data) {
-			const params = {
-				subject_id: data.item.payment.group.subject_id,
-				student_id: data.item.payment.student_id,
-				group_id: data.item.payment.group_id,
-			}
-			params.month = new Date(data.item.date).getMonth() + 1
-			params.year = new Date(data.item.date).getFullYear()
-			params.payment_id = data.item.payment_id
-			params.date = data.item.date
-			params.amount = data.item.amount
-			params.paid_id = data.item.id
-			this.$refs.form.open(params)
-		},
-		createForm() {
-			this.$refs.form.open({
-				subject_id: this.filters.subject_id ? this.filters.subject_id.id : null,
-				student_id: this.filters.student_id ? this.filters.student_id.id : null,
-				group_id: this.filters.group_id ? this.filters.group_id.id : null,
-				month: this.filters.month.value,
-				year: this.filters.year.value,
-				payment_id: this.filters.payment_id
-			})
-		},
-			ExportExcel(type, fn, dl) {
-			let items = document.querySelectorAll('.sr-only')
-			items.forEach(item => {
-				item.innerHTML = ''
-			})
+      let elt = this.$refs.excel.$el.children[0]
+      let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+      return dl
+        ? XLSX.write(wb, {
+            bookType: type,
+            bookSST: true,
+            type: 'base64',
+          })
+        : XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+    },
+    formatNumber(value) {
+      return this.$options.filters.formatNumber(value)
+    },
+    formatMonth(value) {
+      return moment(value).format('MMM YY')
+    },
+    formatDate(value) {
+      return moment(value).format('D MMM Y')
+    },
+    loadPaids(skip = 0) {
+      if (this.notLoadPaids) return false
 
-			let elt = this.$refs.excel.$el.children[0]
-			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
-			return dl
-				? XLSX.write(wb, {
-						bookType: type,
-						bookSST: true,
-						type: 'base64'
-				  })
-				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
-		},
-		formatNumber(value) {
-			return this.$options.filters.formatNumber(value)
-		},
-		formatMonth(value) {
-			return moment(value).format('MMM YY')
-		},
-		formatDate(value) {
-			return moment(value).format('D MMM Y')
-		},
-		loadPaids(skip = 0) {
+      const params = {}
 
-			if (this.notLoadPaids)
-				return false;
+      params.limit = this.limit
+      params.skip = skip
 
-			const params = {}
+      if (this.filters.payment_id) params.payment_id = this.filters.payment_id
 
-			params.limit = this.limit
-			params.skip = skip
+      if (this.filters.group_id) params.group_id = this.filters.group_id.id
 
-			if (this.filters.payment_id) params.payment_id = this.filters.payment_id
+      if (this.filters.subject_id) params.subject_id = this.filters.subject_id.id
 
-			if (this.filters.group_id) params.group_id = this.filters.group_id.id
+      if (this.filters.student_id) params.student_id = this.filters.student_id.id
 
-			if (this.filters.subject_id) params.subject_id = this.filters.subject_id.id
+      if (this.filters.year.value) params.year = this.filters.year.value
 
-			if (this.filters.student_id) params.student_id = this.filters.student_id.id
+      if (this.filters.month.value) params.month = this.filters.month.value
 
-			if (this.filters.year.value) params.year = this.filters.year.value
+      if (this.filters.student_name) params.student_name = this.filters.student_name
 
-			if (this.filters.month.value) params.month = this.filters.month.value
+      // if (this.phone) params.phone = this.phone
 
-			if (this.filters.student_name) params.student_name = this.filters.student_name
+      if (this.filters.group_id || this.filters.student_name || this.filters.student_id) {
+        const $this = this
 
-			// if (this.phone) params.phone = this.phone
+        console.log(params)
 
-			if (this.filters.group_id || this.filters.student_name || this.filters.student_id) {
-				const $this = this
+        axios.get('payment-paids', { params }).then(response => {
+          $this.paids = response.data.data
+          $this.totalPages = response.data.total
+        })
+      } else {
+        this.paids = []
+      }
 
-				console.log(params)
+      if (this.$parent.$parent.$parent.$options.name === 'Payment') this.$parent.$parent.$parent.loadPayments()
+    },
+    loadStudents() {
+      const $this = this
+      const params = {}
 
-				axios.get('/api/payment-paids', {params}).then(response => {
-					$this.paids = response.data.data
-					$this.totalPages = response.data.total
-				})
-			} else {
-				this.paids = []
-			}
+      if (this.filters.group_id) params.group_id = this.filters.group_id
 
-			if (this.$parent.$parent.$parent.$options.name === 'Payment') this.$parent.$parent.$parent.loadPayments()
-		},
-		loadStudents() {
-			const $this = this
-			const params = {}
+      axios.get('students', { params }).then(response => {
+        $this.options.students = response.data.data
+      })
+    },
+    loadFromQuery() {
+      const { group_id, student_id, subject_id, payment_id, year, month } = this.$route.query
 
-			if (this.filters.group_id) params.group_id = this.filters.group_id
+      if (payment_id) {
+        this.notLoadPaids = false
+        this.filters.payment_id = payment_id ?? null
+        this.notLoadPaids = true
 
-			axios.get('/api/students', {params}).then(response => {
-				$this.options.students = response.data.data
-			})
-		},
-		loadFromQuery() {
-			const {group_id, student_id, subject_id, payment_id, year, month} = this.$route.query
+        let payment
+        axios.get('payments/' + payment_id).then(res => {
+          payment = res.data.data
 
-			if (payment_id) {
+          const month = moment(payment.date).format('M')
+          const monthLabel = moment(payment.date).format('MMMM')
+          const year = moment(payment.date).format('Y')
 
-				this.notLoadPaids = false;
-				this.filters.payment_id = payment_id ?? null
-				this.notLoadPaids = true;
+          this.filters.month = { text: monthLabel, value: month }
+          this.filters.year = { text: year, value: year }
 
-				let payment
-				axios.get('/api/payments/' + payment_id).then(res => {
-					payment = res.data.data
+          if (payment.group_id) {
+            axios.get('groups/' + payment.group_id).then(res => {
+              this.filters.group_id = { id: res.data.data.id, number: res.data.data.number }
+            })
+          }
+        })
+      } else {
+        this.notLoadPaids = false
 
-					const month = moment(payment.date).format('M')
-					const monthLabel = moment(payment.date).format('MMMM')
-					const year = moment(payment.date).format('Y')
+        this.filters.group_id = group_id ?? null
 
-					this.filters.month = {text: monthLabel, value: month}
-					this.filters.year = {text: year, value: year}
+        // this.filters.month = month ?? null
+        // this.filters.year = year ?? null
+      }
 
-					if (payment.group_id) {
-						axios.get('/api/groups/' + payment.group_id).then(res => {
-							this.filters.group_id = {id: res.data.data.id, number: res.data.data.number}
-						})
-					}
-				})
+      if (student_id) {
+        axios.get('students/' + student_id).then(res => {
+          this.filters.student_id = { id: student_id, full_name: res.data.data.full_name }
+        })
+      }
 
-			} else {
+      if (subject_id) {
+        axios.get('subjects/' + subject_id).then(res => {
+          this.filters.subject_id = { id: subject_id, name: res.data.data.name }
+        })
+      }
 
-				this.notLoadPaids = false;
-
-				this.filters.group_id = group_id ?? null
-
-				// this.filters.month = month ?? null
-				// this.filters.year = year ?? null
-			}
-
-			if (student_id) {
-				axios.get('/api/students/' + student_id).then(res => {
-					this.filters.student_id = {id: student_id, full_name: res.data.data.full_name}
-				})
-			}
-
-			if (subject_id) {
-				axios.get('/api/subjects/' + subject_id).then(res => {
-					this.filters.subject_id = {id: subject_id, name: res.data.data.name}
-				})
-			}
-
-			this.notLoadPaids = false;
-		},
-		loadGroups() {
-			axios.get('/api/groups').then(response => {
-				this.options.groups = response.data.data
-			})
-		},
-		loadSubjects() {
-			axios.get('/api/subjects').then(response => {
-				this.options.subjects = response.data.data
-			})
-		}
-	},
-	watch: {
-		'filters.year': function () {
-			this.loadPaids()
-		},
-		'filters.month': function () {
-			this.loadPaids()
-		},
-		'filters.payment_id': function () {
-			this.loadPaids()
-		},
-		'filters.group_id': function () {
-			this.loadPaids()
-		},
-		'filters.student_id': function () {
-			this.loadPaids()
-		},
-		'filters.subject_id': function () {
-			this.loadPaids()
-		},
-		'filters.student_name': function () {
-			this.loadPaids()
-		},
-		['page']() {
-			this.loadPaids((this.page - 1) * this.limit)
-		},
-		limit() {
-			this.loadPaids()
-		}
-	}
+      this.notLoadPaids = false
+    },
+    loadGroups() {
+      axios.get('groups').then(response => {
+        this.options.groups = response.data.data
+      })
+    },
+    loadSubjects() {
+      axios.get('subjects').then(response => {
+        this.options.subjects = response.data.data
+      })
+    },
+  },
+  watch: {
+    'filters.year': function () {
+      this.loadPaids()
+    },
+    'filters.month': function () {
+      this.loadPaids()
+    },
+    'filters.payment_id': function () {
+      this.loadPaids()
+    },
+    'filters.group_id': function () {
+      this.loadPaids()
+    },
+    'filters.student_id': function () {
+      this.loadPaids()
+    },
+    'filters.subject_id': function () {
+      this.loadPaids()
+    },
+    'filters.student_name': function () {
+      this.loadPaids()
+    },
+    ['page']() {
+      this.loadPaids((this.page - 1) * this.limit)
+    },
+    limit() {
+      this.loadPaids()
+    },
+  },
 }
 </script>

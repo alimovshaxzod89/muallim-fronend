@@ -382,7 +382,7 @@ export default {
 			this.filters[input] = [input] !== 'year' ? null : moment().format('YYYY')
 		},
 		removeCosts(item) {
-			axios.delete(`/api/teacher-paids/${item.id}`).then(res => {
+			axios.delete(`teacher-paids/${item.id}`).then(res => {
 				if (res.status === 200) {
 					this.loadTeacherPaids()
 					this.$toast({
@@ -405,7 +405,7 @@ export default {
 			})
 		},
 		loadTeachers() {
-			axios.get('/api/teachers').then(response => {
+			axios.get('teachers').then(response => {
 				if (response.status === 200) {
 					this.options.teachers = response.data.data
 				}
@@ -429,7 +429,7 @@ export default {
 		loadTeacherPaids() {
 			if (this.filters.month && this.filters.year && this.filters.day) {
 				axios
-					.get('/api/teacher-paids', {
+					.get('teacher-paids', {
 						params: {
 							day: this.filters.day,
 							month: this.filters.month.id,
