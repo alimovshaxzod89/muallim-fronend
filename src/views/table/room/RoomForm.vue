@@ -47,7 +47,7 @@
 
               <v-col cols="10">
                 <v-text-field
-                  type="text"
+                  type="number"
                   label="SIG'IMI"
                   v-model="formData.capacity"
                   outlined
@@ -89,12 +89,10 @@ import axios from '@axios'
 import { ref, onMounted } from '@vue/composition-api'
 import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
 
+const MODULE_NAME = 'room'
+
 export default {
   props: {
-    MODULE_NAME: {
-      type: String,
-      required: true,
-    },
   },
 
   created() {
@@ -146,9 +144,13 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.name && formData.value.place_id && formData.value.name) {
+        if (
+            formData.value.name && 
+            formData.value.place_id && 
+            formData.value.name
+          ) {
           store
-            .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -164,9 +166,12 @@ export default {
           })
         }
       } else {
-        if (formData.value.name && formData.value.place_id && formData.value.name) {
+        if (formData.value.name && 
+            formData.value.place_id && 
+            formData.value.name
+          ) {
           store
-            .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })

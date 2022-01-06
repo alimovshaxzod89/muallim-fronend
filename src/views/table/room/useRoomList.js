@@ -11,6 +11,12 @@ export default function useRoomList(MODULE_NAME) {
     { text: 'NOMI', value: 'name' },
     { text: "SIG'IMI", value: 'capacity' },
     { text: "AKTIV", value: 'active' },
+    {
+      text: 'AMALLAR',
+      value: 'actions',
+      align: 'center',
+      sortable: false,
+    }
   ]
 
   const searchQuery = ref('')
@@ -48,7 +54,8 @@ export default function useRoomList(MODULE_NAME) {
   }
 
   watch(searchQuery, () => {
-    if (options.value.page != 1) options.value.page = 1
+    if (options.value.page != 1) 
+    options.value.page = 1
   })
 
   watch([searchQuery, options], () => {
