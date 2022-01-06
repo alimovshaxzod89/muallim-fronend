@@ -53,9 +53,9 @@
 
 <script>
 import store from '@/store'
-import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
+import envParams from '@envParams'
 
 export default {
   props: {
@@ -119,8 +119,8 @@ export default {
     const openUserImage = student => {
       studentInfo.value = student
       show.value = true
-      if (student.photo) {
-        url.value = 'storage/' + student.photo
+      if (student.photo_link) {
+        url.value = envParams.BASE_URL + student.photo_link
         selectedAvatar.value = true
       } else {
         url.value = require(`@/assets/images/user-image.png`)
@@ -194,9 +194,11 @@ export default {
       if (studentInfo.value && avatar.value) {
         const newInfo = {
           ...studentInfo.value,
-          photo: url.value ? url.value : null,
-          // photo: avatar.value ? avatar.value : null,
+          // photo: url.value ? url.value : null,
+          image: avatar.value ? avatar.value : null,
         }
+				delete newInfo.photo
+				delete newInfo.photo_link
         store
           .dispatch(`${props.MODULE_NAME}/updateRow`, newInfo)
           .then(res => {
