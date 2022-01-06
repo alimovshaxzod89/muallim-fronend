@@ -314,9 +314,6 @@ label[for='fileUpload'] {
 }
 .photo-label {
   height: 0 !important;
-  /* min-width: 92px; */
-  /* color: var(--v-info-base) !important;
-  caret-color: var(--v-info-base) !important; */
   padding: 0 !important;
 }
 .photo-label label {

@@ -27,9 +27,31 @@ export default function useUnitList(MODULE_NAME) {
   ]
 
   const searchQuery = ref('')
+  // const filterInputs = ref({
+  //   first_name: null,
+  //   phone: null,
+  //   region_id: null,
+  //   address: null,
+  //   permanent_region_id: null,
+  //   permanent_address: null,
+  //   gender: null,
+  //   birth_date: null,
+  //   sale: null,
+  //   sale_cause: null,
+  // })
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
+    first_name: null,
+    phone: null,
+    region_id: null,
+    address: null,
+    permanent_region_id: null,
+    permanent_address: null,
+    gender: null,
+    birth_date: null,
+    sale: null,
+    sale_cause: null,
   })
   const loading = ref(false)
 
