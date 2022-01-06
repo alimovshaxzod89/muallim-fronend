@@ -8,6 +8,14 @@ const views = [
     },
   },
   {
+    path: '/rooms',
+    name: 'rooms',
+    component: () => import('@/views/table/room/RoomList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/rate',
     name: 'rate',
     component: () => import('@/views/rate/RateList.vue'),

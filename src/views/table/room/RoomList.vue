@@ -2,111 +2,21 @@
   <v-card id="data-list">
     <!-- search -->
     <v-card-text class="d-flex align-center flex-wrap pb-0">
-      <div class="d-flex align-center flex-wrap pb-5 my-filter">
+      <div class="d-flex align-center pb-5">
         <v-text-field
           v-model="searchQuery"
           single-line
           dense
           outlined
           hide-details
-          placeholder="FISH"
+          placeholder="Qidiruv"
           class="data-list-search me-3"
         ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="TELEFON"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="TUMAN"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="MANZIL"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="D.Y. TUMAN"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="D.Y. MANZIL"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="JINSI"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="TUG'ILGAN SANA"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="CHEGIRMA"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="CHEGIRMA SABABI"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-spacer></v-spacer>
-
-				<v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
       </div>
+
+      <v-spacer></v-spacer>
+
+      <v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
@@ -154,27 +64,19 @@
           <!-- image -->
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openPhoto(item)">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
                 <v-icon size="18">
                   {{ icons.mdiImageEditOutline }}
                 </v-icon>
               </v-btn>
             </template>
-            <span>Suratni tanlash</span>
+            <span>Rasm tanlash</span>
           </v-tooltip>
         </div>
       </template>
 
       <template #[`item.gender`]="{ item }">
         {{ item.gender === 1 ? 'Erkak' : 'Ayol' }}
-      </template>
-
-      <template #[`item.photo`]="{ item }">
-        <img
-          class="img-user"
-          :src="item.photo_link ? BASE_URL + item.photo_link : require(`@/assets/images/user-image.png`)"
-          alt="Avatar"
-        />
       </template>
 
       <template #[`item.sale`]="{ item }">
@@ -184,14 +86,8 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <student-form
-      ref="studentForm"
-      :MODULE_NAME="MODULE_NAME"
-      v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-    />
-
-    <student-photo
-      ref="studentPhoto"
+    <room-form
+      ref="roomForm"
       :MODULE_NAME="MODULE_NAME"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
@@ -212,29 +108,25 @@ import {
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
 
-import envParams from '@envParams'
-
 // store module
-import StudentStoreModule from './StudentStoreModule'
+import RoomStoreModule from './RoomStoreModule'
 
 // composition function
-import useStudentList from './useStudentList'
-import StudentForm from './StudentForm'
-import StudentPhoto from './StudentPhoto'
+import useRoomList from './useRoomList'
+import RoomForm from './RoomForm.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 export default {
   components: {
-    StudentForm,
-    StudentPhoto,
+    RoomForm,
     DialogConfirm,
   },
   setup() {
-    const MODULE_NAME = 'students'
+    const MODULE_NAME = 'room'
 
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, StudentStoreModule)
+      store.registerModule(MODULE_NAME, RoomStoreModule)
     }
     // UnRegister on leave
     onUnmounted(() => {
@@ -254,7 +146,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useStudentList(MODULE_NAME)
+    } = useRoomList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -266,15 +158,9 @@ export default {
     ]
 
     //Form
-    const studentForm = ref(null)
+    const roomForm = ref(null)
     const openForm = id => {
-      studentForm.value.open(id)
-    }
-
-    //Photo
-    const studentPhoto = ref(null)
-    const openPhoto = item => {
-      studentPhoto.value.openUserImage(item)
+      roomForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -286,11 +172,8 @@ export default {
         .catch(() => {})
     }
 
-		const BASE_URL = envParams.BASE_URL
-
     // Return
     return {
-			BASE_URL,
       state,
 
       tableColumns,
@@ -308,10 +191,8 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      studentForm,
-      studentPhoto,
+      roomForm,
       openForm,
-      openPhoto,
 
       MODULE_NAME,
 
@@ -342,18 +223,6 @@ export default {
 
   .data-list-search {
     max-width: 10.625rem;
-  }
-}
-.img-user {
-  width: 50px;
-  height: 50px;
-  overflow: hidden;
-  object-fit: cover;
-}
-
-.my-filter {
-  .v-input {
-    margin-bottom: 12px;
   }
 }
 </style>
