@@ -32,8 +32,8 @@
                 <v-btn v-if="cameraShow" v-show="visibleCamera" class="primary" @click="capturePhoto">SURATGA OLISH</v-btn>
                 <v-btn v-if="!cameraShow" v-show="visibleCamera" class="primary" @click="startWebCamera">SURATGA OLISH BO'LIMI</v-btn>
                 <input id="fileUpload" type="file" accept="image/*" hidden @click="fileUpload" @change="fileUpload" />
-                <v-btn color="info" outlined v-show="visibleCamera">
-									<label class="photo-label" for="fileUpload">TANLASH</label>
+                <v-btn class="photo-label" color="info" outlined v-show="visibleCamera">
+									<label for="fileUpload" v-show="visibleCamera">TANLASH</label>
 								</v-btn>
               </div>
 
@@ -197,8 +197,8 @@ export default {
           // photo: url.value ? url.value : null,
           image: avatar.value ? avatar.value : null,
         }
-				delete newInfo.photo
-				delete newInfo.photo_link
+        delete newInfo.photo
+        delete newInfo.photo_link
         store
           .dispatch(`${props.MODULE_NAME}/updateRow`, newInfo)
           .then(res => {
@@ -313,6 +313,18 @@ label[for='fileUpload'] {
   width: 100%;
 }
 .photo-label {
+  height: 0 !important;
+  /* min-width: 92px; */
+  /* color: var(--v-info-base) !important;
+  caret-color: var(--v-info-base) !important; */
+  padding: 0 !important;
+}
+.photo-label label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px !important;
+  padding: 0 23.1111111111px;
   cursor: pointer;
 }
 .webcam-buttons {
