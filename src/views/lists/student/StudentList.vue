@@ -3,12 +3,21 @@
     <!-- search -->
     <v-card-text class="d-flex align-center flex-wrap pb-0">
       <div class="d-flex align-center flex-wrap pb-5 my-filter">
+				<v-text-field
+          v-model="searchQuery"
+          dense
+          outlined
+          hide-details
+          label="Qidiruv"
+          class="data-list-search me-3"
+        ></v-text-field>
+
         <v-text-field
           v-model="options.first_name"
           dense
           outlined
           hide-details
-          label="FISH"
+          label="Fish"
           class="data-list-search me-3"
         ></v-text-field>
 
@@ -17,7 +26,7 @@
           dense
           outlined
           hide-details
-          label="TELEFON"
+          label="Telefon"
           class="data-list-search me-3"
         ></v-text-field>
 
@@ -29,7 +38,7 @@
           dense
           outlined
           hide-details
-          label="TUMAN"
+          label="Tuman"
           class="data-list-search me-3"
 					clearable
         ></v-autocomplete>
@@ -39,7 +48,7 @@
           dense
           outlined
           hide-details
-          label="MANZIL"
+          label="Manzil"
           class="data-list-search me-3"
         ></v-text-field>
 
@@ -51,7 +60,7 @@
           dense
           outlined
           hide-details
-          label="D.Y. TUMAN"
+          label="D.Y. Tuman"
           class="data-list-search me-3"
 					clearable
         ></v-autocomplete>
@@ -61,7 +70,7 @@
           dense
           outlined
           hide-details
-          label="D.Y. MANZIL"
+          label="D.Y. Manzil"
           class="data-list-search me-3"
         ></v-text-field>
 
@@ -73,7 +82,7 @@
           dense
           outlined
 					hide-details
-          label="JINSI"
+          label="Jinsi"
           class="data-list-search me-3"
 					clearable
         ></v-autocomplete>
@@ -83,7 +92,7 @@
 						<v-text-field
 							class="my-date-picker"
 							v-model="options.birth_date"
-							label="TUG'ILGAN SANA"
+							label="Tug'ilgan sana"
 							readonly
 							v-bind="attrs"
 							hide-details
@@ -112,7 +121,7 @@
           dense
           outlined
           hide-details
-          label="CHEGIRMA"
+          label="Chegirma"
           class="data-list-search me-3"
 					clearable
         ></v-autocomplete>
@@ -122,7 +131,7 @@
           dense
           outlined
           hide-details
-          label="CHEGIRMA SABABI"
+          label="Chegirma sababi"
           class="data-list-search me-3"
         ></v-text-field>
 
