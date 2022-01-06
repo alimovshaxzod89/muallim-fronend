@@ -42,7 +42,7 @@ export default {
     fetchDatas({ commit }, queryParams) {
       return new Promise((resolve, reject) => {
         axios
-          .get('/api/rooms', { params: queryParams })
+          .get('rooms', { params: queryParams })
           .then(response => {
             const { data, total } = response.data
             commit('setRows', data)
@@ -56,7 +56,7 @@ export default {
     addRow({ commit }, row) {
       return new Promise((resolve, reject) => {
         axios
-          .post('api/rooms', row)
+          .post('rooms', row)
           .then(response => {
             if (response.data.success) {
               commit('addRow', response.data.data)
@@ -71,7 +71,7 @@ export default {
     updateRow({ commit, getters }, row) {
       return new Promise((resolve, reject) => {
         axios
-          .put(`api/rooms/${row.id}`, row)
+          .put(`rooms/${row.id}`, row)
           .then(response => {
             if (response.data.success) {
               const index = getters.indexIds.indexOf(parseInt(row.id))
@@ -86,7 +86,7 @@ export default {
     removeRow({ commit, getters }, id) {
       return new Promise((resolve, reject) => {
         axios
-          .delete(`api/rooms/${id}`)
+          .delete(`rooms/${id}`)
           .then(response => {
             if (response.data.success) {
               const index = getters.indexIds.indexOf(id)

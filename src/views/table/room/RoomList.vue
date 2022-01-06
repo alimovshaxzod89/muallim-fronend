@@ -35,7 +35,10 @@
         {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
       </template>
 
-      <template #[`item.actions`]="{ item }">
+      <!-- total -->
+      <template #[`item.total`]="{ item }"> ${{ item.total }}</template>
+
+      <template late #[`item.actions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
           <v-tooltip bottom>
@@ -60,27 +63,7 @@
             </template>
             <span>Tahrirlash</span>
           </v-tooltip>
-
-          <!-- image -->
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiImageEditOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Rasm tanlash</span>
-          </v-tooltip>
         </div>
-      </template>
-
-      <template #[`item.gender`]="{ item }">
-        {{ item.gender === 1 ? 'Erkak' : 'Ayol' }}
-      </template>
-
-      <template #[`item.sale`]="{ item }">
-        {{ item.sale ? 'Ha' : 'Yo\'q' }}
       </template>
     </v-data-table>
 
@@ -88,7 +71,6 @@
 
     <room-form
       ref="roomForm"
-      :MODULE_NAME="MODULE_NAME"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -116,22 +98,23 @@ import useRoomList from './useRoomList'
 import RoomForm from './RoomForm.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
+const MODULE_NAME = 'room'
+
 export default {
   components: {
     RoomForm,
     DialogConfirm,
   },
   setup() {
-    const MODULE_NAME = 'room'
 
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, RoomStoreModule)
     }
     // UnRegister on leave
-    onUnmounted(() => {
-      if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
-    })
+    // onUnmounted(() => {
+    //   if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
+    // })
 
     //store state
     const state = ref(store.state[MODULE_NAME])
