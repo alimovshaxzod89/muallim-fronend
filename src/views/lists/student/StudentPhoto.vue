@@ -192,13 +192,11 @@ export default {
     }
     const submitPhoto = () => {
       if (studentInfo.value && avatar.value) {
-        console.log(studentInfo)
         const newInfo = {
           ...studentInfo.value,
-          // photo: avatar.value ? avatar.value : null,
           photo: url.value ? url.value : null,
+          // photo: avatar.value ? avatar.value : null,
         }
-        console.log(newInfo)
         store
           .dispatch(`${props.MODULE_NAME}/updateRow`, newInfo)
           .then(res => {
@@ -209,18 +207,6 @@ export default {
             console.log(error)
             emit('notify', { type: 'error', text: error.message })
           })
-        // axios
-        //   .put('students/' + studentInfo.value.id, {
-        //     first_name: studentInfo.value.first_name,
-        //     image: avatar.value ? avatar.value : null,
-        //   })
-        //   .then(res => {
-        //     if (res.data.success) {
-        //       stopWebCamera()
-        //       // loadStudents((page.value - 1) * limit.value)
-        //       emit('notify', { type: 'success', text: 'Muvaffaqiyatli' })
-        //     }
-        //   })
       } else if (!avatar.value) {
         stopWebCamera()
         // loadStudents((this.page - 1) * this.limit)
@@ -230,20 +216,37 @@ export default {
       }
     }
     const deleteImage = () => {
-      axios
-        .put('students/' + studentInfo.value.id, {
-          first_name: studentInfo.value.first_name,
-          photo: null,
+      const newInfo = {
+        ...studentInfo.value,
+        photo: null,
+      }
+      store
+        .dispatch(`${props.MODULE_NAME}/updateRow`, newInfo)
+        .then(res => {
+          emit('notify', { type: 'success', text: 'Muvaffaqiyatli' })
+          url.value = require(`@/assets/images/user-image.png`)
+          selectedAvatar.value = false
+          avatar.value = null
         })
-        .then(response => {
-          if (response.data.success) {
-            emit('notify', { type: 'success', text: 'Muvaffaqiyatli' })
-            url.value = require(`@/assets/images/user-image.png`)
-            // $refs['my-modal'].hide()
-            selectedAvatar.value = false
-            avatar.value = null
-          }
+        .catch(error => {
+          console.log(error)
+          emit('notify', { type: 'error', text: error.message })
         })
+
+      // axios
+      //   .put('students/' + studentInfo.value.id, {
+      //     first_name: studentInfo.value.first_name,
+      //     photo: null,
+      //   })
+      //   .then(response => {
+      //     if (response.data.success) {
+      //       emit('notify', { type: 'success', text: 'Muvaffaqiyatli' })
+      //       url.value = require(`@/assets/images/user-image.png`)
+      //       // $refs['my-modal'].hide()
+      //       selectedAvatar.value = false
+      //       avatar.value = null
+      //     }
+      //   })
     }
 
     return {
