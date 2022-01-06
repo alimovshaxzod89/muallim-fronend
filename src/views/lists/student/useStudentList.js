@@ -30,11 +30,26 @@ export default function useUnitList(MODULE_NAME) {
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
+    first_name: null,
+    phone: null,
+    region_id: null,
+    address: null,
+    permanent_region_id: null,
+    permanent_address: null,
+    gender: null,
+    birth_date: null,
+    sale: null,
+    sale_cause: null,
+    limit: 10,
+    skip: 0,
   })
   const loading = ref(false)
 
   let lastQuery = ''
   const fetchDatas = (force = false) => {
+    options.value.skip = options.value.page - 1
+    options.value.limit = options.value.itemsPerPage
+
     const queryParams = {
       q: searchQuery.value,
       ...options.value,

@@ -43,7 +43,7 @@
 				<hr>
         <v-card-actions class="pt-5">
           <v-spacer></v-spacer>
-          <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
+          <v-btn color="gray" outlined @click="stopWebCamera()">Bekor qilish</v-btn>
           <v-btn color="success" type="submit" @click.prevent="submitPhoto()">Saqlash</v-btn>
         </v-card-actions>
       </v-form>
@@ -314,9 +314,6 @@ label[for='fileUpload'] {
 }
 .photo-label {
   height: 0 !important;
-  /* min-width: 92px; */
-  /* color: var(--v-info-base) !important;
-  caret-color: var(--v-info-base) !important; */
   padding: 0 !important;
 }
 .photo-label label {

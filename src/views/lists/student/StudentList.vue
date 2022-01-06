@@ -3,103 +3,135 @@
     <!-- search -->
     <v-card-text class="d-flex align-center flex-wrap pb-0">
       <div class="d-flex align-center flex-wrap pb-5 my-filter">
+				<v-text-field
+          v-model="searchQuery"
+          dense
+          outlined
+          hide-details
+          label="Qidiruv"
+          class="data-list-search me-3"
+        ></v-text-field>
+
         <v-text-field
-          v-model="searchQuery"
-          single-line
+          v-model="options.first_name"
           dense
           outlined
           hide-details
-          placeholder="FISH"
+          label="Fish"
           class="data-list-search me-3"
         ></v-text-field>
 
 				<v-text-field
-          v-model="searchQuery"
-          single-line
+          v-model="options.phone"
           dense
           outlined
           hide-details
-          placeholder="TELEFON"
+          label="Telefon"
           class="data-list-search me-3"
         ></v-text-field>
 
-				<v-text-field
-          v-model="searchQuery"
-          single-line
+				<v-autocomplete
+          v-model="options.region_id"
+					:items="regions"
+					item-text="name"
+					item-value="id"
           dense
           outlined
           hide-details
-          placeholder="TUMAN"
+          label="Tuman"
+          class="data-list-search me-3"
+					clearable
+        ></v-autocomplete>
+
+				<v-text-field
+          v-model="options.address"
+          dense
+          outlined
+          hide-details
+          label="Manzil"
           class="data-list-search me-3"
         ></v-text-field>
 
-				<v-text-field
-          v-model="searchQuery"
-          single-line
+				<v-autocomplete
+          v-model="options.permanent_region_id"
+					:items="regions"
+					item-text="name"
+					item-value="id"
           dense
           outlined
           hide-details
-          placeholder="MANZIL"
+          label="D.Y. Tuman"
+          class="data-list-search me-3"
+					clearable
+        ></v-autocomplete>
+
+				<v-text-field
+          v-model="options.permanent_address"
+          dense
+          outlined
+          hide-details
+          label="D.Y. Manzil"
           class="data-list-search me-3"
         ></v-text-field>
 
-				<v-text-field
-          v-model="searchQuery"
-          single-line
+				<v-autocomplete
+          v-model="options.gender"
+					:items="[{value: 1, name: 'Erkak'}, {value: 2, name: 'Ayol'}]"
+					item-text="name"
+					item-value="value"
+          dense
+          outlined
+					hide-details
+          label="Jinsi"
+          class="data-list-search me-3"
+					clearable
+        ></v-autocomplete>
+
+				<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+					<template v-slot:activator="{ on, attrs }">
+						<v-text-field
+							class="my-date-picker"
+							v-model="options.birth_date"
+							label="Tug'ilgan sana"
+							readonly
+							v-bind="attrs"
+							hide-details
+							v-on="on"
+							style="height: 40px !important; width: 170px !important"
+							outlined
+							clearable
+							:append-icon="icons.mdiCalendar"
+						></v-text-field>
+					</template>
+					<v-date-picker
+						v-model="options.birth_date"
+						color="primary"
+						@input="isDate = false"
+						no-title
+						:first-day-of-week="1"
+						locale="ru-ru"
+					></v-date-picker>
+				</v-menu>
+
+				<v-autocomplete
+          v-model="options.sale"
+					:items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
+					item-text="name"
+					item-value="value"
           dense
           outlined
           hide-details
-          placeholder="D.Y. TUMAN"
+          label="Chegirma"
           class="data-list-search me-3"
-        ></v-text-field>
+					clearable
+        ></v-autocomplete>
 
 				<v-text-field
-          v-model="searchQuery"
-          single-line
+          v-model="options.sale_cause"
           dense
           outlined
           hide-details
-          placeholder="D.Y. MANZIL"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="JINSI"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="TUG'ILGAN SANA"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="CHEGIRMA"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-text-field
-          v-model="searchQuery"
-          single-line
-          dense
-          outlined
-          hide-details
-          placeholder="CHEGIRMA SABABI"
+          label="Chegirma sababi"
           class="data-list-search me-3"
         ></v-text-field>
 
@@ -206,11 +238,13 @@ import {
   mdiDotsVertical,
   mdiEyeOutline,
   mdiPencilOutline,
+  mdiCalendar,
   mdiImageEditOutline,
 } from '@mdi/js'
 
-import { onUnmounted, ref } from '@vue/composition-api'
+import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
+import axios from '@axios'
 
 import envParams from '@envParams'
 
@@ -265,6 +299,10 @@ export default {
       { title: 'Edit', icon: mdiPencilOutline },
     ]
 
+    // Datepicker
+    const picker = new Date().toISOString().substr(0, 10)
+    const isDate = ref(false)
+
     //Form
     const studentForm = ref(null)
     const openForm = id => {
@@ -286,13 +324,27 @@ export default {
         .catch(() => {})
     }
 
-		const BASE_URL = envParams.BASE_URL
+    const BASE_URL = envParams.BASE_URL
+
+    // LoadApis
+    const regions = ref([])
+    const loadRegions = () => {
+      axios.get('regions').then(response => {
+        regions.value = response.data.data
+      })
+    }
+
+    onMounted(() => {
+      loadRegions()
+    })
 
     // Return
     return {
-			BASE_URL,
+      BASE_URL,
       state,
 
+      picker,
+      isDate,
       tableColumns,
       searchQuery,
       options,
@@ -315,12 +367,16 @@ export default {
 
       MODULE_NAME,
 
+      // LoadApis
+      regions,
+
       icons: {
         mdiTrendingUp,
         mdiPlus,
         mdiPencilOutline,
         mdiDeleteOutline,
         mdiDotsVertical,
+        mdiCalendar,
         mdiEyeOutline,
         mdiImageEditOutline,
       },
@@ -353,6 +409,7 @@ export default {
 
 .my-filter {
   .v-input {
+    margin-right: 12px;
     margin-bottom: 12px;
   }
 }
