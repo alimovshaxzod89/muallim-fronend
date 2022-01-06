@@ -232,21 +232,6 @@ export default {
           console.log(error)
           emit('notify', { type: 'error', text: error.message })
         })
-
-      // axios
-      //   .put('students/' + studentInfo.value.id, {
-      //     first_name: studentInfo.value.first_name,
-      //     photo: null,
-      //   })
-      //   .then(response => {
-      //     if (response.data.success) {
-      //       emit('notify', { type: 'success', text: 'Muvaffaqiyatli' })
-      //       url.value = require(`@/assets/images/user-image.png`)
-      //       // $refs['my-modal'].hide()
-      //       selectedAvatar.value = false
-      //       avatar.value = null
-      //     }
-      //   })
     }
 
     return {

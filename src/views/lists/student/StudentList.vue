@@ -2,21 +2,111 @@
   <v-card id="data-list">
     <!-- search -->
     <v-card-text class="d-flex align-center flex-wrap pb-0">
-      <div class="d-flex align-center pb-5">
+      <div class="d-flex align-center flex-wrap pb-5 my-filter">
         <v-text-field
           v-model="searchQuery"
           single-line
           dense
           outlined
           hide-details
-          placeholder="Qidiruv"
+          placeholder="FISH"
           class="data-list-search me-3"
         ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="TELEFON"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="TUMAN"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="MANZIL"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="D.Y. TUMAN"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="D.Y. MANZIL"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="JINSI"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="TUG'ILGAN SANA"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="CHEGIRMA"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-text-field
+          v-model="searchQuery"
+          single-line
+          dense
+          outlined
+          hide-details
+          placeholder="CHEGIRMA SABABI"
+          class="data-list-search me-3"
+        ></v-text-field>
+
+				<v-spacer></v-spacer>
+
+				<v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
       </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
@@ -254,5 +344,11 @@ export default {
   height: 50px;
   overflow: hidden;
   object-fit: cover;
+}
+
+.my-filter {
+  .v-input {
+    margin-bottom: 12px;
+  }
 }
 </style>
