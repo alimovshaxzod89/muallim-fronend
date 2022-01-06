@@ -1,13 +1,7 @@
 import {
-  mdiAccountCheckOutline,
-  mdiAccountMultiple,
-  mdiClipboardOutline,
-  mdiFactory,
   mdiFileDocumentEdit,
-  mdiHomeOutline,
-  mdiScaleBalance,
-  mdiShieldAccount,
-  mdiViewHeadline,
+  mdiHomeOutline, mdiShieldAccount,
+  mdiViewHeadline
 } from '@mdi/js'
 
 export default [
@@ -21,30 +15,13 @@ export default [
     icon: mdiViewHeadline,
     children: [
       {
-        title: 'Tovar turlari',
-        icon: mdiClipboardOutline,
-        to: 'product-type',
+        title: 'Xonalar',
+        to: 'rooms',
       },
       {
-        title: 'Tovar brendlari',
-        icon: mdiFactory,
-        to: 'manufacturer',
-      },
-      {
-        title: "O'lchov birliklari",
-        icon: mdiScaleBalance,
-        to: 'units',
-      },
-      {
-        title: 'Yetkazib beruvchilar',
-        icon: mdiAccountCheckOutline,
-        to: 'suppliers',
-      },
-      {
-        title: 'Mijozlar',
-        icon: mdiAccountMultiple,
-        to: 'clients',
-      },
+        title: 'Guruhlar',
+        to: 'groups',
+      }
     ],
   },
   {

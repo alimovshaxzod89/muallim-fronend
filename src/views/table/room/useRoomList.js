@@ -1,55 +1,27 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useUnitList(MODULE_NAME) {
+export default function useRoomList(MODULE_NAME) {
   const selectedTableData = ref([])
   const notify = ref({})
 
   const tableColumns = [
     { text: '#', sortable: false, value: 'index' },
-    {
-      text: 'AMALLAR',
-      value: 'actions',
-      align: 'center',
-      sortable: false,
-    },
-    { text: 'RASM', value: 'photo' },
-    { text: 'FISH', value: 'full_name' },
-    { text: 'TELEFON', value: 'phone' },
-    { text: 'TUMAN', value: 'region.name' },
-    { text: 'MANZIL', value: 'address' },
-    { text: 'D.Y. TUMAN', value: 'permanent_region.name' },
-    { text: 'D.Y. MANZIL', value: 'permanent_address' },
-    { text: 'JINSI', value: 'gender' },
-    { text: "TUG'ILGAN SANA", value: 'birth_date' },
-    { text: 'CHEGIRMA', value: 'sale' },
-    { text: 'CHEGIRMA SABABI', value: 'sale_cause' },
+    { text: 'BINO', value: 'place_id' },
+    { text: 'NOMI', value: 'name' },
+    { text: "SIG'IMI", value: 'capacity' },
+    { text: "AKTIV", value: 'active' },
   ]
 
   const searchQuery = ref('')
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
-    first_name: null,
-    phone: null,
-    region_id: null,
-    address: null,
-    permanent_region_id: null,
-    permanent_address: null,
-    gender: null,
-    birth_date: null,
-    sale: null,
-    sale_cause: null,
-    limit: 10,
-    skip: 0,
   })
   const loading = ref(false)
 
   let lastQuery = ''
   const fetchDatas = (force = false) => {
-    options.value.skip = options.value.page - 1
-    options.value.limit = options.value.itemsPerPage
-
     const queryParams = {
       q: searchQuery.value,
       ...options.value,
