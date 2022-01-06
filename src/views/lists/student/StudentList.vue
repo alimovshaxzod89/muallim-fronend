@@ -82,7 +82,7 @@
       <template #[`item.photo`]="{ item }">
         <img
           class="img-user"
-          :src="item.photo ? 'storage/' + item.photo : require(`@/assets/images/user-image.png`)"
+          :src="item.photo_link ? BASE_URL + item.photo_link : require(`@/assets/images/user-image.png`)"
           alt="Avatar"
         />
       </template>
@@ -121,6 +121,8 @@ import {
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
+
+import envParams from '@envParams'
 
 // store module
 import StudentStoreModule from './StudentStoreModule'
@@ -194,8 +196,11 @@ export default {
         .catch(() => {})
     }
 
+		const BASE_URL = envParams.BASE_URL
+
     // Return
     return {
+			BASE_URL,
       state,
 
       tableColumns,
