@@ -1,8 +1,8 @@
 <template>
   <v-card id="data-list">
     <!-- search -->
-    <v-card-text class="d-flex align-center flex-wrap pb-0">
-      <div class="d-flex align-center flex-wrap pb-5 my-filter">
+    <v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
+      <div class="d-flex pb-5" style="width: 100%">
 				<v-text-field
           v-model="searchQuery"
           dense
@@ -12,133 +12,146 @@
           class="data-list-search me-3"
         ></v-text-field>
 
-        <v-text-field
-          v-model="options.first_name"
-          dense
-          outlined
-          hide-details
-          label="Fish"
-          class="data-list-search me-3"
-        ></v-text-field>
+				<v-expansion-panels class="my-accordion" accordion>
+					<v-expansion-panel>
+						<v-expansion-panel-header disable-icon-rotate>
+							Ko'proq
+							<template #actions>
+							<v-icon color="secondary">
+								{{ icons.mdiFilterOutline  }}
+							</v-icon>
+						</template>
+						</v-expansion-panel-header>
+						<v-expansion-panel-content>
+							<v-text-field
+								v-model="options.first_name"
+								dense
+								outlined
+								hide-details
+								label="Fish"
+								class="data-list-search me-3"
+							></v-text-field>
 
-				<v-text-field
-          v-model="options.phone"
-          dense
-          outlined
-          hide-details
-          label="Telefon"
-          class="data-list-search me-3"
-        ></v-text-field>
+							<v-text-field
+								v-model="options.phone"
+								dense
+								outlined
+								hide-details
+								label="Telefon"
+								class="data-list-search me-3"
+							></v-text-field>
 
-				<v-autocomplete
-          v-model="options.region_id"
-					:items="regions"
-					item-text="name"
-					item-value="id"
-          dense
-          outlined
-          hide-details
-          label="Tuman"
-          class="data-list-search me-3"
-					clearable
-        ></v-autocomplete>
+							<v-autocomplete
+								v-model="options.region_id"
+								:items="regions"
+								item-text="name"
+								item-value="id"
+								dense
+								outlined
+								hide-details
+								label="Tuman"
+								class="data-list-search me-3"
+								clearable
+							></v-autocomplete>
 
-				<v-text-field
-          v-model="options.address"
-          dense
-          outlined
-          hide-details
-          label="Manzil"
-          class="data-list-search me-3"
-        ></v-text-field>
+							<v-text-field
+								v-model="options.address"
+								dense
+								outlined
+								hide-details
+								label="Manzil"
+								class="data-list-search me-3"
+							></v-text-field>
 
-				<v-autocomplete
-          v-model="options.permanent_region_id"
-					:items="regions"
-					item-text="name"
-					item-value="id"
-          dense
-          outlined
-          hide-details
-          label="D.Y. Tuman"
-          class="data-list-search me-3"
-					clearable
-        ></v-autocomplete>
+							<v-autocomplete
+								v-model="options.permanent_region_id"
+								:items="regions"
+								item-text="name"
+								item-value="id"
+								dense
+								outlined
+								hide-details
+								label="D.Y. Tuman"
+								class="data-list-search me-3"
+								clearable
+							></v-autocomplete>
 
-				<v-text-field
-          v-model="options.permanent_address"
-          dense
-          outlined
-          hide-details
-          label="D.Y. Manzil"
-          class="data-list-search me-3"
-        ></v-text-field>
+							<v-text-field
+								v-model="options.permanent_address"
+								dense
+								outlined
+								hide-details
+								label="D.Y. Manzil"
+								class="data-list-search me-3"
+							></v-text-field>
 
-				<v-autocomplete
-          v-model="options.gender"
-					:items="[{value: 1, name: 'Erkak'}, {value: 2, name: 'Ayol'}]"
-					item-text="name"
-					item-value="value"
-          dense
-          outlined
-					hide-details
-          label="Jinsi"
-          class="data-list-search me-3"
-					clearable
-        ></v-autocomplete>
+							<v-autocomplete
+								v-model="options.gender"
+								:items="[{value: 1, name: 'Erkak'}, {value: 2, name: 'Ayol'}]"
+								item-text="name"
+								item-value="value"
+								dense
+								outlined
+								hide-details
+								label="Jinsi"
+								class="data-list-search me-3"
+								clearable
+							></v-autocomplete>
 
-				<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
-					<template v-slot:activator="{ on, attrs }">
-						<v-text-field
-							class="my-date-picker"
-							v-model="options.birth_date"
-							label="Tug'ilgan sana"
-							readonly
-							v-bind="attrs"
-							hide-details
-							v-on="on"
-							style="height: 40px !important; width: 170px !important"
-							outlined
-							clearable
-							:append-icon="icons.mdiCalendar"
-						></v-text-field>
-					</template>
-					<v-date-picker
-						v-model="options.birth_date"
-						color="primary"
-						@input="isDate = false"
-						no-title
-						:first-day-of-week="1"
-						locale="ru-ru"
-					></v-date-picker>
-				</v-menu>
+							<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+								<template v-slot:activator="{ on, attrs }">
+									<v-text-field
+										class="my-date-picker"
+										v-model="options.birth_date"
+										label="Tug'ilgan sana"
+										readonly
+										v-bind="attrs"
+										hide-details
+										v-on="on"
+										style="height: 40px !important; width: 170px !important"
+										outlined
+										clearable
+										:append-icon="icons.mdiCalendar"
+									></v-text-field>
+								</template>
+								<v-date-picker
+									v-model="options.birth_date"
+									color="primary"
+									@input="isDate = false"
+									no-title
+									:first-day-of-week="1"
+									locale="ru-ru"
+								></v-date-picker>
+							</v-menu>
 
-				<v-autocomplete
-          v-model="options.sale"
-					:items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
-					item-text="name"
-					item-value="value"
-          dense
-          outlined
-          hide-details
-          label="Chegirma"
-          class="data-list-search me-3"
-					clearable
-        ></v-autocomplete>
+							<v-autocomplete
+								v-model="options.sale"
+								:items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
+								item-text="name"
+								item-value="value"
+								dense
+								outlined
+								hide-details
+								label="Chegirma"
+								class="data-list-search me-3"
+								clearable
+							></v-autocomplete>
 
-				<v-text-field
-          v-model="options.sale_cause"
-          dense
-          outlined
-          hide-details
-          label="Chegirma sababi"
-          class="data-list-search me-3"
-        ></v-text-field>
-
-				<v-spacer></v-spacer>
-
-				<v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
+							<v-text-field
+								v-model="options.sale_cause"
+								dense
+								outlined
+								hide-details
+								label="Chegirma sababi"
+								class="data-list-search me-3"
+							></v-text-field>
+						</v-expansion-panel-content>
+					</v-expansion-panel>
+				</v-expansion-panels>
       </div>
+
+			<v-spacer></v-spacer>
+			<v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
@@ -240,6 +253,7 @@ import {
   mdiPencilOutline,
   mdiCalendar,
   mdiImageEditOutline,
+  mdiFilterOutline,
 } from '@mdi/js'
 
 import { onMounted, onUnmounted, ref } from '@vue/composition-api'
@@ -379,6 +393,7 @@ export default {
         mdiCalendar,
         mdiEyeOutline,
         mdiImageEditOutline,
+        mdiFilterOutline,
       },
     }
   },
