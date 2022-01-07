@@ -9,7 +9,6 @@
         <v-card-text>
           <v-container>
             <v-row>
-              </v-col>
               <v-col cols="12">
                 <v-autocomplete
                   v-model="formData.place_id"

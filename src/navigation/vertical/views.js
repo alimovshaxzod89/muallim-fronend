@@ -18,6 +18,10 @@ export default [
         title: 'Guruhlar',
         to: 'groups',
       },
+      {
+        title: 'Ustozlar',
+        to: 'teachers',
+      },
     ],
   },
   {
