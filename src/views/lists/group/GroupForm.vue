@@ -11,7 +11,7 @@
     <v-card>
       <v-form ref="form">
         <v-card-title>
-          <span class="headline">Talabalar</span>
+          <span class="headline">Guruhlar</span>
         </v-card-title>
         <v-card-text>
           <v-container>

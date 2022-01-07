@@ -14,7 +14,6 @@
 </template>
 
 <script>
-
 // eslint-disable-next-line object-curly-newline
 import { computed } from '@vue/composition-api'
 // eslint-disable-next-line import/no-unresolved
@@ -99,6 +98,17 @@ export default {
   height: 0;
   span {
     top: -18px;
+  }
+}
+
+.my-accordion {
+  .v-expansion-panel-content__wrap {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    .v-input {
+      width: auto;
+      max-width: unset !important;
+    }
   }
 }
 </style>

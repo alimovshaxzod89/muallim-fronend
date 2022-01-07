@@ -32,6 +32,14 @@ const views = [
     },
   },
   {
+    path: '/group',
+    name: 'group',
+    component: () => import('@/views/lists/group/GroupList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/center-profit',
     name: 'center-profit',
     component: () => import('@/views/report/CenterProfit.vue'),

@@ -229,14 +229,8 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <student-form
-      ref="studentForm"
-      :MODULE_NAME="MODULE_NAME"
-      v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-    />
-
-    <student-photo
-      ref="studentPhoto"
+    <group-form
+      ref="GroupForm"
       :MODULE_NAME="MODULE_NAME"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
@@ -263,26 +257,24 @@ import axios from '@axios'
 import envParams from '@envParams'
 
 // store module
-import StudentStoreModule from './StudentStoreModule'
+import GroupStoreModule from './GroupStoreModule'
 
 // composition function
-import useStudentList from './useStudentList'
-import StudentForm from './StudentForm'
-import StudentPhoto from './StudentPhoto'
+import useGroupList from './useGroupList'
+import GroupForm from './GroupForm'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 export default {
   components: {
-    StudentForm,
-    StudentPhoto,
+    GroupForm,
     DialogConfirm,
   },
   setup() {
-    const MODULE_NAME = 'students'
+    const MODULE_NAME = 'groups'
 
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, StudentStoreModule)
+      store.registerModule(MODULE_NAME, GroupStoreModule)
     }
     // UnRegister on leave
     onUnmounted(() => {
@@ -302,7 +294,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useStudentList(MODULE_NAME)
+    } = useGroupList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -318,15 +310,9 @@ export default {
     const isDate = ref(false)
 
     //Form
-    const studentForm = ref(null)
+    const GroupForm = ref(null)
     const openForm = id => {
-      studentForm.value.open(id)
-    }
-
-    //Photo
-    const studentPhoto = ref(null)
-    const openPhoto = item => {
-      studentPhoto.value.openUserImage(item)
+      GroupForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -374,10 +360,8 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      studentForm,
-      studentPhoto,
+      GroupForm,
       openForm,
-      openPhoto,
 
       MODULE_NAME,
 

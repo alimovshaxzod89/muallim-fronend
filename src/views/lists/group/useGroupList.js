@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useStudentList(MODULE_NAME) {
+export default function useGroupList(MODULE_NAME) {
   const selectedTableData = ref([])
   const notify = ref({})
 
