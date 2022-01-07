@@ -1,8 +1,8 @@
 import { canNavigate } from '@/plugins/acl/routeProtection'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import pages from './pages'
 import views from './views'
+// import pages from './pages'
 // import userInterface from './user-interface'
 
 Vue.use(VueRouter)
@@ -13,12 +13,17 @@ const routes = [
   {
     path: '/',
     redirect: to => {
-      const userData = JSON.parse(localStorage.getItem('userData'))
-      const userRole = userData && userData.role ? userData.role : null
+      // const userData = JSON.parse(localStorage.getItem('userData'))
+      // const userRole = userData && userData.role ? userData.role : null
+      //
+      // if (userRole === 'admin') return { name: 'dashboard-eCommerce' }
+      // if (userRole === 'client') return { name: 'page-access-control' }
 
-      if (userRole === 'admin') return { name: 'dashboard-eCommerce' }
-      if (userRole === 'client') return { name: 'page-access-control' }
+      const accessToken = localStorage.getItem('accessToken')
 
+      if (accessToken) {
+        return { name: 'dashboard-eCommerce', query: to.query }
+      }
       return { name: 'auth-login', query: to.query }
     },
   },
@@ -114,12 +119,10 @@ router.beforeEach((to, _, next) => {
 
   if (!canNavigate(to)) {
     // Redirect to login if not logged in
-    if (!isLoggedIn) return next({ name: 'auth-login', query: { marketplace: to.query.marketplace } })
+    if (!isLoggedIn) return next('login')
 
     // If logged in => not authorized
     return next({ name: 'misc-not-authorized' })
-
-    // return next({ name: 'misc-not-authorized' })
   }
 
   // Redirect if logged in
