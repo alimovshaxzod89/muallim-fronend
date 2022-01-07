@@ -28,7 +28,7 @@ export default function useStudentList(MODULE_NAME) {
 
 	const filter = ref({
 		query: '',
-		first_name: '',
+		full_name: '',
 		phone: '',
 		region_id: '',
 		address: '',

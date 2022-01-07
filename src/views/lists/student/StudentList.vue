@@ -24,7 +24,7 @@
 						</v-expansion-panel-header>
 						<v-expansion-panel-content>
 							<v-text-field
-								v-model="filter.first_name"
+								v-model="filter.full_name"
 								dense
 								outlined
 								hide-details
