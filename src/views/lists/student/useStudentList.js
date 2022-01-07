@@ -13,7 +13,7 @@ export default function useStudentList(MODULE_NAME) {
       align: 'center',
       sortable: false,
     },
-    { text: 'RASM', value: 'photo' },
+    { text: 'SURAT', value: 'photo' },
     { text: 'FISH', value: 'full_name' },
     { text: 'TELEFON', value: 'phone' },
     { text: 'TUMAN', value: 'region.name' },

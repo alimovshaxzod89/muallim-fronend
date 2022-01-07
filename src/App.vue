@@ -97,7 +97,7 @@ export default {
   width: 0;
   height: 0;
   span {
-    top: -18px;
+    top: -14px;
   }
 }
 

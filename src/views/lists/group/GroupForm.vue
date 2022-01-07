@@ -16,47 +16,104 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="4">
-                <h4 class="text-required no-texts"><span>*</span></h4>
-                <v-text-field
-                  type="text"
-                  label="ISM"
-                  v-model="formData.first_name"
-                  outlined
-                  dense
-                  required
-                ></v-text-field>
-              </v-col>
-
-              <v-col cols="4">
-                <h4 class="text-required no-texts"><span>*</span></h4>
-                <v-text-field
-                  type="text"
-                  label="FAMILIYA"
-                  v-model="formData.last_name"
-                  outlined
-                  dense
-                  required
-                ></v-text-field>
-              </v-col>
-
-              <v-col cols="4">
-                <v-text-field
-                  type="text"
-                  label="SHARIFI"
-                  v-model="formData.middle_name"
-                  outlined
-                  dense
-                  required
-                ></v-text-field>
-              </v-col>
-
               <v-col cols="6">
+                <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-text-field
-                  prefix="+998"
-                  type="phone"
-                  label="TELEFON"
-                  v-model="formData.phone"
+                  type="text"
+                  label="NOMER"
+                  v-model="formData.number"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
+
+							<v-col cols="6">
+								<h4 class="text-required no-texts"><span>*</span></h4>
+                <v-autocomplete
+                  v-model="formData.subject_id"
+                  :items="subjects"
+                  item-text="name"
+                  item-value="id"
+                  label="FAN"
+                  dense
+                  outlined
+                  clearable
+                  class="align-start"
+                ></v-autocomplete>
+              </v-col>
+
+							<v-col cols="6">
+                <v-autocomplete
+                  v-model="formData.stage_id"
+                  :items="stages"
+                  item-text="name"
+                  item-value="id"
+                  label="BOSQICH"
+                  dense
+                  outlined
+                  clearable
+                  class="align-start"
+                ></v-autocomplete>
+              </v-col>
+
+							<v-col cols="6">
+								<h4 class="text-required no-texts"><span>*</span></h4>
+                <v-autocomplete
+                  v-model="formData.teacher_id"
+                  :items="teachers"
+                  item-text="full_name"
+                  item-value="id"
+                  label="USTOZ"
+                  dense
+                  outlined
+                  clearable
+                  class="align-start"
+                ></v-autocomplete>
+              </v-col>
+
+							<v-col cols="6">
+                <v-autocomplete
+                  v-model="formData.room_id"
+                  :items="rooms"
+                  item-text="name"
+                  item-value="id"
+                  label="XONA"
+                  dense
+                  outlined
+                  clearable
+                  class="align-start"
+                ></v-autocomplete>
+              </v-col>
+
+							<v-col cols="6">
+                <h4 class="text-required no-texts"><span>*</span></h4>
+                <v-text-field
+                  type="text"
+                  label="NARX"
+                  v-model="formData.price"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
+
+							<v-col cols="6">
+                <v-text-field
+                  type="text"
+                  label="ULUSH"
+                  v-model="formData.teacher_share"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
+
+							<v-col cols="6">
+                <v-text-field
+                  type="text"
+                  label="Maks o'quvchi soni"
+                  v-model="formData.max_students"
                   outlined
                   dense
                   required
@@ -68,19 +125,20 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                     class="my-date-picker"
-                      v-model="formData.birth_date"
-                      label="TUG'ILGAN KUN"
+                      v-model="formData.begin_date"
+                      label="BOSHLANGAN SANA"
                       readonly
                       v-bind="attrs"
                       v-on="on"
                       :rules="[required]"
+											required
                       outlined
                       clearable
                       :append-icon="icons.mdiCalendar"
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    v-model="formData.birth_date"
+                    v-model="formData.begin_date"
                     color="primary"
                     @input="isDate = false"
                     no-title
@@ -90,93 +148,52 @@
                 </v-menu>
               </v-col>
 
-              <v-col cols="6">
-                <v-autocomplete
-                  v-model="formData.region_id"
-                  :items="regions"
-                  item-text="name"
-                  item-value="id"
-                  label="TUMAN"
-                  dense
-                  outlined
-                  clearable
-                  class="align-start"
-                ></v-autocomplete>
+							<v-col cols="6">
+                <v-menu v-model="isDate2" :close-on-content-click="false" offset-y min-width="auto">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                    class="my-date-picker"
+                      v-model="formData.end_date"
+                      label="TUGASH SANASI"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      outlined
+                      clearable
+                      :append-icon="icons.mdiCalendar"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="formData.end_date"
+                    color="primary"
+                    @input="isDate2 = false"
+                    no-title
+                    :first-day-of-week="1"
+                    locale="ru-ru"
+                  ></v-date-picker>
+                </v-menu>
               </v-col>
 
-              <v-col cols="6">
-                <v-autocomplete
-                  v-model="formData.permanent_region_id"
-                  :items="regions"
-                  item-text="name"
-                  item-value="id"
-                  label="D.Y. TUMAN"
-                  dense
-                  outlined
-                  clearable
-                  class="align-start"
-                ></v-autocomplete>
-              </v-col>
-
-              <v-col cols="6">
-                <v-text-field
-                  type="text"
-                  label="MANZIL"
-                  v-model="formData.address"
-                  outlined
-                  dense
-                  required
-                ></v-text-field>
-              </v-col>
-
-              <v-col cols="6">
-                <v-text-field
-                  type="text"
-                  label="D.Y. MANZILI"
-									v-model="formData.permanent_address"
-                  outlined
-                  dense
-                  required
-								></v-text-field>
-              </v-col>
-
-              <v-col cols="12">
-                <h4 class="text-required">Jinsi <span>*</span></h4>
-                <v-radio-group
-									v-model="formData.gender"
-									column
-                  hide-details=""
-									class="mt-0"
-								>
-									<v-radio
-										label="Erkak"
-										:value="1"
-									></v-radio>
-									<v-radio
-										label="Ayol"
-										:value="2"
-									></v-radio>
-								</v-radio-group>
-              </v-col>
-
-              <v-col cols="12">
-                <v-checkbox
-                  v-model="formData.sale"
-                  hide-details
-                  label="CHEGIRMA"
-                  @change="changeSale()"
-                ></v-checkbox>
-              </v-col>
-
-              <v-col cols="12" v-if="formData.sale">
+							<v-col cols="12">
                 <v-textarea
-                  v-model="formData.sale_cause"
-                  label="CHEGIRMA SABABI"
+                  v-model="formData.description"
+                  label="IZOH"
                   hide-details
                   outlined
                   clearable
                   class="mt-0"
+									height="100"
                 ></v-textarea>
+              </v-col>
+
+							<v-col cols="12">
+								<h4 class="text-required no-texts"><span>*</span></h4>
+                <v-checkbox
+									class="mt-0"
+                  v-model="formData.status"
+                  hide-details
+                  label="Aktiv"
+                ></v-checkbox>
               </v-col>
             </v-row>
           </v-container>
@@ -215,21 +232,19 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      first_name: null,
-      last_name: null,
-      middle_name: null,
-      phone: null,
-      birth_date: null,
-      region_id: null,
-      permanent_region_id: null,
-      address: null,
-      permanent_address: null,
-      gender: null,
-      sale: false,
-      sale_cause: null,
+      number: null,
+      subject_id: null,
+      stage_id: null,
+      teacher_id: null,
+      price: null,
+      teacher_share: null,
+      max_students: null,
+      begin_date: null,
+      end_date: null,
     }
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
+    const isDate2 = ref(false)
 
     const validate = () => {
       form.value.validate()
@@ -246,7 +261,13 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
+        if (
+          formData.value.number &&
+          formData.value.stage_id &&
+          formData.value.teacher_id &&
+          formData.value.price &&
+          formData.value.status
+        ) {
           store
             .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
@@ -264,7 +285,13 @@ export default {
           })
         }
       } else {
-        if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
+        if (
+          formData.value.number &&
+          formData.value.stage_id &&
+          formData.value.teacher_id &&
+          formData.value.price &&
+          formData.value.status
+        ) {
           store
             .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
             .then(message => {
@@ -283,26 +310,50 @@ export default {
         }
       }
     }
-    // Load regions
-    const regions = ref()
-    const loadRegions = () => {
-      axios.get('/api/regions').then(response => {
+
+    // Load subjects
+    const subjects = ref()
+    const loadSubjects = () => {
+      axios.get('/api/subjects').then(response => {
         if (response.data.success) {
-          regions.value = response.data.data
+          subjects.value = response.data.data
+        }
+      })
+    }
+    // Load subjects
+    const stages = ref()
+    const loadStages = () => {
+      axios.get('/api/stages').then(response => {
+        if (response.data.success) {
+          stages.value = response.data.data
+        }
+      })
+    }
+    // Load rooms
+    const rooms = ref()
+    const loadRooms = () => {
+      axios.get('/api/rooms').then(response => {
+        if (response.data.success) {
+          rooms.value = response.data.data
+        }
+      })
+    }
+    // Load teachers
+    const teachers = ref()
+    const loadTeachers = () => {
+      axios.get('/api/teachers').then(response => {
+        if (response.data.success) {
+          teachers.value = response.data.data
         }
       })
     }
 
     onMounted(() => {
-      loadRegions()
+      loadSubjects()
+      loadStages()
+      loadRooms()
+      loadTeachers()
     })
-
-    // Watch
-    const changeSale = () => {
-      if (formData.value.sale === false) {
-        formData.value.sale_cause = ''
-      }
-    }
 
     return {
       form,
@@ -317,8 +368,11 @@ export default {
       onSubmit,
       open,
       close,
-      regions,
-      changeSale,
+      subjects,
+      stages,
+      rooms,
+      teachers,
+      isDate2,
 
       icons: {
         mdiCalendar,
