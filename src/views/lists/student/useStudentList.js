@@ -2,113 +2,133 @@ import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
 export default function useStudentList(MODULE_NAME) {
-  const selectedTableData = ref([])
-  const notify = ref({})
+	const selectedTableData = ref([])
+	const notify = ref({})
 
-  const tableColumns = [
-    { text: '#', sortable: false, value: 'index' },
-    {
-      text: 'AMALLAR',
-      value: 'actions',
-      align: 'center',
-      sortable: false,
-    },
-    { text: 'RASM', value: 'photo' },
-    { text: 'FISH', value: 'full_name' },
-    { text: 'TELEFON', value: 'phone' },
-    { text: 'TUMAN', value: 'region.name' },
-    { text: 'MANZIL', value: 'address' },
-    { text: 'D.Y. TUMAN', value: 'permanent_region.name' },
-    { text: 'D.Y. MANZIL', value: 'permanent_address' },
-    { text: 'JINSI', value: 'gender' },
-    { text: "TUG'ILGAN SANA", value: 'birth_date' },
-    { text: 'CHEGIRMA', value: 'sale' },
-    { text: 'CHEGIRMA SABABI', value: 'sale_cause' },
-  ]
+	const tableColumns = [
+		{ text: '#', sortable: false, value: 'index' },
+		{
+			text: 'AMALLAR',
+			value: 'actions',
+			align: 'center',
+			sortable: false,
+		},
+		{ text: 'SURAT', value: 'photo' },
+		{ text: 'FISH', value: 'full_name' },
+		{ text: 'TELEFON', value: 'phone' },
+		{ text: 'TUMAN', value: 'region.name' },
+		{ text: 'MANZIL', value: 'address' },
+		{ text: 'D.Y. TUMAN', value: 'permanent_region.name' },
+		{ text: 'D.Y. MANZIL', value: 'permanent_address' },
+		{ text: 'JINSI', value: 'gender' },
+		{ text: 'TUG\'ILGAN SANA', value: 'birth_date' },
+		{ text: 'CHEGIRMA', value: 'sale' },
+		{ text: 'CHEGIRMA SABABI', value: 'sale_cause' },
+	]
 
-  const searchQuery = ref('')
-  const options = ref({
-    sortBy: ['id'],
-    sortDesc: [true],
-    first_name: null,
-    phone: null,
-    region_id: null,
-    address: null,
-    permanent_region_id: null,
-    permanent_address: null,
-    gender: null,
-    birth_date: null,
-    sale: null,
-    sale_cause: null,
-    limit: 10,
-    skip: 0,
-  })
-  const loading = ref(false)
+	const filter = ref({
+		query: '',
+		first_name: '',
+		phone: '',
+		region_id: '',
+		address: '',
+		permanent_region_id: '',
+		permanent_address: '',
+		gender: '',
+		birth_date: '',
+		sale: '',
+		sale_cause: '',
+	})
+	const options = ref({
+		sortBy: ['id'],
+		sortDesc: [true],
+		limit: 10,
+		skip: 0,
+	})
+	const loading = ref(false)
 
-  let lastQuery = ''
-  const fetchDatas = (force = false) => {
-    options.value.skip = options.value.page - 1
-    options.value.limit = options.value.itemsPerPage
+	let lastQuery = ''
+	const fetchDatas = (force = false) => {
 
-    const queryParams = {
-      q: searchQuery.value,
-      ...options.value,
-    }
+		options.value.skip = options.value.page - 1
+		options.value.limit = options.value.itemsPerPage
 
-    const newQuery = JSON.stringify(queryParams)
+		const queryParams = {
+			...options.value,
+		}
 
-    if (force || lastQuery !== newQuery) {
-      lastQuery = newQuery
+		const filterCleared = {}
+		for (let key in filter.value) {
+			let value = filter.value[key]
+			if (value !== null && value !== '') {
+				filterCleared[key] = value
+			}
+		}
+		queryParams.filter = filterCleared
 
-      store
-        .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
-        .then(() => {
-          loading.value = false
-        })
-        .catch(error => {
-          console.log(error)
-          loading.value = false
-          notify.value = { type: 'error', text: error, time: Date.now() }
-        })
-    }
+		const newQuery = JSON.stringify(queryParams)
 
-    lastQuery = JSON.stringify(queryParams)
-  }
+		if (force || lastQuery !== newQuery) {
+			// if (lastQuery) {
+			// 	const lastParam = JSON.parse(lastQuery)
+			// 	console.log(JSON.stringify(lastParam.filter))
+			// }
+			// console.log(JSON.stringify(filterCleared))
 
-  watch(searchQuery, () => {
-    if (options.value.page != 1) options.value.page = 1
-  })
+			lastQuery = newQuery
 
-  watch([searchQuery, options], () => {
-    loading.value = true
-    fetchDatas()
-    // selectedTableData.value = []
-  })
+			store
+				.dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
+				.then(() => {
+					loading.value = false
+				})
+				.catch(error => {
+					console.log(error)
+					loading.value = false
+					notify.value = { type: 'error', text: error, time: Date.now() }
+				})
+		}
 
-  //delete
-  const deleteRow = id => {
-    store
-      .dispatch(`${MODULE_NAME}/removeRow`, id)
-      .then(message => {
-        notify.value = { type: 'success', text: message, time: Date.now() }
+		lastQuery = JSON.stringify(queryParams)
+	}
 
-        fetchDatas(true)
-      })
-      .catch(error => {
-        console.log(error)
-        notify.value = { type: 'error', text: error.message, time: Date.now() }
-      })
-  }
+	watch(filter, () => {
+		if (options.value.page != 1) options.value.page = 1
+		loading.value = true
 
-  return {
-    tableColumns,
-    searchQuery,
-    fetchDatas,
-    deleteRow,
+		setTimeout(() => fetchDatas(), 1000);
+	}, {deep: true})
 
-    options,
-    loading,
-    notify,
-    selectedTableData,
-  }
+	watch(options, () => {
+		loading.value = true
+		fetchDatas()
+		// selectedTableData.value = []
+	})
+
+	//delete
+	const deleteRow = id => {
+		store
+			.dispatch(`${MODULE_NAME}/removeRow`, id)
+			.then(message => {
+				notify.value = { type: 'success', text: message, time: Date.now() }
+
+				fetchDatas(true)
+			})
+			.catch(error => {
+				console.log(error)
+				notify.value = { type: 'error', text: error.message, time: Date.now() }
+			})
+	}
+
+	return {
+		tableColumns,
+		filter,
+		fetchDatas,
+		deleteRow,
+
+		options,
+		loading,
+		notify,
+		selectedTableData,
+	}
 }

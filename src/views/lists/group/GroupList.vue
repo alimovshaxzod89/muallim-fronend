@@ -195,18 +195,6 @@
             </template>
             <span>Tahrirlash</span>
           </v-tooltip>
-
-          <!-- image -->
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openPhoto(item)">
-                <v-icon size="18">
-                  {{ icons.mdiImageEditOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Suratni tanlash</span>
-          </v-tooltip>
         </div>
       </template>
 
