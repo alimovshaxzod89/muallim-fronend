@@ -2,6 +2,7 @@ import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
 export default function useRoomList(MODULE_NAME) {
+
   const selectedTableData = ref([])
   const notify = ref({})
 
@@ -10,7 +11,7 @@ export default function useRoomList(MODULE_NAME) {
     { text: 'BINO', value: 'place_id' },
     { text: 'NOMI', value: 'name' },
     { text: "SIG'IMI", value: 'capacity' },
-    { text: "AKTIV", value: 'active' },
+    { text: "AKTIV", value: 'status' },
     {
       text: 'AMALLAR',
       value: 'actions',
@@ -26,7 +27,7 @@ export default function useRoomList(MODULE_NAME) {
   })
   const loading = ref(false)
 
-  let lastQuery = ''
+  let lastQuery = '';
   const fetchDatas = (force = false) => {
     const queryParams = {
       q: searchQuery.value,
@@ -51,11 +52,12 @@ export default function useRoomList(MODULE_NAME) {
     }
 
     lastQuery = JSON.stringify(queryParams)
+
   }
 
   watch(searchQuery, () => {
-    if (options.value.page != 1) 
-    options.value.page = 1
+    if (options.value.page != 1)
+      options.value.page = 1
   })
 
   watch([searchQuery, options], () => {
@@ -65,18 +67,18 @@ export default function useRoomList(MODULE_NAME) {
   })
 
   //delete
-  const deleteRow = id => {
-    store
-      .dispatch(`${MODULE_NAME}/removeRow`, id)
-      .then(message => {
-        notify.value = { type: 'success', text: message, time: Date.now() }
+  const deleteRow = (id) => {
+    store.dispatch(`${MODULE_NAME}/removeRow`, id)
+    .then((message) => {
+      notify.value = { type: 'success', text: message, time: Date.now() }
 
-        fetchDatas(true)
-      })
-      .catch(error => {
-        console.log(error)
-        notify.value = { type: 'error', text: error.message, time: Date.now() }
-      })
+      fetchDatas(true)
+    })
+    .catch(error => {
+      console.log(error)
+      notify.value = { type: 'success', text: error.message, time: Date.now() }
+    })
+
   }
 
   return {
@@ -88,6 +90,20 @@ export default function useRoomList(MODULE_NAME) {
     options,
     loading,
     notify,
-    selectedTableData,
+    selectedTableData
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

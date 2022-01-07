@@ -49,10 +49,10 @@
                 </v-icon>
               </v-btn>
             </template>
-            <span>O'chirish</span>
+            <span>Delete</span>
           </v-tooltip>
 
-          <!-- edit  -->
+          <!-- view  -->
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
@@ -61,7 +61,7 @@
                 </v-icon>
               </v-btn>
             </template>
-            <span>Tahrirlash</span>
+            <span>Edit</span>
           </v-tooltip>
         </div>
       </template>
@@ -77,15 +77,14 @@
 </template>
 
 <script>
-import {
+import { 
   mdiTrendingUp,
-  mdiPlus,
-  mdiDeleteOutline,
-  mdiDotsVertical,
-  mdiEyeOutline,
-  mdiPencilOutline,
-  mdiImageEditOutline,
-} from '@mdi/js'
+  mdiPlus, 
+  mdiDeleteOutline, 
+  mdiDotsVertical, 
+  mdiEyeOutline, 
+  mdiPencilOutline 
+  } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
@@ -95,8 +94,8 @@ import RoomStoreModule from './RoomStoreModule'
 
 // composition function
 import useRoomList from './useRoomList'
-import RoomForm from './RoomForm.vue'
-import DialogConfirm from '@/views/components/DialogConfirm.vue'
+import RoomForm from './RoomForm'
+import DialogConfirm from '../../components/DialogConfirm.vue'
 
 const MODULE_NAME = 'room'
 
@@ -186,7 +185,6 @@ export default {
         mdiDeleteOutline,
         mdiDotsVertical,
         mdiEyeOutline,
-        mdiImageEditOutline,
       },
     }
   },
