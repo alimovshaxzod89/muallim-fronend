@@ -28,7 +28,7 @@
 								dense
 								outlined
 								hide-details
-								label="Nomer"
+								label="Fish"
 								class="data-list-search me-3"
 							></v-text-field>
 
