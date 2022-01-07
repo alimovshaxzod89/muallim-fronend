@@ -26,11 +26,6 @@ export default [
     icon: mdiFileDocumentEdit,
   },
   {
-    title: 'Kurs',
-    icon: mdiFileDocumentEdit,
-    to: 'rate',
-  },
-  {
     title: 'Talabalar',
     icon: mdiFileDocumentEdit,
     to: 'student',
