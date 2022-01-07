@@ -115,17 +115,17 @@
               </v-col>
               <v-col cols="12">
                 <v-checkbox
-                  v-model="formData."
+                  v-model="formData.gender"
                   hide-details
-                  label=""
+                  label="ERKAK"
                   class="mt-0"
                 ></v-checkbox>
               </v-col>
               <v-col cols="12">
                 <v-checkbox
-                  v-model="formData."
+                  v-model="formData.gender"
                   hide-details
-                  label=""
+                  label="AYOL"
                   class="mt-0"
                 ></v-checkbox>
               </v-col>
