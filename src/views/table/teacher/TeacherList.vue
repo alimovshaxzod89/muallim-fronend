@@ -4,12 +4,12 @@
     <v-card-text class="d-flex align-center flex-wrap pb-0">
       <div class="d-flex align-center pb-5">
         <v-text-field
-          v-model="searchQuery"
+          v-model="filter.query"
           single-line
           dense
           outlined
           hide-details
-          placeholder="Qidiruv"
+          label="Qidiruv"
           class="data-list-search me-3"
         ></v-text-field>
       </div>

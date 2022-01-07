@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useProductTypeList(MODULE_NAME) {
+export default function useTeacherList(MODULE_NAME) {
 
   const selectedTableData = ref([])
   const notify = ref({})
@@ -12,7 +12,6 @@ export default function useProductTypeList(MODULE_NAME) {
     { text: 'FAMILIYASI', value: 'last_name' },
     { text: 'SHARIFI', value: 'middle_name' },
     { text: "TELEFON", value: 'phone' },
-    { text: "ULUSHI %", value: 'share' },
     { text: "TUMAN", value: 'region_id' },
     { text: "MANZIL", value: 'address' },
     { text: "D.Y. TUMAN", value: 'permanent_region_id' },
