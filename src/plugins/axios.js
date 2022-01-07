@@ -9,7 +9,7 @@ import Vue from 'vue'
 const axiosIns = axios.create({
   // You can add your headers here
   // ================================
-  baseURL: envParams.API_URL,
+  baseURL: envParams.BASE_URL,
   // timeout: 1000,
   // headers: {'X-Custom-Header': 'foobar'}
 })
