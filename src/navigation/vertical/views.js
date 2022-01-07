@@ -15,10 +15,6 @@ export default [
         to: 'rooms',
       },
       {
-        title: 'Guruhlar',
-        to: 'groups',
-      },
-      {
         title: 'Ustozlar',
         to: 'teachers',
       },
