@@ -51,8 +51,8 @@
             <v-col cols="12" sm="8" md="6" lg="12" class="mx-auto">
               <v-card flat>
                 <v-card-text>
-                  <p class="text-2xl font-weight-semibold text--primary mb-2">Welcome to SoftSell! 👋🏻</p>
-                  <p class="mb-2">Please sign-in to your account and start the adventure</p>
+                  <p class="text-2xl font-weight-semibold text--primary mb-2">Kirish</p>
+<!--                  <p class="mb-2">Please sign-in to your account and start the adventure</p>-->
                 </v-card-text>
 
                 <!-- <v-card-text>
@@ -72,7 +72,7 @@
                     <v-text-field
                       v-model="username"
                       outlined
-                      label="Username"
+                      label="Login"
                       placeholder="username"
                       :error-messages="errorMessages.username"
                       :rules="[validators.required]"
@@ -84,7 +84,7 @@
                       v-model="password"
                       outlined
                       :type="isPasswordVisible ? 'text' : 'password'"
-                      label="Password"
+                      label="Parol"
                       :error-messages="errorMessages.password"
                       placeholder="Password"
                       :append-icon="isPasswordVisible ? icons.mdiEyeOffOutline : icons.mdiEyeOutline"
@@ -94,14 +94,14 @@
                       @click:append="isPasswordVisible = !isPasswordVisible"
                     ></v-text-field>
 
-                    <div class="d-flex align-center justify-space-between flex-wrap">
-                      <v-checkbox hide-details label="Remember Me" class="mt-0"> </v-checkbox>
+<!--                    <div class="d-flex align-center justify-space-between flex-wrap">-->
+<!--                      <v-checkbox hide-details label="Remember Me" class="mt-0"> </v-checkbox>-->
 
-                      <!-- forget link -->
-                      <!-- <router-link :to="{ name: 'auth-forgot-password' }" class="ms-3"> Forgot Password? </router-link> -->
-                    </div>
+<!--                      &lt;!&ndash; forget link &ndash;&gt;-->
+<!--                      &lt;!&ndash; <router-link :to="{ name: 'auth-forgot-password' }" class="ms-3"> Forgot Password? </router-link> &ndash;&gt;-->
+<!--                    </div>-->
 
-                    <v-btn block color="primary" type="submit" class="mt-6"> Login </v-btn>
+                    <v-btn block color="primary" type="submit" class="mt-6"> Kirish </v-btn>
                   </v-form>
                 </v-card-text>
 
