@@ -4,7 +4,7 @@
     <v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
       <div class="d-flex pb-5" style="width: 100%">
 				<v-text-field
-          v-model="searchQuery"
+          v-model="filter.query"
           dense
           outlined
           hide-details
@@ -24,7 +24,7 @@
 						</v-expansion-panel-header>
 						<v-expansion-panel-content>
 							<v-text-field
-								v-model="options.first_name"
+								v-model="filter.first_name"
 								dense
 								outlined
 								hide-details
@@ -33,7 +33,7 @@
 							></v-text-field>
 
 							<v-text-field
-								v-model="options.phone"
+								v-model="filter.phone"
 								dense
 								outlined
 								hide-details
@@ -42,7 +42,7 @@
 							></v-text-field>
 
 							<v-autocomplete
-								v-model="options.region_id"
+								v-model="filter.region_id"
 								:items="regions"
 								item-text="name"
 								item-value="id"
@@ -55,7 +55,7 @@
 							></v-autocomplete>
 
 							<v-text-field
-								v-model="options.address"
+								v-model="filter.address"
 								dense
 								outlined
 								hide-details
@@ -64,7 +64,7 @@
 							></v-text-field>
 
 							<v-autocomplete
-								v-model="options.permanent_region_id"
+								v-model="filter.permanent_region_id"
 								:items="regions"
 								item-text="name"
 								item-value="id"
@@ -77,7 +77,7 @@
 							></v-autocomplete>
 
 							<v-text-field
-								v-model="options.permanent_address"
+								v-model="filter.permanent_address"
 								dense
 								outlined
 								hide-details
@@ -86,7 +86,7 @@
 							></v-text-field>
 
 							<v-autocomplete
-								v-model="options.gender"
+								v-model="filter.gender"
 								:items="[{value: 1, name: 'Erkak'}, {value: 2, name: 'Ayol'}]"
 								item-text="name"
 								item-value="value"
@@ -102,7 +102,7 @@
 								<template v-slot:activator="{ on, attrs }">
 									<v-text-field
 										class="my-date-picker"
-										v-model="options.birth_date"
+										v-model="filter.birth_date"
 										label="Tug'ilgan sana"
 										readonly
 										v-bind="attrs"
@@ -115,7 +115,7 @@
 									></v-text-field>
 								</template>
 								<v-date-picker
-									v-model="options.birth_date"
+									v-model="filter.birth_date"
 									color="primary"
 									@input="isDate = false"
 									no-title
@@ -125,7 +125,7 @@
 							</v-menu>
 
 							<v-autocomplete
-								v-model="options.sale"
+								v-model="filter.sale"
 								:items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
 								item-text="name"
 								item-value="value"
@@ -138,7 +138,7 @@
 							></v-autocomplete>
 
 							<v-text-field
-								v-model="options.sale_cause"
+								v-model="filter.sale_cause"
 								dense
 								outlined
 								hide-details
@@ -294,7 +294,7 @@ export default {
 
     //logics
     const {
-      searchQuery,
+			filter,
       tableColumns,
       deleteRow,
 
@@ -360,7 +360,7 @@ export default {
       picker,
       isDate,
       tableColumns,
-      searchQuery,
+			filter,
       options,
       loading,
       notify,
