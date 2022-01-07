@@ -16,6 +16,14 @@ const views = [
     },
   },
   {
+    path: '/teachers',
+    name: 'teachers',
+    component: () => import('@/views/table/teacher/TeacherList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/rate',
     name: 'rate',
     component: () => import('@/views/rate/RateList.vue'),
