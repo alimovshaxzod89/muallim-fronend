@@ -26,20 +26,37 @@ export default function useTeacherList(MODULE_NAME) {
     },
   ]
 
-  const searchQuery = ref('')
+  const filter = ref({
+      first_name: '',
+  })
+
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
+    limit: 10,
+    skip: 0,
   })
   const loading = ref(false)
 
   let lastQuery = '';
   const fetchDatas = (force = false) => {
 
+    options.value.skip = options.value.page - 1
+    options.value.limit = options.value.itemsPerPage
+
     const queryParams = {
-      q: searchQuery.value,
       ...options.value,
     }
+
+    const filterCleared = {}
+		for (let key in filter.value) {
+			let value = filter.value[key]
+			if (value !== null && value !== '') {
+				filterCleared[key] = value
+			}
+		}
+
+    queryParams.filter = filterCleared
 
     const newQuery = JSON.stringify(queryParams)
 
@@ -62,12 +79,14 @@ export default function useTeacherList(MODULE_NAME) {
 
   }
 
-  watch(searchQuery, () => {
-    if (options.value.page != 1)
-      options.value.page = 1
-  })
+  watch(filter, () => {
+    if (options.value.page != 1) options.value.page
+      loading.value = true
 
-  watch([searchQuery, options], () => {
+      setTimeout(() => fetchDatas(), 1000);
+  }, {deep: true})
+
+  watch(options, () => {
     loading.value = true
     fetchDatas()
     // selectedTableData.value = []
@@ -76,13 +95,15 @@ export default function useTeacherList(MODULE_NAME) {
   //delete
   const deleteRow = (id) => {
 
-    store.dispatch(`${MODULE_NAME}/removeRow`, id).then((message) => {
+    store
+        .dispatch(`${MODULE_NAME}/removeRow`, id)
+        .then((message) => {
+            notify.value = { type: 'success', text: message, time: Date.now() }
 
-      notify.value = { type: 'success', text: message, time: Date.now() }
+            fetchDatas(true)
 
-      fetchDatas(true)
-
-    }).catch(error => {
+    })
+    .catch(error => {
       console.log(error)
       notify.value = { type: 'error', text: error.message, time: Date.now() }
     })
@@ -91,7 +112,7 @@ export default function useTeacherList(MODULE_NAME) {
 
   return {
     tableColumns,
-    searchQuery,
+    filter,
     fetchDatas,
     deleteRow,
 

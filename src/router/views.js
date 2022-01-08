@@ -10,7 +10,7 @@ const views = [
   {
     path: '/rooms',
     name: 'rooms',
-    component: () => import('@/views/table/room/RoomList.vue'),
+    component: () => import('@/views/lists/room/RoomList.vue'),
     meta: {
       layout: 'content',
     },
@@ -18,7 +18,7 @@ const views = [
   {
     path: '/teachers',
     name: 'teachers',
-    component: () => import('@/views/table/teacher/TeacherList.vue'),
+    component: () => import('@/views/lists/teacher/TeacherList.vue'),
     meta: {
       layout: 'content',
     },

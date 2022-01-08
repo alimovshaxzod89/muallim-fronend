@@ -1,6 +1,12 @@
 <template>
   <!-- form dialog -->
-  <v-dialog v-model="show" @keydown.esc="close()" @click:outside="close()" max-width="600px" width="500px">
+  <v-dialog 
+    v-model="show" 
+    @keydown.esc="close()" 
+    @click:outside="close()" 
+    max-width="600px" 
+    width="500px"
+  >
     <v-card>
       <v-form ref="form">
         <v-card-title>
@@ -118,8 +124,9 @@ export default {
       capacity: null,
       status: false,
     }
-    //validation
     const formData = ref({ ...emptyFormData })
+
+    //validation
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     const validate = () => {
       form.value.validate()
