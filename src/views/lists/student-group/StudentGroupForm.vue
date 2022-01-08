@@ -288,7 +288,7 @@ export default {
     }
     const addStudentToOptions = row => {
       selectsDatas.value.student = selectsDatas.value.student.concat([row])
-      formData.value.student = row.id
+      formData.value.student_id = row.id
     }
     // GroupForm
     const groupForm = ref(null)

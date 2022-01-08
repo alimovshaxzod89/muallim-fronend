@@ -185,7 +185,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-          <v-btn color="success" type="submit" @click.prevent="onSubmit()">Saqlash</v-btn>
+          <v-btn color="success" type="submit" @click.prevent="onSubmit">Saqlash</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -214,7 +214,7 @@ export default {
 
     //show, hide
     const show = ref(false)
-    const formData = ref({ ...emptyFormData })
+    const formData = ref({})
     const form = ref(null)
     const emptyFormData = {
       id: null,
@@ -239,7 +239,10 @@ export default {
     }
     const open = (id = null) => {
       show.value = true
-      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](id)))
+      setTimeout(() => {
+        form.value.$el[0].focus()
+      }, 100)
+      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
     }
     const close = () => {
       show.value = false
@@ -252,13 +255,16 @@ export default {
         if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(message => {
+            .then(({ data, message}) => {
               close()
               // emit('notify', { type: 'success', text: message })
+              return data
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+
+              return false
             })
         } else {
           emit('notify', {
@@ -270,13 +276,15 @@ export default {
         if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(message => {
+            .then(({ data, message}) => {
               close()
               // emit('notify', { type: 'success', text: message })
+              emit('add-student-to-options', data)  
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+              return false
             })
         } else {
           emit('notify', {
