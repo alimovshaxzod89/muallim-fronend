@@ -1,6 +1,12 @@
 <template>
   <!-- form dialog -->
-  <v-dialog v-model="show" @keydown.esc="close()" @click:outside="close()" max-width="600px" width="500px">
+  <v-dialog
+    v-model="show"
+    max-width="600px"
+    width="500px"
+    @keydown.esc="close()"
+    @click:outside="close()"
+  >
     <v-card>
       <v-form ref="form">
         <v-card-title>
@@ -15,7 +21,7 @@
                   :items="selectsDatas.room"
                   item-text="name"
                   item-value="id"
-                  label="BINO"
+                  label="Bino"
                   dense
                   outlined
                   hide-details
@@ -26,8 +32,8 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  label="Nomi"
                   v-model="formData.name"
+                  label="Nomi"
                   dense
                   outlined
                   required
@@ -37,8 +43,8 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  label="SIG'IMI"
                   v-model="formData.capacity"
+                  label="Sig'imi"
                   type="number"
                   dense
                   outlined
@@ -50,7 +56,7 @@
                 <v-checkbox
                   v-model="formData.status"
                   hide-details
-                  label="AKTIV"
+                  label="Aktiv"
                   class="mt-0"
                 ></v-checkbox>
               </v-col>
@@ -60,32 +66,43 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
+          <v-btn
+            color="gray"
+            outlined
+            @click="close()"
+          >
+            Bekor qilish
+          </v-btn>
 
-          <v-btn color="success" type="submit" @click.prevent="onSubmit"> Saqlash</v-btn>
+          <v-btn
+            color="success"
+            type="submit"
+            @click.prevent="onSubmit"
+          >
+            Saqlash
+          </v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
-
   </v-dialog>
 </template>
 
 <script>
 import { mdiPlusCircleOutline } from '@mdi/js'
 
-import store from '@/store'
-import RoomStoreModule from './RoomStoreModule'
-
 import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
+import RoomStoreModule from './RoomStoreModule'
+import store from '@/store'
 import Button from '../../components/button/Button'
 
 const MODULE_NAME = 'room'
 
 export default {
   components: { Button },
+
   // props: {
   //
   // },
@@ -118,15 +135,17 @@ export default {
       capacity: null,
       status: false,
     }
-    //validation
+
+    // validation
     const formData = ref({ ...emptyFormData })
-    const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
+    const selectRule = [v => !!v || 'Biror qiymatni tanlang!']
     const validate = () => {
       form.value.validate()
     }
 
-    //form options for selects
+    // form options for selects
     const selectsDatas = ref({})
+
     // ! METHODS
     const loadPlace = () => {
       axios
@@ -159,24 +178,22 @@ export default {
             text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
           })
         }
-      } else {
-        if (formData.value.place_id && formData.value.name) {
-          store
-            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(message => {
-              close()
-              emit('notify', { type: 'success', text: message })
-            })
-            .catch(error => {
-              console.log(error)
-              emit('notify', { type: 'error', text: error.message })
-            })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
+      } else if (formData.value.place_id && formData.value.name) {
+        store
+          .dispatch(`${MODULE_NAME}/addRow`, formData.value)
+          .then(message => {
+            close()
+            emit('notify', { type: 'success', text: message })
           })
-        }
+          .catch(error => {
+            console.log(error)
+            emit('notify', { type: 'error', text: error.message })
+          })
+      } else {
+        emit('notify', {
+          type: 'warning',
+          text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
+        })
       }
     }
 
