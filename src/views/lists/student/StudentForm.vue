@@ -200,15 +200,18 @@ import axios from '@axios'
 
 import { ref, onMounted } from '@vue/composition-api'
 import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
+import StudentStoreModule from '../student/StudentStoreModule'
+
+const MODULE_NAME = 'student'
 
 export default {
-  props: {
-    MODULE_NAME: {
-      type: String,
-      required: true,
-    },
-  },
   setup(props, { emit }) {
+
+    // Register module
+    if (!store.hasModule(MODULE_NAME)) {
+      store.registerModule(MODULE_NAME, StudentStoreModule)
+    }
+
     //show, hide
     const show = ref(false)
     const formData = ref({ ...emptyFormData })
@@ -248,7 +251,7 @@ export default {
       if (formData.value.id) {
         if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
-            .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -266,7 +269,7 @@ export default {
       } else {
         if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
-            .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })

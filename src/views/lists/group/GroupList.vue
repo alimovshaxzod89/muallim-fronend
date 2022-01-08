@@ -239,7 +239,6 @@
 
     <group-form
       ref="GroupForm"
-      :MODULE_NAME="MODULE_NAME"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
 
@@ -280,6 +279,8 @@ import GroupForm from './GroupForm'
 import GroupTimeList from './GroupTimeList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
+const MODULE_NAME = 'group'
+
 export default {
   components: {
     GroupForm,
@@ -287,8 +288,6 @@ export default {
     DialogConfirm,
   },
   setup() {
-    const MODULE_NAME = 'groups'
-
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, GroupStoreModule)
