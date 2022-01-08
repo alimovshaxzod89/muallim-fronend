@@ -12,7 +12,7 @@
           class="data-list-search me-3"
         ></v-text-field>
 
-				<v-expansion-panels class="my-accordion" accordion>
+				<!-- <v-expansion-panels class="my-accordion" accordion>
 					<v-expansion-panel>
 						<v-expansion-panel-header disable-icon-rotate>
 							Ko'proq
@@ -147,7 +147,7 @@
 							></v-text-field>
 						</v-expansion-panel-content>
 					</v-expansion-panel>
-				</v-expansion-panels>
+				</v-expansion-panels> -->
       </div>
 
 			<v-spacer></v-spacer>
@@ -170,10 +170,27 @@
         {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
       </template>
 
-			<template #[`item.group`]="{ item }">
-        {{ item.number ? item.number : null }} /
-        {{ item.subject.name ? item.subject.name : null }} /
-				{{ item.teacher.full_name ? item.teacher.full_name : null }}
+			<!-- <template #[`item.group`]="{ item }">
+        <h3>{{ item.group.number ? item.group.number : null }} /
+        {{ item.group.subject.name ? item.group.subject.name : null }} <br>
+				{{ item.group.teacher.full_name ? item.group.teacher.full_name : null }}</h3>
+      </template> -->
+
+			<template #[`item.group_times`]="{ item }">
+				<div class="my-table pa-5">
+					<v-simple-table>
+						<template v-slot:default>
+							<tbody>
+								<tr v-for="(i, index) in item.group_times" :key="item.id + index">
+									<td class="text-center">{{ i.week_day ? getDay(i.week_day) : '-' }}</td>
+									<td class="text-center">{{ i.room ? i.room.name : '-' }}</td>
+									<td class="text-center">{{ i.time_begin ? i.time_begin : '-' }}</td>
+									<td class="text-center">{{ i.time_end ? i.time_end : '-' }}</td>
+								</tr>
+							</tbody>
+						</template>
+					</v-simple-table>
+				</div>
       </template>
     </v-data-table>
 
@@ -276,16 +293,35 @@ export default {
 
     const BASE_URL = envParams.BASE_URL
 
-    // LoadApis
-    const regions = ref([])
-    const loadRegions = () => {
-      axios.get('/api/regions').then(response => {
-        regions.value = response.data.data
+    // Week logic
+    const days = ref([
+      { key: 1, name: 'Dushanba' },
+      { key: 2, name: 'Seshanba' },
+      { key: 3, name: 'Chorshanba' },
+      { key: 4, name: 'Payshanba' },
+      { key: 5, name: 'Juma' },
+      { key: 6, name: 'Shanba' },
+      { key: 7, name: 'Yakshanba' },
+    ])
+
+    const getDay = day => {
+      const result = days.value.filter(item => {
+        if (item.key === day) {
+          return item.name
+        }
       })
+      return result[0].name
     }
 
+    // LoadApis
+    const groupTimes = ref([])
+    const loadGroupTimes = () => {
+      axios.get('/api/group-times').then(response => {
+        // groupTimes.value = response.data.data[1]
+      })
+    }
     onMounted(() => {
-      loadRegions()
+      loadGroupTimes()
     })
 
     // Return
@@ -315,8 +351,11 @@ export default {
 
       MODULE_NAME,
 
+      // Wekk logic
+      getDay,
+
       // LoadApis
-      regions,
+      groupTimes,
 
       icons: {
         mdiTrendingUp,
