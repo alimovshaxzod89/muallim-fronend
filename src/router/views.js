@@ -24,24 +24,16 @@ const views = [
     },
   },
   {
-    path: '/rate',
-    name: 'rate',
-    component: () => import('@/views/rate/RateList.vue'),
-    meta: {
-      layout: 'content',
-    },
-  },
-  {
-    path: '/student',
-    name: 'student',
+    path: '/students',
+    name: 'students',
     component: () => import('@/views/lists/student/StudentList.vue'),
     meta: {
       layout: 'content',
     },
   },
   {
-    path: '/group',
-    name: 'group',
+    path: '/groups',
+    name: 'groups',
     component: () => import('@/views/lists/group/GroupList.vue'),
     meta: {
       layout: 'content',

@@ -26,19 +26,14 @@ export default [
     icon: mdiFileDocumentEdit,
   },
   {
-    title: 'Kurs',
-    icon: mdiFileDocumentEdit,
-    to: 'rate',
-  },
-  {
     title: 'Talabalar',
     icon: mdiFileDocumentEdit,
-    to: 'student',
+    to: 'students',
   },
   {
     title: 'Guruhlar',
     icon: mdiFileDocumentEdit,
-    to: 'group',
+    to: 'groups',
   },
   {
     subheader: '#',
