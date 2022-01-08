@@ -1,6 +1,13 @@
 <template>
   <!-- form dialog -->
-  <v-dialog v-model="show" @keydown.esc="close()" @click:outside="close()" max-width="700px" width="700px">
+  <v-dialog 
+    v-model="show"
+    @keydown.enter="onSubmit()" 
+    @keydown.esc="close()" 
+    @click:outside="close()" 
+    max-width="700px" 
+    width="700px"
+  >
     <v-card>
       <v-form ref="form">
         <v-card-title>
@@ -46,9 +53,10 @@
               </v-col>
               <v-col cols="6">
                 <v-text-field
+                  prefix="+998"
                   label="TELEFON"
                   v-model="formData.phone"
-                  type="number"
+                  type="phone"
                   dense
                   outlined
                   hide-details
@@ -157,7 +165,6 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-
           <v-btn color="success" type="submit" @click.prevent="onSubmit"> Saqlash</v-btn>
         </v-card-actions>
       </v-form>
