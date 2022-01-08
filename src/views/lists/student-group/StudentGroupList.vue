@@ -4,12 +4,11 @@
     <v-card-text class="d-flex align-center flex-wrap pb-0">
       <div class="d-flex align-center pb-5">
         <v-text-field
-          v-model="searchQuery"
-          single-line
+          v-model="filter.query"
           dense
           outlined
           hide-details
-          placeholder="Qidiruv"
+          label="Qidirish"
           class="data-list-search me-3"
         ></v-text-field>
       </div>
@@ -69,46 +68,40 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <room-form
-      ref="roomForm"
+    <student-group-form
+      ref="studentGroupForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
 </template>
 
 <script>
-import { 
-  mdiTrendingUp,
-  mdiPlus, 
-  mdiDeleteOutline, 
-  mdiDotsVertical, 
-  mdiEyeOutline, 
-  mdiPencilOutline 
-  } from '@mdi/js'
+import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
 
+import envParams from '@envParams'
+
 // store module
-import RoomStoreModule from './RoomStoreModule'
+import StudenGroupStoreModule from './StudenGroupStoreModule'
 
 // composition function
-import useRoomList from './useRoomList'
-import RoomForm from './RoomForm'
+import useStudentGroupList from './useStudentGroupList'
+import StudentGroupForm from './StudentGroupForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'room'
+const MODULE_NAME = 'teacher'
 
 export default {
   components: {
-    RoomForm,
+    StudentGroupForm,
     DialogConfirm,
   },
   setup() {
-
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, RoomStoreModule)
+      store.registerModule(MODULE_NAME, StudenGroupStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -120,6 +113,7 @@ export default {
 
     //logics
     const {
+      filter,
       searchQuery,
       tableColumns,
       deleteRow,
@@ -128,7 +122,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useRoomList(MODULE_NAME)
+    } = useStudentGroupList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -140,9 +134,9 @@ export default {
     ]
 
     //Form
-    const roomForm = ref(null)
+    const studentGroupForm = ref(null)
     const openForm = id => {
-      roomForm.value.open(id)
+      studentGroupForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -154,8 +148,11 @@ export default {
         .catch(() => {})
     }
 
+    const BASE_URL = envParams.BASE_URL
+
     // Return
     return {
+      BASE_URL,
       state,
 
       tableColumns,
@@ -164,6 +161,7 @@ export default {
       loading,
       notify,
       selectedTableData,
+      filter,
 
       actions,
       actionOptions,
@@ -173,7 +171,7 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      roomForm,
+      studentGroupForm,
       openForm,
 
       MODULE_NAME,

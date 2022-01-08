@@ -5,11 +5,10 @@
       <div class="d-flex align-center pb-5">
         <v-text-field
           v-model="filter.query"
-          single-line
           dense
           outlined
           hide-details
-          label="Qidiruv"
+          label="Qidirish"
           class="data-list-search me-3"
         ></v-text-field>
       </div>
@@ -77,17 +76,12 @@
 </template>
 
 <script>
-import { 
-  mdiTrendingUp,
-  mdiPlus, 
-  mdiDeleteOutline, 
-  mdiDotsVertical, 
-  mdiEyeOutline, 
-  mdiPencilOutline 
-  } from '@mdi/js'
+import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
+
+import envParams from '@envParams'
 
 // store module
 import TeacherStoreModule from './TeacherStoreModule'
@@ -105,7 +99,6 @@ export default {
     DialogConfirm,
   },
   setup() {
-
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, TeacherStoreModule)
@@ -120,6 +113,7 @@ export default {
 
     //logics
     const {
+      filter,
       searchQuery,
       tableColumns,
       deleteRow,
@@ -154,8 +148,11 @@ export default {
         .catch(() => {})
     }
 
+    const BASE_URL = envParams.BASE_URL
+
     // Return
     return {
+      BASE_URL,
       state,
 
       tableColumns,
@@ -164,6 +161,7 @@ export default {
       loading,
       notify,
       selectedTableData,
+      filter,
 
       actions,
       actionOptions,
