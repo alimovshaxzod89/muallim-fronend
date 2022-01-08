@@ -170,39 +170,17 @@
         {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
       </template>
 
-      <template #[`item.actions`]="{ item }">
-        <div class="d-flex align-center justify-center">
-          <!-- delete -->
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiDeleteOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>O'chirish</span>
-          </v-tooltip>
-
-          <!-- edit  -->
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiPencilOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Tahrirlash</span>
-          </v-tooltip>
-        </div>
+			<template #[`item.group`]="{ item }">
+        {{ item.number ? item.number : null }} /
+        {{ item.subject.name ? item.subject.name : null }} /
+				{{ item.teacher.full_name ? item.teacher.full_name : null }}
       </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <group-form
-      ref="GroupForm"
+    <group-time-form
+      ref="GroupTimeForm"
       :MODULE_NAME="MODULE_NAME"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
@@ -229,24 +207,24 @@ import axios from '@axios'
 import envParams from '@envParams'
 
 // store module
-import GroupStoreModule from './GroupStoreModule'
+import GroupTimeStoreModule from './GroupTimeStoreModule'
 
 // composition function
-import useGroupList from './useGroupList'
-import GroupForm from './GroupForm'
+import useGroupTimeList from './useGroupTimeList'
+import GroupTimeForm from './GroupTimeForm.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 export default {
   components: {
-    GroupForm,
+    GroupTimeForm,
     DialogConfirm,
   },
   setup() {
-    const MODULE_NAME = 'groups'
+    const MODULE_NAME = 'group-time'
 
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, GroupStoreModule)
+      store.registerModule(MODULE_NAME, GroupTimeStoreModule)
     }
     // UnRegister on leave
     onUnmounted(() => {
@@ -266,7 +244,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useGroupList(MODULE_NAME)
+    } = useGroupTimeList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -282,9 +260,9 @@ export default {
     const isDate = ref(false)
 
     //Form
-    const GroupForm = ref(null)
+    const GroupTimeForm = ref(null)
     const openForm = id => {
-      GroupForm.value.open(id)
+      GroupTimeForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -332,7 +310,7 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      GroupForm,
+      GroupTimeForm,
       openForm,
 
       MODULE_NAME,

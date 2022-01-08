@@ -40,6 +40,14 @@ const views = [
     },
   },
   {
+    path: '/group-time',
+    name: 'group-time',
+    component: () => import('@/views/lists/group-time/GroupTimeList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/center-profit',
     name: 'center-profit',
     component: () => import('@/views/report/CenterProfit.vue'),
