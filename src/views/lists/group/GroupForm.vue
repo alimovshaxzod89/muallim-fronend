@@ -214,18 +214,21 @@ import { mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
 import axios from '@axios'
+import GroupStoreModule from '../group/GroupStoreModule'
 
 import { ref, onMounted } from '@vue/composition-api'
 import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
 
+const MODULE_NAME = 'group'
+
 export default {
-  props: {
-    MODULE_NAME: {
-      type: String,
-      required: true,
-    },
-  },
   setup(props, { emit }) {
+
+    // Register module
+    if (!store.hasModule(MODULE_NAME)) {
+      store.registerModule(MODULE_NAME, GroupStoreModule)
+    }
+
     //show, hide
     const show = ref(false)
     const formData = ref({ ...emptyFormData })
@@ -269,7 +272,7 @@ export default {
           formData.value.status
         ) {
           store
-            .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -293,7 +296,7 @@ export default {
           formData.value.status
         ) {
           store
-            .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })

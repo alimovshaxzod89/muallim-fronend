@@ -84,14 +84,14 @@ import store from '@/store'
 import envParams from '@envParams'
 
 // store module
-import StudenGroupStoreModule from './StudenGroupStoreModule'
+import StudentGroupStoreModule from './StudentGroupStoreModule'
 
 // composition function
 import useStudentGroupList from './useStudentGroupList'
 import StudentGroupForm from './StudentGroupForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'teacher'
+const MODULE_NAME = 'studentGroup'
 
 export default {
   components: {
@@ -101,7 +101,7 @@ export default {
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, StudenGroupStoreModule)
+      store.registerModule(MODULE_NAME, StudentGroupStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {

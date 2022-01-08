@@ -18,6 +18,10 @@ export default [
         title: 'Ustozlar',
         to: 'teachers',
       },
+      {
+        title: 'Talaba guruhlari',
+        to: 'student-groups',
+      },
     ],
   },
   {

@@ -32,6 +32,14 @@ const views = [
     },
   },
   {
+    path: '/student-groups',
+    name: 'student-groups',
+    component: () => import('@/views/lists/student-group/StudentGroupList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/groups',
     name: 'groups',
     component: () => import('@/views/lists/group/GroupList.vue'),

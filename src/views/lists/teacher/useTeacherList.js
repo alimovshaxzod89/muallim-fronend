@@ -8,6 +8,12 @@ export default function useTeacherList(MODULE_NAME) {
 
   const tableColumns = [
     { text: '#', sortable: false, value: 'index' },
+    {
+      text: 'AMALLAR',
+      value: 'actions',
+      align: 'center',
+      sortable: false,
+    },
     { text: 'ISMI', value: 'first_name' },
     { text: 'FAMILIYASI', value: 'last_name' },
     { text: 'SHARIFI', value: 'middle_name' },
@@ -18,12 +24,6 @@ export default function useTeacherList(MODULE_NAME) {
     { text: "D.Y. Manzili", value: 'permanent_address' },
     { text: "JINSI", value: '' },
     { text: "TUG'ILGAN SANASI", value: 'birth_date' },
-    {
-      text: 'AMALLAR',
-      value: 'actions',
-      align: 'center',
-      sortable: false,
-    },
   ]
 
   const filter = ref({

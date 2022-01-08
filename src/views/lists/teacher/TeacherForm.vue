@@ -262,7 +262,7 @@ export default {
         ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(message => {
+            .then(({message}) => {
               close()
               emit('notify', { type: 'success', text: message })
             })
@@ -283,7 +283,7 @@ export default {
            ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(message => {
+            .then(({message}) => {
               close()
               emit('notify', { type: 'success', text: message })
             })
