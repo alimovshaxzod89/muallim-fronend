@@ -67,7 +67,10 @@ export default {
       required: true,
     },
   },
-  setup() {
+	mounted() {
+		console.log(this.navMenuItems);
+	},
+	setup() {
     const { resolveNavItemComponent, isMouseHovered } = useVerticalNavMenu()
     provide('isMouseHovered', isMouseHovered)
 
