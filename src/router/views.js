@@ -14,6 +14,8 @@ const views = [
     component: () => import('@/views/lists/room/RoomList.vue'),
     meta: {
       layout: 'content',
+			resource: 'Room',
+			action: 'manage',
     },
   },
   {
@@ -22,6 +24,8 @@ const views = [
     component: () => import('@/views/lists/teacher/TeacherList.vue'),
     meta: {
       layout: 'content',
+			resource: 'Teacher',
+			action: 'manage',
     },
   },
   {
@@ -30,7 +34,7 @@ const views = [
     component: () => import('@/views/lists/student/StudentList.vue'),
     meta: {
       layout: 'content',
-			resource: 'students',
+			resource: 'Student',
 			action: 'manage',
     },
   },
@@ -40,7 +44,8 @@ const views = [
     component: () => import('@/views/lists/group/GroupList.vue'),
     meta: {
       layout: 'content',
-			resource: 'students',
+			resource: 'Group',
+			action: 'manage',
     },
   },
   {

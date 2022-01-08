@@ -13,10 +13,14 @@ export default [
       {
         title: 'Xonalar',
         to: 'rooms',
+				resource: 'Room',
+				action: 'manage',
       },
       {
         title: 'Ustozlar',
         to: 'teachers',
+				resource: 'Teacher',
+				action: 'manage',
       },
     ],
   },
@@ -29,14 +33,14 @@ export default [
     title: 'Talabalar',
     icon: mdiAccountDetailsOutline,
     to: 'students',
-		resource: 'students',
+		resource: 'Student',
 		action: 'manage',
   },
   {
     title: 'Guruhlar',
     icon: mdiAccountGroup,
     to: 'groups',
-		resource: 'students',
+		resource: 'Group',
 		action: 'manage',
   },
   {
