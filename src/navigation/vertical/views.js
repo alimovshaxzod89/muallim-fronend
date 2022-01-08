@@ -28,12 +28,12 @@ export default [
   {
     title: 'Talabalar',
     icon: mdiFileDocumentEdit,
-    to: 'student',
+    to: 'students',
   },
   {
     title: 'Guruhlar',
     icon: mdiFileDocumentEdit,
-    to: 'group',
+    to: 'groups',
   },
   {
     subheader: '#',
