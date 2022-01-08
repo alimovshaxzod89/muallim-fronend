@@ -42,10 +42,10 @@ export default {
     fetchDatas({ commit }, queryParams) {
       return new Promise((resolve, reject) => {
         axios
-          .get('/api/groups', { params: queryParams })
+          .get('/api/group-times', { params: queryParams })
           .then(response => {
             const { data, total } = response.data
-            commit('setRows', data)
+            commit('setRows', data[2])
             commit('setTotal', total)
 
             resolve(response.data.message)
@@ -56,7 +56,7 @@ export default {
     addRow({ commit }, row) {
       return new Promise((resolve, reject) => {
         axios
-          .post('/api/groups', row)
+          .post('/api/group-times', row)
           .then(response => {
             if (response.data.success) {
               commit('addRow', response.data.data)
@@ -71,7 +71,7 @@ export default {
     updateRow({ commit, getters }, row) {
       return new Promise((resolve, reject) => {
         axios
-          .put(`/api/groups/${row.id}`, row)
+          .put(`/api/group-times/${row.id}`, row)
           .then(response => {
             if (response.data.success) {
               const index = getters.indexIds.indexOf(parseInt(row.id))
@@ -86,7 +86,7 @@ export default {
     removeRow({ commit, getters }, id) {
       return new Promise((resolve, reject) => {
         axios
-          .delete(`/api/groups/${id}`)
+          .delete(`/api/group-times/${id}`)
           .then(response => {
             if (response.data.success) {
               const index = getters.indexIds.indexOf(id)

@@ -16,40 +16,14 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="6">
-                <h4 class="text-required no-texts"><span>*</span></h4>
-                <v-text-field
-                  type="text"
-                  label="NOMER"
-                  v-model="formData.number"
-                  outlined
-                  dense
-                  required
-                ></v-text-field>
-              </v-col>
-
 							<v-col cols="6">
 								<h4 class="text-required no-texts"><span>*</span></h4>
                 <v-autocomplete
-                  v-model="formData.subject_id"
-                  :items="subjects"
+                  v-model="formData.week_day"
+                  :items="group_times.week_day"
                   item-text="name"
                   item-value="id"
-                  label="FAN"
-                  dense
-                  outlined
-                  clearable
-                  class="align-start"
-                ></v-autocomplete>
-              </v-col>
-
-							<v-col cols="6">
-                <v-autocomplete
-                  v-model="formData.stage_id"
-                  :items="stages"
-                  item-text="name"
-                  item-value="id"
-                  label="BOSQICH"
+                  label="KUN"
                   dense
                   outlined
                   clearable
@@ -59,23 +33,9 @@
 
 							<v-col cols="6">
 								<h4 class="text-required no-texts"><span>*</span></h4>
-                <v-autocomplete
-                  v-model="formData.teacher_id"
-                  :items="teachers"
-                  item-text="full_name"
-                  item-value="id"
-                  label="USTOZ"
-                  dense
-                  outlined
-                  clearable
-                  class="align-start"
-                ></v-autocomplete>
-              </v-col>
-
-							<v-col cols="6">
                 <v-autocomplete
                   v-model="formData.room_id"
-                  :items="rooms"
+                  :items="group_times.room"
                   item-text="name"
                   item-value="id"
                   label="XONA"
@@ -89,9 +49,9 @@
 							<v-col cols="6">
                 <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-text-field
-                  type="text"
-                  label="NARX"
-                  v-model="formData.price"
+                  type="number"
+                  label="VAQT ..DAN"
+                  v-model="formData.time_begin"
                   outlined
                   dense
                   required
@@ -99,101 +59,15 @@
               </v-col>
 
 							<v-col cols="6">
+                <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-text-field
-                  type="text"
-                  label="ULUSH"
-                  v-model="formData.teacher_share"
+                  type="number"
+                  label="VAQT ..GACHA"
+                  v-model="formData.time_end"
                   outlined
                   dense
                   required
                 ></v-text-field>
-              </v-col>
-
-							<v-col cols="6">
-                <v-text-field
-                  type="text"
-                  label="Maks o'quvchi soni"
-                  v-model="formData.max_students"
-                  outlined
-                  dense
-                  required
-                ></v-text-field>
-              </v-col>
-
-              <v-col cols="6">
-                <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                    class="my-date-picker"
-                      v-model="formData.begin_date"
-                      label="BOSHLANGAN SANA"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      :rules="[required]"
-											required
-                      outlined
-                      clearable
-                      :append-icon="icons.mdiCalendar"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="formData.begin_date"
-                    color="primary"
-                    @input="isDate = false"
-                    no-title
-                    :first-day-of-week="1"
-                    locale="ru-ru"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-
-							<v-col cols="6">
-                <v-menu v-model="isDate2" :close-on-content-click="false" offset-y min-width="auto">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                    class="my-date-picker"
-                      v-model="formData.end_date"
-                      label="TUGASH SANASI"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      outlined
-                      clearable
-                      :append-icon="icons.mdiCalendar"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="formData.end_date"
-                    color="primary"
-                    @input="isDate2 = false"
-                    no-title
-                    :first-day-of-week="1"
-                    locale="ru-ru"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-
-							<v-col cols="12">
-                <v-textarea
-                  v-model="formData.description"
-                  label="IZOH"
-                  hide-details
-                  outlined
-                  clearable
-                  class="mt-0"
-									height="100"
-                ></v-textarea>
-              </v-col>
-
-							<v-col cols="12">
-								<h4 class="text-required no-texts"><span>*</span></h4>
-                <v-checkbox
-									class="mt-0"
-                  v-model="formData.status"
-                  hide-details
-                  label="Aktiv"
-                ></v-checkbox>
               </v-col>
             </v-row>
           </v-container>
@@ -242,9 +116,6 @@ export default {
       begin_date: null,
       end_date: null,
     }
-    const picker = new Date().toISOString().substr(0, 10)
-    const isDate = ref(false)
-    const isDate2 = ref(false)
 
     const validate = () => {
       form.value.validate()
@@ -312,53 +183,21 @@ export default {
     }
 
     // Load subjects
-    const subjects = ref()
-    const loadSubjects = () => {
-      axios.get('/api/subjects').then(response => {
+    const group_times = ref()
+    const loadGroup_times = () => {
+      axios.get('/api/group_times').then(response => {
         if (response.data.success) {
-          subjects.value = response.data.data
-        }
-      })
-    }
-    // Load subjects
-    const stages = ref()
-    const loadStages = () => {
-      axios.get('/api/stages').then(response => {
-        if (response.data.success) {
-          stages.value = response.data.data
-        }
-      })
-    }
-    // Load rooms
-    const rooms = ref()
-    const loadRooms = () => {
-      axios.get('/api/rooms').then(response => {
-        if (response.data.success) {
-          rooms.value = response.data.data
-        }
-      })
-    }
-    // Load teachers
-    const teachers = ref()
-    const loadTeachers = () => {
-      axios.get('/api/teachers').then(response => {
-        if (response.data.success) {
-          teachers.value = response.data.data
+          console.log(response)
+          group_times.value = response.data
         }
       })
     }
 
     onMounted(() => {
-      loadSubjects()
-      loadStages()
-      loadRooms()
-      loadTeachers()
+      loadGroup_times()
     })
 
     return {
-      form,
-      picker,
-      isDate,
       required,
       minLengthValidator,
       maxLengthValidator,
@@ -368,7 +207,7 @@ export default {
       onSubmit,
       open,
       close,
-      subjects,
+      group_times,
       stages,
       rooms,
       teachers,

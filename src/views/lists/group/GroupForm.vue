@@ -261,13 +261,7 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (
-          formData.value.number &&
-          formData.value.stage_id &&
-          formData.value.teacher_id &&
-          formData.value.price &&
-          formData.value.status
-        ) {
+        if (formData.value.number && formData.value.stage_id && formData.value.teacher_id && formData.value.price) {
           store
             .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
@@ -285,13 +279,7 @@ export default {
           })
         }
       } else {
-        if (
-          formData.value.number &&
-          formData.value.stage_id &&
-          formData.value.teacher_id &&
-          formData.value.price &&
-          formData.value.status
-        ) {
+        if (formData.value.number && formData.value.stage_id && formData.value.teacher_id && formData.value.price) {
           store
             .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
             .then(message => {

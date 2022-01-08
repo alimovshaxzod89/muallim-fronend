@@ -111,4 +111,11 @@ export default {
     }
   }
 }
+
+.my-size-table {
+  td {
+    min-width: 110px;
+    width: 100px !important;
+  }
+}
 </style>

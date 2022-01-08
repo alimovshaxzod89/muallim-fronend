@@ -7,10 +7,16 @@ export default function useGroupList(MODULE_NAME) {
 
   const tableColumns = [
     { text: '#', sortable: false, value: 'index' },
-    { text: 'NOMER', value: 'number' },
-    { text: 'FAN', value: 'subject.name' },
-    { text: 'USTOZ', value: 'teacher.full_name' },
-    { text: 'VAQTLAR', value: 'group_times', align: 'center' },
+    {
+      text: 'AMALLAR',
+      value: 'actions',
+      align: 'start',
+      sortable: false,
+    },
+    { text: 'KUN', value: 'week_day' },
+    { text: 'XONA', value: 'room.name' },
+    { text: 'VAQT ...DAN', value: 'time_begin' },
+    { text: 'VAQT ...GACHA', value: 'time_end' },
   ]
 
   const searchQuery = ref('')
