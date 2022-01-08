@@ -61,6 +61,15 @@ const routes = [
       redirectIfLoggedIn: true,
     },
   },
+	{
+		path: '/pages/miscellaneous/not-authorized',
+		name: 'misc-not-authorized',
+		component: () => import('@/views/pages/miscellaneous/NotAuthorized.vue'),
+		meta: {
+			layout: 'blank',
+			resource: 'Public',
+		},
+	},
   ...views,
   // {
   //   path: '/register',

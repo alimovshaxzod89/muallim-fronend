@@ -5,6 +5,7 @@ const views = [
     component: () => import('@/views/dashboards/ecommerce/Ecommerce.vue'),
     meta: {
       layout: 'content',
+			resource: 'Public',
     },
   },
   {
@@ -29,6 +30,7 @@ const views = [
     component: () => import('@/views/lists/student/StudentList.vue'),
     meta: {
       layout: 'content',
+			resource: 'students',
     },
   },
   {
@@ -37,6 +39,7 @@ const views = [
     component: () => import('@/views/lists/group/GroupList.vue'),
     meta: {
       layout: 'content',
+			resource: 'students',
     },
   },
   {
