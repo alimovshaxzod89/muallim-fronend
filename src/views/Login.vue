@@ -208,13 +208,7 @@ export default {
             localStorage.setItem('accessToken', token)
             localStorage.setItem('userData', JSON.stringify(user))
 
-            //hozircha hammasiga bir xil
-            const userAbility = [
-              {
-                action: 'manage',
-                subject: 'all',
-              },
-            ]
+						const {ability: userAbility} = user
             // Set user ability
             // ? https://casl.js.org/v5/en/guide/intro#update-rules
             vm.$ability.update(userAbility)

@@ -5,12 +5,13 @@ const views = [
     component: () => import('@/views/dashboards/ecommerce/Ecommerce.vue'),
     meta: {
       layout: 'content',
+			resource: 'Public',
     },
   },
   {
     path: '/rooms',
     name: 'rooms',
-    component: () => import('@/views/table/room/RoomList.vue'),
+    component: () => import('@/views/lists/room/RoomList.vue'),
     meta: {
       layout: 'content',
     },
@@ -18,7 +19,7 @@ const views = [
   {
     path: '/teachers',
     name: 'teachers',
-    component: () => import('@/views/table/teacher/TeacherList.vue'),
+    component: () => import('@/views/lists/teacher/TeacherList.vue'),
     meta: {
       layout: 'content',
     },
@@ -29,6 +30,8 @@ const views = [
     component: () => import('@/views/lists/student/StudentList.vue'),
     meta: {
       layout: 'content',
+			resource: 'students',
+			action: 'manage',
     },
   },
   {
@@ -37,6 +40,7 @@ const views = [
     component: () => import('@/views/lists/group/GroupList.vue'),
     meta: {
       layout: 'content',
+			resource: 'students',
     },
   },
   {
