@@ -10,7 +10,7 @@ const views = [
   {
     path: '/rooms',
     name: 'rooms',
-    component: () => import('@/views/table/room/RoomList.vue'),
+    component: () => import('@/views/lists/room/RoomList.vue'),
     meta: {
       layout: 'content',
     },
@@ -18,30 +18,22 @@ const views = [
   {
     path: '/teachers',
     name: 'teachers',
-    component: () => import('@/views/table/teacher/TeacherList.vue'),
+    component: () => import('@/views/lists/teacher/TeacherList.vue'),
     meta: {
       layout: 'content',
     },
   },
   {
-    path: '/rate',
-    name: 'rate',
-    component: () => import('@/views/rate/RateList.vue'),
-    meta: {
-      layout: 'content',
-    },
-  },
-  {
-    path: '/student',
-    name: 'student',
+    path: '/students',
+    name: 'students',
     component: () => import('@/views/lists/student/StudentList.vue'),
     meta: {
       layout: 'content',
     },
   },
   {
-    path: '/group',
-    name: 'group',
+    path: '/groups',
+    name: 'groups',
     component: () => import('@/views/lists/group/GroupList.vue'),
     meta: {
       layout: 'content',

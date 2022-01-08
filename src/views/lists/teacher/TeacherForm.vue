@@ -1,15 +1,22 @@
 <template>
   <!-- form dialog -->
-  <v-dialog v-model="show" @keydown.esc="close()" @click:outside="close()" max-width="600px" width="500px">
+  <v-dialog 
+    v-model="show"
+    @keydown.enter="onSubmit()" 
+    @keydown.esc="close()" 
+    @click:outside="close()" 
+    max-width="700px" 
+    width="700px"
+  >
     <v-card>
       <v-form ref="form">
         <v-card-title>
-          <span class="headline">Xonalar</span>
+          <span class="headline">Ustozlar</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="6">
                 <h4 class="text-required no-text"><span>*</span></h4>  
                 <v-text-field
                   label="ISMI"
@@ -21,7 +28,8 @@
                   :rules="[required, minLengthValidator(formData.first_name, 3)]"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="6">
+                <h4 class="text-required no-text"><span>*</span></h4>  
                 <v-text-field
                   label="FAMILIYA"
                   v-model="formData.last_name"
@@ -32,7 +40,7 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="6">
                 <v-text-field
                   label="SHARIFI"
                   v-model="formData.middle_name"
@@ -43,29 +51,19 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="6">
                 <v-text-field
+                  prefix="+998"
                   label="TELEFON"
                   v-model="formData.phone"
-                  type="number"
+                  type="phone"
                   dense
                   outlined
                   hide-details
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  label="ULUSH %"
-                  v-model="formData.share"
-                  type="text"
-                  dense
-                  outlined
-                  hide-details
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
+              <v-col cols="6">
                 <v-autocomplete
                   v-model="formData.region_id"
                   :items="selectsDatas.teacher"
@@ -80,7 +78,7 @@
                 >
                 </v-autocomplete>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="6">
                   <v-textarea
                     v-model="formData.address"
                     label="MANZIL"
@@ -88,21 +86,26 @@
                     outlined
                     hide-details
                     required
+                    height="80px"
                   >
                   </v-textarea>
               </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  label="D.Y. TUMAN "
+              <v-col cols="6"> 
+                <v-autocomplete
                   v-model="formData.permanent_region_id"
-                  type="number"
+                  :items="selectsDatas.teacher"
+                  item-text="name"
+                  item-value="id"
+                  label="D.Y. TUMAN"
                   dense
                   outlined
                   hide-details
-                  required
-                ></v-text-field>
+                  clearable
+                  :rules="selectRule"
+                >
+                </v-autocomplete>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="6">
                   <v-textarea
                     v-model="formData.permanent_address"
                     label="D.Y. MANZIL"
@@ -110,26 +113,27 @@
                     outlined
                     hide-details
                     required
+                    height="80px"
                   >
                   </v-textarea>
               </v-col>
-              <v-col cols="12">
-                <v-checkbox
-                  v-model="formData.gender"
-                  hide-details
-                  label="ERKAK"
-                  class="mt-0"
-                ></v-checkbox>
+              <v-col cols="6"> 
+                <v-radio-group
+                 v-model="formData.gender"
+                 class="mt-0"
+                 hide-details
+                >
+                    <v-radio
+                      label="ERKAK"
+                      value="0"
+                    ></v-radio>
+                    <v-radio
+                      label="AYOL"
+                      value="1"
+                    ></v-radio>
+                </v-radio-group>
               </v-col>
-              <v-col cols="12">
-                <v-checkbox
-                  v-model="formData.gender"
-                  hide-details
-                  label="AYOL"
-                  class="mt-0"
-                ></v-checkbox>
-              </v-col>
-              <v-col cols="12">
+              <v-col cols="6">  
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -139,9 +143,9 @@
                       v-bind="attrs"
                       v-on="on"
                       :rules="[required]"
+                      hide-details
                       outlined
                       :append-icon="icons.mdiCalendar"
-                      class="my-date-picker"
                     ></v-text-field>
                   </template>
                   <v-date-picker
@@ -161,7 +165,6 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-
           <v-btn color="success" type="submit" @click.prevent="onSubmit"> Saqlash</v-btn>
         </v-card-actions>
       </v-form>
@@ -189,7 +192,10 @@ export default {
   // props: {
   //
   // },
-  setup(props, { emit }) {
+  created() {
+      this.loadRegion()
+  },
+  setup (props, {emit})  {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, TeacherStoreModule)
@@ -214,13 +220,11 @@ export default {
       last_name: null,
       middle_name: null,
       phone: null,
-      share: null,
       region_id: null,
       address: null,
       permanent_region_id: null,
       permanent_address: null,
-    //   checkbox gender male
-    //   checkbox gender male
+      gender: null,
       birth_date: null,  
     }
     const formData = ref({ ...emptyFormData })
@@ -238,32 +242,23 @@ export default {
     //form options for selects
     const selectsDatas = ref({})
     // ! METHODS
-    // const loadPlace = () => {
-    //   axios
-    //     .get('/api/places', { params: { itemsPerPage: -1 } })
-    //     .then(response => {
-    //       if (response.data.success) {
-    //         selectsDatas.value.room = response.data.data
-    //       }
-    //     })
-    //     .catch(error => console.log(error))
-    // }
+    const loadRegion = () => {
+      axios
+        .get('/api/regions', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.teacher = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
 
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
         if (
             formData.value.first_name &&
-            formData.value.last_name &&
-            formData.value.middle_name &&
-            formData.value.last_name &&
-            formData.value.phone &&
-            formData.value.share &&
-            formData.value.region_id &&
-            formData.value.address &&
-            formData.value.permanent_region_id &&
-            formData.value.permanent_address &&
-            formData.value.birth_date
+            formData.value.last_name
         ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
@@ -284,16 +279,7 @@ export default {
       } else {
         if (
             formData.value.first_name &&
-            formData.value.last_name &&
-            formData.value.middle_name &&
-            formData.value.last_name &&
-            formData.value.phone &&
-            formData.value.share &&
-            formData.value.region_id &&
-            formData.value.address &&
-            formData.value.permanent_region_id &&
-            formData.value.permanent_address &&
-            formData.value.birth_date
+            formData.value.last_name
            ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
@@ -314,6 +300,15 @@ export default {
       }
     }
 
+    // TeacherForm
+    const teacherForm = ref(null)
+    const addRegion = (id = null) => {
+        roomForm.value.open(id)
+    }
+    const addRegionToOptions = row => {
+        selectsDatas.value.region = selectsDatas.value.region.concat([row])
+        formData.value.region_id = row.id
+    }
    
 
     return {
@@ -325,12 +320,16 @@ export default {
       formData,
       selectsDatas,
       selectRule,
+      loadRegion,
       validate,
       show,
       onSubmit,
       open,
       close,
 
+      teacherForm,
+      addRegion,
+      addRegionToOptions,
 
       icons: {
         mdiPlusCircleOutline,

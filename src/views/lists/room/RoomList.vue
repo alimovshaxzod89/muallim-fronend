@@ -4,12 +4,11 @@
     <v-card-text class="d-flex align-center flex-wrap pb-0">
       <div class="d-flex align-center pb-5">
         <v-text-field
-          v-model="searchQuery"
-          single-line
+          v-model="filter.query"
           dense
           outlined
           hide-details
-          placeholder="Qidiruv"
+          label="Qidiruv"
           class="data-list-search me-3"
         ></v-text-field>
       </div>
@@ -69,50 +68,60 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <rate-form
-      ref="rateForm"
-      :MODULE_NAME="MODULE_NAME"
+    <room-form
+      ref="roomForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
 </template>
 
 <script>
-import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
+import { 
+  mdiTrendingUp,
+  mdiPlus, 
+  mdiDeleteOutline, 
+  mdiDotsVertical, 
+  mdiEyeOutline, 
+  mdiPencilOutline 
+  } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
 
+import envParams from '@envParams'
+
 // store module
-import RateStoreModule from './RateStoreModule'
+import RoomStoreModule from './RoomStoreModule'
 
 // composition function
-import useRateList from './useRateList'
-import RateForm from './RateForm'
-import DialogConfirm from '@/views/components/DialogConfirm.vue'
+import useRoomList from './useRoomList'
+import RoomForm from './RoomForm'
+import DialogConfirm from '../../components/DialogConfirm.vue'
+
+const MODULE_NAME = 'room'
 
 export default {
   components: {
-    RateForm,
+    RoomForm,
     DialogConfirm,
   },
   setup() {
-    const MODULE_NAME = 'rate'
 
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, RateStoreModule)
+      store.registerModule(MODULE_NAME, RoomStoreModule)
     }
     // UnRegister on leave
-    onUnmounted(() => {
-      if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
-    })
+    // onUnmounted(() => {
+    //   if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
+    // })
 
     //store state
     const state = ref(store.state[MODULE_NAME])
 
     //logics
     const {
+      filter,
       searchQuery,
       tableColumns,
       deleteRow,
@@ -121,7 +130,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useRateList(MODULE_NAME)
+    } = useRoomList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -133,9 +142,9 @@ export default {
     ]
 
     //Form
-    const rateForm = ref(null)
+    const roomForm = ref(null)
     const openForm = id => {
-      rateForm.value.open(id)
+      roomForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -147,8 +156,11 @@ export default {
         .catch(() => {})
     }
 
+    const BASE_URL = envParams.BASE_URL
+
     // Return
     return {
+      BASE_URL,
       state,
 
       tableColumns,
@@ -157,6 +169,7 @@ export default {
       loading,
       notify,
       selectedTableData,
+      filter,
 
       actions,
       actionOptions,
@@ -166,7 +179,7 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      rateForm,
+      roomForm,
       openForm,
 
       MODULE_NAME,
