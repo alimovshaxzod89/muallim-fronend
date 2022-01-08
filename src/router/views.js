@@ -31,6 +31,7 @@ const views = [
     meta: {
       layout: 'content',
 			resource: 'students',
+			action: 'manage',
     },
   },
   {

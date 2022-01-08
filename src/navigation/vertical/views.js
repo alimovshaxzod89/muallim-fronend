@@ -26,19 +26,18 @@ export default [
     icon: mdiPercent,
   },
   {
-    title: 'Kurs',
-    icon: mdiFileDocumentEdit,
-    to: 'rate',
-  },
-  {
     title: 'Talabalar',
     icon: mdiAccountDetailsOutline,
-    to: 'student',
+    to: 'students',
+		resource: 'students',
+		action: 'manage',
   },
   {
     title: 'Guruhlar',
     icon: mdiAccountGroup,
-    to: 'group',
+    to: 'groups',
+		resource: 'students',
+		action: 'manage',
   },
   {
     subheader: '#',
