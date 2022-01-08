@@ -10,22 +10,13 @@ export default function useGroupList(MODULE_NAME) {
     {
       text: 'AMALLAR',
       value: 'actions',
-      align: 'center',
+      align: 'start',
       sortable: false,
     },
-    { text: 'NOMER', value: 'number' },
-    { text: 'FAN', value: 'subject.name' },
-    { text: 'USTOZ', value: 'teacher.full_name' },
-    { text: 'NARX', value: 'price' },
-    { text: 'NOMER', value: 'number' },
-    { text: 'FAN', value: 'subject.name' },
-    { text: 'USTOZ', value: 'teacher.full_name' },
-    { text: 'VAQTLAR', value: 'group_times', align: 'center', sortable: false },
-    { text: 'BOSHLANGAN SANA / TUGASH SANASI', value: 'begin_date', align: 'center', sortable: false },
-    // { text: 'TUGASH SANASI', value: 'end_date' },
-    { text: 'BOSQICH', value: 'stage_id' },
-    { text: 'ULUSH', value: 'teacher_share' },
-    { text: "MAKS O'QUVCHI SONI", value: 'max_students' },
+    { text: 'KUN', value: 'week_day' },
+    { text: 'XONA', value: 'room.name' },
+    { text: 'VAQT ...DAN', value: 'time_begin' },
+    { text: 'VAQT ...GACHA', value: 'time_end' },
   ]
 
   const searchQuery = ref('')

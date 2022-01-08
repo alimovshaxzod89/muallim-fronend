@@ -51,6 +51,11 @@ export default [
 		action: 'manage',
   },
   {
+    title: 'Guruh vaqtlari',
+    icon: mdiFileDocumentEdit,
+    to: 'group-time',
+  },
+  {
     subheader: '#',
     badge: 'New',
     bageColor: 'success',
