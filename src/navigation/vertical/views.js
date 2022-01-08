@@ -1,39 +1,47 @@
-import { mdiFileDocumentEdit, mdiHomeOutline, mdiShieldAccount, mdiViewHeadline } from '@mdi/js'
+import { mdiAccountDetailsOutline, mdiFileDocumentEdit, mdiHome, mdiShieldAccount, mdiFilterVariant, mdiPercent, mdiAccountGroup, mdiFormatListBulleted } from '@mdi/js'
 
 export default [
   {
     title: 'Asosiy panel',
-    icon: mdiHomeOutline,
+    icon: mdiHome,
     to: 'dashboard-eCommerce',
   },
   {
     title: "Ro'yxatlar",
-    icon: mdiViewHeadline,
+    icon: mdiFilterVariant,
     children: [
       {
         title: 'Xonalar',
         to: 'rooms',
+				resource: 'Room',
+				action: 'manage',
       },
       {
         title: 'Ustozlar',
         to: 'teachers',
+				resource: 'Teacher',
+				action: 'manage',
       },
     ],
   },
   {
     title: 'Markaz ulushi',
     to: 'center-profit',
-    icon: mdiFileDocumentEdit,
+    icon: mdiPercent,
   },
   {
     title: 'Talabalar',
-    icon: mdiFileDocumentEdit,
+    icon: mdiAccountDetailsOutline,
     to: 'students',
+		resource: 'Student',
+		action: 'manage',
   },
   {
     title: 'Guruhlar',
-    icon: mdiFileDocumentEdit,
+    icon: mdiAccountGroup,
     to: 'groups',
+		resource: 'Group',
+		action: 'manage',
   },
   {
     title: 'Guruh vaqtlari',
