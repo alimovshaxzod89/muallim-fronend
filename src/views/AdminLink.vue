@@ -6,7 +6,7 @@
 export default {
   name: 'AdminLink',
   beforeCreate() {
-    window.location.href = '/admin'
+    window.location.href = '/v1/admin'
   },
 }
 </script>
