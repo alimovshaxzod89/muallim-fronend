@@ -5,6 +5,11 @@ export default [
     title: 'Guruhlar',
     to: 'groups',
     icon: mdiPercent,
+
+		//casl
+		resource: 'Group',
+		// action: ['manage', 'create', 'read', 'update', 'delete'],
+		action: 'create',
   },
 	{
 		title: 'Talabalar',
@@ -17,30 +22,42 @@ export default [
 		subheader: '#',
 		badge: 'New',
 		bageColor: 'success',
+		resource: 'Public',
+		action: 'read',
 	},
 	{
-		title: 'Darslar',
+		title: 'Darslar va xonalar',
 		icon: mdiAccountDetailsOutline,
 		to: '',
+		resource: 'Public',
+		action: 'read',
 	},
 	{
 		title: 'Lidlar',
 		icon: mdiAccountDetailsOutline,
 		to: '',
+		resource: 'Public',
+		action: 'read',
 	},
 	{
-		subheader: '#',
+		subheader: '##',
 		badge: 'New',
 		bageColor: 'success',
+		resource: 'Public',
+		action: 'read',
 	},
 	{
 		title: 'To\'lovlar',
 		icon: mdiAccountDetailsOutline,
 		to: '',
+		resource: 'Public',
+		action: 'read',
 	},
 	{
 		title: 'Qarzdor talabalar',
 		icon: mdiAccountDetailsOutline,
 		to: '',
+		resource: 'Public',
+		action: 'read',
 	},
 ]

@@ -16,8 +16,7 @@ import operator from './roles/operator'
 
 let roleMenu = []
 
-const userData = localStorage.getItem('userData')
-
+const userData = JSON.parse(localStorage.getItem('userData'))
 if (userData && userData.role) {
 	switch (userData.role) {
 		case 'admin':
@@ -28,7 +27,7 @@ if (userData && userData.role) {
 			break
 	}
 } else {
-	roleMenu = views
+	// roleMenu = views
 }
 
 export default roleMenu

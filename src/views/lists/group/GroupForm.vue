@@ -22,6 +22,8 @@
                   type="text"
                   label="NOMER"
                   v-model="formData.number"
+                  :rules="[required]"
+									required
                   outlined
                   dense
                   required
@@ -36,6 +38,7 @@
                   item-text="name"
                   item-value="id"
                   label="FAN"
+									required
                   dense
                   outlined
                   clearable
@@ -65,6 +68,7 @@
                   item-text="full_name"
                   item-value="id"
                   label="USTOZ"
+                  required
                   dense
                   outlined
                   clearable
@@ -92,6 +96,7 @@
                   type="text"
                   label="NARX"
                   v-model="formData.price"
+                  :rules="[required]"
                   outlined
                   dense
                   required
@@ -123,6 +128,7 @@
               <v-col cols="6">
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
+                    <h4 class="text-required no-texts"><span>*</span></h4>
                     <v-text-field
                     class="my-date-picker"
                       v-model="formData.begin_date"
@@ -187,9 +193,7 @@
               </v-col>
 
 							<v-col cols="12">
-								<h4 class="text-required no-texts"><span>*</span></h4>
                 <v-checkbox
-									class="mt-0"
                   v-model="formData.status"
                   hide-details
                   label="Aktiv"
@@ -202,7 +206,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-          <v-btn color="success" type="submit" @click.prevent="onSubmit()">Saqlash</v-btn>
+          <v-btn color="success" type="submit" @click.prevent="onSubmit">Saqlash</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -231,7 +235,7 @@ export default {
 
     //show, hide
     const show = ref(false)
-    const formData = ref({ ...emptyFormData })
+    const formData = ref({status: true,})
     const form = ref(null)
     const emptyFormData = {
       id: null,
@@ -244,6 +248,7 @@ export default {
       max_students: null,
       begin_date: null,
       end_date: null,
+      
     }
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
@@ -254,7 +259,10 @@ export default {
     }
     const open = (id = null) => {
       show.value = true
-      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](id)))
+      setTimeout(() => {
+        form.value.$el[0].focus()
+      }, 100)
+      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
     }
     const close = () => {
       show.value = false
@@ -264,16 +272,26 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.number && formData.value.stage_id && formData.value.teacher_id && formData.value.price) {
+        // update
+        if (
+            formData.value.number && 
+            formData.value.subject_id && 
+            formData.value.teacher_id && 
+            formData.value.price && 
+            formData.begin_date
+          ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(message => {
+            .then(({data, message}) => {
               close()
               // emit('notify', { type: 'success', text: message })
+              return data
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+
+              return false
             })
         } else {
           emit('notify', {
@@ -282,16 +300,25 @@ export default {
           })
         }
       } else {
-        if (formData.value.number && formData.value.stage_id && formData.value.teacher_id && formData.value.price) {
+        // create
+        if (
+            formData.value.number && 
+            formData.value.subject_id && 
+            formData.value.teacher_id && 
+            formData.value.price
+          ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(message => {
+            .then(({data, message}) => {
               close()
               // emit('notify', { type: 'success', text: message })
+              emit('add-group-to-options', data)
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+
+              return false
             })
         } else {
           emit('notify', {
