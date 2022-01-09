@@ -23,18 +23,43 @@ export default function useGroupList(MODULE_NAME) {
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
+    skip: 0,
+    limit: 10,
+  })
+  const filter = ref({
+    group_id: null,
   })
   const loading = ref(false)
 
   let lastQuery = ''
   const fetchDatas = (force = false) => {
-    options.value.skip = options.value.page - 1
-    options.value.limit = options.value.itemsPerPage
+    if (options.value.page) {
+      options.value.skip = options.value.page - 1
+    }
+    if (options.value.itemsPerPage) {
+      options.value.limit = options.value.itemsPerPage
+    }
 
     const queryParams = {
       q: searchQuery.value,
       ...options.value,
     }
+
+    for (let key in filter.value) {
+      let value = filter.value[key]
+      if (value !== null && value !== '') {
+        queryParams[key] = value
+      }
+    }
+
+    // const filterCleared = {}
+    // for (let key in filter.value) {
+    //   let value = filter.value[key]
+    //   if (value !== null && value !== '') {
+    //     filterCleared[key] = value
+    //   }
+    // }
+    // queryParams.filter = filterCleared
 
     const newQuery = JSON.stringify(queryParams)
 
@@ -84,6 +109,7 @@ export default function useGroupList(MODULE_NAME) {
   return {
     tableColumns,
     searchQuery,
+    filter,
     fetchDatas,
     deleteRow,
 

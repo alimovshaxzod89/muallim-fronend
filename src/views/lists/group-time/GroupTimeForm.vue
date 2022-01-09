@@ -60,7 +60,7 @@
 
 								<v-menu
 									ref="menu"
-									v-model="formData.time_begin"
+									v-model="time"
 									:close-on-content-click="false"
 									:nudge-right="40"
 									:return-value.sync="time"
@@ -73,7 +73,7 @@
 										<v-text-field
 										class="my-date-picker"
 											outlined
-											v-model="time"
+											v-model="formData.time_begin"
 											label="VAQT ...DAN"
 											:append-icon="icons.mdiClockTimeFourOutline"
 											readonly
@@ -83,11 +83,11 @@
 									</template>
 									<v-time-picker
 										format="24hr"
-										v-if="formData.time_begin"
-										v-model="time"
+										v-if="time"
+										v-model="formData.time_begin"
 										color="primary"
 										full-width
-										@click:minute="$refs.menu.save(time)"
+										@click:minute="$refs.menu.save(formData.time_begin)"
 									></v-time-picker>
 								</v-menu>
               </v-col>
@@ -95,10 +95,10 @@
 							<v-col cols="6">
                 <v-menu
 									ref="menu2"
-									v-model="formData.time_end"
+									v-model="time2"
 									:close-on-content-click="false"
 									:nudge-right="40"
-									:return-value.sync="time2"
+									:return-value.sync="formData.time_end"
 									transition="scale-transition"
 									offset-y
 									max-width="290px"
@@ -108,7 +108,7 @@
 										<v-text-field
 										class="my-date-picker"
 											outlined
-											v-model="time2"
+											v-model="formData.time_end"
 											label="VAQT ...GACHA"
 											:append-icon="icons.mdiClockTimeFourOutline"
 											readonly
@@ -118,11 +118,11 @@
 									</template>
 									<v-time-picker
 										format="24hr"
-										v-if="formData.time_end"
-										v-model="time2"
+										v-if="time2"
+										v-model="formData.time_end"
 										color="primary"
 										full-width
-										@click:minute="$refs.menu2.save(time2)"
+										@click:minute="$refs.menu2.save(formData.time_end)"
 									></v-time-picker>
 								</v-menu>
               </v-col>
@@ -149,12 +149,9 @@ import axios from '@axios'
 import { ref, onMounted } from '@vue/composition-api'
 import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
 
-import MaskedInput from 'vue-masked-input'
+// import MaskedInput from 'vue-masked-input'
 
 export default {
-  components: {
-    MaskedInput,
-  },
   props: {
     MODULE_NAME: {
       type: String,
@@ -163,16 +160,8 @@ export default {
   },
   setup(props, { emit }) {
     //show, hide
-    const days = ref([
-      { key: 1, name: 'Dushanba' },
-      { key: 2, name: 'Seshanba' },
-      { key: 3, name: 'Chorshanba' },
-      { key: 4, name: 'Payshanba' },
-      { key: 5, name: 'Juma' },
-      { key: 6, name: 'Shanba' },
-      { key: 7, name: 'Yakshanba' },
-    ])
 
+    const form = ref(null)
     const show = ref(false)
     const emptyFormData = {
       id: null,
@@ -180,12 +169,17 @@ export default {
       room_id: null,
       time_begin: null,
       time_end: null,
+      group_id: null,
     }
     const formData = ref({ ...emptyFormData })
-    const form = ref(null)
-    const open = (id = null) => {
+    const open = (item = null, group_id = null) => {
       show.value = true
-      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](id)))
+      if (item) {
+        formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](item.id)))
+      }
+      if (group_id) {
+        formData.value.group_id = group_id
+      }
     }
     const close = () => {
       show.value = false
@@ -201,6 +195,7 @@ export default {
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
+              emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
@@ -213,12 +208,14 @@ export default {
           })
         }
       } else {
+        //create
         if (formData.value.week_day && formData.value.room_id) {
           store
             .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
+              emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
@@ -232,6 +229,16 @@ export default {
         }
       }
     }
+
+    const days = ref([
+      { key: 1, name: 'Dushanba' },
+      { key: 2, name: 'Seshanba' },
+      { key: 3, name: 'Chorshanba' },
+      { key: 4, name: 'Payshanba' },
+      { key: 5, name: 'Juma' },
+      { key: 6, name: 'Shanba' },
+      { key: 7, name: 'Yakshanba' },
+    ])
 
     // Load subjects
     const rooms = ref(null)
@@ -279,6 +286,7 @@ export default {
     // })
 
     return {
+      form,
       required,
       minLengthValidator,
       maxLengthValidator,

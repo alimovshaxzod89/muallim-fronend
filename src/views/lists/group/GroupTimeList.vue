@@ -32,8 +32,6 @@
 </template>
 
 <script>
-import { mdiCalendar } from '@mdi/js'
-
 // import store from '@/store'
 // import axios from '@axios'
 
@@ -61,10 +59,6 @@ export default {
       show,
       open,
       close,
-
-      icons: {
-        mdiCalendar,
-      },
     }
   },
 }
