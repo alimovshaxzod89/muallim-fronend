@@ -12,7 +12,7 @@ export default [
 		action: 'create',
   },
 	{
-		title: 'Talabalar1',
+		title: 'Talabalar',
 		icon: mdiAccountDetailsOutline,
 		to: 'students',
 		resource: 'Student',
@@ -26,7 +26,7 @@ export default [
 		action: 'read',
 	},
 	{
-		title: 'Darslar',
+		title: 'Darslar va xonalar',
 		icon: mdiAccountDetailsOutline,
 		to: '',
 		resource: 'Public',
