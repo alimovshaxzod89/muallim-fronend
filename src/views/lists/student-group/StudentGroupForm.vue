@@ -84,7 +84,6 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
-                      :rules="[required]"
                       hide-details
                       outlined
                       :append-icon="icons.mdiCalendar"
@@ -110,7 +109,6 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
-                      :rules="[required]"
                       hide-details
                       outlined
                       :append-icon="icons.mdiCalendar"
@@ -162,7 +160,7 @@ import axios from '@axios'
 import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import StudentForm from '@/views/lists/student/StudentForm'
-import GroupForm from '@/views/lists/group/GroupForm.vue'
+import GroupForm from '@/views/lists/group/GroupForm'
 import Button from '../../components/button/Button'
 
 const MODULE_NAME = 'studentGroup'
@@ -295,9 +293,9 @@ export default {
     const addGroup = (id = null) => {
       groupForm.value.open(id)
     }
-    const addGroupToOptions = row => {
+    const addGroupToOptions = (row) => {
       selectsDatas.value.group = selectsDatas.value.group.concat([row])
-      formData.value.group = row.id
+      formData.value.group_id = row.id
     }
 
     return {

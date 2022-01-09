@@ -25,7 +25,7 @@ export default [
         icon: mdiHumanMaleFemale,
       },
       {
-        title: 'Talaba guruhlari',
+        title: 'Guruh talabalari',
         to: 'student-groups',
         icon: mdiHumanCapacityDecrease,
       },
