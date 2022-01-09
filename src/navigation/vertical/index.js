@@ -9,4 +9,26 @@ import views from './views'
 
 // Array of sections
 // export default [...dashboard, ...appAndPages, ...uiElements, ...formsAndTables, ...chartsAndMaps, ...others]
-export default views
+
+
+import admin from './roles/admin'
+import operator from './roles/operator'
+
+let roleMenu = []
+
+const userData = localStorage.getItem('userData')
+
+if (userData && userData.role) {
+	switch (userData.role) {
+		case 'admin':
+			roleMenu = admin
+			break
+		case 'operator':
+			roleMenu = operator
+			break
+	}
+} else {
+	roleMenu = views
+}
+
+export default roleMenu
