@@ -23,15 +23,6 @@ export default function useGroupList(MODULE_NAME) {
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
-    number: null,
-    subject_id: null,
-    stage_id: null,
-    teacher_id: null,
-    price: null,
-    teacher_share: null,
-    max_students: null,
-    begin_date: null,
-    end_date: null,
   })
   const loading = ref(false)
 

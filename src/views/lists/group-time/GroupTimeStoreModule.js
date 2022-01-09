@@ -45,7 +45,7 @@ export default {
           .get('/api/group-times', { params: queryParams })
           .then(response => {
             const { data, total } = response.data
-            commit('setRows', data[2])
+            commit('setRows', data[1])
             commit('setTotal', total)
 
             resolve(response.data.message)
