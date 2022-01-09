@@ -12,7 +12,7 @@ export default [
 		action: 'create',
   },
 	{
-		title: 'Talabalar1',
+		title: 'Talabalar',
 		icon: mdiAccountDetailsOutline,
 		to: 'students',
 		resource: 'Student',
