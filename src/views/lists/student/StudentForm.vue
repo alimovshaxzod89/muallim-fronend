@@ -73,7 +73,6 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
-                      :rules="[required]"
                       outlined
                       clearable
                       :append-icon="icons.mdiCalendar"
