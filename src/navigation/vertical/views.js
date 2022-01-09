@@ -1,4 +1,4 @@
-import { mdiAccountDetailsOutline, mdiDoor, mdiHome, mdiShieldAccount, mdiFilterVariant, mdiPercent, mdiAccountGroup, mdiHumanMaleFemale, mdiHumanCapacityDecrease, } from '@mdi/js'
+import { mdiAccountDetailsOutline, mdiDoor, mdiHome, mdiFileDocumentEdit, mdiShieldAccount, mdiFilterVariant, mdiPercent, mdiAccountGroup, mdiHumanMaleFemale, mdiHumanCapacityDecrease, } from '@mdi/js'
 
 export default [
   {

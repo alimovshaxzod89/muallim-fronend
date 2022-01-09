@@ -152,7 +152,7 @@
 </template>
 
 <script>
-import { mdiPlusCircleOutline } from '@mdi/js'
+import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
 import StudentGroupStoreModule from './StudentGroupStoreModule'
@@ -327,6 +327,7 @@ export default {
 
       icons: {
         mdiPlusCircleOutline,
+        mdiCalendar,
       },
     }
   },
