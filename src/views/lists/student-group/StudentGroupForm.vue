@@ -1,11 +1,11 @@
 <template>
   <!-- form dialog -->
-  <v-dialog 
+  <v-dialog
     v-model="show"
-    @keydown.enter="onSubmit()" 
-    @keydown.esc="close()" 
-    @click:outside="close()" 
-    max-width="1000px" 
+    @keydown.enter="onSubmit()"
+    @keydown.esc="close()"
+    @click:outside="close()"
+    max-width="1000px"
     width="1000px"
   >
     <v-card>
@@ -17,10 +17,10 @@
           <v-container>
             <v-row>
               <v-col cols="6">
-                <v-list-item-title>Talaba</v-list-item-title>  
+                <v-list-item-title>Talaba</v-list-item-title>
                 <v-autocomplete
                   v-model="formData.student_id"
-                  :items="selectsDatas.student"   
+                  :items="selectsDatas.student"
                   item-text="full_name"
                   item-value="id"
                   label="TALABA"
@@ -46,7 +46,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="6">
-                <v-list-item-title>Guruh</v-list-item-title>  
+                <v-list-item-title>Guruh</v-list-item-title>
                 <v-autocomplete
                   v-model="formData.group_id"
                   :items="selectsDatas.group"
@@ -74,7 +74,7 @@
                   </template>
                 </v-autocomplete>
               </v-col>
-              <v-col cols="6">  
+              <v-col cols="6">
                 <v-menu v-model="isDateFirst" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -100,7 +100,7 @@
                   ></v-date-picker>
                 </v-menu>
               </v-col>
-              <v-col cols="6">  
+              <v-col cols="6">
                 <v-menu v-model="isDateSecond" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -132,7 +132,7 @@
                   hide-details
                   label="AKTIV"
                 ></v-checkbox>
-              </v-col>  
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -147,7 +147,7 @@
 
   <student-form ref="studentForm" v-on:add-student-to-options="addStudentToOptions($event)" />
   <group-form ref="groupForm" v-on:add-group-to-options="addGroupToOptions($event)" />
-  
+
   </v-dialog>
 </template>
 
@@ -286,7 +286,7 @@ export default {
     const addStudent = (id = null) => {
       studentForm.value.open(id)
     }
-    const addStudentToOptions = row => {
+    const addStudentToOptions = (row) => {
       selectsDatas.value.student = selectsDatas.value.student.concat([row])
       formData.value.student_id = row.id
     }

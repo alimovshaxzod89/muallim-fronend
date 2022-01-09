@@ -62,7 +62,7 @@ export default {
               commit('addRow', response.data.data)
               commit('incrementTotal')
 
-              resolve(response.data.message)
+              resolve(response.data)
             }
           })
           .catch(error => reject(error))
@@ -77,7 +77,7 @@ export default {
               const index = getters.indexIds.indexOf(parseInt(row.id))
               commit('updateRow', { row: response.data.data, index })
 
-              resolve(response.data.message)
+              resolve(response.data)
             }
           })
           .catch(error => reject(error))

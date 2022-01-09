@@ -252,6 +252,7 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
+				//update
         if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
@@ -273,13 +274,14 @@ export default {
           })
         }
       } else {
+				//create
         if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ data, message}) => {
               close()
               // emit('notify', { type: 'success', text: message })
-              emit('add-student-to-options', data)  
+              emit('add-student-to-options', data)
             })
             .catch(error => {
               console.log(error)
