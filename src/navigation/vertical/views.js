@@ -1,4 +1,4 @@
-import { mdiAccountDetailsOutline, mdiFileDocumentEdit, mdiHome, mdiShieldAccount, mdiFilterVariant, mdiPercent, mdiAccountGroup} from '@mdi/js'
+import { mdiAccountDetailsOutline, mdiDoor, mdiHome, mdiShieldAccount, mdiFilterVariant, mdiPercent, mdiAccountGroup, mdiHumanMaleFemale, mdiHumanCapacityDecrease, } from '@mdi/js'
 
 export default [
   {
@@ -15,12 +15,19 @@ export default [
         to: 'rooms',
 				resource: 'Room',
 				action: 'manage',
+        icon: mdiDoor,
       },
       {
         title: 'Ustozlar',
         to: 'teachers',
 				resource: 'Teacher',
 				action: 'manage',
+        icon: mdiHumanMaleFemale,
+      },
+      {
+        title: 'Talaba guruhlari',
+        to: 'student-groups',
+        icon: mdiHumanCapacityDecrease,
       },
     ],
   },
@@ -42,6 +49,11 @@ export default [
     to: 'groups',
 		resource: 'Group',
 		action: 'manage',
+  },
+  {
+    title: 'Guruh vaqtlari',
+    icon: mdiFileDocumentEdit,
+    to: 'group-time',
   },
   {
     subheader: '#',

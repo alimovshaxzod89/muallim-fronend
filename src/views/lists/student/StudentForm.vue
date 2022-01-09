@@ -185,7 +185,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-          <v-btn color="success" type="submit" @click.prevent="onSubmit()">Saqlash</v-btn>
+          <v-btn color="success" type="submit" @click.prevent="onSubmit">Saqlash</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -200,18 +200,21 @@ import axios from '@axios'
 
 import { ref, onMounted } from '@vue/composition-api'
 import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
+import StudentStoreModule from '../student/StudentStoreModule'
+
+const MODULE_NAME = 'student'
 
 export default {
-  props: {
-    MODULE_NAME: {
-      type: String,
-      required: true,
-    },
-  },
   setup(props, { emit }) {
+
+    // Register module
+    if (!store.hasModule(MODULE_NAME)) {
+      store.registerModule(MODULE_NAME, StudentStoreModule)
+    }
+
     //show, hide
     const show = ref(false)
-    const formData = ref({ ...emptyFormData })
+    const formData = ref({})
     const form = ref(null)
     const emptyFormData = {
       id: null,
@@ -236,7 +239,10 @@ export default {
     }
     const open = (id = null) => {
       show.value = true
-      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](id)))
+      setTimeout(() => {
+        form.value.$el[0].focus()
+      }, 100)
+      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
     }
     const close = () => {
       show.value = false
@@ -248,14 +254,17 @@ export default {
       if (formData.value.id) {
         if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
-            .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
-            .then(message => {
+            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
+            .then(({ data, message}) => {
               close()
               // emit('notify', { type: 'success', text: message })
+              return data
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+
+              return false
             })
         } else {
           emit('notify', {
@@ -266,14 +275,16 @@ export default {
       } else {
         if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
-            .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
-            .then(message => {
+            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
+            .then(({ data, message}) => {
               close()
               // emit('notify', { type: 'success', text: message })
+              emit('add-student-to-options', data)  
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+              return false
             })
         } else {
           emit('notify', {

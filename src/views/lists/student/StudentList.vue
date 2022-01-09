@@ -231,13 +231,11 @@
 
     <student-form
       ref="studentForm"
-      :MODULE_NAME="MODULE_NAME"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
 
     <student-photo
       ref="studentPhoto"
-      :MODULE_NAME="MODULE_NAME"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -271,6 +269,8 @@ import StudentForm from './StudentForm'
 import StudentPhoto from './StudentPhoto'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
+const MODULE_NAME = 'student'
+
 export default {
   components: {
     StudentForm,
@@ -278,16 +278,14 @@ export default {
     DialogConfirm,
   },
   setup() {
-    const MODULE_NAME = 'students'
-
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, StudentStoreModule)
     }
-    // UnRegister on leave
-    onUnmounted(() => {
-      if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
-    })
+    // // UnRegister on leave
+    // onUnmounted(() => {
+    //   if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
+    // })
 
     //store state
     const state = ref(store.state[MODULE_NAME])

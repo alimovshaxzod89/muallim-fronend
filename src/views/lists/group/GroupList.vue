@@ -165,6 +165,7 @@
       :items-per-page="options.itemsPerPage"
       :footer-props="footerProps"
       class="text-no-wrap"
+			:headers-length="2"
     >
       <template slot="item.index" scope="props">
         {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
@@ -195,30 +196,54 @@
             </template>
             <span>Tahrirlash</span>
           </v-tooltip>
+
+					<!-- time edit -->
+					<v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="openGroupTimeList(item.id)">
+                <v-icon size="18">
+                  {{ icons.mdiClockTimeThreeOutline  }}
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Tahrirlash</span>
+          </v-tooltip>
         </div>
       </template>
 
-      <template #[`item.gender`]="{ item }">
-        {{ item.gender === 1 ? 'Erkak' : 'Ayol' }}
+			<template #[`item.begin_date`]="{ item }">
+				{{item.begin_date}} <br>
+				<b>{{ item.end_date }}</b>
       </template>
 
-      <template #[`item.photo`]="{ item }">
-        <img
-          class="img-user"
-          :src="item.photo_link ? BASE_URL + item.photo_link : require(`@/assets/images/user-image.png`)"
-          alt="Avatar"
-        />
+			<template #[`item.group_times`]="{ item }">
+				<div class="my-table my-size-table pa-5">
+					<v-simple-table dense>
+						<template v-slot:default>
+							<tbody>
+								<tr v-for="(i, index) in item.group_times" :key="item.id + index">
+									<td class="text-center">{{ i.week_day ? getDay(i.week_day) : '-' }}</td>
+									<td class="text-center">{{ i.room ? i.room.name : '-' }}</td>
+									<td class="text-center">{{ i.time_begin ? i.time_begin : '-' }}</td>
+									<td class="text-center">{{ i.time_end ? i.time_end : '-' }}</td>
+								</tr>
+							</tbody>
+						</template>
+					</v-simple-table>
+				</div>
       </template>
 
-      <template #[`item.sale`]="{ item }">
-        {{ item.sale ? 'Ha' : 'Yo\'q' }}
-      </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
 
     <group-form
       ref="GroupForm"
+      v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
+    />
+
+		<group-time-list
+      ref="groupTimeList"
       :MODULE_NAME="MODULE_NAME"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
@@ -236,6 +261,7 @@ import {
   mdiCalendar,
   mdiImageEditOutline,
   mdiFilterOutline,
+  mdiClockTimeThreeOutline,
 } from '@mdi/js'
 
 import { onMounted, onUnmounted, ref } from '@vue/composition-api'
@@ -250,16 +276,18 @@ import GroupStoreModule from './GroupStoreModule'
 // composition function
 import useGroupList from './useGroupList'
 import GroupForm from './GroupForm'
+import GroupTimeList from './GroupTimeList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
+
+const MODULE_NAME = 'group'
 
 export default {
   components: {
     GroupForm,
+    GroupTimeList,
     DialogConfirm,
   },
   setup() {
-    const MODULE_NAME = 'groups'
-
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, GroupStoreModule)
@@ -303,6 +331,12 @@ export default {
       GroupForm.value.open(id)
     }
 
+    // time list form
+    const groupTimeList = ref(null)
+    const openGroupTimeList = id => {
+      groupTimeList.value.open(id)
+    }
+
     //Delete Confirm Dialog
     const dialogConfirm = ref(null)
     const confirmDelete = id => {
@@ -313,6 +347,26 @@ export default {
     }
 
     const BASE_URL = envParams.BASE_URL
+
+    // Week logic
+    const days = ref([
+      { key: 1, name: 'Dushanba' },
+      { key: 2, name: 'Seshanba' },
+      { key: 3, name: 'Chorshanba' },
+      { key: 4, name: 'Payshanba' },
+      { key: 5, name: 'Juma' },
+      { key: 6, name: 'Shanba' },
+      { key: 7, name: 'Yakshanba' },
+    ])
+
+    const getDay = day => {
+      const result = days.value.filter(item => {
+        if (item.key === day) {
+          return item.name
+        }
+      })
+      return result[0].name
+    }
 
     // LoadApis
     const regions = ref([])
@@ -353,8 +407,13 @@ export default {
 
       MODULE_NAME,
 
+      groupTimeList,
+      openGroupTimeList,
+
       // LoadApis
       regions,
+
+      getDay,
 
       icons: {
         mdiTrendingUp,
@@ -366,6 +425,7 @@ export default {
         mdiEyeOutline,
         mdiImageEditOutline,
         mdiFilterOutline,
+        mdiClockTimeThreeOutline,
       },
     }
   },

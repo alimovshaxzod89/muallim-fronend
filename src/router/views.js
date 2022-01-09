@@ -39,6 +39,14 @@ const views = [
     },
   },
   {
+    path: '/student-groups',
+    name: 'student-groups',
+    component: () => import('@/views/lists/student-group/StudentGroupList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/groups',
     name: 'groups',
     component: () => import('@/views/lists/group/GroupList.vue'),
@@ -46,6 +54,14 @@ const views = [
       layout: 'content',
 			resource: 'Group',
 			action: 'manage',
+    },
+  },
+  {
+    path: '/group-time',
+    name: 'group-time',
+    component: () => import('@/views/lists/group-time/GroupTimeList.vue'),
+    meta: {
+      layout: 'content',
     },
   },
   {

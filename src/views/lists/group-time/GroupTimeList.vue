@@ -1,21 +1,7 @@
 <template>
   <v-card id="data-list">
-    <!-- search -->
-    <v-card-text class="d-flex align-center flex-wrap pb-0">
-      <div class="d-flex align-center pb-5">
-        <v-text-field
-          v-model="filter.query"
-          dense
-          outlined
-          hide-details
-          label="Qidirish"
-          class="data-list-search me-3"
-        ></v-text-field>
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
+    <v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
+			<v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
@@ -34,11 +20,12 @@
         {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
       </template>
 
-      <!-- total -->
-      <template #[`item.total`]="{ item }"> ${{ item.total }}</template>
+			<template #[`item.week_day`]="{ item }">
+				{{ item.week_day ? getDay(item.week_day) : '-' }}
+      </template>
 
-      <template late #[`item.actions`]="{ item }">
-        <div class="d-flex align-center justify-center">
+			<template #[`item.actions`]="{ item }">
+        <div class="d-flex align-center">
           <!-- delete -->
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
@@ -48,10 +35,10 @@
                 </v-icon>
               </v-btn>
             </template>
-            <span>Delete</span>
+            <span>O'chirish</span>
           </v-tooltip>
 
-          <!-- view  -->
+          <!-- edit  -->
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
@@ -60,7 +47,7 @@
                 </v-icon>
               </v-btn>
             </template>
-            <span>Edit</span>
+            <span>Tahrirlash</span>
           </v-tooltip>
         </div>
       </template>
@@ -68,52 +55,63 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <student-group-form
-      ref="studentGroupForm"
+    <group-time-form
+      ref="GroupTimeForm"
+      :MODULE_NAME="MODULE_NAME"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
 </template>
 
 <script>
-import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
+import {
+  mdiTrendingUp,
+  mdiPlus,
+  mdiDeleteOutline,
+  mdiDotsVertical,
+  mdiEyeOutline,
+  mdiPencilOutline,
+  mdiCalendar,
+  mdiImageEditOutline,
+  mdiFilterOutline,
+} from '@mdi/js'
 
-import { onUnmounted, ref } from '@vue/composition-api'
+import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
+import axios from '@axios'
 
 import envParams from '@envParams'
 
 // store module
-import StudentGroupStoreModule from './StudentGroupStoreModule'
+import GroupTimeStoreModule from './GroupTimeStoreModule'
 
 // composition function
-import useStudentGroupList from './useStudentGroupList'
-import StudentGroupForm from './StudentGroupForm'
-import DialogConfirm from '../../components/DialogConfirm.vue'
-
-const MODULE_NAME = 'studentGroup'
+import useGroupTimeList from './useGroupTimeList'
+import GroupTimeForm from './GroupTimeForm.vue'
+import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 export default {
   components: {
-    StudentGroupForm,
+    GroupTimeForm,
     DialogConfirm,
   },
   setup() {
+    const MODULE_NAME = 'group-time'
+
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, StudentGroupStoreModule)
+      store.registerModule(MODULE_NAME, GroupTimeStoreModule)
     }
     // UnRegister on leave
-    // onUnmounted(() => {
-    //   if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
-    // })
+    onUnmounted(() => {
+      if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
+    })
 
     //store state
     const state = ref(store.state[MODULE_NAME])
 
     //logics
     const {
-      filter,
       searchQuery,
       tableColumns,
       deleteRow,
@@ -122,7 +120,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useStudentGroupList(MODULE_NAME)
+    } = useGroupTimeList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -133,10 +131,14 @@ export default {
       { title: 'Edit', icon: mdiPencilOutline },
     ]
 
+    // Datepicker
+    const picker = new Date().toISOString().substr(0, 10)
+    const isDate = ref(false)
+
     //Form
-    const studentGroupForm = ref(null)
+    const GroupTimeForm = ref(null)
     const openForm = id => {
-      studentGroupForm.value.open(id)
+      GroupTimeForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -150,18 +152,50 @@ export default {
 
     const BASE_URL = envParams.BASE_URL
 
+    // Week logic
+    const days = ref([
+      { key: 1, name: 'Dushanba' },
+      { key: 2, name: 'Seshanba' },
+      { key: 3, name: 'Chorshanba' },
+      { key: 4, name: 'Payshanba' },
+      { key: 5, name: 'Juma' },
+      { key: 6, name: 'Shanba' },
+      { key: 7, name: 'Yakshanba' },
+    ])
+
+    const getDay = day => {
+      const result = days.value.filter(item => {
+        if (item.key === day) {
+          return item.name
+        }
+      })
+      return result[0].name
+    }
+
+    // LoadApis
+    const groupTimes = ref([])
+    const loadGroupTimes = () => {
+      axios.get('/api/group-times').then(response => {
+        // groupTimes.value = response.data.data[1]
+      })
+    }
+    onMounted(() => {
+      loadGroupTimes()
+    })
+
     // Return
     return {
       BASE_URL,
       state,
 
+      picker,
+      isDate,
       tableColumns,
       searchQuery,
       options,
       loading,
       notify,
       selectedTableData,
-      filter,
 
       actions,
       actionOptions,
@@ -171,10 +205,16 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      studentGroupForm,
+      GroupTimeForm,
       openForm,
 
       MODULE_NAME,
+
+      // Wekk logic
+      getDay,
+
+      // LoadApis
+      groupTimes,
 
       icons: {
         mdiTrendingUp,
@@ -182,7 +222,10 @@ export default {
         mdiPencilOutline,
         mdiDeleteOutline,
         mdiDotsVertical,
+        mdiCalendar,
         mdiEyeOutline,
+        mdiImageEditOutline,
+        mdiFilterOutline,
       },
     }
   },
@@ -202,6 +245,19 @@ export default {
 
   .data-list-search {
     max-width: 10.625rem;
+  }
+}
+.img-user {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.my-filter {
+  .v-input {
+    margin-right: 12px;
+    margin-bottom: 12px;
   }
 }
 </style>

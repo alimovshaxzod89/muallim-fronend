@@ -5,8 +5,8 @@
     @keydown.enter="onSubmit()" 
     @keydown.esc="close()" 
     @click:outside="close()" 
-    max-width="700px" 
-    width="700px"
+    max-width="1000px" 
+    width="1000px"
   >
     <v-card>
       <v-form ref="form">
@@ -19,9 +19,9 @@
               <v-col cols="6">
                 <v-list-item-title>Talaba</v-list-item-title>  
                 <v-autocomplete
-                  v-model="formData.student"
-                  :items="selectsDatas.student_group"
-                  item-text="name"
+                  v-model="formData.student_id"
+                  :items="selectsDatas.student"   
+                  item-text="full_name"
                   item-value="id"
                   label="TALABA"
                   dense
@@ -30,7 +30,7 @@
                   clearable
                   :rules="selectRule"
                 >
-                  <template>
+                  <template v-slot:append-outer>
                     <v-btn
                       class="btn-dialog-add-item"
                       color="secondary"
@@ -46,116 +46,41 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="6">
-                <h4 class="text-required no-text"><span>*</span></h4>  
-                <v-text-field
-                  label="FAMILIYA"
-                  v-model="formData.last_name"
-                  type="text"
-                  dense
-                  outlined
-                  hide-details
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  label="SHARIFI"
-                  v-model="formData.middle_name"
-                  type="text"
-                  dense
-                  outlined
-                  hide-details
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  prefix="+998"
-                  label="TELEFON"
-                  v-model="formData.phone"
-                  type="phone"
-                  dense
-                  outlined
-                  hide-details
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="6">
+                <v-list-item-title>Guruh</v-list-item-title>  
                 <v-autocomplete
-                  v-model="formData.region_id"
-                  :items="selectsDatas.teacher"
-                  item-text="name"
+                  v-model="formData.group_id"
+                  :items="selectsDatas.group"
+                  item-text="number"
                   item-value="id"
-                  label="TUMAN"
+                  label="GURUH"
                   dense
                   outlined
                   hide-details
                   clearable
                   :rules="selectRule"
                 >
+                  <template v-slot:append-outer>
+                    <v-btn
+                      class="btn-dialog-add-item"
+                      color="secondary"
+                      height="40px !important"
+                      outlined
+                      @click="addGroup()"
+                    >
+                      <v-icon size="22">
+                        {{ icons.mdiPlusCircleOutline }}
+                      </v-icon>
+                    </v-btn>
+                  </template>
                 </v-autocomplete>
-              </v-col>
-              <v-col cols="6">
-                  <v-textarea
-                    v-model="formData.address"
-                    label="MANZIL"
-                    dense
-                    outlined
-                    hide-details
-                    required
-                    height="80px"
-                  >
-                  </v-textarea>
-              </v-col>
-              <v-col cols="6"> 
-                <v-autocomplete
-                  v-model="formData.permanent_region_id"
-                  :items="selectsDatas.teacher"
-                  item-text="name"
-                  item-value="id"
-                  label="D.Y. TUMAN"
-                  dense
-                  outlined
-                  hide-details
-                  clearable
-                  :rules="selectRule"
-                >
-                </v-autocomplete>
-              </v-col>
-              <v-col cols="6">
-                  <v-textarea
-                    v-model="formData.permanent_address"
-                    label="D.Y. MANZIL"
-                    dense
-                    outlined
-                    hide-details
-                    required
-                    height="80px"
-                  >
-                  </v-textarea>
-              </v-col>
-              <v-col cols="6"> 
-                <v-radio-group
-                 v-model="formData.gender"
-                 class="mt-0"
-                 hide-details
-                >
-                    <v-radio
-                      label="ERKAK"
-                      value="0"
-                    ></v-radio>
-                    <v-radio
-                      label="AYOL"
-                      value="1"
-                    ></v-radio>
-                </v-radio-group>
               </v-col>
               <v-col cols="6">  
-                <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+                <v-menu v-model="isDateFirst" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="formData.birth_date"
-                      label="TUG'ilGAN SANASI"
+                      class="my-date-picker"
+                      v-model="formData.begin_date"
+                      label="BOSHLANGAN SANA"
                       readonly
                       v-bind="attrs"
                       v-on="on"
@@ -166,15 +91,48 @@
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    v-model="formData.birth_date"
+                    v-model="formData.begin_date"
                     color="primary"
-                    @input="isDate = false"
+                    @input="isDateFirst = false"
                     no-title
                     :first-day-of-week="1"
                     locale="ru-ru"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
+              <v-col cols="6">  
+                <v-menu v-model="isDateSecond" :close-on-content-click="false" offset-y min-width="auto">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      class="my-date-picker"
+                      v-model="formData.end_date"
+                      label="TUGAGAN SANA"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      :rules="[required]"
+                      hide-details
+                      outlined
+                      :append-icon="icons.mdiCalendar"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="formData.end_date"
+                    color="primary"
+                    @input="isDateSecond = false"
+                    no-title
+                    :first-day-of-week="1"
+                    locale="ru-ru"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col cols="6" class="mt-0">
+                <v-checkbox
+                  v-model="formData.status"
+                  hide-details
+                  label="AKTIV"
+                ></v-checkbox>
+              </v-col>  
             </v-row>
           </v-container>
         </v-card-text>
@@ -187,7 +145,9 @@
       </v-form>
     </v-card>
 
-  <student-form ref="studentForm" v-on:add-product-type-to-options="addProductTypeToOptions($enent)" />
+  <student-form ref="studentForm" v-on:add-student-to-options="addStudentToOptions($event)" />
+  <group-form ref="groupForm" v-on:add-group-to-options="addGroupToOptions($event)" />
+  
   </v-dialog>
 </template>
 
@@ -201,20 +161,22 @@ import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
+import StudentForm from '@/views/lists/student/StudentForm'
+import GroupForm from '@/views/lists/group/GroupForm.vue'
 import Button from '../../components/button/Button'
-import StudentForm from '../student/StudentForm.vue'
 
 const MODULE_NAME = 'studentGroup'
 
 export default {
-  components: { Button, StudentForm },
+  components: { StudentForm, GroupForm, Button },
   // props: {
   //
   // },
   created() {
-      this.loadStudent()
+    this.loadStudent()
+    this.loadGroup()
   },
-  setup (props, {emit})  {
+  setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, StudentGroupStoreModule)
@@ -235,20 +197,20 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      teacher: null,
-			student: null,
-			group: null,
-			begin_date: null,
-			end_date: null,
-			status: null
+      teacher_id: null,
+      student_id: null,
+      group_id: null,
+      begin_date: null,
+      end_date: null,
+      status: true,
     }
-    const formData = ref({ ...emptyFormData })
 
-    // birth date picker
     const picker = new Date().toISOString().substr(0, 10)
-    const isDate = ref(false)
+    const isDateFirst = ref(false)
+    const isDateSecond = ref(false)
 
     //validation
+    const formData = ref({ ...emptyFormData })
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     const validate = () => {
       form.value.validate()
@@ -262,7 +224,17 @@ export default {
         .get('/api/students', { params: { itemsPerPage: -1 } })
         .then(response => {
           if (response.data.success) {
-            selectsDatas.value.student_group = response.data.data
+            selectsDatas.value.student = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
+    const loadGroup = () => {
+      axios
+        .get('/api/groups', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.group = response.data.data
           }
         })
         .catch(error => console.log(error))
@@ -271,15 +243,12 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (
-            formData.value.student &&
-            formData.value.group
-        ) {
+        if (formData.value.student_id && formData.value.group_id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(message => {
+            .then(({ message }) => {
               close()
-              emit('notify', { type: 'success', text: message })
+              // emit('notify', { type: 'success', text: message })
             })
             .catch(error => {
               console.log(error)
@@ -292,13 +261,10 @@ export default {
           })
         }
       } else {
-        if (
-            formData.value.student &&
-            formData.value.group
-           ) {
+        if (formData.value.student_id && formData.value.group_id) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(message => {
+            .then(({ message }) => {
               close()
               emit('notify', { type: 'success', text: message })
             })
@@ -318,33 +284,46 @@ export default {
     // StudentForm
     const studentForm = ref(null)
     const addStudent = (id = null) => {
-        roomForm.value.open(id)
+      studentForm.value.open(id)
     }
-    const addRegionToOptions = row => {
-        selectsDatas.value.region = selectsDatas.value.region.concat([row])
-        formData.value.region_id = row.id
+    const addStudentToOptions = row => {
+      selectsDatas.value.student = selectsDatas.value.student.concat([row])
+      formData.value.student_id = row.id
     }
-   
+    // GroupForm
+    const groupForm = ref(null)
+    const addGroup = (id = null) => {
+      groupForm.value.open(id)
+    }
+    const addGroupToOptions = row => {
+      selectsDatas.value.group = selectsDatas.value.group.concat([row])
+      formData.value.group = row.id
+    }
 
     return {
       form,
       picker,
-      isDate,
+      isDateFirst,
+      isDateSecond,
       required,
       minLengthValidator,
       formData,
       selectsDatas,
       selectRule,
-      loadRegion,
+      loadStudent,
+      loadGroup,
       validate,
       show,
       onSubmit,
       open,
       close,
 
-      teacherForm,
-      addRegion,
-      addRegionToOptions,
+      studentForm,
+      addStudent,
+      addStudentToOptions,
+      groupForm,
+      addGroup,
+      addGroupToOptions,
 
       icons: {
         mdiPlusCircleOutline,
