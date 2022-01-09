@@ -8,7 +8,7 @@ export default function useStudentList(MODULE_NAME) {
 	const tableColumns = [
 		{ text: '#', sortable: false, value: 'index' },
 		{
-			text: 'AMALLAR',
+			text: 'Amallar',
 			value: 'actions',
 			align: 'center',
 			sortable: false,
