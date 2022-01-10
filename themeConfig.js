@@ -2,8 +2,9 @@ import { mdiCheckboxBlankCircleOutline } from '@mdi/js'
 
 const themeConfig = {
   app: {
-    name: 'MUALLIM',
-    logo: require('@/assets/images/svg/logo.svg'),
+		name: 'MUALLIM',
+    // logo: require('@/assets/images/svg/logo.svg'),
+    logo: require('@/assets/logo/HILOL TA\'LIM.png'),
     isDark: false,
     isRtl: false,
     contentLayoutNav: 'vertical', // vertical, horizontal
