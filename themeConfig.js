@@ -1,8 +1,9 @@
 import { mdiCheckboxBlankCircleOutline } from '@mdi/js'
+import envParams from '@envParams' 
 
 const themeConfig = {
   app: {
-    name: 'MUALLIM',
+    name:envParams.COMPANY_NAME ?? 'MUALLIM',
     logo: require('@/assets/images/svg/logo.svg'),
     isDark: false,
     isRtl: false,
