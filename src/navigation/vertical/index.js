@@ -12,7 +12,10 @@ import views from './views'
 
 
 import admin from './roles/admin'
+import director from './roles/director'
+import manager from './roles/manager'
 import operator from './roles/operator'
+import teacher from './roles/teacher'
 
 let roleMenu = []
 
@@ -22,8 +25,17 @@ if (userData && userData.role) {
 		case 'admin':
 			roleMenu = admin
 			break
+		case 'director':
+			roleMenu = director
+			break
+		case 'manager':
+			roleMenu = manager
+			break
 		case 'operator':
 			roleMenu = operator
+			break
+		case 'teacher':
+			roleMenu = teacher
 			break
 	}
 } else {

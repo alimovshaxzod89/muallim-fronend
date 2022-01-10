@@ -8,7 +8,6 @@ export default [
 
     resource: 'Group',
     action: 'read',
-    // action: ['manage', 'create', 'list', 'update', 'delete'],
   },
   {
     title: 'Talabalar',

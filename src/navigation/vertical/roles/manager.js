@@ -1,15 +1,18 @@
-import { mdiAccountDetailsOutline, mdiPercent } from '@mdi/js'
+import {
+	mdiAccountDetailsOutline, mdiCash,
+	mdiDoor,
+	mdiFilterVariant, mdiHumanCapacityDecrease,
+	mdiHumanMaleFemale,
+	mdiPercent,
+} from '@mdi/js'
 
 export default [
   {
     title: 'Guruhlar',
     to: 'groups',
     icon: mdiPercent,
-
-    //casl
     resource: 'Group',
-    // action: ['manage', 'create', 'read', 'update', 'delete'],
-    action: 'create',
+    action: 'read',
   },
   {
     title: 'Talabalar',
@@ -75,38 +78,37 @@ export default [
     action: 'read',
   },
   {
-    subheader: '##',
+    subheader: '###',
     badge: 'New',
     bageColor: 'success',
     resource: 'Public',
     action: 'read',
   },
-  {
-    title: "Ro'yxatlar",
-    icon: mdiAccountDetailsOutline,
-    to: '',
-    resource: 'Public',
-    action: 'read',
-  },
-  {
-    title: 'Fanlar',
-    icon: mdiAccountDetailsOutline,
-    to: '',
-    resource: 'Public',
-    action: 'read',
-  },
-  {
-    title: 'Xonalar',
-    icon: mdiAccountDetailsOutline,
-    to: '',
-    resource: 'Public',
-    action: 'read',
-  },
-  {
-    title: 'Ustozlar',
-    icon: mdiAccountDetailsOutline,
-    to: '',
-    resource: 'Public',
-    action: 'read',
-  },
+	{
+		title: "Ro'yxatlar",
+		icon: mdiFilterVariant,
+		children: [
+			{
+				title: 'Fanlar',
+				icon: mdiAccountDetailsOutline,
+				to: 'subjects',
+				resource: 'Public',
+				action: 'read',
+			},
+			{
+				title: 'Xonalar',
+				icon: mdiAccountDetailsOutline,
+				to: 'rooms',
+				resource: 'Public',
+				action: 'read',
+			},
+			{
+				title: 'Ustozlar',
+				icon: mdiAccountDetailsOutline,
+				to: 'teachers',
+				resource: 'Public',
+				action: 'read',
+			},
+		],
+	},
 ]
