@@ -75,6 +75,7 @@
 									ref="GroupTimeForm"
 									:MODULE_NAME="MODULE_NAME"
 									v-on:refresh-list="$emit('refresh-list')"
+									v-on:delete-row="$emit('delete-row')"
 									v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
 								/>
 							</div>
@@ -122,8 +123,9 @@ export default {
     GroupTimeForm,
     DialogConfirm,
   },
-  setup() {
+  setup(props, { emit }) {
     const MODULE_NAME = 'group-time'
+    const BASE_URL = envParams.BASE_URL
 
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
@@ -155,7 +157,6 @@ export default {
       searchQuery,
       filter,
       tableColumns,
-      deleteRow,
       fetchDatas,
 
       options,
@@ -192,7 +193,21 @@ export default {
         .catch(() => {})
     }
 
-    const BASE_URL = envParams.BASE_URL
+    //delete
+    const deleteRow = id => {
+      store
+        .dispatch(`${MODULE_NAME}/removeRow`, id)
+        .then(message => {
+          notify.value = { type: 'success', text: message, time: Date.now() }
+
+          fetchDatas(true)
+          emit('delete-row')
+        })
+        .catch(error => {
+          console.log(error)
+          notify.value = { type: 'error', text: error.message, time: Date.now() }
+        })
+    }
 
     // Week logic
     const days = ref([
@@ -242,6 +257,7 @@ export default {
       GroupTimeForm,
       openForm,
       group_id,
+      deleteRow,
 
       MODULE_NAME,
 
