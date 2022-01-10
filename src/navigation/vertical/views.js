@@ -68,11 +68,11 @@ export default [
     resource: 'Group',
     action: 'manage',
   },
-  {
-    title: 'Guruh vaqtlari',
-    icon: mdiFileDocumentEdit,
-    to: 'group-times',
-  },
+  // {
+  //   title: 'Guruh vaqtlari',
+  //   icon: mdiFileDocumentEdit,
+  //   to: 'group-times',
+  // },
   {
     subheader: '#',
     badge: 'New',

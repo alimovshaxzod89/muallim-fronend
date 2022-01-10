@@ -1,4 +1,16 @@
-import { mdiAccountDetailsOutline, mdiAccountGroup, mdiDoor, mdiFileDocumentEdit, mdiFilterVariant, mdiHome, mdiHumanCapacityDecrease, mdiHumanMaleFemale, mdiPercent, mdiShieldAccount, mdiAccountCash, mdiCashMultiple  } from '@mdi/js'
+import {
+  mdiAccountCash,
+  mdiAccountDetailsOutline,
+  mdiAccountGroup,
+  mdiCashMultiple,
+  mdiDoor,
+  mdiFilterVariant,
+  mdiHome,
+  mdiHumanCapacityDecrease,
+  mdiHumanMaleFemale,
+  mdiPercent,
+  mdiShieldAccount,
+} from '@mdi/js'
 
 export default [
   {
@@ -13,15 +25,15 @@ export default [
       {
         title: 'Xonalar',
         to: 'rooms',
-				resource: 'Room',
-				action: 'manage',
+        resource: 'Room',
+        action: 'manage',
         icon: mdiDoor,
       },
       {
         title: 'Ustozlar',
         to: 'teachers',
-				resource: 'Teacher',
-				action: 'manage',
+        resource: 'Teacher',
+        action: 'manage',
         icon: mdiHumanMaleFemale,
       },
       {
@@ -32,16 +44,16 @@ export default [
       {
         title: 'Ustozlarga tulovlar',
         to: 'teacher-paids',
-				resource: 'Public',
-				action: 'manage',
-        icon: mdiAccountCash ,
+        resource: 'Public',
+        action: 'manage',
+        icon: mdiAccountCash,
       },
       {
         title: 'Markaz Xarajatlari',
         to: 'costs',
-				resource: 'Teacher',
-				action: 'manage',
-        icon: mdiCashMultiple ,
+        resource: 'Teacher',
+        action: 'manage',
+        icon: mdiCashMultiple,
       },
     ],
   },
@@ -54,21 +66,21 @@ export default [
     title: 'Talabalar',
     icon: mdiAccountDetailsOutline,
     to: 'students',
-		resource: 'Student',
-		action: 'manage',
+    resource: 'Student',
+    action: 'manage',
   },
   {
     title: 'Guruhlar',
     icon: mdiAccountGroup,
     to: 'groups',
-		resource: 'Group',
-		action: 'manage',
+    resource: 'Group',
+    action: 'manage',
   },
-  {
-    title: 'Guruh vaqtlari',
-    icon: mdiFileDocumentEdit,
-    to: 'group-times',
-  },
+  // {
+  //   title: 'Guruh vaqtlari',
+  //   icon: mdiFileDocumentEdit,
+  //   to: 'group-times',
+  // },
   {
     subheader: '#',
     badge: 'New',
