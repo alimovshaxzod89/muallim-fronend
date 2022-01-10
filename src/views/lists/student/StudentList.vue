@@ -217,7 +217,7 @@
       <template #[`item.photo`]="{ item }">
         <img
           class="img-user"
-          :src="item.photo_link ? BASE_URL + item.photo_link : require(`@/assets/images/user-image.png`)"
+          :src="item.photo_link ? BACKEND_URL + item.photo_link : require(`@/assets/images/user-image.png`)"
           alt="Avatar"
         />
       </template>
@@ -336,7 +336,7 @@ export default {
         .catch(() => {})
     }
 
-    const BASE_URL = envParams.BASE_URL
+    const BACKEND_URL = envParams.BACKEND_URL
 
     // LoadApis
     const regions = ref([])
@@ -352,7 +352,7 @@ export default {
 
     // Return
     return {
-      BASE_URL,
+			BACKEND_URL,
       state,
 
       picker,

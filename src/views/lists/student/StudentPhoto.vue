@@ -120,7 +120,7 @@ export default {
       studentInfo.value = student
       show.value = true
       if (student.photo_link) {
-        url.value = envParams.BASE_URL + student.photo_link
+        url.value = envParams.BACKEND_URL + student.photo_link
         selectedAvatar.value = true
       } else {
         url.value = require(`@/assets/images/user-image.png`)
