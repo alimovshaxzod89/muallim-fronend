@@ -162,7 +162,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-divider class="my-2"></v-divider> --> -->
+      <v-divider class="my-2"></v-divider> --> 
 
       <!-- Logout -->
       <v-list-item @click="logoutUser">
@@ -172,7 +172,7 @@
           </v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>Kirish</v-list-item-title>
+          <v-list-item-title>Chiqish</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
