@@ -7,7 +7,7 @@
     :elevation="$vuetify.theme.dark ? 9 : 8"
   >
     <!-- Activator -->
-    <template v-slot:activator="{ on, attrs }">
+    <!-- <template v-slot:activator="{ on, attrs }">
       <div
         v-bind="attrs"
         class="d-flex align-center"
@@ -22,7 +22,7 @@
         ></v-img>
         <span v-if="$vuetify.breakpoint.smAndUp">{{ locales.find(l => l.locale === $i18n.locale).title }}</span>
       </div>
-    </template>
+    </template> -->
 
     <!-- Options List -->
     <v-list>
