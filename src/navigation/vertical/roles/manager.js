@@ -16,7 +16,7 @@ export default [
     icon: mdiAccountDetailsOutline,
     to: 'students',
     resource: 'Student',
-    action: 'manage',
+    action: 'read',
   },
   {
     subheader: '#',

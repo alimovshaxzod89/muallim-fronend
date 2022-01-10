@@ -57,13 +57,9 @@ import store from '@/store'
 import { ref } from '@vue/composition-api'
 import envParams from '@envParams'
 
+const MODULE_NAME = 'student'
+
 export default {
-  props: {
-    MODULE_NAME: {
-      type: String,
-      required: true,
-    },
-  },
   setup(props, { emit }) {
     //show, hide
     const show = ref(false)
@@ -120,7 +116,7 @@ export default {
       studentInfo.value = student
       show.value = true
       if (student.photo_link) {
-        url.value = envParams.BASE_URL + student.photo_link
+        url.value = envParams.BACKEND_URL + student.photo_link
         selectedAvatar.value = true
       } else {
         url.value = require(`@/assets/images/user-image.png`)
@@ -252,6 +248,7 @@ export default {
       avatar,
       video,
       studentInfo,
+      MODULE_NAME,
 
       // Photo functions
       startWebCamera,
