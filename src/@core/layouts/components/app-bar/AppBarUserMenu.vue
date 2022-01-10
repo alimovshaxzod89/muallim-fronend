@@ -71,7 +71,7 @@
           style="vertical-align:middle"
         >
           <span class="text--primary font-weight-semibold mb-n1">
-            {{ userData.fullName || userData.username }}
+            {{ userData.name || userData.username }}
           </span>
           <small class="text--disabled text-capitalize">{{ userData.role }}</small>
         </div>
