@@ -66,6 +66,14 @@ const views = [
     },
   },
   {
+    path: '/subjects',
+    name: 'subjects',
+    component: () => import('@/views/lists/subject/SubjectList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/groups',
     name: 'groups',
     component: () => import('@/views/lists/group/GroupList.vue'),

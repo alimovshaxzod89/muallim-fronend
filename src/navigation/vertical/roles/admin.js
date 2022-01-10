@@ -10,6 +10,7 @@ import {
   mdiHumanMaleFemale,
   mdiPercent,
   mdiShieldAccount,
+  mdiBookOpenVariant, 
 } from '@mdi/js'
 
 export default [
@@ -54,6 +55,13 @@ export default [
         resource: 'Teacher',
         action: 'read',
         icon: mdiCashMultiple,
+      },
+      {
+        title: 'Fanlar',
+        to: 'subjects',
+        resource: 'Teacher',
+        action: 'read',
+        icon: mdiBookOpenVariant ,
       },
     ],
   },
