@@ -61,7 +61,7 @@
         <span>COPYRIGHT &copy; {{ new Date().getFullYear() }} <a
           href="https://themeselection.com"
           class="text-decoration-none"
-        >ThemeSelection</a>, All rights Reserved</span>
+        >SoftWork</a>, All rights Reserved</span>
         <div class="d-flex align-center">
           <span>Hand-crafted &amp; Made with</span>
           <v-icon

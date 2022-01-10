@@ -6,14 +6,14 @@
     :elevation="$vuetify.theme.dark ? 9 : 8"
     content-class="list-style notification-menu-content"
   >
-    <template v-slot:activator="{ on, attrs }">
+    <!-- <template v-slot:activator="{ on, attrs }">
       <v-icon
         v-bind="attrs"
         v-on="on"
       >
         {{ icons.mdiBellOutline }}
       </v-icon>
-    </template>
+    </template> -->
     <v-card class="app-bar-notification-content-container">
       <perfect-scrollbar
         class="ps-user-notifications"
