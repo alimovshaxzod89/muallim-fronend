@@ -40,13 +40,6 @@ export default [
         to: 'student-groups',
         icon: mdiHumanCapacityDecrease,
       },
-      {
-        title: 'Ustozlarga tulovlar',
-        to: 'teacher-paids',
-        resource: 'Public',
-        action: 'manage',
-        icon: mdiCash,
-      },
     ],
   },
   {
@@ -68,6 +61,13 @@ export default [
     resource: 'Group',
     action: 'manage',
   },
+	{
+		title: 'Ustozlarga tulovlar',
+		to: 'teacher-paids',
+		resource: 'Public',
+		action: 'manage',
+		icon: mdiCash,
+	},
   // {
   //   title: 'Guruh vaqtlari',
   //   icon: mdiFileDocumentEdit,
