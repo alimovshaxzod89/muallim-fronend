@@ -151,7 +151,7 @@
       </div>
 
 			<v-spacer></v-spacer>
-			<v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
+			<v-btn v-if="$can('create', 'Group')" class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
@@ -198,7 +198,7 @@
           </v-tooltip>
 
 					<!-- time edit -->
-					<v-tooltip bottom>
+					<v-tooltip bottom v-if="$can('manage', 'GroupTime')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openGroupTimeList(item)">
                 <v-icon size="18">
@@ -216,7 +216,7 @@
 				<b>{{ item.end_date }}</b>
       </template>
 
-			<template #[`item.group_times`]="{ item }">
+			<template #[`item.group_times`]="{ item }" >
 				<div class="my-table my-size-table pa-5">
 					<v-simple-table dense>
 						<template v-slot:default>

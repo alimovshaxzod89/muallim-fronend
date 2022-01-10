@@ -53,7 +53,7 @@ export default [
   {
     title: 'Guruh vaqtlari',
     icon: mdiFileDocumentEdit,
-    to: 'group-time',
+    to: 'group-times',
   },
   {
     subheader: '#',

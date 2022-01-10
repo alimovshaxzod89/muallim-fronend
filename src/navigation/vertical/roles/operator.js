@@ -6,17 +6,16 @@ export default [
     to: 'groups',
     icon: mdiPercent,
 
-		//casl
 		resource: 'Group',
-		// action: ['manage', 'create', 'read', 'update', 'delete'],
-		action: 'create',
+		action: 'read',
+		// action: ['manage', 'create', 'list', 'update', 'delete'],
   },
 	{
 		title: 'Talabalar',
 		icon: mdiAccountDetailsOutline,
 		to: 'students',
 		resource: 'Student',
-		action: 'manage',
+		action: 'read',
 	},
 	{
 		subheader: '#',
