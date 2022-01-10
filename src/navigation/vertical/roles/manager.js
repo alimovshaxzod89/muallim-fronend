@@ -5,11 +5,8 @@ export default [
     title: 'Guruhlar',
     to: 'groups',
     icon: mdiPercent,
-
-    //casl
     resource: 'Group',
-    // action: ['manage', 'create', 'read', 'update', 'delete'],
-    action: 'create',
+    action: 'read',
   },
   {
     title: 'Talabalar',
