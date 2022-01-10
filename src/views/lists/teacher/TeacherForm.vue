@@ -136,6 +136,7 @@
               <v-col cols="6">  
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
+                    <h4 class="text-required no-text"><span>*</span></h4>
                     <v-text-field
                       v-model="formData.birth_date"
                       label="TUG'ilGAN SANASI"
@@ -174,7 +175,7 @@
 </template>
 
 <script>
-import { mdiPlusCircleOutline } from '@mdi/js'
+import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
 import TeacherStoreModule from './TeacherStoreModule'
@@ -205,6 +206,9 @@ export default {
     const show = ref(false)
     const open = (id = null) => {
       show.value = true
+      setTimeout(() => {
+        form.value.$el[0].focus()
+      }, 100)
       if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
     }
     const close = () => {
@@ -227,7 +231,7 @@ export default {
       gender: null,
       birth_date: null,  
     }
-    const formData = ref({ ...emptyFormData })
+    const formData = ref({})
 
     // birth date picker
     const picker = new Date().toISOString().substr(0, 10)
@@ -258,17 +262,21 @@ export default {
       if (formData.value.id) {
         if (
             formData.value.first_name &&
-            formData.value.last_name
+            formData.value.last_name &&
+            formData.value.birth_date
         ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(({message}) => {
+            .then(({ data, message}) => {
               close()
-              emit('notify', { type: 'success', text: message })
+              // emit('notify', { type: 'success', text: message })
+              return data
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+
+              return false
             })
         } else {
           emit('notify', {
@@ -279,17 +287,20 @@ export default {
       } else {
         if (
             formData.value.first_name &&
-            formData.value.last_name
+            formData.value.last_name &&
+            formData.value.birth_date
            ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(({message}) => {
+            .then(({data, message}) => {
               close()
-              emit('notify', { type: 'success', text: message })
+              // emit('notify', { type: 'success', text: message })
+              emit('add-teacher-to-options', data)
             })
-            .catch(error => {
+            .catch(error => {``
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+              return false
             })
         } else {
           emit('notify', {
@@ -333,6 +344,7 @@ export default {
 
       icons: {
         mdiPlusCircleOutline,
+        mdiCalendar
       },
     }
   },

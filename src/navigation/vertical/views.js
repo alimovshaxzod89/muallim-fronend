@@ -1,4 +1,4 @@
-import { mdiAccountDetailsOutline, mdiAccountGroup, mdiDoor, mdiFileDocumentEdit, mdiFilterVariant, mdiHome, mdiHumanCapacityDecrease, mdiHumanMaleFemale, mdiPercent, mdiShieldAccount } from '@mdi/js'
+import { mdiAccountDetailsOutline, mdiAccountGroup, mdiDoor, mdiFileDocumentEdit, mdiFilterVariant, mdiHome, mdiHumanCapacityDecrease, mdiHumanMaleFemale, mdiPercent, mdiShieldAccount, mdiCash } from '@mdi/js'
 
 export default [
   {
@@ -28,6 +28,13 @@ export default [
         title: 'Guruh talabalari',
         to: 'student-groups',
         icon: mdiHumanCapacityDecrease,
+      },
+      {
+        title: 'Ustozlarga tulovlar',
+        to: 'teacher-paids',
+        resource: 'Public',
+				action: 'manage',
+        icon: mdiCash,
       },
     ],
   },
