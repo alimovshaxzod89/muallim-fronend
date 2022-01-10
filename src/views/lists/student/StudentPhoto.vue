@@ -57,13 +57,9 @@ import store from '@/store'
 import { ref } from '@vue/composition-api'
 import envParams from '@envParams'
 
+const MODULE_NAME = 'student'
+
 export default {
-  props: {
-    MODULE_NAME: {
-      type: String,
-      required: true,
-    },
-  },
   setup(props, { emit }) {
     //show, hide
     const show = ref(false)
@@ -252,6 +248,7 @@ export default {
       avatar,
       video,
       studentInfo,
+      MODULE_NAME,
 
       // Photo functions
       startWebCamera,

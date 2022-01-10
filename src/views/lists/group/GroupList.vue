@@ -245,6 +245,7 @@
 		<group-time-list
       ref="groupTimeList"
 			v-on:refresh-list="fetchDatas(true)"
+			v-on:delete-row="fetchDatas(true)"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>

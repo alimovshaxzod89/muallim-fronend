@@ -91,27 +91,11 @@ export default function useGroupList(MODULE_NAME) {
     // selectedTableData.value = []
   })
 
-  //delete
-  const deleteRow = id => {
-    store
-      .dispatch(`${MODULE_NAME}/removeRow`, id)
-      .then(message => {
-        notify.value = { type: 'success', text: message, time: Date.now() }
-
-        fetchDatas(true)
-      })
-      .catch(error => {
-        console.log(error)
-        notify.value = { type: 'error', text: error.message, time: Date.now() }
-      })
-  }
-
   return {
     tableColumns,
     searchQuery,
     filter,
     fetchDatas,
-    deleteRow,
 
     options,
     loading,
