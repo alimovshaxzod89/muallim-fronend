@@ -40,7 +40,6 @@ export default {
   },
   actions: {
     fetchDatas({ commit }, queryParams) {
-      console.log('ds', queryParams)
       return new Promise((resolve, reject) => {
         axios
           .get('/api/group-times', { params: queryParams })

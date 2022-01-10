@@ -1,4 +1,15 @@
-import { mdiAccountDetailsOutline, mdiAccountGroup, mdiDoor, mdiFileDocumentEdit, mdiFilterVariant, mdiHome, mdiHumanCapacityDecrease, mdiHumanMaleFemale, mdiPercent, mdiShieldAccount, mdiCash } from '@mdi/js'
+import {
+  mdiAccountDetailsOutline,
+  mdiAccountGroup,
+  mdiCash,
+  mdiDoor,
+  mdiFilterVariant,
+  mdiHome,
+  mdiHumanCapacityDecrease,
+  mdiHumanMaleFemale,
+  mdiPercent,
+  mdiShieldAccount,
+} from '@mdi/js'
 
 export default [
   {
@@ -13,15 +24,15 @@ export default [
       {
         title: 'Xonalar',
         to: 'rooms',
-				resource: 'Room',
-				action: 'manage',
+        resource: 'Room',
+        action: 'manage',
         icon: mdiDoor,
       },
       {
         title: 'Ustozlar',
         to: 'teachers',
-				resource: 'Teacher',
-				action: 'manage',
+        resource: 'Teacher',
+        action: 'manage',
         icon: mdiHumanMaleFemale,
       },
       {
@@ -33,7 +44,7 @@ export default [
         title: 'Ustozlarga tulovlar',
         to: 'teacher-paids',
         resource: 'Public',
-				action: 'manage',
+        action: 'manage',
         icon: mdiCash,
       },
     ],
@@ -47,20 +58,15 @@ export default [
     title: 'Talabalar',
     icon: mdiAccountDetailsOutline,
     to: 'students',
-		resource: 'Student',
-		action: 'manage',
+    resource: 'Student',
+    action: 'manage',
   },
   {
     title: 'Guruhlar',
     icon: mdiAccountGroup,
     to: 'groups',
-		resource: 'Group',
-		action: 'manage',
-  },
-  {
-    title: 'Guruh vaqtlari',
-    icon: mdiFileDocumentEdit,
-    to: 'group-time',
+    resource: 'Group',
+    action: 'manage',
   },
   {
     subheader: '#',
