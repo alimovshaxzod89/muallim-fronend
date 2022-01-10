@@ -174,7 +174,7 @@
       <template #[`item.actions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
-          <v-tooltip bottom>
+          <v-tooltip bottom v-if="$can('delete', 'Group')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
                 <v-icon size="18">
@@ -186,7 +186,7 @@
           </v-tooltip>
 
           <!-- edit  -->
-          <v-tooltip bottom>
+          <v-tooltip bottom v-if="$can('update', 'Group')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
                 <v-icon size="18">
