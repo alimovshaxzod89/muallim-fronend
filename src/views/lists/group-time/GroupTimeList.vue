@@ -1,66 +1,97 @@
 <template>
-  <v-card id="data-list">
-    <v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
-			<v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
-    </v-card-text>
+<v-dialog
+    v-model="show"
+    @keydown.esc="close()"
+    @click:outside="close()"
+    @keydown.enter="onSubmit()"
+    max-width="1800"
+    width="80%"
+  >
+    <v-card>
+			<v-card-title>
+				<span class="headline">Guruh vaqtlari</span>
+			</v-card-title>
+			<v-card-text>
+				<v-container>
+					<v-row>
 
-    <!-- table -->
-    <v-data-table
-      v-model="selectedTableData"
-      :headers="tableColumns"
-      :items="state.rows"
-      :options.sync="options"
-      :server-items-length="state.total"
-      :loading="loading"
-      :items-per-page="options.itemsPerPage"
-      :footer-props="footerProps"
-      class="text-no-wrap"
-    >
-      <template slot="item.index" scope="props">
-        {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
-      </template>
+						<v-col cols="12">
+							<div id="data-list">
+								<v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
+									<v-btn class="primary" @click="openForm(null, filter.group_id)">Qo'shish</v-btn>
+								</v-card-text>
 
-			<template #[`item.week_day`]="{ item }">
-				{{ item.week_day ? getDay(item.week_day) : '-' }}
-      </template>
+								<!-- table -->
+								<v-data-table
+									v-model="selectedTableData"
+									:headers="tableColumns"
+									:items="state.rows"
+									:options.sync="options"
+									:server-items-length="state.total"
+									:loading="loading"
+									:items-per-page="options.itemsPerPage"
+									:footer-props="footerProps"
+									class="text-no-wrap"
+								>
+									<template slot="item.index" scope="props">
+										{{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
+									</template>
 
-			<template #[`item.actions`]="{ item }">
-        <div class="d-flex align-center">
-          <!-- delete -->
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiDeleteOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>O'chirish</span>
-          </v-tooltip>
+									<template #[`item.week_day`]="{ item }">
+										{{ item.week_day ? getDay(item.week_day) : '-' }}
+									</template>
 
-          <!-- edit  -->
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiPencilOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Tahrirlash</span>
-          </v-tooltip>
-        </div>
-      </template>
-    </v-data-table>
+									<template #[`item.actions`]="{ item }">
+										<div class="d-flex align-center">
+											<!-- delete -->
+											<v-tooltip bottom>
+												<template #activator="{ on, attrs }">
+													<v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
+														<v-icon size="18">
+															{{ icons.mdiDeleteOutline }}
+														</v-icon>
+													</v-btn>
+												</template>
+												<span>O'chirish</span>
+											</v-tooltip>
 
-    <dialog-confirm ref="dialogConfirm" />
+											<!-- edit  -->
+											<v-tooltip bottom>
+												<template #activator="{ on, attrs }">
+													<v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item)">
+														<v-icon size="18">
+															{{ icons.mdiPencilOutline }}
+														</v-icon>
+													</v-btn>
+												</template>
+												<span>Tahrirlash</span>
+											</v-tooltip>
+										</div>
+									</template>
+								</v-data-table>
 
-    <group-time-form
-      ref="GroupTimeForm"
-      :MODULE_NAME="MODULE_NAME"
-      v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-    />
-  </v-card>
+								<dialog-confirm ref="dialogConfirm" />
+
+								<group-time-form
+									ref="GroupTimeForm"
+									:MODULE_NAME="MODULE_NAME"
+									v-on:refresh-list="$emit('refresh-list')"
+									v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
+								/>
+							</div>
+						</v-col>
+
+					</v-row>
+				</v-container>
+			</v-card-text>
+
+			<v-card-actions>
+				<v-spacer></v-spacer>
+				<v-btn color="gray" outlined @click="close()">OK</v-btn>
+				<!-- <v-btn color="success" @click.prevent="onSubmit()">OK</v-btn> -->
+			</v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -76,9 +107,9 @@ import {
   mdiFilterOutline,
 } from '@mdi/js'
 
-import { onMounted, onUnmounted, ref } from '@vue/composition-api'
+import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
-import axios from '@axios'
+// import axios from '@axios'
 
 import envParams from '@envParams'
 
@@ -107,14 +138,30 @@ export default {
       if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
     })
 
+    // Modal
+    const show = ref(false)
+    const group_id = ref(null)
+    const open = (group_id = null) => {
+      console.log(group_id)
+      show.value = true
+      filter.value.group_id = group_id
+
+      fetchDatas(true)
+    }
+    const close = () => {
+      show.value = false
+    }
+
     //store state
     const state = ref(store.state[MODULE_NAME])
 
     //logics
     const {
       searchQuery,
+      filter,
       tableColumns,
       deleteRow,
+      fetchDatas,
 
       options,
       loading,
@@ -137,8 +184,8 @@ export default {
 
     //Form
     const GroupTimeForm = ref(null)
-    const openForm = id => {
-      GroupTimeForm.value.open(id)
+    const openForm = (item, group_id) => {
+      GroupTimeForm.value.open(item, group_id)
     }
 
     //Delete Confirm Dialog
@@ -162,7 +209,6 @@ export default {
       { key: 6, name: 'Shanba' },
       { key: 7, name: 'Yakshanba' },
     ])
-
     const getDay = day => {
       const result = days.value.filter(item => {
         if (item.key === day) {
@@ -172,25 +218,18 @@ export default {
       return result[0].name
     }
 
-    // LoadApis
-    const groupTimes = ref([])
-    const loadGroupTimes = () => {
-      axios.get('/api/group-times').then(response => {
-        // groupTimes.value = response.data.data[1]
-      })
-    }
-    onMounted(() => {
-      loadGroupTimes()
-    })
-
     // Return
     return {
+      show,
+      open,
+      close,
       BASE_URL,
       state,
 
       picker,
       isDate,
       tableColumns,
+      filter,
       searchQuery,
       options,
       loading,
@@ -207,14 +246,12 @@ export default {
 
       GroupTimeForm,
       openForm,
+      group_id,
 
       MODULE_NAME,
 
       // Wekk logic
       getDay,
-
-      // LoadApis
-      groupTimes,
 
       icons: {
         mdiTrendingUp,

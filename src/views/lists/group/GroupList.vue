@@ -200,13 +200,13 @@
 					<!-- time edit -->
 					<v-tooltip bottom>
             <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openGroupTimeList(item.id)">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="openGroupTimeList(item)">
                 <v-icon size="18">
                   {{ icons.mdiClockTimeThreeOutline  }}
                 </v-icon>
               </v-btn>
             </template>
-            <span>Tahrirlash</span>
+            <span>Guruh vaqtlarini tahrirlash</span>
           </v-tooltip>
         </div>
       </template>
@@ -244,7 +244,7 @@
 
 		<group-time-list
       ref="groupTimeList"
-      :MODULE_NAME="MODULE_NAME"
+			v-on:refresh-list="fetchDatas(true)"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -276,7 +276,7 @@ import GroupStoreModule from './GroupStoreModule'
 // composition function
 import useGroupList from './useGroupList'
 import GroupForm from './GroupForm'
-import GroupTimeList from './GroupTimeList.vue'
+import GroupTimeList from '@/views/lists/group-time/GroupTimeList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 const MODULE_NAME = 'group'
@@ -305,6 +305,7 @@ export default {
       searchQuery,
       tableColumns,
       deleteRow,
+      fetchDatas,
 
       options,
       loading,
@@ -334,7 +335,7 @@ export default {
     // time list form
     const groupTimeList = ref(null)
     const openGroupTimeList = id => {
-      groupTimeList.value.open(id)
+      groupTimeList.value.open(id.id)
     }
 
     //Delete Confirm Dialog
@@ -389,6 +390,7 @@ export default {
       isDate,
       tableColumns,
       searchQuery,
+      fetchDatas,
       options,
       loading,
       notify,

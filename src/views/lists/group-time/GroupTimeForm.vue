@@ -20,9 +20,9 @@
 								<h4 class="text-required no-texts"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.week_day"
-                  :items="group_times.week_day"
+                  :items="days"
                   item-text="name"
-                  item-value="id"
+                  item-value="key"
                   label="KUN"
                   dense
                   outlined
@@ -35,7 +35,7 @@
 								<h4 class="text-required no-texts"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.room_id"
-                  :items="group_times.room"
+                  :items="rooms"
                   item-text="name"
                   item-value="id"
                   label="XONA"
@@ -48,26 +48,83 @@
 
 							<v-col cols="6">
                 <h4 class="text-required no-texts"><span>*</span></h4>
-                <v-text-field
+								<!-- <MaskedInput type="text" mask="##:##" outlined dense required class="v-input" v-model="formData.time_begin" /> -->
+                <!-- <v-text-field
                   type="number"
-                  label="VAQT ..DAN"
+                  label="VAQT ...DAN"
                   v-model="formData.time_begin"
                   outlined
                   dense
                   required
-                ></v-text-field>
+                ></v-text-field> -->
+
+								<v-menu
+									ref="menu"
+									v-model="time"
+									:close-on-content-click="false"
+									:nudge-right="40"
+									:return-value.sync="time"
+									transition="scale-transition"
+									offset-y
+									max-width="290px"
+									min-width="290px"
+								>
+									<template v-slot:activator="{ on, attrs }">
+										<v-text-field
+										class="my-date-picker"
+											outlined
+											v-model="formData.time_begin"
+											label="VAQT ...DAN"
+											:append-icon="icons.mdiClockTimeFourOutline"
+											readonly
+											v-bind="attrs"
+											v-on="on"
+										></v-text-field>
+									</template>
+									<v-time-picker
+										format="24hr"
+										v-if="time"
+										v-model="formData.time_begin"
+										color="primary"
+										full-width
+										@click:minute="$refs.menu.save(formData.time_begin)"
+									></v-time-picker>
+								</v-menu>
               </v-col>
 
 							<v-col cols="6">
-                <h4 class="text-required no-texts"><span>*</span></h4>
-                <v-text-field
-                  type="number"
-                  label="VAQT ..GACHA"
-                  v-model="formData.time_end"
-                  outlined
-                  dense
-                  required
-                ></v-text-field>
+                <v-menu
+									ref="menu2"
+									v-model="time2"
+									:close-on-content-click="false"
+									:nudge-right="40"
+									:return-value.sync="formData.time_end"
+									transition="scale-transition"
+									offset-y
+									max-width="290px"
+									min-width="290px"
+								>
+									<template v-slot:activator="{ on, attrs }">
+										<v-text-field
+										class="my-date-picker"
+											outlined
+											v-model="formData.time_end"
+											label="VAQT ...GACHA"
+											:append-icon="icons.mdiClockTimeFourOutline"
+											readonly
+											v-bind="attrs"
+											v-on="on"
+										></v-text-field>
+									</template>
+									<v-time-picker
+										format="24hr"
+										v-if="time2"
+										v-model="formData.time_end"
+										color="primary"
+										full-width
+										@click:minute="$refs.menu2.save(formData.time_end)"
+									></v-time-picker>
+								</v-menu>
               </v-col>
             </v-row>
           </v-container>
@@ -84,13 +141,15 @@
 </template>
 
 <script>
-import { mdiCalendar } from '@mdi/js'
+import { mdiCalendar, mdiClockTimeFourOutline } from '@mdi/js'
 
 import store from '@/store'
 import axios from '@axios'
 
 import { ref, onMounted } from '@vue/composition-api'
 import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
+
+// import MaskedInput from 'vue-masked-input'
 
 export default {
   props: {
@@ -101,28 +160,26 @@ export default {
   },
   setup(props, { emit }) {
     //show, hide
-    const show = ref(false)
-    const formData = ref({ ...emptyFormData })
+
     const form = ref(null)
+    const show = ref(false)
     const emptyFormData = {
       id: null,
-      number: null,
-      subject_id: null,
-      stage_id: null,
-      teacher_id: null,
-      price: null,
-      teacher_share: null,
-      max_students: null,
-      begin_date: null,
-      end_date: null,
+      week_day: null,
+      room_id: null,
+      time_begin: null,
+      time_end: null,
+      group_id: null,
     }
-
-    const validate = () => {
-      form.value.validate()
-    }
-    const open = (id = null) => {
+    const formData = ref({ ...emptyFormData })
+    const open = (item = null, group_id = null) => {
       show.value = true
-      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](id)))
+      if (item) {
+        formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](item.id)))
+      }
+      if (group_id) {
+        formData.value.group_id = group_id
+      }
     }
     const close = () => {
       show.value = false
@@ -132,18 +189,13 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (
-          formData.value.number &&
-          formData.value.stage_id &&
-          formData.value.teacher_id &&
-          formData.value.price &&
-          formData.value.status
-        ) {
+        if (formData.value.week_day && formData.value.room_id) {
           store
             .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
+              emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
@@ -156,18 +208,14 @@ export default {
           })
         }
       } else {
-        if (
-          formData.value.number &&
-          formData.value.stage_id &&
-          formData.value.teacher_id &&
-          formData.value.price &&
-          formData.value.status
-        ) {
+        //create
+        if (formData.value.week_day && formData.value.room_id) {
           store
             .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
+              emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
@@ -182,39 +230,80 @@ export default {
       }
     }
 
+    const days = ref([
+      { key: 1, name: 'Dushanba' },
+      { key: 2, name: 'Seshanba' },
+      { key: 3, name: 'Chorshanba' },
+      { key: 4, name: 'Payshanba' },
+      { key: 5, name: 'Juma' },
+      { key: 6, name: 'Shanba' },
+      { key: 7, name: 'Yakshanba' },
+    ])
+
     // Load subjects
-    const group_times = ref()
-    const loadGroup_times = () => {
-      axios.get('/api/group_times').then(response => {
+    const rooms = ref(null)
+    const loadRooms = () => {
+      axios.get('/api/rooms').then(response => {
         if (response.data.success) {
-          console.log(response)
-          group_times.value = response.data
+          rooms.value = response.data.data
         }
       })
     }
 
     onMounted(() => {
-      loadGroup_times()
+      loadRooms()
     })
 
+    // time settings
+    const time = ref(null)
+    const time2 = ref(null)
+
+    // const timeTesting = type => {
+    //   if (formData.value[type].length > 4) {
+    //     const firstTime = formData.value[type].slice(0, 2)
+    //     const secondTime = formData.value[type].slice(3, 5)
+    //     console.log(firstTime + '-' + secondTime)
+    //     if (firstTime > 23 || secondTime > 59) {
+    //       formData.value[type] = '0000'
+    //     }
+    //   }
+    // }
+
+    // watch(
+    //   formData,
+    //   () => {
+    //     if (formData.value.time_begin) {
+    //       timeTesting('time_begin')
+    //     }
+    //     if (formData.value.time_end) {
+    //       timeTesting('time_end')
+    //     }
+    //   },
+    //   { deep: true },
+    // )
+    // watch(formData, () => {
+    //   timeTesting(formData.time_end)
+    // })
+
     return {
+      form,
       required,
       minLengthValidator,
       maxLengthValidator,
       formData,
-      validate,
       show,
       onSubmit,
       open,
       close,
-      group_times,
-      stages,
       rooms,
-      teachers,
-      isDate2,
+      days,
+
+      time,
+      time2,
 
       icons: {
         mdiCalendar,
+        mdiClockTimeFourOutline,
       },
     }
   },

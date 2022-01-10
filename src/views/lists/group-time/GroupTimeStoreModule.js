@@ -40,13 +40,16 @@ export default {
   },
   actions: {
     fetchDatas({ commit }, queryParams) {
+      console.log('ds', queryParams)
       return new Promise((resolve, reject) => {
         axios
           .get('/api/group-times', { params: queryParams })
           .then(response => {
             const { data, total } = response.data
-            commit('setRows', data[2])
-            commit('setTotal', total)
+            commit('setRows', data[queryParams.group_id] ?? [])
+            commit('setTotal', data[queryParams.group_id] ? data[queryParams.group_id].length : 0)
+            // commit('setRows', data)
+            // commit('setTotal', total)
 
             resolve(response.data.message)
           })
