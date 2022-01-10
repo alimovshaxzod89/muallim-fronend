@@ -14,7 +14,6 @@
 			<v-card-text>
 				<v-container>
 					<v-row>
-
 						<v-col cols="12">
 							<div id="data-list">
 								<v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
@@ -80,7 +79,6 @@
 								/>
 							</div>
 						</v-col>
-
 					</v-row>
 				</v-container>
 			</v-card-text>
@@ -88,7 +86,6 @@
 			<v-card-actions>
 				<v-spacer></v-spacer>
 				<v-btn color="gray" outlined @click="close()">OK</v-btn>
-				<!-- <v-btn color="success" @click.prevent="onSubmit()">OK</v-btn> -->
 			</v-card-actions>
     </v-card>
   </v-dialog>
@@ -109,7 +106,6 @@ import {
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
-// import axios from '@axios'
 
 import envParams from '@envParams'
 
@@ -142,7 +138,6 @@ export default {
     const show = ref(false)
     const group_id = ref(null)
     const open = (group_id = null) => {
-      console.log(group_id)
       show.value = true
       filter.value.group_id = group_id
 

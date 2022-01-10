@@ -22,7 +22,6 @@ export default function useGroupList(MODULE_NAME) {
     { text: 'USTOZ', value: 'teacher.full_name' },
     { text: 'VAQTLAR', value: 'group_times', align: 'center', sortable: false },
     { text: 'BOSHLANGAN SANA / TUGASH SANASI', value: 'begin_date', align: 'center', sortable: false },
-    // { text: 'TUGASH SANASI', value: 'end_date' },
     { text: 'BOSQICH', value: 'stage_id' },
     { text: 'ULUSH', value: 'teacher_share' },
     { text: "MAKS O'QUVCHI SONI", value: 'max_students' },
