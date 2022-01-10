@@ -151,7 +151,7 @@
       </div>
 
 			<v-spacer></v-spacer>
-			<v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
+			<v-btn v-if="$can('create', 'Room')" class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
@@ -173,7 +173,7 @@
       <template #[`item.actions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
-          <v-tooltip bottom>
+          <v-tooltip bottom v-if="$can('delete', 'Group')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
                 <v-icon size="18">
@@ -185,7 +185,7 @@
           </v-tooltip>
 
           <!-- edit  -->
-          <v-tooltip bottom>
+          <v-tooltip bottom v-if="$can('update', 'Group')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
                 <v-icon size="18">
@@ -197,7 +197,7 @@
           </v-tooltip>
 
           <!-- image -->
-          <v-tooltip bottom>
+          <v-tooltip bottom v-if="$can('update', 'Group')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openPhoto(item)">
                 <v-icon size="18">

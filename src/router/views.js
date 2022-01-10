@@ -16,7 +16,7 @@ const views = [
     meta: {
       layout: 'content',
       resource: 'Room',
-      action: 'read',
+      action: 'manage',
     },
   },
   {
