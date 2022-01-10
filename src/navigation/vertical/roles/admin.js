@@ -29,6 +29,12 @@ export default [
         to: 'student-groups',
         icon: mdiHumanCapacityDecrease,
       },
+      {
+        title: 'Ustozlarga tulovlar',
+        to: 'teacher-paids',
+				resource: 'Public',
+				action: 'manage',
+      },
     ],
   },
   {

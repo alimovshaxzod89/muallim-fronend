@@ -47,6 +47,14 @@ const views = [
     },
   },
   {
+    path: '/teacher-paids',
+    name: 'teacher-paids',
+    component: () => import('@/views/lists/teacher-paid/TeacherPaidList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/groups',
     name: 'groups',
     component: () => import('@/views/lists/group/GroupList.vue'),
