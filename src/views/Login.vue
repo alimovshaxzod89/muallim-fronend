@@ -13,8 +13,7 @@
         ></v-img>
 
         <h2 class="text--primary">
-          HILOL TA'LIM
-          <!-- {{ appName }} -->
+          {{ appName }}
         </h2>
       </router-link>
       <!--/ brand logo -->
