@@ -334,8 +334,8 @@ export default {
 
     // time list form
     const groupTimeList = ref(null)
-    const openGroupTimeList = id => {
-      groupTimeList.value.open(id.id)
+    const openGroupTimeList = group => {
+      groupTimeList.value.open(group.id)
     }
 
     //Delete Confirm Dialog
