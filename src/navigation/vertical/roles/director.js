@@ -23,7 +23,7 @@ export default [
     action: 'read',
   },
   {
-    subheader: '##',
+    subheader: '#',
     badge: 'New',
     bageColor: 'success',
     resource: 'Public',
@@ -58,7 +58,7 @@ export default [
     action: 'read',
   },
   {
-    subheader: '#',
+    subheader: '##',
     badge: 'New',
     bageColor: 'success',
     resource: 'Public',
@@ -86,7 +86,7 @@ export default [
     action: 'read',
   },
   {
-    subheader: '##',
+    subheader: '###',
     badge: 'New',
     bageColor: 'success',
     resource: 'Public',
