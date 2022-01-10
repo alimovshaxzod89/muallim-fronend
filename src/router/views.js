@@ -5,7 +5,8 @@ const views = [
     component: () => import('@/views/dashboards/ecommerce/Ecommerce.vue'),
     meta: {
       layout: 'content',
-			resource: 'Public',
+      resource: 'Public',
+			action: 'read',
     },
   },
   {
@@ -14,8 +15,8 @@ const views = [
     component: () => import('@/views/lists/room/RoomList.vue'),
     meta: {
       layout: 'content',
-			resource: 'Room',
-			action: 'manage',
+      resource: 'Room',
+      action: 'read',
     },
   },
   {
@@ -24,8 +25,8 @@ const views = [
     component: () => import('@/views/lists/teacher/TeacherList.vue'),
     meta: {
       layout: 'content',
-			resource: 'Teacher',
-			action: 'manage',
+      resource: 'Teacher',
+      action: 'read',
     },
   },
   {
@@ -43,7 +44,25 @@ const views = [
     name: 'student-groups',
     component: () => import('@/views/lists/student-group/StudentGroupList.vue'),
     meta: {
-      layout: 'read',
+      layout: 'content',
+			resource: 'StudentGroup',
+			action: 'read',
+    },
+  },
+  {
+    path: '/teacher-paids',
+    name: 'teacher-paids',
+    component: () => import('@/views/lists/teacher-paid/TeacherPaidList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
+    path: '/costs',
+    name: 'costs',
+    component: () => import('@/views/lists/cost/CostList.vue'),
+    meta: {
+      layout: 'content',
     },
   },
   {

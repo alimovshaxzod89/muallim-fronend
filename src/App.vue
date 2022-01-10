@@ -83,6 +83,7 @@ export default {
   transform: translateY(-17px) scale(0.75);
 }
 .text-required {
+  margin-bottom: 10px;
   position: relative;
   display: inline-block;
   span {

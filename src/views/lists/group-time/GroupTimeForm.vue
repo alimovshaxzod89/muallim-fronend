@@ -48,16 +48,6 @@
 
 							<v-col cols="6">
                 <h4 class="text-required no-texts"><span>*</span></h4>
-								<!-- <MaskedInput type="text" mask="##:##" outlined dense required class="v-input" v-model="formData.time_begin" /> -->
-                <!-- <v-text-field
-                  type="number"
-                  label="VAQT ...DAN"
-                  v-model="formData.time_begin"
-                  outlined
-                  dense
-                  required
-                ></v-text-field> -->
-
 								<v-menu
 									ref="menu"
 									v-model="time"
@@ -147,9 +137,6 @@ import store from '@/store'
 import axios from '@axios'
 
 import { ref, onMounted } from '@vue/composition-api'
-import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
-
-// import MaskedInput from 'vue-masked-input'
 
 export default {
   props: {
@@ -258,38 +245,8 @@ export default {
     const time = ref(null)
     const time2 = ref(null)
 
-    // const timeTesting = type => {
-    //   if (formData.value[type].length > 4) {
-    //     const firstTime = formData.value[type].slice(0, 2)
-    //     const secondTime = formData.value[type].slice(3, 5)
-    //     console.log(firstTime + '-' + secondTime)
-    //     if (firstTime > 23 || secondTime > 59) {
-    //       formData.value[type] = '0000'
-    //     }
-    //   }
-    // }
-
-    // watch(
-    //   formData,
-    //   () => {
-    //     if (formData.value.time_begin) {
-    //       timeTesting('time_begin')
-    //     }
-    //     if (formData.value.time_end) {
-    //       timeTesting('time_end')
-    //     }
-    //   },
-    //   { deep: true },
-    // )
-    // watch(formData, () => {
-    //   timeTesting(formData.time_end)
-    // })
-
     return {
       form,
-      required,
-      minLengthValidator,
-      maxLengthValidator,
       formData,
       show,
       onSubmit,
