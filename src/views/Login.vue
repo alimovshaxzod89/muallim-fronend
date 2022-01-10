@@ -3,12 +3,12 @@
     <div class="auth-inner">
       <!-- brand logo -->
       <router-link to="/" class="brand-logo d-flex align-center">
-        <v-img 
-          :src="appLogo" 
-          max-height="30px" 
-          max-width="30px" 
-          alt="logo" 
-          contain 
+        <v-img
+          :src="appLogo"
+          max-height="30px"
+          max-width="30px"
+          alt="logo"
+          contain
           class="me-3"
         ></v-img>
 
@@ -260,7 +260,7 @@ export default {
 
       // themeConfig
       appName: themeConfig.app.name,
-      appLogo: themeConfig.app.logo,
+      appLogo: themeConfig.app.logoInLogin,
 
       // Template Refs
       loginForm,

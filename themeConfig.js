@@ -4,13 +4,14 @@ import envParams from '@envParams'
 const themeConfig = {
 	app: {
 		name: envParams.COMPANY_NAME ?? 'MUALLIM',
-		logo: envParams.COMPANY_NAME ? require('@/assets/logo/' + envParams.COMPANY_NAME + '.png') : require('@/assets/images/svg/logo.svg'),
+		logo: envParams.COMPANY_NAME ? require('@/assets/logo/' + envParams.COMPANY_NAME + '-dark.png') : require('@/assets/images/svg/logo.svg'),
+		logoInLogin: envParams.COMPANY_NAME ? require('@/assets/logo/' + envParams.COMPANY_NAME + '.png') : require('@/assets/images/svg/logo.svg'),
 		isDark: false,
 		isRtl: false,
 		contentLayoutNav: 'vertical', // vertical, horizontal
 		routeTransition: 'scroll-x-transition', // https://vuetifyjs.com/en/styles/transitions/#api
 		// ! `semi-dark` isn't available for horizontal nav menu
-		skinVariant: 'bordered', // default, bordered, semi-dark
+		skinVariant: 'semi-dark', // default, bordered, semi-dark
 		contentWidth: 'full',
 	},
 	menu: {
