@@ -57,23 +57,18 @@ export default function useStudentList(MODULE_NAME) {
 			...options.value,
 		}
 
-		const filterCleared = {}
 		for (let key in filter.value) {
 			let value = filter.value[key]
 			if (value !== null && value !== '') {
-				filterCleared[key] = value
+				queryParams[key] = value
 			}
 		}
-		queryParams.filter = filterCleared
 
 		const newQuery = JSON.stringify(queryParams)
 
 		if (force || lastQuery !== newQuery) {
-			// if (lastQuery) {
-			// 	const lastParam = JSON.parse(lastQuery)
-			// 	console.log(JSON.stringify(lastParam.filter))
-			// }
-			// console.log(JSON.stringify(filterCleared))
+			// console.log(JSON.stringify(lastQuery))
+			// console.log(JSON.stringify(newQuery))
 
 			lastQuery = newQuery
 
