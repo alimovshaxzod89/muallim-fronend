@@ -40,14 +40,12 @@ export default function useCostList(MODULE_NAME) {
       ...options.value,
     }
 
-    const filterCleared = {}
 		for (let key in filter.value) {
 			let value = filter.value[key]
 			if (value !== null && value !== '') {
-				filterCleared[key] = value
+				queryParams[key] = value
 			}
 		}
-		queryParams.filter = filterCleared
 
     const newQuery = JSON.stringify(queryParams)
 
