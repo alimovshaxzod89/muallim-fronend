@@ -3,6 +3,7 @@ import {
   mdiAccountDetailsOutline,
   mdiAccountGroup,
   mdiBookOpenVariant,
+  mdiCashMinus,
   mdiCashMultiple,
   mdiDoor,
   mdiFilterVariant,
@@ -11,8 +12,6 @@ import {
   mdiHumanMaleFemale,
   mdiPercent,
   mdiShieldAccount,
-  mdiBookOpenVariant,
-  mdiCashMinus,
 } from '@mdi/js'
 
 export default [
