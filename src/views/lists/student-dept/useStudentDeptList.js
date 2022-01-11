@@ -1,47 +1,43 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useGroupList(MODULE_NAME) {
+export default function useStudentDeptList(MODULE_NAME) {
+
   const selectedTableData = ref([])
   const notify = ref({})
 
   const tableColumns = [
     { text: '#', sortable: false, value: 'index' },
-    {
-      text: 'AMALLAR',
-      value: 'actions',
-      align: 'start',
-      sortable: false,
-    },
-    { text: 'KUN', value: 'week_day' },
-    { text: 'XONA', value: 'room.name' },
-    { text: 'VAQT ...DAN', value: 'time_begin' },
-    { text: 'VAQT ...GACHA', value: 'time_end' },
+    { text: 'GURUH', value: 'groups' },
+    { text: 'USTOZ', value: 'full_name' },
+    { text: "TALABA", value: 'students' },
+    { text: "TELEFON", value: 'phone' },
+    { text: "OYLIK TO'LOV", value: 'month_paids' },
+    { text: "TO'lADI", value: 'paid' },
+    { text: "QARZ", value: 'depts' },
+    { text: "OY", value: 'month' },
   ]
 
-  const searchQuery = ref('')
+  const filter = ref({
+    name: '',
+  })
+
+
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
-    skip: 0,
     limit: 10,
-  })
-  const filter = ref({
-    group_id: null,
+    skip: 0,
   })
   const loading = ref(false)
 
-  let lastQuery = ''
+  let lastQuery = '';
   const fetchDatas = (force = false) => {
-    if (options.value.page) {
-      options.value.skip = options.value.page - 1
-    }
-    if (options.value.itemsPerPage) {
-      options.value.limit = options.value.itemsPerPage
-    }
+
+    options.value.skip = options.value.page -1
+    options.value.limit = options.value.itemsPerPage
 
     const queryParams = {
-      q: searchQuery.value,
       ...options.value,
     }
 
@@ -51,15 +47,6 @@ export default function useGroupList(MODULE_NAME) {
 				queryParams[key] = value
 			}
 		}
-
-    // const filterCleared = {}
-    // for (let key in filter.value) {
-    //   let value = filter.value[key]
-    //   if (value !== null && value !== '') {
-    //     filterCleared[key] = value
-    //   }
-    // }
-    // queryParams.filter = filterCleared
 
     const newQuery = JSON.stringify(queryParams)
 
@@ -79,27 +66,60 @@ export default function useGroupList(MODULE_NAME) {
     }
 
     lastQuery = JSON.stringify(queryParams)
+
   }
 
-  watch(searchQuery, () => {
-    if (options.value.page != 1) options.value.page = 1
-  })
+  watch(filter, () => {
+    if (options.value.page != 1) options.value.page
+      options.value = true
 
-  watch([searchQuery, options], () => {
+      setTimeout(() => fetchDatas(), 1000);
+  }, {deep: true})
+
+  watch(options, () => {
     loading.value = true
     fetchDatas()
     // selectedTableData.value = []
   })
 
+  //delete
+  const deleteRow = (id) => {
+    store.dispatch(`${MODULE_NAME}/removeRow`, id)
+    .then((message) => {
+      notify.value = { type: 'success', text: message, time: Date.now() }
+
+      fetchDatas(true)
+    })
+    .catch(error => {
+      console.log(error)
+      notify.value = { type: 'success', text: error.message, time: Date.now() }
+    })
+
+  }
+
   return {
     tableColumns,
-    searchQuery,
     filter,
     fetchDatas,
+    deleteRow,
 
     options,
     loading,
     notify,
-    selectedTableData,
+    selectedTableData
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

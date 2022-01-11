@@ -74,6 +74,14 @@ const views = [
     },
   },
   {
+    path: '/student-dept',
+    name: 'student-dept',
+    component: () => import('@/views/lists/student-dept/StudentDeptList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/groups',
     name: 'groups',
     component: () => import('@/views/lists/group/GroupList.vue'),

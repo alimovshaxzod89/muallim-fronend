@@ -10,7 +10,8 @@ import {
   mdiHumanMaleFemale,
   mdiPercent,
   mdiShieldAccount,
-  mdiBookOpenVariant, 
+  mdiBookOpenVariant,
+  mdiCashMinus,  
 } from '@mdi/js'
 
 export default [
@@ -62,6 +63,13 @@ export default [
         resource: 'Teacher',
         action: 'read',
         icon: mdiBookOpenVariant ,
+      },
+      {
+        title: 'Qarzdor talabalar',
+        to: 'student-dept',
+        resource: 'Teacher',
+        action: 'read',
+        icon: mdiCashMinus,
       },
     ],
   },
