@@ -6,7 +6,7 @@ const views = [
     meta: {
       layout: 'content',
       resource: 'Public',
-			action: 'read',
+      action: 'read',
     },
   },
   {
@@ -35,8 +35,8 @@ const views = [
     component: () => import('@/views/lists/student/StudentList.vue'),
     meta: {
       layout: 'content',
-			resource: 'Student',
-			action: 'read',
+      resource: 'Student',
+      action: 'read',
     },
   },
   {
@@ -45,8 +45,8 @@ const views = [
     component: () => import('@/views/lists/student-group/StudentGroupList.vue'),
     meta: {
       layout: 'content',
-			resource: 'StudentGroup',
-			action: 'read',
+      resource: 'StudentGroup',
+      action: 'read',
     },
   },
   {
@@ -79,20 +79,30 @@ const views = [
     component: () => import('@/views/lists/group/GroupList.vue'),
     meta: {
       layout: 'content',
-			resource: 'Group',
-			action: 'read',
+      resource: 'Group',
+      action: 'read',
     },
   },
   {
-    path: '/group-times',
-    name: 'group-times',
-    component: () => import('@/views/lists/group-time/GroupTimeList.vue'),
+    path: '/payments',
+    name: 'payments',
+    component: () => import('@/views/lists/payment/PaymentList.vue'),
     meta: {
       layout: 'content',
-			resource: 'GroupTime',
-			action: 'read',
+      resource: 'Payment',
+      action: 'read',
     },
   },
+  // {
+  //   path: '/group-times',
+  //   name: 'group-times',
+  //   component: () => import('@/views/lists/group-time/GroupTimeList.vue'),
+  //   meta: {
+  //     layout: 'content',
+  //     resource: 'GroupTime',
+  //     action: 'read',
+  //   },
+  // },
   {
     path: '/center-profit',
     name: 'center-profit',

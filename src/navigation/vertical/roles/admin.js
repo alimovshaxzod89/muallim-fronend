@@ -2,6 +2,7 @@ import {
   mdiAccountCash,
   mdiAccountDetailsOutline,
   mdiAccountGroup,
+  mdiBookOpenVariant,
   mdiCashMultiple,
   mdiDoor,
   mdiFilterVariant,
@@ -10,7 +11,6 @@ import {
   mdiHumanMaleFemale,
   mdiPercent,
   mdiShieldAccount,
-  mdiBookOpenVariant, 
 } from '@mdi/js'
 
 export default [
@@ -61,7 +61,7 @@ export default [
         to: 'subjects',
         resource: 'Teacher',
         action: 'read',
-        icon: mdiBookOpenVariant ,
+        icon: mdiBookOpenVariant,
       },
     ],
   },
@@ -84,6 +84,23 @@ export default [
     resource: 'Group',
     action: 'read',
   },
+  {
+    title: "To'lovlar",
+    icon: mdiAccountGroup,
+    to: 'payments',
+    resource: 'payments',
+    action: 'read',
+  },
+  // {
+  //   path: '/group-times',
+  //   name: 'group-times',
+  //   component: () => import('@/views/lists/group-time/GroupTimeList.vue'),
+  //   meta: {
+  //     layout: 'content',
+  //     resource: 'GroupTime',
+  //     action: 'read',
+  //   },
+  // },
   // {
   //   title: 'Guruh vaqtlari',
   //   icon: mdiFileDocumentEdit,
