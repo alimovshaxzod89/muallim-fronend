@@ -63,6 +63,12 @@
             <span>Edit</span>
           </v-tooltip>
         </div>
+
+        
+      </template>
+
+      <template #[`item.status`]="{ item }">
+          {{item.status ? 'ha' : 'yo\'q'}}
       </template>
     </v-data-table>
 
@@ -76,14 +82,7 @@
 </template>
 
 <script>
-import { 
-  mdiTrendingUp,
-  mdiPlus, 
-  mdiDeleteOutline, 
-  mdiDotsVertical, 
-  mdiEyeOutline, 
-  mdiPencilOutline 
-  } from '@mdi/js'
+import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
@@ -106,7 +105,6 @@ export default {
     DialogConfirm,
   },
   setup() {
-
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, SubjectStoreModule)
@@ -142,9 +140,9 @@ export default {
     ]
 
     //Form
-    const roomForm = ref(null)
+    const subjectForm = ref(null)
     const openForm = id => {
-      roomForm.value.open(id)
+      subjectForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -178,7 +176,7 @@ export default {
 
       dialogConfirm,
       confirmDelete,
-
+      subjectForm,
       openForm,
 
       MODULE_NAME,

@@ -1,6 +1,12 @@
 <template>
   <!-- form dialog -->
-  <v-dialog v-model="show" @keydown.esc="close()" @click:outside="close()" max-width="700px" width="700px">
+  <v-dialog 
+    v-model="show" 
+    @keydown.esc="close()" 
+    @click:outside="close()" 
+    max-width="550px" 
+    width="550px"
+  >
     <v-card>
       <v-form ref="form">
         <v-card-title>
@@ -12,21 +18,21 @@
               <v-col cols="12">
                 <h4 class="text-required no-text"><span>*</span></h4>  
                 <v-text-field
-                  label="SIG'IMI"
-                  v-model="formData.subject_id"
+                  label="NOMI"
+                  v-model="formData.name"
+                  :items="selectsDatas.subject"
                   type="text"
                   dense
                   outlined
                   hide-details
-                  :rules="selectRule"
+                  :rules="[required]"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="6" class="mt-0">
                 <v-checkbox
                   v-model="formData.status"
                   hide-details
                   label="AKTIV"
-                  class="mt-0"
                 ></v-checkbox>
               </v-col>
             </v-row>
@@ -64,6 +70,9 @@ export default {
   // props: {
   //
   // },
+  created() {
+    this.loadSubject()
+  },
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
@@ -72,8 +81,20 @@ export default {
 
     // show, hide
     const show = ref(false)
+    const formData = ref({})
+
+    const form = ref(null)
+    const emptyFormData = {
+      id: null,
+      name: null,
+      status: true,
+    }
+
     const open = (id = null) => {
       show.value = true
+      setTimeout(() => {
+        form.value.$el[0].focus()
+      }, 100)
       if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
     }
     const close = () => {
@@ -82,23 +103,14 @@ export default {
       formData.value = { ...emptyFormData }
     }
 
-    const form = ref(null)
-    const emptyFormData = {
-      id: null,
-      subject_id: null,
-      status: false,
-    }
     //validation
-    const formData = ref({ ...emptyFormData })
-    const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     const validate = () => {
       form.value.validate()
     }
-
     //form options for selects
     const selectsDatas = ref({})
     // ! METHODS
-    const loadPlace = () => {
+    const loadSubject = () => {
       axios
         .get('/api/subjects', { params: { itemsPerPage: -1 } })
         .then(response => {
@@ -112,16 +124,19 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.subject_id) {
+        if (formData.value.name) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(message => {
+            .then(({ data, message }) => {
               close()
-              emit('notify', { type: 'success', text: message })
+              // emit('notify', { type: 'success', text: message })
+              return data
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+
+              return false
             })
         } else {
           emit('notify', {
@@ -130,16 +145,19 @@ export default {
           })
         }
       } else {
-        if (formData.value.subject_id) {
+        if (formData.value.name) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(message => {
+            .then(({ data, message }) => {
               close()
-              emit('notify', { type: 'success', text: message })
+              // emit('notify', { type: 'success', text: message })
+              return data
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+
+              return false
             })
         } else {
           emit('notify', {
@@ -155,13 +173,14 @@ export default {
       required,
       minLengthValidator,
       formData,
-      selectsDatas,
-      selectRule,
       validate,
+      selectsDatas,
       show,
       onSubmit,
       open,
       close,
+      loadSubject,
+      emptyFormData,
 
       icons: {
         mdiPlusCircleOutline,

@@ -15,7 +15,7 @@ export default function useSubjectList(MODULE_NAME) {
       sortable: false,
     },
     { text: 'NOMI', value: 'name' },
-    { text: "AKTIV", value: 'status' },
+    { text: 'AKTIV', value: 'status' },
   ]
 
   const filter = ref({
