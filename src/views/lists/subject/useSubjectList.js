@@ -15,7 +15,7 @@ export default function useSubjectList(MODULE_NAME) {
       sortable: false,
     },
     { text: 'NOMI', value: 'name' },
-    { text: "AKTIV", value: 'status' },
+    { text: 'AKTIV', value: 'status' },
   ]
 
   const filter = ref({
@@ -41,15 +41,13 @@ export default function useSubjectList(MODULE_NAME) {
       ...options.value,
     }
 
-    const filterCleared = {}
-		for (let key in filter.value) {
+    for (let key in filter.value) {
 			let value = filter.value[key]
 			if (value !== null && value !== '') {
-				filterCleared[key] = value
+				queryParams[key] = value
 			}
 		}
 
-    queryParams.filter = filterCleared
 
     const newQuery = JSON.stringify(queryParams)
 

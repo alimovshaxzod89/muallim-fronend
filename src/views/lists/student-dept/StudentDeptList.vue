@@ -12,10 +12,6 @@
           class="data-list-search me-3"
         ></v-text-field>
       </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn v-if="$can('create', 'Room')" class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
@@ -25,7 +21,6 @@
       :items="state.rows"
       :options.sync="options"
       :server-items-length="state.total"
-      :loading="loading"
       :items-per-page="options.itemsPerPage"
       :footer-props="footerProps"
       class="text-no-wrap"
@@ -63,26 +58,22 @@
             <span>Edit</span>
           </v-tooltip>
         </div>
-
-        
-      </template>
-
-      <template #[`item.status`]="{ item }">
-          {{item.status ? 'ha' : 'yo\'q'}}
       </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
-
-    <subject-form
-      ref="subjectForm"
-      v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-    />
   </v-card>
 </template>
 
 <script>
-import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
+import { 
+  mdiTrendingUp,
+  mdiPlus, 
+  mdiDeleteOutline, 
+  mdiDotsVertical, 
+  mdiEyeOutline, 
+  mdiPencilOutline 
+  } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
@@ -90,24 +81,23 @@ import store from '@/store'
 import envParams from '@envParams'
 
 // store module
-import SubjectStoreModule from './SubjectStoreModule'
+import StudentDeptStoreModule from './StudentDeptStoreModule'
 
 // composition function
-import useSubjectList from './useSubjectList'
-import SubjectForm from './SubjectForm.vue'
+import useStudentDeptList from './useStudentDeptList'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'subject'
+const MODULE_NAME = 'studentDept'
 
 export default {
   components: {
-    SubjectForm,
     DialogConfirm,
   },
   setup() {
+
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, SubjectStoreModule)
+      store.registerModule(MODULE_NAME, StudentDeptStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -123,12 +113,11 @@ export default {
       searchQuery,
       tableColumns,
       deleteRow,
+      selectedTableData,
 
       options,
-      loading,
       notify,
-      selectedTableData,
-    } = useSubjectList(MODULE_NAME)
+    } = useStudentDeptList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -138,12 +127,6 @@ export default {
       { title: 'Delete', icon: mdiDeleteOutline },
       { title: 'Edit', icon: mdiPencilOutline },
     ]
-
-    //Form
-    const subjectForm = ref(null)
-    const openForm = id => {
-      subjectForm.value.open(id)
-    }
 
     //Delete Confirm Dialog
     const dialogConfirm = ref(null)
@@ -164,10 +147,9 @@ export default {
       tableColumns,
       searchQuery,
       options,
-      loading,
       notify,
-      selectedTableData,
       filter,
+      selectedTableData,
 
       actions,
       actionOptions,
@@ -176,8 +158,6 @@ export default {
 
       dialogConfirm,
       confirmDelete,
-      subjectForm,
-      openForm,
 
       MODULE_NAME,
 

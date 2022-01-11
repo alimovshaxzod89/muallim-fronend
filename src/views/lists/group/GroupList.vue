@@ -4,7 +4,7 @@
     <v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
       <div class="d-flex pb-5" style="width: 100%">
 				<v-text-field
-          v-model="searchQuery"
+          v-model="filter.query"
           dense
           outlined
           hide-details
@@ -303,6 +303,7 @@ export default {
 
     //logics
     const {
+      filter,
       searchQuery,
       tableColumns,
       deleteRow,
@@ -386,6 +387,7 @@ export default {
     return {
       BASE_URL,
       state,
+      filter,
 
       picker,
       isDate,

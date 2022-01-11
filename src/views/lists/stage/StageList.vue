@@ -8,14 +8,14 @@
           dense
           outlined
           hide-details
-          label="Qidiruv"
+          label="Qidirish"
           class="data-list-search me-3"
         ></v-text-field>
       </div>
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="$can('create', 'Room')" class="primary" @click="openForm()">Qo'shish</v-btn>
+      <v-btn v-if="$can('create', 'Teacher')" class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
@@ -40,7 +40,7 @@
       <template late #[`item.actions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
-          <v-tooltip bottom v-if="$can('delete', 'Group')">
+          <v-tooltip bottom v-if="$can('delete', 'Teacher')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
                 <v-icon size="18">
@@ -52,7 +52,7 @@
           </v-tooltip>
 
           <!-- view  -->
-          <v-tooltip bottom v-if="$can('update', 'Group')">
+          <v-tooltip bottom v-if="$can('update', 'Teacher')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
                 <v-icon size="18">
@@ -63,19 +63,13 @@
             <span>Edit</span>
           </v-tooltip>
         </div>
-
-        
-      </template>
-
-      <template #[`item.status`]="{ item }">
-          {{item.status ? 'ha' : 'yo\'q'}}
       </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <subject-form
-      ref="subjectForm"
+    <teacher-paid-form
+      ref="teacherPaidForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -90,24 +84,24 @@ import store from '@/store'
 import envParams from '@envParams'
 
 // store module
-import SubjectStoreModule from './SubjectStoreModule'
+import TeacherPaidStoreModule from './TeacherPaidStoreModule'
 
 // composition function
-import useSubjectList from './useSubjectList'
-import SubjectForm from './SubjectForm.vue'
+import useTeacherPaidList from './useTeacherPaidList'
+import TeacherPaidForm from './TeacherPaidForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'subject'
+const MODULE_NAME = 'teacherPaid'
 
 export default {
   components: {
-    SubjectForm,
+    TeacherPaidForm,
     DialogConfirm,
   },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, SubjectStoreModule)
+      store.registerModule(MODULE_NAME, TeacherPaidStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -128,7 +122,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useSubjectList(MODULE_NAME)
+    } = useTeacherPaidList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -140,9 +134,9 @@ export default {
     ]
 
     //Form
-    const subjectForm = ref(null)
+    const teacherPaidForm = ref(null)
     const openForm = id => {
-      subjectForm.value.open(id)
+      teacherPaidForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -176,7 +170,8 @@ export default {
 
       dialogConfirm,
       confirmDelete,
-      subjectForm,
+
+      stageForm,
       openForm,
 
       MODULE_NAME,

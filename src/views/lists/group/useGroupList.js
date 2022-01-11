@@ -24,7 +24,10 @@ export default function useGroupList(MODULE_NAME) {
     { text: "MAKS O'QUVCHI SONI", value: 'max_students' },
   ]
 
-  const searchQuery = ref('')
+  const filter = ref({
+    name: '',
+  })
+
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
@@ -42,13 +45,21 @@ export default function useGroupList(MODULE_NAME) {
 
   let lastQuery = ''
   const fetchDatas = (force = false) => {
+
     options.value.skip = options.value.page - 1
     options.value.limit = options.value.itemsPerPage
 
     const queryParams = {
-      q: searchQuery.value,
       ...options.value,
     }
+
+    for (let key in filter.value) {
+			let value = filter.value[key]
+			if (value !== null && value !== '') {
+				queryParams[key] = value
+			}
+		}
+
 
     const newQuery = JSON.stringify(queryParams)
 
@@ -70,18 +81,21 @@ export default function useGroupList(MODULE_NAME) {
     lastQuery = JSON.stringify(queryParams)
   }
 
-  watch(searchQuery, () => {
-    if (options.value.page != 1) options.value.page = 1
-  })
+  watch(filter, () => {
+    if (options.value.page != 1) options.value.page
+      options.value = true
 
-  watch([searchQuery, options], () => {
+      setTimeout(() => fetchDatas(), 1000);
+  }, {deep: true})
+
+  watch(options, () => {
     loading.value = true
     fetchDatas()
     // selectedTableData.value = []
   })
 
   //delete
-  const deleteRow = id => {
+  const deleteRow = (id) => {
     store
       .dispatch(`${MODULE_NAME}/removeRow`, id)
       .then(message => {
@@ -97,7 +111,7 @@ export default function useGroupList(MODULE_NAME) {
 
   return {
     tableColumns,
-    searchQuery,
+    filter,
     fetchDatas,
     deleteRow,
 
