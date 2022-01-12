@@ -11,7 +11,9 @@ import {
   mdiPercent,
   mdiShieldAccount,
   mdiBookOpenVariant,
-  mdiCashMinus,  
+  mdiCashMinus,
+  mdiGoogleAnalytics,
+  mdiInboxFull,    
 } from '@mdi/js'
 
 export default [
@@ -70,6 +72,20 @@ export default [
         resource: 'Teacher',
         action: 'read',
         icon: mdiCashMinus,
+      },
+      {
+        title: 'Bosqichlar',
+        to: 'stages',
+        resource: 'Teacher',
+        action: 'read',
+        icon: mdiGoogleAnalytics,
+      },
+      {
+        title: 'Viloyatlar',
+        to: 'provinces',
+        resource: 'Teacher',
+        action: 'read',
+        icon: mdiInboxFull,
       },
     ],
   },

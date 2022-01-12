@@ -72,8 +72,8 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <stage-form
-      ref="stageForm"
+    <province-form
+      ref="provinceForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -88,24 +88,24 @@ import store from '@/store'
 import envParams from '@envParams'
 
 // store module
-import StageStoreModule from './StageStoreModule'
+import ProvinceStoreModule from './ProvinceStoreModule'
 
 // composition function
-import useStageList from './useStageList'
-import StageForm from './StageForm'
+import useProvinceList from './useProvinceList'
+import ProvinceForm from './ProvinceForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'stage'
+const MODULE_NAME = 'province'
 
 export default {
   components: {
-    StageForm,
+    ProvinceForm,
     DialogConfirm,
   },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, StageStoreModule)
+      store.registerModule(MODULE_NAME, ProvinceStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -126,7 +126,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useStageList(MODULE_NAME)
+    } = useProvinceList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -138,9 +138,9 @@ export default {
     ]
 
     //Form
-    const stageForm = ref(null)
+    const provinceForm = ref(null)
     const openForm = id => {
-      stageForm.value.open(id)
+      provinceForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -175,7 +175,7 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      stageForm,
+      provinceForm,
       openForm,
 
       MODULE_NAME,

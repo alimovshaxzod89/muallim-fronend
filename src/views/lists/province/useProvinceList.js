@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useTeacherPaidList(MODULE_NAME) {
+export default function useProvinceList(MODULE_NAME) {
 
   const selectedTableData = ref([])
   const notify = ref({})
@@ -14,9 +14,7 @@ export default function useTeacherPaidList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
-    { text: 'FAN', value: 'subject.name' },
     { text: 'NOMI', value: 'name' },
-    { text: 'AKTIV', value: 'status'},
     ]
 
   const filter = ref({
