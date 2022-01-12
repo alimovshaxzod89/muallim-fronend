@@ -185,7 +185,7 @@
       </template>
 
 			<template #[`item.paid`]="{ item }">
-				<v-btn outlined color="success" title="To'lov amalga oshirish uchun bosing">{{item.paid}}</v-btn>
+				<v-btn outlined color="success" title="To'lov amalga oshirish uchun bosing" @click="openPaymentPaidsList(item)">{{item.paid}}</v-btn>
       </template>
 
 			<template #[`item.dept`]="{ item }">
@@ -224,6 +224,11 @@
       ref="paymentForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
+
+		<payment-paids-list
+      ref="paymentPaidsList"
+      v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
+    />
   </v-card>
 </template>
 
@@ -255,6 +260,7 @@ import XLSX from 'xlsx'
 // composition function
 import usePaymentList from './usePaymentList'
 import PaymentForm from './PaymentForm.vue'
+import PaymentPaidsList from '@/views/lists/payment-paids/PaymentPaidsList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 const MODULE_NAME = 'student'
@@ -262,6 +268,7 @@ const MODULE_NAME = 'student'
 export default {
   components: {
     PaymentForm,
+    PaymentPaidsList,
     DialogConfirm,
   },
   setup() {
@@ -448,6 +455,13 @@ export default {
       loadRegions()
     })
 
+    // Paids
+    const paymentPaidsList = ref(null)
+    const openPaymentPaidsList = item => {
+      console.log(paymentPaidsList.value)
+      paymentPaidsList.value.open(item)
+    }
+
     // Return
     return {
       BACKEND_URL,
@@ -457,6 +471,8 @@ export default {
       totalAmount,
       totalPaid,
       totalDebt,
+      paymentPaidsList,
+      openPaymentPaidsList,
 
       picker,
       isDate,
