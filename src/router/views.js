@@ -101,6 +101,16 @@ const views = [
       action: 'read',
     },
   },
+	{
+		path: '/lessons-rooms',
+		name: 'lessons-rooms',
+		component: () => import('@/views/lists/lessons-rooms/LessonsRooms'),
+		meta: {
+			layout: 'content',
+			resource: 'Group',
+			action: 'read',
+		},
+	},
   // {
   //   path: '/group-times',
   //   name: 'group-times',
