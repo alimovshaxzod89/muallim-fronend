@@ -13,7 +13,9 @@ import {
   mdiBookOpenVariant,
   mdiCashMinus,
   mdiGoogleAnalytics,
-  mdiInboxFull,    
+  mdiMapMarkerRadiusOutline,
+  mdiCurrencyUsd,
+  mdiMapMarkerMultipleOutline,      
 } from '@mdi/js'
 
 export default [
@@ -67,8 +69,8 @@ export default [
         icon: mdiBookOpenVariant ,
       },
       {
-        title: 'Qarzdor talabalar',
-        to: 'student-dept',
+        title: '!!!Qarzdor talabalar',
+        to: 'student-depts',
         resource: 'Teacher',
         action: 'read',
         icon: mdiCashMinus,
@@ -81,11 +83,18 @@ export default [
         icon: mdiGoogleAnalytics,
       },
       {
+        title: 'Tumanlar',
+        to: 'regions',
+        resource: 'Teacher',
+        action: 'read',
+        icon: mdiMapMarkerRadiusOutline,
+      },
+      {
         title: 'Viloyatlar',
         to: 'provinces',
         resource: 'Teacher',
         action: 'read',
-        icon: mdiInboxFull,
+        icon: mdiMapMarkerMultipleOutline,
       },
     ],
   },

@@ -8,9 +8,9 @@ export default function useStudentDeptList(MODULE_NAME) {
 
   const tableColumns = [
     { text: '#', sortable: false, value: 'index' },
-    { text: 'GURUH', value: 'groups' },
-    { text: 'USTOZ', value: 'full_name' },
-    { text: "TALABA", value: 'students' },
+    { text: 'GURUH', value: 'group.number' },
+    { text: 'USTOZ', value: 'teacher.full_name' },
+    { text: "TALABA", value: 'student.full_name' },
     { text: "TELEFON", value: 'phone' },
     { text: "OYLIK TO'LOV", value: 'month_paids' },
     { text: "TO'lADI", value: 'paid' },
@@ -19,10 +19,12 @@ export default function useStudentDeptList(MODULE_NAME) {
   ]
 
   const filter = ref({
-    name: '',
+    date: '',
+    month: '',
+    teacher_id: '',
+    group_id: '',
+    student_id: '',
   })
-
-
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
@@ -31,43 +33,42 @@ export default function useStudentDeptList(MODULE_NAME) {
   })
   const loading = ref(false)
 
-  let lastQuery = '';
-  const fetchDatas = (force = false) => {
+  let lastQuery = ''
+	const fetchDatas = (force = false) => {
 
-    options.value.skip = options.value.page -1
-    options.value.limit = options.value.itemsPerPage
+		options.value.skip = options.value.page - 1
+		options.value.limit = options.value.itemsPerPage
 
-    const queryParams = {
-      ...options.value,
-    }
+		const queryParams = {
+			...options.value,
+		}
 
-    for (let key in filter.value) {
+		for (let key in filter.value) {
 			let value = filter.value[key]
 			if (value !== null && value !== '') {
 				queryParams[key] = value
 			}
 		}
 
-    const newQuery = JSON.stringify(queryParams)
+		const newQuery = JSON.stringify(queryParams)
 
-    if (force || lastQuery !== newQuery) {
-      lastQuery = newQuery
+		if (force || lastQuery !== newQuery) {
+			lastQuery = newQuery
 
-      store
-        .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
-        .then(() => {
-          loading.value = false
-        })
-        .catch(error => {
-          console.log(error)
-          loading.value = false
-          notify.value = { type: 'error', text: error, time: Date.now() }
-        })
-    }
+			store
+				.dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
+				.then(() => {
+					loading.value = false
+				})
+				.catch(error => {
+					console.log(error)
+					loading.value = false
+					notify.value = { type: 'error', text: error, time: Date.now() }
+				})
+		}
 
-    lastQuery = JSON.stringify(queryParams)
-
-  }
+		lastQuery = JSON.stringify(queryParams)
+	}
 
   watch(filter, () => {
     if (options.value.page != 1) options.value.page

@@ -11,11 +11,27 @@
     <v-card>
       <v-form ref="form">
         <v-card-title>
-          <span class="headline">Viloyatlar</span>
+          <span class="headline">Tumanlar</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
+              <v-col cols="12">
+                <h4 class="text-required no-text"><span>*</span></h4> 
+                <v-autocomplete
+                  v-model="formData.province_id"
+                  :items="selectsDatas.region"
+                  item-text="name"
+                  item-value="id"
+                  label="VILOYAT"
+                  dense
+                  outlined
+                  hide-details
+                  clearable
+                  :rules="selectRule"
+                >
+                </v-autocomplete>
+              </v-col>
               <v-col cols="12">
                 <h4 class="text-required no-text"><span>*</span></h4>  
                 <v-text-field
@@ -47,7 +63,7 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import ProvinceStoreModule from './ProvinceStoreModule'
+import RegionStoreModule from './RegionStoreModule'
 
 import axios from '@axios'
 
@@ -55,17 +71,20 @@ import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import Button from '../../components/button/Button'
 
-const MODULE_NAME = 'province'
+const MODULE_NAME = 'region'
 
 export default {
   components: { Button },
   // props: {
   //
   // },
+  created() {
+      this.loadProvince()
+  },
   setup (props, {emit})  {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, ProvinceStoreModule)
+      store.registerModule(MODULE_NAME, RegionStoreModule)
     }
 
     // show, hide
@@ -86,6 +105,7 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
+      province_id: null,
       name: null,  
     }
     const formData = ref({})
@@ -96,11 +116,27 @@ export default {
       form.value.validate()
     }
 
+    //form options for selects
+    const selectsDatas = ref({})
+    // ! METHODS
+    const loadProvince = () => {
+      axios
+        .get('/api/provinces', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.region = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
 
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.name) {
+        if (
+            formData.value.province_id &&
+            formData.value.name 
+        ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ data, message}) => {
@@ -121,13 +157,16 @@ export default {
           })
         }
       } else {
-        if (formData.value.name) {
+        if (
+            formData.value.province_id &&
+            formData.value.name 
+           ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({data, message}) => {
               close()
-              emit('notify', { type: 'success', text: message })
-             
+              // emit('notify', { type: 'success', text: message })
+              emit('add-province-to-options', data)
             })
             .catch(error => {``
               console.log(error)
@@ -143,7 +182,15 @@ export default {
       }
     }
 
-   
+    // ProvinceForm
+    const regionForm = ref(null)
+    const addProvince = (id = null) => {
+        provinceForm.value.open(id)
+    }
+    const addProvinceToOptions = row => {
+        selectsDatas.value.region = selectsDatas.value.region.concat([row])
+        formData.value.province_id = row.id
+    }
    
 
     return {
@@ -151,12 +198,18 @@ export default {
       required,
       minLengthValidator,
       formData,
+      selectsDatas,
       selectRule,
+      loadProvince,
       validate,
       show,
       onSubmit,
       open,
       close,
+
+      regionForm,
+      addProvince,
+      addProvinceToOptions,
 
       icons: {
         mdiPlusCircleOutline,

@@ -117,6 +117,7 @@ export default {
   td {
     min-width: 110px;
     width: 100px !important;
+    
   }
 }
 </style>

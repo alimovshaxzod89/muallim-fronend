@@ -67,9 +67,6 @@ export default function useStudentList(MODULE_NAME) {
 		const newQuery = JSON.stringify(queryParams)
 
 		if (force || lastQuery !== newQuery) {
-			// console.log(JSON.stringify(lastQuery))
-			// console.log(JSON.stringify(newQuery))
-
 			lastQuery = newQuery
 
 			store

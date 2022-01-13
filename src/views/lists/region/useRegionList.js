@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useProvinceList(MODULE_NAME) {
+export default function useRegionList(MODULE_NAME) {
 
   const selectedTableData = ref([])
   const notify = ref({})
@@ -14,6 +14,7 @@ export default function useProvinceList(MODULE_NAME) {
       align: 'center',
       sortable: false,
     },
+    { text: 'VILOYAT', value: 'province.name' },
     { text: 'NOMI', value: 'name' },
   ]
 
