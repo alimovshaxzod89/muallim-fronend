@@ -26,8 +26,8 @@ export default [
   {
     title: 'Darslar va xonalar',
     icon: mdiAccountDetailsOutline,
-    to: '',
-    resource: 'Public',
+    to: 'lessons-rooms',
+    resource: 'Group',
     action: 'read',
   },
   {

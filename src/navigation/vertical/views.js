@@ -61,13 +61,13 @@ export default [
     resource: 'Group',
     action: 'manage',
   },
-	{
-		title: 'Ustozlarga tulovlar',
-		to: 'teacher-paids',
-		resource: 'Public',
-		action: 'manage',
-		icon: mdiCash,
-	},
+  {
+    title: 'Ustozlarga tulovlar',
+    to: 'teacher-paids',
+    resource: 'Public',
+    action: 'manage',
+    icon: mdiCash,
+  },
   // {
   //   title: 'Guruh vaqtlari',
   //   icon: mdiFileDocumentEdit,

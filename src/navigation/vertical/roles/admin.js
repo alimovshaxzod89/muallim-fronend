@@ -2,6 +2,8 @@ import {
   mdiAccountCash,
   mdiAccountDetailsOutline,
   mdiAccountGroup,
+  mdiBookOpenVariant,
+  mdiCashMinus,
   mdiCashMultiple,
   mdiDoor,
   mdiFilterVariant,
@@ -10,12 +12,9 @@ import {
   mdiHumanMaleFemale,
   mdiPercent,
   mdiShieldAccount,
-  mdiBookOpenVariant,
-  mdiCashMinus,
   mdiGoogleAnalytics,
   mdiMapMarkerRadiusOutline,
-  mdiCurrencyUsd,
-  mdiMapMarkerMultipleOutline,      
+  mdiMapMarkerMultipleOutline
 } from '@mdi/js'
 
 export default [
@@ -66,7 +65,7 @@ export default [
         to: 'subjects',
         resource: 'Teacher',
         action: 'read',
-        icon: mdiBookOpenVariant ,
+        icon: mdiBookOpenVariant,
       },
       {
         title: '!!!Qarzdor talabalar',
@@ -117,6 +116,23 @@ export default [
     resource: 'Group',
     action: 'read',
   },
+  {
+    title: "To'lovlar",
+    icon: mdiAccountGroup,
+    to: 'payments',
+    resource: 'payments',
+    action: 'read',
+  },
+  // {
+  //   path: '/group-times',
+  //   name: 'group-times',
+  //   component: () => import('@/views/lists/group-time/GroupTimeList.vue'),
+  //   meta: {
+  //     layout: 'content',
+  //     resource: 'GroupTime',
+  //     action: 'read',
+  //   },
+  // },
   // {
   //   title: 'Guruh vaqtlari',
   //   icon: mdiFileDocumentEdit,

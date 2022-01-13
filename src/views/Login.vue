@@ -215,7 +215,7 @@ export default {
             localStorage.setItem('accessToken', token)
             localStorage.setItem('userData', JSON.stringify(user))
 
-						const {ability: userAbility} = user
+            const { ability: userAbility } = user
             // Set user ability
             // ? https://casl.js.org/v5/en/guide/intro#update-rules
             vm.$ability.update(userAbility)
@@ -225,9 +225,8 @@ export default {
             // notify.value = { type: 'success', text: msg, time: Date.now() }
             // router.push({ name: 'dashboard-eCommerce' }).catch(err => console.log(err)).then(() => {
             // router.push('/').catch(err => console.log(err)).then(() => {
-							window.location.reload()
-						// });
-
+            window.location.reload()
+            // });
           } else {
             notify.value = { type: 'error', text: msg, time: Date.now() }
             username.value = ''
