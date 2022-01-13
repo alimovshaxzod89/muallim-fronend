@@ -22,6 +22,12 @@
 				<td v-for='time in times'
 						:key='time.hour'
 				>
+					<div>
+
+					</div>
+					<div v-if="time.time == groupTimes.time_begin">
+						{{ time.time }}
+					</div>
 					<div style='position: relative; height: 100%; margin-top: 5px; width: 50px;'>
 
 						<div v-if="room.id == 2 && time.hour == '9'"
@@ -56,10 +62,52 @@ export default {
 		}
 
 		const rooms = ref([{ id: 1, name: '1x' }, { id: 2, name: '2x' }, { id: 3, name: '3x' }])
+		const newArray = groupTimes.filter(function (el)
+			{
+				return el.time_begin >=15 &&
+					el.time_end <= 200;
+			}
+		);
+		const groupTimes = ref([
+			{
+				"id": 6,
+				"group_id": 15,
+				"room_id": 1,
+				"week_day": 1,
+				"time_begin": "07:00",
+				"time_end": "10:00"
+			},
+			{
+				"id": 7,
+				"group_id": 16,
+				"room_id": 1,
+				"week_day": 1,
+				"time_begin": "10:00",
+				"time_end": "11:30"
+			},
+			{
+				"id": 8,
+				"group_id": 18,
+				"room_id": 1,
+				"week_day": 1,
+				"time_begin": "02:00",
+				"time_end": "03:30"
+			},
+			{
+				"id": 9,
+				"group_id": 20,
+				"room_id": 1,
+				"week_day": 1,
+				"time_begin": "04:00",
+				"time_end": "05:30"
+			}
+		])
 
 		return {
 			times,
 			rooms,
+			groupTimes,
+			newArray,
 		}
 	},
 }
