@@ -64,6 +64,10 @@
           </v-tooltip>
         </div>
       </template>
+
+      <template #[`item.status`]="{ item }">
+          {{item.status ? 'ha' : 'yo\'q'}}
+      </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />

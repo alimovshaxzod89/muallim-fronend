@@ -8,14 +8,14 @@
           dense
           outlined
           hide-details
-          label="Qidiruv"
+          label="Qidirish"
           class="data-list-search me-3"
         ></v-text-field>
       </div>
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="$can('create', 'Room')" class="primary" @click="openForm()">Qo'shish</v-btn>
+      <v-btn v-if="$can('create', 'Teacher')" class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
@@ -40,7 +40,7 @@
       <template late #[`item.actions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
-          <v-tooltip bottom v-if="$can('delete', 'Group')">
+          <v-tooltip bottom v-if="$can('delete', 'Teacher')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
                 <v-icon size="18">
@@ -52,7 +52,7 @@
           </v-tooltip>
 
           <!-- view  -->
-          <v-tooltip bottom v-if="$can('update', 'Group')">
+          <v-tooltip bottom v-if="$can('update', 'Teacher')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
                 <v-icon size="18">
@@ -64,30 +64,19 @@
           </v-tooltip>
         </div>
       </template>
-
-      <template #[`item.status`]="{ item }">
-          {{item.status ? 'ha' : 'yo\'q'}}
-      </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <room-form
-      ref="roomForm"
+    <province-form
+      ref="provinceForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
 </template>
 
 <script>
-import { 
-  mdiTrendingUp,
-  mdiPlus, 
-  mdiDeleteOutline, 
-  mdiDotsVertical, 
-  mdiEyeOutline, 
-  mdiPencilOutline 
-  } from '@mdi/js'
+import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
@@ -95,25 +84,24 @@ import store from '@/store'
 import envParams from '@envParams'
 
 // store module
-import RoomStoreModule from './RoomStoreModule'
+import ProvinceStoreModule from './ProvinceStoreModule'
 
 // composition function
-import useRoomList from './useRoomList'
-import RoomForm from './RoomForm'
+import useProvinceList from './useProvinceList'
+import ProvinceForm from './ProvinceForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'room'
+const MODULE_NAME = 'province'
 
 export default {
   components: {
-    RoomForm,
+    ProvinceForm,
     DialogConfirm,
   },
   setup() {
-
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, RoomStoreModule)
+      store.registerModule(MODULE_NAME, ProvinceStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -134,7 +122,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useRoomList(MODULE_NAME)
+    } = useProvinceList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -146,9 +134,9 @@ export default {
     ]
 
     //Form
-    const roomForm = ref(null)
+    const provinceForm = ref(null)
     const openForm = id => {
-      roomForm.value.open(id)
+      provinceForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -183,7 +171,7 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      roomForm,
+      provinceForm,
       openForm,
 
       MODULE_NAME,

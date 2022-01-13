@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useTeacherPaidList(MODULE_NAME) {
+export default function useProvinceList(MODULE_NAME) {
 
   const selectedTableData = ref([])
   const notify = ref({})
@@ -9,19 +9,18 @@ export default function useTeacherPaidList(MODULE_NAME) {
   const tableColumns = [
     { text: '#', sortable: false, value: 'index' },
     {
-        text: 'AMALLAR',
-        value: 'actions',
-        align: 'center',
-        sortable: false,
+      text: 'AMALLAR',
+      value: 'actions',
+      align: 'center',
+      sortable: false,
     },
-    { text: 'FAN', value: 'subject.name' },
     { text: 'NOMI', value: 'name' },
-    { text: 'AKTIV', value: 'status'},
-    ]
+  ]
 
   const filter = ref({
-    query: '',
+      first_name: '',
   })
+
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
@@ -33,7 +32,7 @@ export default function useTeacherPaidList(MODULE_NAME) {
   let lastQuery = '';
   const fetchDatas = (force = false) => {
 
-    options.value.skip = options.value.page -1
+    options.value.skip = options.value.page - 1
     options.value.limit = options.value.itemsPerPage
 
     const queryParams = {
@@ -69,10 +68,10 @@ export default function useTeacherPaidList(MODULE_NAME) {
   }
 
   watch(filter, () => {
-    if (options.value.page != 1) options.value.page = 1
-    loading.value = true
+    if (options.value.page != 1) options.value.page
+      loading.value = true
 
-    setTimeout(() => fetchDatas(), 1000);
+      setTimeout(() => fetchDatas(), 1000);
   }, {deep: true})
 
   watch(options, () => {
@@ -84,14 +83,15 @@ export default function useTeacherPaidList(MODULE_NAME) {
   //delete
   const deleteRow = (id) => {
 
-    store.
-        dispatch(`${MODULE_NAME}/removeRow`, id)
+    store
+        .dispatch(`${MODULE_NAME}/removeRow`, id)
         .then((message) => {
             notify.value = { type: 'success', text: message, time: Date.now() }
 
             fetchDatas(true)
 
-    }).catch(error => {
+    })
+    .catch(error => {
       console.log(error)
       notify.value = { type: 'error', text: error.message, time: Date.now() }
     })
@@ -110,3 +110,15 @@ export default function useTeacherPaidList(MODULE_NAME) {
     selectedTableData
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+

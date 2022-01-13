@@ -43,7 +43,7 @@ export default {
     fetchDatas({ commit }, queryParams) {
       return new Promise((resolve, reject) => {
         axios
-          .get('/api/payments', { params: queryParams })
+          .get('/api/provinces', { params: queryParams })
           .then(response => {
             const { data, total } = response.data
             commit('setRows', data)
@@ -55,43 +55,59 @@ export default {
       })
     },
     addRow({ commit }, row) {
+
       return new Promise((resolve, reject) => {
+
         axios
-          .post('api/payments', row)
+          .post('api/provinces', row)
           .then(response => {
             if (response.data.success) {
+
               commit('addRow', response.data.data)
               commit('incrementTotal')
-              resolve(response.data.message)
+
+              resolve(response.data)
             }
           })
           .catch(error => reject(error))
+
       })
     },
     updateRow({ commit, getters }, row) {
+
       return new Promise((resolve, reject) => {
+
         axios
-          .put(`api/payments/${row.id}`, row)
+          .put(`api/provinces/${row.id}`, row)
           .then(response => {
             if (response.data.success) {
+
               const index = getters.indexIds.indexOf(parseInt(row.id))
               commit('updateRow', { row: response.data.data, index })
-              resolve(response.data.message)
+
+              resolve(response.data)
             }
           }).catch(error => reject(error))
+
       })
     },
     removeRow({ commit, getters }, id) {
+
       return new Promise((resolve, reject) => {
-        axios.delete(`api/payments/${id}`).then(response => {
+
+        axios.delete(`api/provinces/${id}`).then(response => {
           if (response.data.success) {
+
             const index = getters.indexIds.indexOf(id)
             commit('removeRow', index)
             commit('decrementTotal')
+
             resolve(response.data.message)
           }
         }).catch(error => reject(error))
+
       })
+
     },
   }
 }

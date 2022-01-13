@@ -82,6 +82,38 @@ const views = [
     },
   },
   {
+    path: '/stages',
+    name: 'stages',
+    component: () => import('@/views/lists/stage/StageList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
+    path: '/regions',
+    name: 'regions',
+    component: () => import('@/views/lists/region/RegionList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
+    path: '/provinces',
+    name: 'provinces',
+    component: () => import('@/views/lists/province/ProvinceList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
+    path: '/student-depts',
+    name: 'student-depts',
+    component: () => import('@/views/lists/student-dept/StudentDeptList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/groups',
     name: 'groups',
     component: () => import('@/views/lists/group/GroupList.vue'),

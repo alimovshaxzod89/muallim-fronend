@@ -2,7 +2,7 @@
   <v-card id="data-list">
     <!-- search -->
     <v-card-text class="d-flex align-center flex-wrap pb-0">
-      <div class="d-flex align-center pb-5">
+      <!-- <div class="d-flex align-center pb-5">
         <v-text-field
           v-model="filter.query"
           dense
@@ -11,7 +11,114 @@
           label="Qidiruv"
           class="data-list-search me-3"
         ></v-text-field>
-      </div>
+      </div> -->
+
+      <v-col cols="3" class="">
+        <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+            class="my-date-picker"
+              v-model="filter.date"
+              label="SANA"
+              readonly
+              :now="today"
+              :value="today"
+              v-bind="attrs"
+              v-on="on"
+              outlined
+              clearable
+              :append-icon="icons.mdiCalendar"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            v-model="filter.date"
+            color="primary"
+            @input="isDate = false"
+            no-title
+            :first-day-of-week="1"
+            locale="ru-ru"
+          ></v-date-picker>
+        </v-menu>
+      </v-col>
+
+      <v-col cols="9">
+        <v-expansion-panels class="my-accordion" accordion>
+					<v-expansion-panel>
+						<v-expansion-panel-header disable-icon-rotate>
+							Ko'proq
+							<template #actions>
+							<v-icon color="secondary">
+								{{ icons.mdiFilterOutline  }}
+							</v-icon>
+						</template>
+						</v-expansion-panel-header>
+						<v-expansion-panel-content>
+              <v-col cols="3">
+							  <v-autocomplete
+							  	v-model="filter.month"
+							  	:items="months"
+							  	item-text="name"
+							  	item-value="id"
+							  	dense
+							  	outlined
+							  	hide-details
+							  	label="OY"
+							  	class="data-list-search me-3"
+							  	clearable
+							  ></v-autocomplete>
+              </v-col>
+
+              <v-col cols="3">
+                <v-autocomplete
+							  	v-model="filter.teacher_id"
+							  	:items="teachers"
+							  	item-text="full_name"
+							  	item-value="id"
+							  	dense
+							  	outlined
+							  	hide-details
+							  	label="USTOZ"
+							  	class="data-list-search me-3"
+							  	clearable
+							  ></v-autocomplete>
+              </v-col>
+
+              <v-col cols="3">
+                <v-autocomplete
+							  	v-model="filter.group_id"
+							  	:items="groups"
+							  	item-text="number"
+							  	item-value="id"
+							  	dense
+							  	outlined
+							  	hide-details
+							  	label="GURUH"
+							  	class="data-list-search me-3"
+							  	clearable
+							  ></v-autocomplete>
+              </v-col>
+
+              <v-col cols="3">
+                <v-autocomplete
+							  	v-model="filter.student_id"
+							  	:items="students"
+							  	item-text="full_name"
+							  	item-value="id"
+							  	dense
+							  	outlined
+							  	hide-details
+							  	label="TALABA"
+							  	class="data-list-search me-3"
+							  	clearable
+							  ></v-autocomplete>
+              </v-col>
+						</v-expansion-panel-content>
+            <v-expansion-panel-content>
+              
+            </v-expansion-panel-content>
+					</v-expansion-panel>
+				</v-expansion-panels>
+      </v-col>
     </v-card-text>
 
     <!-- table -->
@@ -72,11 +179,14 @@ import {
   mdiDeleteOutline, 
   mdiDotsVertical, 
   mdiEyeOutline, 
-  mdiPencilOutline 
+  mdiPencilOutline,
+  mdiFilterOutline,
+  mdiCalendar, 
   } from '@mdi/js'
 
-import { onUnmounted, ref } from '@vue/composition-api'
+import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
+import axios from '@axios'
 
 import envParams from '@envParams'
 
@@ -106,6 +216,11 @@ export default {
 
     //store state
     const state = ref(store.state[MODULE_NAME])
+
+    const today = Date.now()
+
+    const picker = new Date().toISOString().substr(0, 10)
+    const isDate = ref(false)
 
     //logics
     const {
@@ -139,10 +254,49 @@ export default {
 
     const BASE_URL = envParams.BASE_URL
 
+
+    // LoadApis
+    const months = ref([])
+    const loadMonths = () => {
+      axios.get('/api/months').then(response => {
+        months.value = response.data.data 
+      })
+    }
+    const teachers = ref([])
+    const loadTeachers = () => {
+      axios.get('/api/teachers').then(response => {
+        teachers.value = response.data.data 
+      })
+    }
+    const groups = ref([])
+    const loadGroups = () => {
+      axios.get('/api/groups').then(response => {
+        groups.value = response.data.data 
+      })
+    }
+    const students = ref([])
+    const loadStudents = () => {
+      axios.get('/api/students').then(response => {
+        students.value = response.data.data 
+      })
+    }
+
+    onMounted(() => {
+      loadMonths()
+      loadTeachers()
+      loadGroups()
+      loadStudents()
+    })
+
+
+
     // Return
     return {
       BASE_URL,
       state,
+      picker,
+      isDate,
+      today,
 
       tableColumns,
       searchQuery,
@@ -161,6 +315,12 @@ export default {
 
       MODULE_NAME,
 
+      // LoadApis
+      months,
+      teachers,
+      groups,
+      students,
+
       icons: {
         mdiTrendingUp,
         mdiPlus,
@@ -168,6 +328,8 @@ export default {
         mdiDeleteOutline,
         mdiDotsVertical,
         mdiEyeOutline,
+        mdiFilterOutline,
+        mdiCalendar,
       },
     }
   },

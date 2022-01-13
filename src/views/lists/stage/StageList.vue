@@ -64,12 +64,16 @@
           </v-tooltip>
         </div>
       </template>
+
+      <template #[`item.status`]="{ item }">
+          {{item.status ? 'ha' : 'yo\'q'}}
+      </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <teacher-paid-form
-      ref="teacherPaidForm"
+    <stage-form
+      ref="stageForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -84,24 +88,24 @@ import store from '@/store'
 import envParams from '@envParams'
 
 // store module
-import TeacherPaidStoreModule from './TeacherPaidStoreModule'
+import StageStoreModule from './StageStoreModule'
 
 // composition function
-import useTeacherPaidList from './useTeacherPaidList'
-import TeacherPaidForm from './TeacherPaidForm'
+import useStageList from './useStageList'
+import StageForm from './StageForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'teacherPaid'
+const MODULE_NAME = 'stage'
 
 export default {
   components: {
-    TeacherPaidForm,
+    StageForm,
     DialogConfirm,
   },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, TeacherPaidStoreModule)
+      store.registerModule(MODULE_NAME, StageStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -122,7 +126,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useTeacherPaidList(MODULE_NAME)
+    } = useStageList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -134,9 +138,9 @@ export default {
     ]
 
     //Form
-    const teacherPaidForm = ref(null)
+    const stageForm = ref(null)
     const openForm = id => {
-      teacherPaidForm.value.open(id)
+      stageForm.value.open(id)
     }
 
     //Delete Confirm Dialog
