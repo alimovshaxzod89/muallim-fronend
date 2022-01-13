@@ -17,7 +17,7 @@
 						<v-col cols="12">
 							<div id="data-list">
 								<v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
-									<v-btn class="primary" @click="openForm(null, filter.group_id)">Qo'shish</v-btn>
+									<v-btn class="primary" @click="openPaidsForm()">Qo'shish</v-btn>
 								</v-card-text>
 
 								<!-- table -->
@@ -57,7 +57,7 @@
 											<!-- edit  -->
 											<v-tooltip bottom>
 												<template #activator="{ on, attrs }">
-													<v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item)">
+													<v-btn icon small v-bind="attrs" v-on="on" @click="openPaidsForm(item)">
 														<v-icon size="18">
 															{{ icons.mdiPencilOutline }}
 														</v-icon>
@@ -68,16 +68,6 @@
 										</div>
 									</template>
 								</v-data-table>
-
-								<dialog-confirm ref="dialogConfirm" />
-
-								<payment-paids-form
-									ref="PaymentPaidsForm"
-									:MODULE_NAME="MODULE_NAME"
-									v-on:refresh-list="$emit('refresh-list')"
-									v-on:delete-row="$emit('delete-row')"
-									v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-								/>
 							</div>
 						</v-col>
 					</v-row>
@@ -89,6 +79,16 @@
 				<v-btn color="gray" outlined @click="close()">OK</v-btn>
 			</v-card-actions>
     </v-card>
+
+				<dialog-confirm ref="dialogConfirm" />
+
+				<payment-paids-form
+					ref="PaymentPaidsForm"
+					:MODULE_NAME="MODULE_NAME"
+					v-on:refresh-list="$emit('refresh-list')"
+					v-on:delete-row="$emit('delete-row')"
+					v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
+				/>
   </v-dialog>
 </template>
 
@@ -107,6 +107,7 @@ import {
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
+import { useRouter } from '@core/utils'
 
 import envParams from '@envParams'
 
@@ -127,6 +128,8 @@ export default {
     const MODULE_NAME = 'payment-paids'
     const BASE_URL = envParams.BASE_URL
 
+    const { router } = useRouter()
+
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, PaymentPaidsStoreModule)
@@ -141,7 +144,7 @@ export default {
     const group_id = ref(null)
     const open = (group_id = null) => {
       show.value = true
-      filter.value.group_id = group_id
+      filter.value.group_id = group_id.group_id
 
       fetchDatas(true)
     }
@@ -178,10 +181,10 @@ export default {
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
 
-    //Form
+    // Form
     const PaymentPaidsForm = ref(null)
-    const openForm = (item, group_id) => {
-      PaymentPaidsForm.value.open(item, group_id)
+    const openPaidsForm = item => {
+      PaymentPaidsForm.value.open(item)
     }
 
     //Delete Confirm Dialog
@@ -255,7 +258,7 @@ export default {
       confirmDelete,
 
       PaymentPaidsForm,
-      openForm,
+      openPaidsForm,
       group_id,
       deleteRow,
 

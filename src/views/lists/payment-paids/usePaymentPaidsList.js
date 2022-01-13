@@ -15,7 +15,7 @@ export default function useGroupList(MODULE_NAME) {
     },
     { text: 'GURUH', value: 'payment.group.number' },
     { text: "TO'LOV OYI", value: 'payment.date' },
-    { text: 'TALABA', value: 'student.full_name' },
+    { text: 'TALABA', value: 'payment.student.full_name' },
     { text: "TO'LADI", value: 'amount' },
     { text: 'SANA', value: 'date' },
   ]

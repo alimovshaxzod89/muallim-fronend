@@ -458,7 +458,6 @@ export default {
     // Paids
     const paymentPaidsList = ref(null)
     const openPaymentPaidsList = item => {
-      console.log(paymentPaidsList.value)
       paymentPaidsList.value.open(item)
     }
 

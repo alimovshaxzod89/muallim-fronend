@@ -17,28 +17,12 @@
           <v-container>
             <v-row>
 							<v-col cols="6">
-								<h4 class="text-required no-texts"><span>*</span></h4>
                 <v-autocomplete
-                  v-model="formData.week_day"
-                  :items="days"
-                  item-text="name"
-                  item-value="key"
-                  label="KUN"
-                  dense
-                  outlined
-                  clearable
-                  class="align-start"
-                ></v-autocomplete>
-              </v-col>
-
-							<v-col cols="6">
-								<h4 class="text-required no-texts"><span>*</span></h4>
-                <v-autocomplete
-                  v-model="formData.room_id"
-                  :items="rooms"
+                  v-model="formData.subject_id"
+                  :items="subjects"
                   item-text="name"
                   item-value="id"
-                  label="XONA"
+                  label="FAN"
                   dense
                   outlined
                   clearable
@@ -47,74 +31,82 @@
               </v-col>
 
 							<v-col cols="6">
-                <h4 class="text-required no-texts"><span>*</span></h4>
-								<v-menu
-									ref="menu"
-									v-model="time"
-									:close-on-content-click="false"
-									:nudge-right="40"
-									:return-value.sync="time"
-									transition="scale-transition"
-									offset-y
-									max-width="290px"
-									min-width="290px"
-								>
-									<template v-slot:activator="{ on, attrs }">
-										<v-text-field
-										class="my-date-picker"
-											outlined
-											v-model="formData.time_begin"
-											label="VAQT ...DAN"
-											:append-icon="icons.mdiClockTimeFourOutline"
-											readonly
-											v-bind="attrs"
-											v-on="on"
-										></v-text-field>
-									</template>
-									<v-time-picker
-										format="24hr"
-										v-if="time"
-										v-model="formData.time_begin"
-										color="primary"
-										full-width
-										@click:minute="$refs.menu.save(formData.time_begin)"
-									></v-time-picker>
-								</v-menu>
+                <v-autocomplete
+                  v-model="formData.group_id"
+                  :items="groups"
+                  item-text="number"
+                  item-value="id"
+                  label="GURUH"
+                  dense
+                  outlined
+                  clearable
+                  class="align-start"
+                ></v-autocomplete>
               </v-col>
 
 							<v-col cols="6">
-                <v-menu
-									ref="menu2"
-									v-model="time2"
-									:close-on-content-click="false"
-									:nudge-right="40"
-									:return-value.sync="formData.time_end"
-									transition="scale-transition"
-									offset-y
-									max-width="290px"
-									min-width="290px"
-								>
-									<template v-slot:activator="{ on, attrs }">
-										<v-text-field
-										class="my-date-picker"
-											outlined
-											v-model="formData.time_end"
-											label="VAQT ...GACHA"
-											:append-icon="icons.mdiClockTimeFourOutline"
-											readonly
-											v-bind="attrs"
-											v-on="on"
-										></v-text-field>
-									</template>
-									<v-time-picker
-										format="24hr"
-										v-if="time2"
-										v-model="formData.time_end"
-										color="primary"
-										full-width
-										@click:minute="$refs.menu2.save(formData.time_end)"
-									></v-time-picker>
-								</v-menu>
+                <v-autocomplete
+                  v-model="formData.student_id"
+                  :items="students"
+                  item-text="full_name"
+                  item-value="id"
+                  label="TALABA"
+                  dense
+                  outlined
+                  clearable
+                  class="align-start"
+                ></v-autocomplete>
+              </v-col>
+
+							<v-col cols="6">
+                <v-autocomplete
+                  v-model="formData.month"
+                  :items="month"
+                  item-text="name"
+                  item-value="key"
+                  label="OY/YIL"
+                  dense
+                  outlined
+                  clearable
+                  class="align-start"
+                ></v-autocomplete>
+              </v-col>
+
+							<v-col cols="6">
+                <v-text-field
+                  type="text"
+                  label="SUMMA"
+                  v-model="formData.amount"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
+
+							<v-col cols="6">
+                <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                    class="my-date-picker"
+                      v-model="formData.date"
+                      label="SA'NA"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      outlined
+                      clearable
+                      :append-icon="icons.mdiCalendar"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="formData.date"
+                    color="primary"
+                    @input="isDate = false"
+                    no-title
+                    :first-day-of-week="1"
+                    locale="ru-ru"
+                  ></v-date-picker>
+                </v-menu>
               </v-col>
             </v-row>
           </v-container>
@@ -148,24 +140,25 @@ export default {
   setup(props, { emit }) {
     //show, hide
 
+    const picker = new Date().toISOString().substr(0, 10)
+    const isDate = ref(false)
+
     const form = ref(null)
     const show = ref(false)
     const emptyFormData = {
       id: null,
-      week_day: null,
-      room_id: null,
-      time_begin: null,
-      time_end: null,
+      subject_id: null,
+      student_id: null,
+      month: null,
       group_id: null,
+      amount: null,
+      date: null,
     }
     const formData = ref({ ...emptyFormData })
-    const open = (item = null, group_id = null) => {
+    const open = (item = null) => {
       show.value = true
       if (item) {
         formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](item.id)))
-      }
-      if (group_id) {
-        formData.value.group_id = group_id
       }
     }
     const close = () => {
@@ -176,13 +169,13 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.week_day && formData.value.room_id) {
+        if (formData.value.subject_id && formData.value.group_id) {
           store
             .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
-              emit('refresh-list')
+              // emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
@@ -196,13 +189,13 @@ export default {
         }
       } else {
         //create
-        if (formData.value.week_day && formData.value.room_id) {
+        if (formData.value.subject_id && formData.value.group_id) {
           store
             .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
-              emit('refresh-list')
+              // emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
@@ -226,37 +219,69 @@ export default {
       { key: 6, name: 'Shanba' },
       { key: 7, name: 'Yakshanba' },
     ])
+    const month = ref([
+      { key: 1, name: 'Yanvar' },
+      { key: 2, name: 'Fevral' },
+      { key: 3, name: 'Mart' },
+      { key: 4, name: 'Aprel' },
+      { key: 5, name: 'May' },
+    ])
+    // const monthOptions = () => {
+    //   const arr = [{ value: '', text: '' }]
+    //   for (let i = 1; i <= 12; i++) {
+    //     arr.push({ value: i, text: `2000-${i}-01` })
+    //   }
+    //   return arr
+    // }
 
-    // Load subjects
-    const rooms = ref(null)
-    const loadRooms = () => {
-      axios.get('/api/rooms').then(response => {
+    // Loads
+    const subjects = ref(null)
+    const loadSubjects = () => {
+      axios.get('/api/subjects').then(response => {
         if (response.data.success) {
-          rooms.value = response.data.data
+          subjects.value = response.data.data
+        }
+      })
+    }
+
+    const groups = ref(null)
+    const loadGroups = () => {
+      axios.get('/api/groups').then(response => {
+        if (response.data.success) {
+          groups.value = response.data.data
+        }
+      })
+    }
+
+    const students = ref(null)
+    const loadStudents = () => {
+      axios.get('/api/students').then(response => {
+        if (response.data.success) {
+          students.value = response.data.data
         }
       })
     }
 
     onMounted(() => {
-      loadRooms()
+      loadSubjects()
+      loadGroups()
+      loadStudents()
     })
 
-    // time settings
-    const time = ref(null)
-    const time2 = ref(null)
-
     return {
+      isDate,
+      picker,
       form,
       formData,
       show,
       onSubmit,
       open,
       close,
-      rooms,
+      subjects,
+      groups,
+      students,
       days,
-
-      time,
-      time2,
+      month,
 
       icons: {
         mdiCalendar,

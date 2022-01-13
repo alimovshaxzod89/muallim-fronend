@@ -42,13 +42,11 @@ export default {
     fetchDatas({ commit }, queryParams) {
       return new Promise((resolve, reject) => {
         axios
-          .get('/api/group-times', { params: queryParams })
+          .get('/api/payment-paids', { params: queryParams })
           .then(response => {
             const { data, total } = response.data
-            commit('setRows', data[queryParams.group_id] ?? [])
-            commit('setTotal', data[queryParams.group_id] ? data[queryParams.group_id].length : 0)
-            // commit('setRows', data)
-            // commit('setTotal', total)
+            commit('setRows', data)
+            commit('setTotal', total)
 
             resolve(response.data.message)
           })
@@ -58,13 +56,13 @@ export default {
     addRow({ commit }, row) {
       return new Promise((resolve, reject) => {
         axios
-          .post('/api/group-times', row)
+          .post('/api/payment-paids', row)
           .then(response => {
             if (response.data.success) {
               commit('addRow', response.data.data)
               commit('incrementTotal')
 
-              resolve(response.data.message)
+              resolve(response.data)
             }
           })
           .catch(error => reject(error))
@@ -73,13 +71,13 @@ export default {
     updateRow({ commit, getters }, row) {
       return new Promise((resolve, reject) => {
         axios
-          .put(`/api/group-times/${row.id}`, row)
+          .put(`/api/payment-paids/${row.id}`, row)
           .then(response => {
             if (response.data.success) {
               const index = getters.indexIds.indexOf(parseInt(row.id))
               commit('updateRow', { row: response.data.data, index })
 
-              resolve(response.data.message)
+              resolve(response.data)
             }
           })
           .catch(error => reject(error))
@@ -88,7 +86,7 @@ export default {
     removeRow({ commit, getters }, id) {
       return new Promise((resolve, reject) => {
         axios
-          .delete(`/api/group-times/${id}`)
+          .delete(`/api/payment-paids/${id}`)
           .then(response => {
             if (response.data.success) {
               const index = getters.indexIds.indexOf(id)
