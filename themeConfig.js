@@ -3,7 +3,7 @@ import envParams from '@envParams'
 
 const themeConfig = {
 	app: {
-		name: envParams.COMPANY_NAME ?? 'MUALLIM',
+		name: envParams.COMPANY_NAME ?? 'UGAM BRON',
 		logo: envParams.COMPANY_NAME ? require('@/assets/logo/' + envParams.COMPANY_NAME + '-dark.png') : require('@/assets/images/svg/logo.svg'),
 		logoInLogin: envParams.COMPANY_NAME ? require('@/assets/logo/' + envParams.COMPANY_NAME + '.png') : require('@/assets/images/svg/logo.svg'),
 		isDark: false,
