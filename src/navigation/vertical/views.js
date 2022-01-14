@@ -19,7 +19,7 @@ export default [
   },
 	{
 		title: 'Bron',
-		to: '',
+		to: 'bron',
 		resource: 'Public',
 		action: 'read',
 		icon: mdiCash,
