@@ -6,15 +6,10 @@ import {
   mdiCashMinus,
   mdiCashMultiple,
   mdiDoor,
-  mdiFilterVariant,
-  mdiHome,
+  mdiFilterVariant, mdiGoogleAnalytics, mdiHome,
   mdiHumanCapacityDecrease,
-  mdiHumanMaleFemale,
-  mdiPercent,
-  mdiShieldAccount,
-  mdiGoogleAnalytics,
-  mdiMapMarkerRadiusOutline,
-  mdiMapMarkerMultipleOutline
+  mdiHumanMaleFemale, mdiMapMarkerMultipleOutline, mdiMapMarkerRadiusOutline, mdiOfficeBuilding, mdiPercent,
+  mdiShieldAccount
 } from '@mdi/js'
 
 export default [
@@ -126,6 +121,7 @@ export default [
 
   {
     title: "Binolar",
+    icon: mdiOfficeBuilding,
     to: 'places',
     resource: 'Place',
     action: 'read' 

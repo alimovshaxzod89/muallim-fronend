@@ -143,7 +143,6 @@ const views = [
 			action: 'read',
 		},
 	},
-<<<<<<< HEAD
   {
     path: '/places',
     name: 'places',
@@ -180,33 +179,6 @@ const views = [
       // ],
     },
   },
-=======
-	// {
-	//   path: '/group-times',
-	//   name: 'group-times',
-	//   component: () => import('@/views/lists/group-time/GroupTimeList.vue'),
-	//   meta: {
-	//     layout: 'content',
-	//     resource: 'GroupTime',
-	//     action: 'read',
-	//   },
-	// },
-	{
-		path: '/center-profit',
-		name: 'center-profit',
-		component: () => import('@/views/report/CenterProfit.vue'),
-		meta: {
-			layout: 'content',
-			// pageTitle: 'Markaz Ulushi',
-			// breadcrumb: [
-			//   {
-			//     text: 'Markaz Ulushi',
-			//     active: true,
-			//   },
-			// ],
-		},
-	},
->>>>>>> a97fd4f865c9324a1befdd2b4e5b98312365c9a6
 ]
 
 export default views
