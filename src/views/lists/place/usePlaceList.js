@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useRegionList(MODULE_NAME) {
+export default function usePlaceList(MODULE_NAME) {
 
   const selectedTableData = ref([])
   const notify = ref({})
@@ -9,18 +9,19 @@ export default function useRegionList(MODULE_NAME) {
   const tableColumns = [
     { text: '#', sortable: false, value: 'index' },
     {
-      text: 'AMALLAR',
+      text: 'Amallar',
       value: 'actions',
       align: 'center',
       sortable: false,
     },
-    { text: 'VILOYAT', value: 'province.name' },
     { text: 'NOMI', value: 'name' },
+    { text: 'AKTIV', value: 'status' },
   ]
 
   const filter = ref({
-      query: '',
+    name: '',
   })
+
 
   const options = ref({
     sortBy: ['id'],
@@ -33,7 +34,7 @@ export default function useRegionList(MODULE_NAME) {
   let lastQuery = '';
   const fetchDatas = (force = false) => {
 
-    options.value.skip = options.value.page - 1
+    options.value.skip = options.value.page -1
     options.value.limit = options.value.itemsPerPage
 
     const queryParams = {
@@ -46,6 +47,7 @@ export default function useRegionList(MODULE_NAME) {
 				queryParams[key] = value
 			}
 		}
+
 
     const newQuery = JSON.stringify(queryParams)
 
@@ -70,7 +72,7 @@ export default function useRegionList(MODULE_NAME) {
 
   watch(filter, () => {
     if (options.value.page != 1) options.value.page
-      loading.value = true
+      options.value = true
 
       setTimeout(() => fetchDatas(), 1000);
   }, {deep: true})
@@ -83,18 +85,15 @@ export default function useRegionList(MODULE_NAME) {
 
   //delete
   const deleteRow = (id) => {
+    store.dispatch(`${MODULE_NAME}/removeRow`, id)
+    .then((message) => {
+      notify.value = { type: 'success', text: message, time: Date.now() }
 
-    store
-        .dispatch(`${MODULE_NAME}/removeRow`, id)
-        .then((message) => {
-            notify.value = { type: 'success', text: message, time: Date.now() }
-
-            fetchDatas(true)
-
+      fetchDatas(true)
     })
     .catch(error => {
       console.log(error)
-      notify.value = { type: 'error', text: error.message, time: Date.now() }
+      notify.value = { type: 'success', text: error.message, time: Date.now() }
     })
 
   }
@@ -111,6 +110,8 @@ export default function useRegionList(MODULE_NAME) {
     selectedTableData
   }
 }
+
+
 
 
 

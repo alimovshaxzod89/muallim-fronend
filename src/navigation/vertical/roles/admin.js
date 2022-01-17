@@ -123,6 +123,14 @@ export default [
     resource: 'payments',
     action: 'read',
   },
+
+  {
+    title: "Binolar",
+    to: 'places',
+    resource: 'Place',
+    action: 'read' 
+  },
+
   // {
   //   path: '/group-times',
   //   name: 'group-times',

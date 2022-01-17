@@ -197,6 +197,8 @@
                   v-model="formData.status"
                   hide-details
                   label="Aktiv"
+                  false-value="0"
+                  true-value="1"
                 ></v-checkbox>
               </v-col>
             </v-row>
@@ -235,7 +237,7 @@ export default {
 
     //show, hide
     const show = ref(false)
-    const formData = ref({status: true,})
+    const formData = ref({})
     const form = ref(null)
     const emptyFormData = {
       id: null,
@@ -248,6 +250,7 @@ export default {
       max_students: null,
       begin_date: null,
       end_date: null,
+      status: "1",
       
     }
     const picker = new Date().toISOString().substr(0, 10)

@@ -143,6 +143,17 @@ const views = [
 			action: 'read',
 		},
 	},
+  {
+    path: '/places',
+    name: 'places',
+    component: () => import('@/views/lists/place/PlaceList.vue'),
+    meta: {
+      layout: 'content',
+			resource: 'Place',
+			action: 'read',
+    },
+  },
+
   // {
   //   path: '/group-times',
   //   name: 'group-times',
