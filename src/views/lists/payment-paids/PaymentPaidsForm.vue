@@ -163,7 +163,9 @@ export default {
       if (item) {
         formData.value = {
           ...JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](item.id))),
-          subject_id: item.payment.subject.name,
+          subject_id: item.payment.group.subject_id,
+          group_id: item.payment.group.id,
+          student_id: item.payment.student_id,
         }
       }
     }
