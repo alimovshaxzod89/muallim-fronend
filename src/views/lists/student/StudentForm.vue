@@ -164,6 +164,8 @@
                   hide-details
                   label="CHEGIRMA"
                   @change="changeSale()"
+                  false-value="0"
+                  true-value="1"
                 ></v-checkbox>
               </v-col>
 
@@ -227,7 +229,7 @@ export default {
       address: null,
       permanent_address: null,
       gender: null,
-      sale: false,
+      sale: "1",
       sale_cause: null,
     }
     const picker = new Date().toISOString().substr(0, 10)
