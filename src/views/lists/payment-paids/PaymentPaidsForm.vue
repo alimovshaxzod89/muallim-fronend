@@ -61,9 +61,9 @@
 							<v-col cols="6">
                 <v-autocomplete
                   v-model="formData.month"
-                  :items="month"
-                  item-text="name"
-                  item-value="key"
+                  :items="monthOptions"
+                  item-text="value"
+                  item-value="id"
                   label="OY/YIL"
                   dense
                   outlined
@@ -127,6 +127,9 @@ import { mdiCalendar, mdiClockTimeFourOutline } from '@mdi/js'
 
 import store from '@/store'
 import axios from '@axios'
+import moment from 'moment'
+
+require('moment/locale/uz-latn')
 
 import { ref, onMounted } from '@vue/composition-api'
 
@@ -158,7 +161,10 @@ export default {
     const open = (item = null) => {
       show.value = true
       if (item) {
-        formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](item.id)))
+        formData.value = {
+          ...JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](item.id))),
+          subject_id: item.payment.subject.name,
+        }
       }
     }
     const close = () => {
@@ -219,20 +225,14 @@ export default {
       { key: 6, name: 'Shanba' },
       { key: 7, name: 'Yakshanba' },
     ])
-    const month = ref([
-      { key: 1, name: 'Yanvar' },
-      { key: 2, name: 'Fevral' },
-      { key: 3, name: 'Mart' },
-      { key: 4, name: 'Aprel' },
-      { key: 5, name: 'May' },
-    ])
-    // const monthOptions = () => {
-    //   const arr = [{ value: '', text: '' }]
-    //   for (let i = 1; i <= 12; i++) {
-    //     arr.push({ value: i, text: `2000-${i}-01` })
-    //   }
-    //   return arr
-    // }
+    const monthOptions = () => {
+      const arr = [{ value: null, text: 'Oy' }]
+      for (let i = 1; i <= 12; i++) {
+        arr.push({ value: i, text: moment(`2000-${i}-01`).format('MMMM') })
+      }
+      console.log(arr)
+      return arr
+    }
 
     // Loads
     const subjects = ref(null)
@@ -281,7 +281,7 @@ export default {
       groups,
       students,
       days,
-      month,
+      monthOptions,
 
       icons: {
         mdiCalendar,

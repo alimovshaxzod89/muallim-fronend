@@ -19,16 +19,16 @@ const views = [
       action: 'read',
     },
   },
-	{
-		path: '/bron',
-		name: 'bron',
-		component: () => import('@/views/bron/Bron'),
-		meta: {
-			layout: 'content',
-			resource: 'Public',
-			action: 'read',
-		},
-	},
+  {
+    path: '/bron',
+    name: 'bron',
+    component: () => import('@/views/bron/Bron'),
+    meta: {
+      layout: 'content',
+      resource: 'Public',
+      action: 'read',
+    },
+  },
   // {
   //   path: '/teachers',
   //   name: 'teachers',
@@ -133,26 +133,26 @@ const views = [
   //     action: 'read',
   //   },
   // },
+  {
+    path: '/payments',
+    name: 'payments',
+    component: () => import('@/views/lists/payment/PaymentList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'Payment',
+      action: 'read',
+    },
+  },
   // {
-  //   path: '/payments',
-  //   name: 'payments',
-  //   component: () => import('@/views/lists/payment/PaymentList.vue'),
-  //   meta: {
-  //     layout: 'content',
-  //     resource: 'Payment',
-  //     action: 'read',
-  //   },
+  // 	path: '/lessons-rooms',
+  // 	name: 'lessons-rooms',
+  // 	component: () => import('@/views/lists/lessons-rooms/LessonsRooms'),
+  // 	meta: {
+  // 		layout: 'content',
+  // 		resource: 'Group',
+  // 		action: 'read',
+  // 	},
   // },
-	// {
-	// 	path: '/lessons-rooms',
-	// 	name: 'lessons-rooms',
-	// 	component: () => import('@/views/lists/lessons-rooms/LessonsRooms'),
-	// 	meta: {
-	// 		layout: 'content',
-	// 		resource: 'Group',
-	// 		action: 'read',
-	// 	},
-	// },
   // {
   //   path: '/group-times',
   //   name: 'group-times',
