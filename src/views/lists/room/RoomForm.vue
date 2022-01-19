@@ -58,6 +58,8 @@
                   hide-details
                   label="AKTIV"
                   class="mt-0"
+                  false-value="0"
+                  true-value="1"
                 ></v-checkbox>
               </v-col>
             </v-row>
@@ -122,7 +124,7 @@ export default {
       place_id: null,
       name: null,
       capacity: null,
-      status: true,
+      status: "1",
     }
     //validation
     const formData = ref({ ...emptyFormData })
