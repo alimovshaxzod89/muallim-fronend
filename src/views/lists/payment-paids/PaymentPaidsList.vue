@@ -18,10 +18,14 @@
 							<div id="data-list">
 								<v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
 									<v-btn class="primary" @click="openPaidsForm()">Qo'shish</v-btn>
+									<div v-if="state.rows.length > 0" class="ml-5">
+										<v-btn v-if="$can('create', 'Room')" class="success exportXlsx" color="white" outlined @click="ExportExcel()">Jadvalni yuklab olish</v-btn>
+									</div>
 								</v-card-text>
 
 								<!-- table -->
 								<v-data-table
+									ref="excel"
 									v-model="selectedTableData"
 									:headers="tableColumns"
 									:items="state.rows"
@@ -65,6 +69,18 @@
 												</template>
 												<span>Tahrirlash</span>
 											</v-tooltip>
+
+											<!-- print  -->
+											<v-tooltip bottom>
+												<template #activator="{ on, attrs }">
+													<v-btn icon small v-bind="attrs" v-on="on" @click="printCheck(item)">
+														<v-icon size="18">
+															{{ icons.mdiPrinter   }}
+														</v-icon>
+													</v-btn>
+												</template>
+												<span>Chop etish</span>
+											</v-tooltip>
 										</div>
 									</template>
 								</v-data-table>
@@ -103,6 +119,7 @@ import {
   mdiCalendar,
   mdiImageEditOutline,
   mdiFilterOutline,
+  mdiPrinter,
 } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'
@@ -110,6 +127,7 @@ import store from '@/store'
 import { useRouter } from '@core/utils'
 
 import envParams from '@envParams'
+import XLSX from 'xlsx'
 
 // store module
 import PaymentPaidsStoreModule from './PaymentPaidsStoreModule'
@@ -231,6 +249,30 @@ export default {
       return result[0].name
     }
 
+    // eport xlsx
+    const excel = ref(null)
+    const ExportExcel = (type, fn, dl) => {
+      let elt = excel.value.$el.children[0]
+      let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+      return dl
+        ? XLSX.write(wb, {
+            bookType: type,
+            bookSST: true,
+            type: 'base64',
+          })
+        : XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+    }
+
+    const printCheck = data => {
+      console.log(data)
+      var myWindow = window.open(
+        '/print/' + data.id,
+        'MsgWindow',
+        'toolbar=no,status=no,menubar=no,width=600,height=600',
+      )
+      //myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
+    }
+
     // Return
     return {
       show,
@@ -238,6 +280,11 @@ export default {
       close,
       BASE_URL,
       state,
+
+      excel,
+      ExportExcel,
+
+      printCheck,
 
       picker,
       isDate,
@@ -277,6 +324,7 @@ export default {
         mdiEyeOutline,
         mdiImageEditOutline,
         mdiFilterOutline,
+        mdiPrinter,
       },
     }
   },
