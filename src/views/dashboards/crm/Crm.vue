@@ -19,23 +19,60 @@
         ></statistics-card-with-images>
       </v-col>
 
-      <v-col
+			<v-col
+				cols="12"
+				md="3"
+				sm="6"
+				order="2"
+				class="align-self-end"
+			>
+				<statistics-card-with-images
+					:avatar="sessionsOptions.avatar"
+					:avatar-width="sessionsOptions.avatarWidth"
+					:change="sessionsOptions.change"
+					:chip-color="sessionsOptions.chipColor"
+					:chip-text="sessionsOptions.chipText"
+					:statistics="sessionsOptions.statistics"
+					:stat-title="sessionsOptions.statTitle"
+				></statistics-card-with-images>
+			</v-col>
+
+			<v-col
         cols="12"
         md="3"
         sm="6"
-        order="2"
+        order="3"
         class="align-self-end"
       >
         <statistics-card-with-images
-          :avatar="sessionsOptions.avatar"
-          :avatar-width="sessionsOptions.avatarWidth"
-          :change="sessionsOptions.change"
-          :chip-color="sessionsOptions.chipColor"
-          :chip-text="sessionsOptions.chipText"
-          :statistics="sessionsOptions.statistics"
-          :stat-title="sessionsOptions.statTitle"
+          :avatar="sessionsOptions2.avatar"
+          :avatar-width="sessionsOptions2.avatarWidth"
+          :change="sessionsOptions2.change"
+          :chip-color="sessionsOptions2.chipColor"
+          :chip-text="sessionsOptions2.chipText"
+          :statistics="sessionsOptions2.statistics"
+          :stat-title="sessionsOptions2.statTitle"
         ></statistics-card-with-images>
       </v-col>
+
+			<v-col
+				cols="12"
+				md="3"
+				sm="6"
+				order="2"
+				class="align-self-end"
+			>
+				<statistics-card-with-images
+					:avatar="ratingsOptions2.avatar"
+					:avatar-width="ratingsOptions2.avatarWidth"
+					:change="ratingsOptions2.change"
+					:chip-color="ratingsOptions2.chipColor"
+					:chip-text="ratingsOptions2.chipText"
+					:statistics="ratingsOptions2.statistics"
+					:stat-title="ratingsOptions2.statTitle"
+				></statistics-card-with-images>
+			</v-col>
+
 
       <v-col
         cols="12"
@@ -57,15 +94,17 @@
         <crm-total-sales></crm-total-sales>
       </v-col>
 
-      <v-col
-        cols="12"
-        md="3"
-        sm="6"
-        order="4"
-        order-md="5"
-      >
-        <crm-revenue-report></crm-revenue-report>
-      </v-col>
+			<v-col
+				cols="12"
+				md="3"
+				sm="6"
+				order="3"
+				order-md="4"
+			>
+				<crm-total-outcomes></crm-total-outcomes>
+			</v-col>
+
+
 
       <v-col
         cols="12"
@@ -77,79 +116,51 @@
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-col
-        cols="12"
-        sm="6"
-      >
-        <crm-activity-timeline></crm-activity-timeline>
-      </v-col>
-      <v-col
-        cols="12"
-        sm="6"
-        md="4"
-      >
-        <crm-weekly-sales></crm-weekly-sales>
-      </v-col>
+<!--    <v-row>-->
+<!--      <v-col-->
+<!--        cols="12"-->
+<!--        sm="6"-->
+<!--        md="4"-->
+<!--      >-->
+<!--        <crm-weekly-sales></crm-weekly-sales>-->
+<!--      </v-col>-->
 
-      <v-col
-        cols="12"
-        md="2"
-      >
-        <v-row>
-          <v-col
-            cols="12"
-            sm="6"
-            md="12"
-          >
-            <statistics-card-area-chart
-              :stat-title="growthAreaChart.statTitle"
-              :statistics="growthAreaChart.statistics"
-              :chart-series="growthAreaChart.series"
-              chart-height="100"
-            ></statistics-card-area-chart>
-          </v-col>
-          <v-col
-            cols="12"
-            sm="6"
-            md="12"
-          >
-            <statistics-card-vertical
-              :change="newProjectOptions.change"
-              :color="newProjectOptions.color"
-              :icon="newProjectOptions.icon"
-              :statistics="newProjectOptions.statistics"
-              :stat-title="newProjectOptions.statTitle"
-              :subtitle="newProjectOptions.subtitle"
-            ></statistics-card-vertical>
-          </v-col>
-        </v-row>
-      </v-col>
+<!--      <v-col-->
+<!--        cols="12"-->
+<!--        md="2"-->
+<!--      >-->
+<!--        <v-row>-->
+<!--          <v-col-->
+<!--            cols="12"-->
+<!--            sm="6"-->
+<!--            md="12"-->
+<!--          >-->
+<!--            <statistics-card-area-chart-->
+<!--              :stat-title="growthAreaChart.statTitle"-->
+<!--              :statistics="growthAreaChart.statistics"-->
+<!--              :chart-series="growthAreaChart.series"-->
+<!--              chart-height="100"-->
+<!--            ></statistics-card-area-chart>-->
+<!--          </v-col>-->
+<!--          <v-col-->
+<!--            cols="12"-->
+<!--            sm="6"-->
+<!--            md="12"-->
+<!--          >-->
+<!--            <statistics-card-vertical-->
+<!--              :change="newProjectOptions.change"-->
+<!--              :color="newProjectOptions.color"-->
+<!--              :icon="newProjectOptions.icon"-->
+<!--              :statistics="newProjectOptions.statistics"-->
+<!--              :stat-title="newProjectOptions.statTitle"-->
+<!--              :subtitle="newProjectOptions.subtitle"-->
+<!--            ></statistics-card-vertical>-->
+<!--          </v-col>-->
+<!--        </v-row>-->
+<!--      </v-col>-->
+<!--			-->
+<!--    </v-row>-->
 
-      <v-col
-        cols="12"
-        sm="6"
-        md="4"
-      >
-        <crm-card-upgrade-plan></crm-card-upgrade-plan>
-      </v-col>
-
-      <v-col
-        cols="12"
-        md="4"
-        sm="6"
-      >
-        <crm-card-meeting-schedule></crm-card-meeting-schedule>
-      </v-col>
-
-      <v-col
-        cols="12"
-        md="4"
-        sm="6"
-      >
-        <crm-card-developer-meetup></crm-card-developer-meetup>
-      </v-col>
-    </v-row>
   </div>
 </template>
 
@@ -171,6 +182,7 @@ import CrmWeeklySales from './CrmWeeklySales.vue'
 import CrmCardUpgradePlan from './CrmCardUpgradePlan.vue'
 import CrmCardMeetingSchedule from './CrmCardMeetingSchedule.vue'
 import CrmCardDeveloperMeetup from './CrmCardDeveloperMeetup.vue'
+import CrmTotalOutcomes from '@/views/dashboards/crm/CrmTotalOutcomes'
 
 export default {
   components: {
@@ -180,6 +192,7 @@ export default {
 
     CrmStatisticsCard,
     CrmTotalSales,
+		CrmTotalOutcomes,
     CrmRevenueReport,
     CrmSalesOverview,
     CrmActivityTimeline,
@@ -191,23 +204,42 @@ export default {
   setup() {
     // card with images
     const ratingsOptions = {
-      statTitle: 'Ratings',
+      statTitle: 'Talabalar',
       statistics: '13k',
       change: '+38%',
-      chipText: 'Year of 2021',
+      chipText: '2022-yil',
       chipColor: 'primary',
       avatar: require('@/assets/images/avatars/9.png'),
       avatarWidth: '111',
     }
     const sessionsOptions = {
-      statTitle: 'Sessions',
+      statTitle: 'Guruhlar',
       statistics: '24.5k',
       change: '-22%',
-      chipText: 'Last Week',
-      chipColor: 'secondary',
+			chipText: '2022-yil',
+			chipColor: 'primary',
       avatar: require('@/assets/images/avatars/10.png'),
       avatarWidth: '86',
     }
+		const sessionsOptions2 = {
+			statTitle: 'Binolar',
+			statistics: '24.5k',
+			change: '-22%',
+			chipText: '2022-yil',
+			chipColor: 'primary',
+			avatar: require('@/assets/images/avatars/9.png'),
+			avatarWidth: '111',
+		}
+		const ratingsOptions2 = {
+			statTitle: 'Ustozlar',
+			statistics: '13k',
+			change: '+38%',
+			chipText: '2022-yil',
+			chipColor: 'primary',
+			avatar: require('@/assets/images/avatars/10.png'),
+			avatarWidth: '86',
+		}
+
 
     const growthAreaChart = {
       statTitle: 'Total Growth',
@@ -233,6 +265,8 @@ export default {
     return {
       ratingsOptions,
       sessionsOptions,
+			ratingsOptions2,
+			sessionsOptions2,
       growthAreaChart,
       newProjectOptions,
     }
