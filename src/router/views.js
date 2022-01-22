@@ -2,7 +2,7 @@ const views = [
   {
     path: '/main',
     name: 'dashboard-eCommerce',
-    component: () => import('@/views/dashboards/ecommerce/Ecommerce.vue'),
+    component: () => import('@/views/dashboards/crm/Crm.vue'),
     meta: {
       layout: 'content',
       resource: 'Public',
