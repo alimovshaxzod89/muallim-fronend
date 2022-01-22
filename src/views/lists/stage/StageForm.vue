@@ -47,6 +47,8 @@
                   v-model="formData.status"
                   hide-details
                   label="AKTIV"
+                  false-value="0"
+                  true-value="1"
                 ></v-checkbox>
               </v-col>
             </v-row>
@@ -114,7 +116,7 @@ export default {
       id: null,
       subject_id: null,
       name: null,
-      status: false,
+      status: "1",
     }
 
     //validation

@@ -10,7 +10,7 @@
     <v-card>
       <v-form ref="form">
         <v-card-title>
-          <span class="headline">Fan qo'shish</span>
+          <span class="headline">Binolar</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -20,7 +20,7 @@
                 <v-text-field
                   label="NOMI"
                   v-model="formData.name"
-                  :items="selectsDatas.subject"
+                  :items="selectsDatas.place"
                   type="text"
                   dense
                   outlined
@@ -57,7 +57,7 @@
 import { mdiPlusCircleOutline } from '@mdi/js'
 
 import store from '@/store'
-import SubjectStoreModule from './SubjectStoreModule'
+import PlaceStoreModule from './PlaceStoreModule'
 
 import axios from '@axios'
 
@@ -65,7 +65,7 @@ import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import Button from '../../components/button/Button'
 
-const MODULE_NAME = 'subject'
+const MODULE_NAME = 'place'
 
 export default {
   components: { Button },
@@ -73,12 +73,12 @@ export default {
   //
   // },
   created() {
-    this.loadSubject()
+    this.loadPlace()
   },
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, SubjectStoreModule)
+      store.registerModule(MODULE_NAME, PlaceStoreModule)
     }
 
     // show, hide
@@ -112,12 +112,12 @@ export default {
     //form options for selects
     const selectsDatas = ref({})
     // ! METHODS
-    const loadSubject = () => {
+    const loadPlace = () => {
       axios
-        .get('/api/subjects', { params: { itemsPerPage: -1 } })
+        .get('/api/places', { params: { itemsPerPage: -1 } })
         .then(response => {
           if (response.data.success) {
-            selectsDatas.value.subject = response.data.data
+            selectsDatas.value.place = response.data.data
           }
         })
         .catch(error => console.log(error))
@@ -181,7 +181,7 @@ export default {
       onSubmit,
       open,
       close,
-      loadSubject,
+      loadPlace,
       emptyFormData,
 
       icons: {

@@ -19,7 +19,7 @@ export default function useRegionList(MODULE_NAME) {
   ]
 
   const filter = ref({
-      first_name: '',
+      query: '',
   })
 
   const options = ref({

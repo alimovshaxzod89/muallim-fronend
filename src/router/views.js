@@ -2,7 +2,7 @@ const views = [
   {
     path: '/main',
     name: 'dashboard-eCommerce',
-    component: () => import('@/views/dashboards/ecommerce/Ecommerce.vue'),
+    component: () => import('@/views/dashboards/crm/Crm.vue'),
     meta: {
       layout: 'content',
       resource: 'Public',
@@ -133,16 +133,27 @@ const views = [
       action: 'read',
     },
   },
-	{
-		path: '/lessons-rooms',
-		name: 'lessons-rooms',
-		component: () => import('@/views/lists/lessons-rooms/LessonsRooms'),
-		meta: {
-			layout: 'content',
-			resource: 'Group',
-			action: 'read',
-		},
-	},
+  {
+    path: '/lessons-rooms',
+    name: 'lessons-rooms',
+    component: () => import('@/views/lists/lessons-rooms/LessonsRooms'),
+    meta: {
+      layout: 'content',
+      resource: 'Group',
+      action: 'read',
+    },
+  },
+  {
+    path: '/places',
+    name: 'places',
+    component: () => import('@/views/lists/place/PlaceList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'Place',
+      action: 'read',
+    },
+  },
+
   // {
   //   path: '/group-times',
   //   name: 'group-times',

@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useSubjectList(MODULE_NAME) {
+export default function usePlaceList(MODULE_NAME) {
 
   const selectedTableData = ref([])
   const notify = ref({})
@@ -72,7 +72,7 @@ export default function useSubjectList(MODULE_NAME) {
 
   watch(filter, () => {
     if (options.value.page != 1) options.value.page
-      options.value.page = 1
+      options.value = true
 
       setTimeout(() => fetchDatas(), 1000);
   }, {deep: true})

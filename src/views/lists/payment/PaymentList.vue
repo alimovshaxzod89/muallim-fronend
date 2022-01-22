@@ -152,7 +152,7 @@
 
 			<v-spacer></v-spacer>
 			<div v-if="state.rows.length > 0">
-				<v-btn v-if="$can('create', 'Room')" class="success exportXlsx" color="white" outlined @click="ExportExcel()">Xlsx formatda yuklab olish</v-btn>
+				<v-btn v-if="$can('create', 'Room')" class="success exportXlsx" color="white" outlined @click="ExportExcel()">Jadvalni yuklab olish</v-btn>
 			</div>
     </v-card-text>
 

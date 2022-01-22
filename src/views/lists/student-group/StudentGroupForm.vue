@@ -129,6 +129,8 @@
                   v-model="formData.status"
                   hide-details
                   label="AKTIV"
+                  false-value="0"
+                  true-value="1"
                 ></v-checkbox>
               </v-col>
             </v-row>
@@ -212,7 +214,7 @@ export default {
       group_id: null,
       begin_date: null,
       end_date: null,
-      status: true,
+      status: "1",
     }
 
     const picker = new Date().toISOString().substr(0, 10)
