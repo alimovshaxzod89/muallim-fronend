@@ -60,7 +60,7 @@
 
 							<v-col cols="6">
                 <v-autocomplete
-                  v-model="formData.month"
+                  v-model="formData.payment_id"
                   :items="monthsYears"
                   item-text="value"
                   item-value="id"
@@ -131,7 +131,7 @@ import moment from 'moment'
 
 require('moment/locale/uz-latn')
 
-import { ref, onMounted } from '@vue/composition-api'
+import { ref, onMounted, watch } from '@vue/composition-api'
 
 export default {
   props: {
@@ -152,7 +152,6 @@ export default {
       id: null,
       subject_id: null,
       student_id: null,
-      month: null,
       payment_id: null,
       group_id: null,
       amount: null,
@@ -248,7 +247,10 @@ export default {
 
     const groups = ref(null)
     const loadGroups = () => {
-      axios.get('/api/groups').then(response => {
+      const params = {}
+      if (formData.value.subject_id) params.subject_id = formData.value.subject_id
+
+      axios.get('/api/groups', { params }).then(response => {
         if (response.data.success) {
           groups.value = response.data.data
         }
@@ -257,7 +259,10 @@ export default {
 
     const students = ref(null)
     const loadStudents = () => {
-      axios.get('/api/students').then(response => {
+      const params = {}
+      if (formData.value.group_id) params.group_id = formData.value.group_id
+
+      axios.get('/api/students', { params }).then(response => {
         if (response.data.success) {
           students.value = response.data.data
         }
@@ -292,10 +297,9 @@ export default {
               }
             } else {
               // year, month mosini tanlash
-
-              if (selectedYear.value == year && selectedMonth.value == month) {
-                formData.value.payment_id = item.id
-              }
+              // if (selectedYear.value == year && selectedMonth.value == month) {
+              //   formData.value.payment_id = item.id
+              // }
             }
 
             const payment = {
@@ -311,12 +315,27 @@ export default {
       })
     }
 
+    // ! Created
     onMounted(() => {
       loadSubjects()
       loadGroups()
       loadStudents()
       loadPayments()
     })
+
+    // ! Watch
+    watch(
+      () => formData.value.subject_id,
+      () => loadGroups(),
+    )
+    watch(
+      () => formData.value.group_id,
+      () => loadStudents(),
+    )
+    watch(
+      () => formData.value.student_id,
+      () => loadPayments(),
+    )
 
     return {
       isDate,
