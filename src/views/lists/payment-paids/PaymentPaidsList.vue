@@ -167,8 +167,8 @@
 				<payment-paids-form
 					ref="PaymentPaidsForm"
 					:MODULE_NAME="MODULE_NAME"
-					v-on:refresh-list="$emit('refresh-list')"
-					v-on:delete-row="$emit('delete-row')"
+					v-on:refresh-list="$emit('refresh-list'), fetchDatas(true)"
+					v-on:delete-row="$emit('delete-row'), fetchDatas(true)"
 					v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
 				/>
   </v-dialog>
@@ -411,6 +411,7 @@ export default {
       close,
       BASE_URL,
       state,
+      fetchDatas,
 
       // Loads
       subjects,

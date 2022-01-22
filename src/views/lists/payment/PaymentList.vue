@@ -265,7 +265,7 @@ import PaymentForm from './PaymentForm.vue'
 import PaymentPaidsList from '@/views/lists/payment-paids/PaymentPaidsList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
-const MODULE_NAME = 'student'
+const MODULE_NAME = 'payment'
 
 export default {
   components: {
