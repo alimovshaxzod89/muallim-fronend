@@ -30,6 +30,7 @@ export default function useStudentDeptList(MODULE_NAME) {
     sortDesc: [true],
     limit: 10,
     skip: 0,
+    only_dept: 1,
   })
   const loading = ref(false)
 
