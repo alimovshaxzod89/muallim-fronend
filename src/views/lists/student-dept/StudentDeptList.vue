@@ -166,6 +166,8 @@
           </v-tooltip>
         </div>
       </template>
+
+      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
@@ -187,6 +189,7 @@ import {
 import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
+import numeral from 'numeral'
 
 import envParams from '@envParams'
 
@@ -203,6 +206,11 @@ export default {
   components: {
     DialogConfirm,
   },
+  filters: {
+		date: value => moment(value).format('D MMMM YYYY'),
+		summa: value => numeral(value).format('0,0'),
+		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
+	},
   setup() {
 
     // Register module

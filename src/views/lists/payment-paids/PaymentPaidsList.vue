@@ -83,6 +83,8 @@
 											</v-tooltip>
 										</div>
 									</template>
+
+                  <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
 								</v-data-table>
 							</div>
 						</v-col>
@@ -128,6 +130,8 @@ import { useRouter } from '@core/utils'
 
 import envParams from '@envParams'
 import XLSX from 'xlsx'
+import numeral from 'numeral'
+numeral.locale('ru')
 
 // store module
 import PaymentPaidsStoreModule from './PaymentPaidsStoreModule'
@@ -142,6 +146,11 @@ export default {
     PaymentPaidsForm,
     DialogConfirm,
   },
+  filters: {
+		date: value => moment(value).format('D MMMM YYYY'),
+		summa: value => numeral(value).format('0,0'),
+		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
+	},
   setup(props, { emit }) {
     const MODULE_NAME = 'payment-paids'
     const BASE_URL = envParams.BASE_URL

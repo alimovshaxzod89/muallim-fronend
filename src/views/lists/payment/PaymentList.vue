@@ -185,11 +185,11 @@
       </template>
 
 			<template #[`item.paid`]="{ item }">
-				<v-btn outlined color="success" title="To'lov amalga oshirish uchun bosing" @click="openPaymentPaidsList(item)">{{item.paid}}</v-btn>
+				<v-btn outlined color="success" title="To'lov amalga oshirish uchun bosing" @click="openPaymentPaidsList(item)">{{item.paid | summa}}</v-btn>
       </template>
 
 			<template #[`item.dept`]="{ item }">
-				{{item.amount - item.paid}}
+				{{item.amount - item.paid | summa}}
       </template>
 
       <template #[`item.month`]="{ item }">
@@ -249,6 +249,8 @@ import { onMounted, ref } from '@vue/composition-api'
 
 import store from '@/store'
 import axios from '@axios'
+import numeral from 'numeral'
+numeral.locale('ru')
 
 import envParams from '@envParams'
 
@@ -271,6 +273,11 @@ export default {
     PaymentPaidsList,
     DialogConfirm,
   },
+  filters: {
+		date: value => moment(value).format('D MMMM YYYY'),
+		summa: value => numeral(value).format('0,0'),
+		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
+	},
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {

@@ -67,7 +67,7 @@
 
       <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
 
-      <template #[`item.amount`]="{ item }"> {{ item.amount | numeral('0,0') }}</template>
+      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
@@ -97,6 +97,7 @@ import DialogConfirm from '../../components/DialogConfirm.vue'
 
 import moment from 'moment'
 moment.locale('uz-latn')
+
 import numeral from 'numeral'
 numeral.locale('ru')
 
@@ -108,10 +109,10 @@ export default {
     DialogConfirm,
   },
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		sum: value => numeral(value).format('0,0'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    date: value => moment(value).format('D MMMM YYYY'),
+    summa: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {

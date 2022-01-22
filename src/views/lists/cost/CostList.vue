@@ -65,6 +65,8 @@
         </div>
       </template>
 
+      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+
       <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
     </v-data-table>
 
@@ -85,6 +87,9 @@ import store from '@/store'
 import moment from 'moment'
 moment.locale('uz-latn')
 
+import numeral from 'numeral'
+numeral.locale('ru')
+
 import envParams from '@envParams'
 
 // store module
@@ -104,7 +109,7 @@ export default {
   },
   filters: {
 		date: value => moment(value).format('D MMMM YYYY'),
-		// sum: value => numeral(value).format('0,0'),
+		summa: value => numeral(value).format('0,0'),
 		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
 	},
   setup() {
