@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="align-start">
-      <span>Sales Overview</span>
+      <span>Oylik tushum sarhisobi</span>
       <v-spacer></v-spacer>
 
       <v-btn
@@ -49,7 +49,7 @@
             </v-avatar>
             <div class="ms-4 d-flex flex-column">
               <p class="text--primary mb-0 text-base">
-                Number of Sales
+                Joriy oy olinishi kerak
               </p>
               <span class="text--primary font-weight-semibold text-xl">$86,400</span>
             </div>
@@ -62,14 +62,14 @@
               <td>
                 <div class="mb-0">
                   <div class="stats-dot primary d-inline-block rounded-circle me-2"></div>
-                  <span>Apparel</span>
+                  <span>Tushum</span>
                 </div>
                 <span class="text-base text--primary font-weight-semibold ms-4">$1,840</span>
               </td>
               <td>
                 <div class="mb-0">
                   <div class="stats-dot primary d-inline-block rounded-circle me-2"></div>
-                  <span>Electronic</span>
+                  <span>Ustozlarga</span>
                 </div>
                 <span class="text-base text--primary font-weight-semibold ms-4">$11,420</span>
               </td>
@@ -78,14 +78,14 @@
               <td>
                 <div class="mb-0">
                   <div class="stats-dot primary d-inline-block rounded-circle me-2"></div>
-                  <span>FMCG</span>
+                  <span>Haftalik </span>
                 </div>
                 <span class="text-base text--primary font-weight-semibold ms-4">$30,234</span>
               </td>
               <td>
                 <div class="mb-0">
                   <div class="stats-dot secondary d-inline-block rounded-circle me-2"></div>
-                  <span>Other Sales</span>
+                  <span>Olinishi zarur</span>
                 </div>
                 <span class="text-base text--primary font-weight-semibold ms-4">$46,054</span>
               </td>
@@ -109,7 +109,7 @@ export default {
     const $vuetify = getVuetify()
 
     const chartOptions = {
-      labels: ['Apparel', 'Electronics', 'FMCG', 'Other Sales', 'Alt'],
+      labels: ['Tushum', 'Ustozlarga', 'Haftalik', 'Olinishi zarur', 'Alt'],
       colors: [
         $vuetify.theme.currentTheme.primary,
         addAlpha($vuetify.theme.currentTheme.primary, 0.7),
@@ -143,7 +143,7 @@ export default {
               },
               total: {
                 show: true,
-                label: 'Weekly Visits',
+                label: 'Bugungi tushum',
                 color: 'rgba(94, 86, 105, 0.68)',
                 formatter(value) {
                   return `${value.globals.seriesTotals.reduce((total, num) => total + num)}k`

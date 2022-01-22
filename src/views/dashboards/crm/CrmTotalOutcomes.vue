@@ -3,7 +3,7 @@
     <v-card-title class="align-start flex-nowrap">
       <div>
         <p class="text-sm font-weight-semibold mb-2 ">
-          Markaz Daromadi
+          Markaz Xarajatlari
         </p>
         <p class="text-no-wrap">
           <span class="text-2xl font-weight-semibold me-1">$21,845</span>
@@ -86,7 +86,7 @@ export default {
         curve: 'smooth',
         lineCap: 'round',
       },
-      colors: [$vuetify.theme.currentTheme.primary],
+      colors: [$vuetify.theme.currentTheme.warning],
       legend: {
         show: false,
       },
