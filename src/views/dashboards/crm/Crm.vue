@@ -104,8 +104,6 @@
 				<crm-total-outcomes></crm-total-outcomes>
 			</v-col>
 
-
-
       <v-col
         cols="12"
         md="6"
@@ -114,6 +112,15 @@
       >
         <crm-sales-overview></crm-sales-overview>
       </v-col>
+
+			<v-col
+				cols="12"
+				md="6"
+				sm="12"
+				order="6"
+			>
+				<crm-subjects-overview></crm-subjects-overview>
+			</v-col>
     </v-row>
 
 <!--    <v-row>-->
@@ -183,6 +190,7 @@ import CrmCardUpgradePlan from './CrmCardUpgradePlan.vue'
 import CrmCardMeetingSchedule from './CrmCardMeetingSchedule.vue'
 import CrmCardDeveloperMeetup from './CrmCardDeveloperMeetup.vue'
 import CrmTotalOutcomes from '@/views/dashboards/crm/CrmTotalOutcomes'
+import CrmSubjectsOverview from '@/views/dashboards/crm/CrmSubjectsOverview'
 
 export default {
   components: {
@@ -200,6 +208,7 @@ export default {
     CrmCardUpgradePlan,
     CrmCardMeetingSchedule,
     CrmCardDeveloperMeetup,
+		CrmSubjectsOverview
   },
   setup() {
     // card with images
@@ -222,11 +231,11 @@ export default {
       avatarWidth: '86',
     }
 		const sessionsOptions2 = {
-			statTitle: 'Binolar',
+			statTitle: 'Lidlar',
 			statistics: '24.5k',
 			change: '-22%',
-			chipText: '2022-yil',
-			chipColor: 'primary',
+			chipText: '200tasi  olib qolingan',
+			chipColor: 'success',
 			avatar: require('@/assets/images/avatars/9.png'),
 			avatarWidth: '111',
 		}

@@ -227,6 +227,8 @@
 
 		<payment-paids-list
       ref="paymentPaidsList"
+			v-on:refresh-list="fetchDatas(true)"
+			v-on:delete-row="fetchDatas(true)"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -265,7 +267,7 @@ import PaymentForm from './PaymentForm.vue'
 import PaymentPaidsList from '@/views/lists/payment-paids/PaymentPaidsList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
-const MODULE_NAME = 'student'
+const MODULE_NAME = 'payment'
 
 export default {
   components: {
@@ -298,6 +300,7 @@ export default {
       filter,
       tableColumns,
       deleteRow,
+      fetchDatas,
 
       options,
       loading,
@@ -479,6 +482,7 @@ export default {
       totalDebt,
       paymentPaidsList,
       openPaymentPaidsList,
+      fetchDatas,
 
       picker,
       isDate,
