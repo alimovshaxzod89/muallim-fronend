@@ -137,14 +137,9 @@ import store from '@/store'
 import axios from '@axios'
 
 import { ref, onMounted } from '@vue/composition-api'
+const MODULE_NAME = 'group-time'
 
 export default {
-  props: {
-    MODULE_NAME: {
-      type: String,
-      required: true,
-    },
-  },
   setup(props, { emit }) {
     //show, hide
 
@@ -162,7 +157,7 @@ export default {
     const open = (item = null, group_id = null) => {
       show.value = true
       if (item) {
-        formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](item.id)))
+        formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](item.id)))
       }
       if (group_id) {
         formData.value.group_id = group_id
@@ -178,7 +173,7 @@ export default {
       if (formData.value.id) {
         if (formData.value.week_day && formData.value.room_id) {
           store
-            .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -198,7 +193,7 @@ export default {
         //create
         if (formData.value.week_day && formData.value.room_id) {
           store
-            .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })

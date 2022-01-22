@@ -282,7 +282,7 @@ import GroupStoreModule from './GroupStoreModule'
 // composition function
 import useGroupList from './useGroupList'
 import GroupForm from './GroupForm'
-import GroupTimeList from '@/views/lists/group-time/GroupTimeList.vue'
+import GroupTimeList from '@/views/lists/group-time/crud/GroupTimeList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 const MODULE_NAME = 'group'
