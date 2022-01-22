@@ -275,7 +275,14 @@ export default {
     // Form
     const PaymentPaidsForm = ref(null)
     const openPaidsForm = item => {
-      PaymentPaidsForm.value.open(item)
+      const data = {
+        // subject_id: filter.value.subject_id ? filter.value.subject_id.id : null,
+        student_id: filter.value.student_id ? filter.value.student_id : null,
+        group_id: filter.value.group_id ? filter.value.group_id : null,
+        payment_id: filter.value.payment_id ? filter.value.payment_id : null,
+      }
+
+      PaymentPaidsForm.value.open(item, data)
     }
 
     //Delete Confirm Dialog

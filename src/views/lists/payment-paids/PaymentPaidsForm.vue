@@ -158,7 +158,7 @@ export default {
       date: null,
     }
     const formData = ref({ ...emptyFormData })
-    const open = (item = null) => {
+    const open = (item = null, data = null) => {
       show.value = true
       if (item) {
         formData.value = {
@@ -166,6 +166,12 @@ export default {
           subject_id: item.payment.group.subject_id,
           group_id: item.payment.group.id,
           student_id: item.payment.student_id,
+        }
+      }
+
+      if (!item && data) {
+        formData.value = {
+          ...data,
         }
       }
     }
@@ -183,7 +189,7 @@ export default {
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
-              // emit('refresh-list')
+              emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
@@ -203,7 +209,7 @@ export default {
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
-              // emit('refresh-list')
+              emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
