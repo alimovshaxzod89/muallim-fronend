@@ -14,6 +14,23 @@ export default {
       const index = getters.indexIds.indexOf(parseInt(id))
       return state.rows[index]
     },
+		indexCalendar(state) {
+			return state.rows.map(el => {
+
+				let date = el.begin_date
+
+				//agar oldingi oydan o'tib kelayotgan bulsa, kalendarda tanlangan oyning 1-sidan qilib kalendarda ko'rsatilsin
+				const date1 = new Date(el.begin_date)
+				const month1 = date1.getMonth() + 1
+				const year = date1.getFullYear()
+				if (month1 != state.month) {
+					const month = String(state.month).padStart(2, '0')
+					date = `${year}-${month}-01`
+				}
+
+				return `${time}_${el.room_id}`
+			})
+		},
   },
   mutations: {
     setRows(state, payload) {

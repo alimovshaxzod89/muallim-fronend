@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="align-start">
-      <span class="font-weight-semibold">Statistika</span>
+      <span class="font-weight-semibold">Qarzdorlar</span>
 
       <v-spacer></v-spacer>
 
@@ -16,22 +16,21 @@
       </v-btn>
     </v-card-title>
 
-    <v-card-subtitle class="mb-7">
+    <v-card-subtitle class='mb-1'>
 
 			<div class='row justify-content-between'>
 				<div class='col'><v-select
 					:items="years"
-					label="Yil"
+					v-model='selectedYear'
+
 					outlined
 				></v-select> </div>
 				<div class='col'><v-select
 					:items="monthes"
-					label="Oy"
+					v-model='selectedMonth'
 					outlined
 				></v-select></div>
 			</div>
-			<span class="font-weight-semibold text--primary me-1">Umumiy 48.5% o'sish</span>
-			<span>😎 joriy oy</span>
     </v-card-subtitle>
 
     <v-card-text>
@@ -45,26 +44,19 @@
         >
           <v-avatar
             size="44"
-            :color="resolveStatisticsIconVariation (data.title).color"
+            :color="resolveStatisticsIconVariation (data.title)"
             rounded
             class="elevation-1"
           >
-            <v-icon
-              dark
-              color="white"
-              size="30"
-            >
-              {{ resolveStatisticsIconVariation (data.title).icon }}
-            </v-icon>
           </v-avatar>
 
           <div class="ms-3">
             <p class="text-xs mb-0">
               {{ data.title }}
             </p>
-            <h3 class="text-xl font-weight-bold">
+            <h2 class=" font-weight-bold bg-primary">
               {{ data.total }}
-            </h3>
+            </h2>
           </div>
         </v-col>
       </v-row>
@@ -78,6 +70,8 @@ import { mdiAccountOutline, mdiTrendingUp, mdiDotsVertical, mdiLabelOutline, mdi
 
 export default {
   setup() {
+		const selectedYear = '2022'
+		const selectedMonth = 'Yanvar'
 		const years = ['2020', '2021', '2022']
 		const monthes = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr']
 
@@ -121,6 +115,8 @@ export default {
 
     return {
       statisticsData,
+			selectedYear,
+			selectedMonth,
 			years,
 			monthes,
       resolveStatisticsIconVariation,

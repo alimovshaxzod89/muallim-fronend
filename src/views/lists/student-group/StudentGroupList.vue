@@ -65,6 +65,17 @@
         </div>
       </template>
 
+      <template #[`item.group_id`]="{ item }"> 
+        {{ item.group_id | numeral('0,0') }}
+      </template>
+
+      <template #[`item.begin_date`]="{ item }"> 
+        {{ item.begin_date | date }}
+      </template>
+      <template #[`item.end_date`]="{ item }"> 
+        {{ item.end_date | date }}
+      </template>
+
       <template #[`item.status`]="{ item }">
           {{item.status ? 'ha' : 'yo\'q'}}
       </template>
@@ -82,8 +93,11 @@
 <script>
 import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
 
+
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
+import moment from 'moment'
+moment.locale('uz-latn')
 
 import envParams from '@envParams'
 
@@ -95,6 +109,9 @@ import useStudentGroupList from './useStudentGroupList'
 import StudentGroupForm from './StudentGroupForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
+import numeral from 'numeral'
+numeral.locale('ru')
+
 const MODULE_NAME = 'studentGroup'
 
 export default {
@@ -102,6 +119,11 @@ export default {
     StudentGroupForm,
     DialogConfirm,
   },
+  filters: {
+		date: value => moment(value).format('D MMMM YYYY'),
+		sum: value => numeral(value).format('0,0'),
+		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
+	},
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
