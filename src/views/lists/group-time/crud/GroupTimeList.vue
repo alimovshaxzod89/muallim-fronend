@@ -111,7 +111,7 @@ import store from '@/store'
 import envParams from '@envParams'
 
 // store module
-import GroupTimeStoreModule from './GroupTimeStoreModule'
+import GroupTimeStoreModule from '../GroupTimeStoreModule'
 
 // composition function
 import useGroupTimeList from './useGroupTimeList'

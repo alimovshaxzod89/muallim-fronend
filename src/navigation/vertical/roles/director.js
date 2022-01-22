@@ -64,13 +64,13 @@ export default [
     resource: 'Public',
     action: 'read',
   },
-  {
-    title: 'Darslar va xonalar',
-    icon: mdiAccountDetailsOutline,
-    to: '',
-    resource: 'Public',
-    action: 'read',
-  },
+	{
+		title: 'Guruh vaqtlari',
+		icon: mdiAccountDetailsOutline,
+		to: 'group-times',
+		resource: 'GroupTime',
+		action: 'read',
+	},
   {
     title: 'Lidlar',
     icon: mdiAccountDetailsOutline,

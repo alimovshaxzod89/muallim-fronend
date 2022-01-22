@@ -4,9 +4,10 @@
 		<template v-slot:default>
 			<thead>
 			<tr>
-				<th>#</th>
+				<th>Xona / Soat</th>
 				<th v-for='time in times'
 						:key='time.hour'
+						style='text-align: left !important;'
 				>
 					{{ time.time }}
 				</th>
@@ -57,17 +58,16 @@ export default {
 	name: 'LessonsRooms',
 	setup() {
 		let times = ref([])
-		for (let hour = 8; hour <= 23.5; hour += 0.5) {
-			times.value.push({ time: moment.utc(hour * 3600 * 1000).format('H:mm'), hour })
+		for (let hour = 6; hour <= 23; hour += 1) {
+			times.value.push({ time: moment.utc(hour * 3600 * 1000).format('H'), hour })
 		}
 
 		const rooms = ref([{ id: 1, name: '1x' }, { id: 2, name: '2x' }, { id: 3, name: '3x' }])
-		const newArray = groupTimes.filter(function (el)
-			{
-				return el.time_begin >=15 &&
-					el.time_end <= 200;
-			}
-		);
+		// const newArray = groupTimes.filter(function (el) {
+		// 		return el.time_begin >=15 &&
+		// 			el.time_end <= 200;
+		// 	}
+		// );
 		const groupTimes = ref([
 			{
 				"id": 6,
@@ -107,7 +107,7 @@ export default {
 			times,
 			rooms,
 			groupTimes,
-			newArray,
+			// newArray,
 		}
 	},
 }
