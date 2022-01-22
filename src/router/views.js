@@ -154,16 +154,16 @@ const views = [
     },
   },
 
-  // {
-  //   path: '/group-times',
-  //   name: 'group-times',
-  //   component: () => import('@/views/lists/group-time/GroupTimeList.vue'),
-  //   meta: {
-  //     layout: 'content',
-  //     resource: 'GroupTime',
-  //     action: 'read',
-  //   },
-  // },
+  {
+    path: '/group-times',
+    name: 'group-times',
+    component: () => import('@/views/lists/group-time/GroupTime.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'GroupTime',
+      action: 'read',
+    },
+  },
   {
     path: '/center-profit',
     name: 'center-profit',

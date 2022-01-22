@@ -212,8 +212,8 @@
       </template>
 
 			<template #[`item.begin_date`]="{ item }">
-				{{item.begin_date}} <br>
-				<b>{{ item.end_date }}</b>
+				{{item.begin_date | date}} <br>
+				<b>{{ item.end_date | date}}</b>
       </template>
 
 			<template #[`item.group_times`]="{ item }" >
@@ -232,6 +232,9 @@
 					</v-simple-table>
 				</div>
       </template>
+
+      <!-- <template #[`item.begin_date`]="{ item }"> {{ item.begin_date | date }}</template>
+      <template #[`item.end_date`]="{ item }"> {{ item.end_date | date }}</template> -->
 
     </v-data-table>
 
@@ -268,6 +271,8 @@ import {
 import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
+import moment from 'moment'
+moment.locale('uz-latn')
 
 import envParams from '@envParams'
 
@@ -277,7 +282,7 @@ import GroupStoreModule from './GroupStoreModule'
 // composition function
 import useGroupList from './useGroupList'
 import GroupForm from './GroupForm'
-import GroupTimeList from '@/views/lists/group-time/GroupTimeList.vue'
+import GroupTimeList from '@/views/lists/group-time/crud/GroupTimeList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 const MODULE_NAME = 'group'
@@ -288,6 +293,11 @@ export default {
     GroupTimeList,
     DialogConfirm,
   },
+  filters: {
+		date: value => moment(value).format('D MMMM YYYY'),
+		// sum: value => numeral(value).format('0,0'),
+		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
+	},
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {

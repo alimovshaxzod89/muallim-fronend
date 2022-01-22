@@ -26,7 +26,6 @@
 									required
                   outlined
                   dense
-                  required
                 ></v-text-field>
               </v-col>
 
@@ -38,7 +37,7 @@
                   item-text="name"
                   item-value="id"
                   label="FAN"
-									required
+									:rules="selectRule"
                   dense
                   outlined
                   clearable
@@ -68,7 +67,7 @@
                   item-text="full_name"
                   item-value="id"
                   label="USTOZ"
-                  required
+                  :rules="selectRule"
                   dense
                   outlined
                   clearable
@@ -257,6 +256,7 @@ export default {
     const isDate = ref(false)
     const isDate2 = ref(false)
 
+    const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     const validate = () => {
       form.value.validate()
     }
@@ -387,6 +387,7 @@ export default {
       validate,
       show,
       onSubmit,
+      selectRule,
       open,
       close,
       subjects,
