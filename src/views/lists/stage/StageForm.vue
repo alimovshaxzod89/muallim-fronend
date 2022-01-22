@@ -17,6 +17,7 @@
           <v-container>
             <v-row>
               <v-col cols="12">
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.subject_id"
                   :items="selectsDatas.subject"
@@ -40,6 +41,7 @@
                   dense
                   outlined
                   hide-details
+                  :rules="[required]"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">

@@ -17,6 +17,7 @@
           <v-container>
             <v-row>
               <v-col cols="12">
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.teacher_id"
                   :items="selectsDatas.teacher"

@@ -24,7 +24,7 @@
                   v-model="formData.first_name"
                   outlined
                   dense
-                  required
+                  :rules="[required]"
                 ></v-text-field>
               </v-col>
 
@@ -36,7 +36,7 @@
                   v-model="formData.last_name"
                   outlined
                   dense
-                  required
+                  :rules="[required]"
                 ></v-text-field>
               </v-col>
 
@@ -47,7 +47,6 @@
                   v-model="formData.middle_name"
                   outlined
                   dense
-                  required
                 ></v-text-field>
               </v-col>
 
@@ -59,7 +58,6 @@
                   v-model="formData.phone"
                   outlined
                   dense
-                  required
                 ></v-text-field>
               </v-col>
 
@@ -146,6 +144,7 @@
 									column
                   hide-details=""
 									class="mt-0"
+                  required
 								>
 									<v-radio
 										label="Erkak"

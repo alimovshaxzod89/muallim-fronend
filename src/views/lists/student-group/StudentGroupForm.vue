@@ -18,6 +18,7 @@
             <v-row>
               <v-col cols="6">
                 <v-list-item-title>Talaba</v-list-item-title>
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.student_id"
                   :items="selectsDatas.student"
@@ -29,6 +30,7 @@
                   hide-details
                   clearable
                   :rules="selectRule"
+                  required
                 >
                   <template v-slot:append-outer>
                     <v-btn
@@ -47,6 +49,7 @@
               </v-col>
               <v-col cols="6">
                 <v-list-item-title>Guruh</v-list-item-title>
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.group_id"
                   :items="selectsDatas.group"

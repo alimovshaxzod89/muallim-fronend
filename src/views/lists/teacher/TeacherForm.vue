@@ -48,7 +48,6 @@
                   dense
                   outlined
                   hide-details
-                  required
                 ></v-text-field>
               </v-col>
               <v-col cols="6">
@@ -60,7 +59,6 @@
                   dense
                   outlined
                   hide-details
-                  required
                 ></v-text-field>
               </v-col>
               <v-col cols="6">
@@ -85,7 +83,6 @@
                     dense
                     outlined
                     hide-details
-                    required
                     height="80px"
                   >
                   </v-textarea>
@@ -112,7 +109,6 @@
                     dense
                     outlined
                     hide-details
-                    required
                     height="80px"
                   >
                   </v-textarea>
