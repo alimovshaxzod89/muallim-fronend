@@ -9,7 +9,7 @@
 							:key='time.hour'
 							style='text-align: left !important;'
 					>
-						{{ time.time }}
+						{{ time.hour }}
 					</th>
 				</tr>
 				</thead>
@@ -21,18 +21,17 @@
 
 						<td
 							v-for="time in times"
-							:key="time"
+							:key="time.hour"
 						>
 							<div
 								style="position: relative; height: 100%; margin-top: 5px; width: 50px;"
 								class="cell"
-								v-if="getters[`${MODULE_NAME}/indexCalendar`].includes(`${date}_${room.id}`)"
+								v-if="getters[`${MODULE_NAME}/indexCalendar`].includes(`${time}_${room.id}`)"
 							>
 								<calendar-cell
-									:group-time="stateGroupTime.rows[getters[`group-time/indexCalendar`].indexOf(`${date}_${room.id}`)]"
-									:date="date"
+									:group-time="stateGroupTime.rows[getters[`group-time/indexCalendar`].indexOf(`${time}_${room.id}`)]"
+									:time="time"
 									:room_id="room.id"
-									:month-last-date="dates.length"
 									v-on:open-group-time-form="openGroupTimeForm($event)"
 								/>
 							</div>
@@ -40,8 +39,8 @@
 							<div
 								style="position: relative; height: 100%; margin-top: 5px; width: 50px;"
 								class="cell"
-								v-if="!getters[`${MODULE_NAME}/indexCalendar`].includes(`${date}_${room.id}`)"
-								@dblclick="openGroupTimeForm(null, {place_id, room_id: room.id, begin_date: date})"
+								v-if="!getters[`${MODULE_NAME}/indexCalendar`].includes(`${time}_${room.id}`)"
+								@dblclick="openGroupTimeForm(null, {place_id, room_id: room.id, time_begin: time})"
 							>
 							</div>
 						</td>
@@ -73,16 +72,12 @@ export default {
     GroupTimeForm,
   },
   props: {
-    year: {
-      type: Number | String,
-      require: true,
-    },
-    month: {
-      type: Number | String,
+    day: {
+      type: Number,
       require: true,
     },
     place_id: {
-      type: Number | String,
+      type: Number,
       require: true,
     },
   },
@@ -100,11 +95,9 @@ export default {
 
     const vm = getCurrentInstance().proxy
 
-    const dates = ref([])
-
 		let times = ref([])
 		for (let hour = 6; hour <= 23; hour += 1) {
-			times.value.push({ time: moment.utc(hour * 3600 * 1000).format('H'), hour })
+			times.value.push({ time: moment.utc(hour * 3600 * 1000).format('H:mm'), hour })
 		}
 
     onMounted(() => {

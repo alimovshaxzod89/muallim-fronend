@@ -25,19 +25,6 @@
 							}}</h2>
 					</div>
 					<div>
-						<!--					<div style="margin-top: 12px; margin-left: 10px">-->
-						<!--						<v-select-->
-						<!--							v-model="filter.year"-->
-						<!--							:items="years"-->
-						<!--							item-text="name"-->
-						<!--							item-value="id"-->
-						<!--							label="Йил"-->
-						<!--							outlined-->
-						<!--							dense-->
-						<!--							class="align-start"-->
-						<!--							style="width: 200px"-->
-						<!--						></v-select>-->
-						<!--					</div>-->
 
 						<div class='month'>
 							<v-btn
@@ -45,11 +32,10 @@
 								:key='dayIndex'
 								style='margin-right: 5px; margin-bottom: 5px'
 								width='100'
-								:outlined='filter.weekDays.indexOf(dayIndex) === -1'
+								:outlined='filter.weekDays.indexOf(parseInt(dayIndex)) === -1'
 								color='primary'
 								small
-								@click='setWeekDays(dayIndex)'
-								@click.ctrl='setWeekDays(dayIndex)'
+								@click='setWeekDays(parseInt(dayIndex))'
 							>
 								{{ day }}
 							</v-btn>
@@ -60,13 +46,16 @@
 			</div>
 
 			<br>
-			<calendar
-				v-if='filter.year && filter.month && filter.place_id'
-				ref='calendar'
-				:year='filter.year'
-				:month='filter.month'
-				:place_id='filter.place_id'
-			/>
+			<div v-for='day in filter.weekDays'>
+				<h2>{{ weekDays[day] }}</h2>
+				<calendar
+					v-if='filter.place_id'
+					:day='day'
+					:place_id='filter.place_id'
+				/>
+				<br />
+			</div>
+
 
 		</div>
 
@@ -78,19 +67,17 @@ import { useRouter } from '@core/utils'
 import SelectPlace from './SelectPlace'
 
 import { onMounted, ref, watch } from '@vue/composition-api'
-import Button from '@/views/components/button/Button'
-import moment from 'moment'
 import Calendar from './calendar/Calendar'
 import store from '@/store'
 import GroupTimeStoreModule from './GroupTimeStoreModule'
 import { mdiArrowLeft } from '@mdi/js'
 import axios from '@axios'
+import moment from 'moment'
 
 const MODULE_NAME = 'group-time'
 
 export default {
 	components: {
-		Button,
 		SelectPlace,
 		Calendar,
 	},
@@ -128,6 +115,7 @@ export default {
 		loadPlaces()
 
 		const selectPlace = id => {
+			console.log(id, typeof id)
 			filter.value.place_id = id
 
 			router.push({
@@ -140,19 +128,33 @@ export default {
 
 		//filters
 		const filter = ref({
-			year: parseInt(moment()
-				.format('YYYY')),
-			month: parseInt(moment()
-				.format('M')),
 			place_id: null,
-			weekDays: []
+			weekDays: [],
 		})
-		const weekDays = {1: 'Dushanba', 2: 'Seshanba', 3: 'Chorshanba', 4: 'Payshanba', 5: 'Juma', 6: 'Shanba', 7: 'Yakshanba'}
+
+		filter.value.weekDays.push(parseInt(moment().format('e')))
+
+		const weekDays = {
+			1: 'Dushanba',
+			2: 'Seshanba',
+			3: 'Chorshanba',
+			4: 'Payshanba',
+			5: 'Juma',
+			6: 'Shanba',
+			7: 'Yakshanba',
+		}
 		const setWeekDay = day => {
 			filter.value.weekDays = [day]
 		}
 		const setWeekDays = day => {
-			filter.value.weekDays.push(day)
+			if (filter.value.weekDays.indexOf(day) !== -1) {
+				//remove
+				const pos = filter.value.weekDays.indexOf(day)
+				filter.value.weekDays.splice(pos, 1)
+			} else {
+				//add
+				filter.value.weekDays.push(day)
+			}
 		}
 		watch(
 			filter,
@@ -162,7 +164,7 @@ export default {
 					weekDays,
 				} = value
 
-				if (place_id && weekDays) {
+				if (place_id && weekDays.length > 0) {
 					store
 						.dispatch(`${MODULE_NAME}/fetchDatas`, filter.value)
 						.then(() => {
@@ -185,9 +187,6 @@ export default {
 			places,
 			selectPlace,
 			filter,
-			// years,
-			// months,
-			// setMonth,
 			weekDays,
 			setWeekDays,
 			setWeekDay,
@@ -201,16 +200,6 @@ export default {
 </script>
 
 <style scoped>
-.switchbutton {
-	margin-bottom: -20px;
-	margin-top: -20%;
-	margin-left: 75%;
-}
-
-.switchbutton1 {
-	width: 600px;
-	margin-top: 10%;
-}
 
 .month {
 	width: 140%;
