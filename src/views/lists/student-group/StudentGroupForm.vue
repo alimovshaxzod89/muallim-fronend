@@ -143,16 +143,24 @@
           <v-btn color="success" type="submit" @click.prevent="onSubmit"> Saqlash</v-btn>
         </v-card-actions>
       </v-form>
+
+      <template #[`item.begin_date`]="{ item }"> {{ item.begin_date | date }}</template>
     </v-card>
 
   <student-form ref="studentForm" v-on:add-student-to-options="addStudentToOptions($event)" />
   <group-form ref="groupForm" v-on:add-group-to-options="addGroupToOptions($event)" />
 
+
+  
   </v-dialog>
 </template>
 
 <script>
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
+
+// formats
+import moment from 'moment'
+moment.locale('uz')
 
 import store from '@/store'
 import StudentGroupStoreModule from './StudentGroupStoreModule'
@@ -169,6 +177,12 @@ const MODULE_NAME = 'studentGroup'
 
 export default {
   components: { StudentForm, GroupForm, Button },
+
+  filters: {
+		date: value => moment(value).format('D MMMM YYYY'),
+		// sum: value => numeral(value).format('0,0'),
+		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
+	},
   
   created() {
     this.loadStudent()

@@ -18,7 +18,7 @@ export default function useProvinceList(MODULE_NAME) {
   ]
 
   const filter = ref({
-      first_name: '',
+      query: '',
   })
 
   const options = ref({
