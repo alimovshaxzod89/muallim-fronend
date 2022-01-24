@@ -96,8 +96,6 @@ export default {
       // 'border-right-radius': props.date == groupTime.end_date ? '10px' : '0',
     })
 
-    console.log(colWidth)
-
     return {
       cellStyles,
 
