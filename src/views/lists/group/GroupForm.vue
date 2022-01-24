@@ -29,6 +29,23 @@
                 ></v-text-field>
               </v-col>
 
+              <v-col cols="6">
+                <h4 class="text-required no-texts"><span>*</span></h4>
+                <v-autocomplete
+                  v-model="formData.place_id"
+                  :items="selectsDatas.room"
+                  item-text="name"
+                  item-value="id"
+                  label="BINO"
+                  dense
+                  outlined
+                  hide-details
+                  clearable
+                  :rules="selectRule"
+                >
+                </v-autocomplete>
+              </v-col>
+
 							<v-col cols="6">
 								<h4 class="text-required no-texts"><span>*</span></h4>
                 <v-autocomplete
@@ -240,6 +257,7 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
+      place_id: null,
       number: null,
       subject_id: null,
       stage_id: null,
@@ -272,6 +290,21 @@ export default {
       formData.value = { ...emptyFormData }
       form.value.resetValidation()
     }
+
+    //form options for selects
+    const selectsDatas = ref({})
+    // ! METHODS
+    const loadPlace = () => {
+      axios
+        .get('/api/places', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.room = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
+
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
@@ -281,7 +314,8 @@ export default {
             formData.value.subject_id && 
             formData.value.teacher_id && 
             formData.value.price && 
-            formData.begin_date
+            formData.begin_date &&
+            formData.value.place_id
           ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
@@ -308,7 +342,8 @@ export default {
             formData.value.number && 
             formData.value.subject_id && 
             formData.value.teacher_id && 
-            formData.value.price
+            formData.value.price &&
+            formData.value.place_id
           ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
@@ -374,6 +409,7 @@ export default {
       loadStages()
       loadRooms()
       loadTeachers()
+      loadPlace()
     })
 
     return {
@@ -384,6 +420,9 @@ export default {
       minLengthValidator,
       maxLengthValidator,
       formData,
+      selectRule,
+      selectsDatas,
+      loadPlace,
       validate,
       show,
       onSubmit,
