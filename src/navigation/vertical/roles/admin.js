@@ -23,7 +23,7 @@ export default [
   },
   {
     title: 'Lidlar',
-    to: 'lids',
+    to: 'leads',
     resource: 'Lid',
     action: 'read',
     icon: mdiChartLine,

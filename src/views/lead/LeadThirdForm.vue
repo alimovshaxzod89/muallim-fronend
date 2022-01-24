@@ -17,7 +17,7 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <h4 class="text-required no-text"><span>*</span></h4>  
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
                   label="NOMI"
                   v-model="formData.name"
@@ -28,7 +28,7 @@
                   hide-details
                   :rules="[required, minLengthValidator(formData.amount, 3)]"
                 ></v-text-field>
-              </v-col>  
+              </v-col>
               <v-col cols="12">
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-autocomplete
@@ -125,7 +125,7 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import LidStoreModule from './LidStoreModule'
+import LeadStoreModule from './LeadStoreModule'
 
 import axios from '@axios'
 
@@ -149,7 +149,7 @@ export default {
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, LidStoreModule)
+      store.registerModule(MODULE_NAME, LeadStoreModule)
     }
 
     // show, hide
@@ -176,7 +176,7 @@ export default {
           {id: 2, name: "Juft kunlar"},
           {id: 3, name: "Dam olish kuni"},
           {id: 4, name: "Har kuni"},
-          {id: 5, name: "Boshqa"},  
+          {id: 5, name: "Boshqa"},
       ]
     }
 

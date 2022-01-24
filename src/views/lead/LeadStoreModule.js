@@ -43,7 +43,7 @@ export default {
     fetchDatas({ commit }, queryParams) {
       return new Promise((resolve, reject) => {
         axios
-          .get('/api/lids', { params: queryParams })
+          .get('/api/leads', { params: queryParams })
           .then(response => {
             const { data, total } = response.data
             commit('setRows', data)
@@ -57,7 +57,7 @@ export default {
     addRow({ commit }, row) {
       return new Promise((resolve, reject) => {
         axios
-          .post('api/lids', row)
+          .post('api/leads', row)
           .then(response => {
             if (response.data.success) {
               commit('addRow', response.data.data)
@@ -71,7 +71,7 @@ export default {
     updateRow({ commit, getters }, row) {
       return new Promise((resolve, reject) => {
         axios
-          .put(`api/lids/${row.id}`, row)
+          .put(`api/leads/${row.id}`, row)
           .then(response => {
             if (response.data.success) {
               const index = getters.indexIds.indexOf(parseInt(row.id))
@@ -83,7 +83,7 @@ export default {
     },
     removeRow({ commit, getters }, id) {
       return new Promise((resolve, reject) => {
-        axios.delete(`api/lids/${id}`).then(response => {
+        axios.delete(`api/leads/${id}`).then(response => {
           if (response.data.success) {
             const index = getters.indexIds.indexOf(id)
             commit('removeRow', index)
