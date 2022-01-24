@@ -48,6 +48,10 @@ export default {
     if (!props.groupTime.group) {
       console.log(props.groupTime, props.day, props.time, props.room_id)
     }
+
+    const tableEl = document.querySelector('.my-table-width tbody .my-td')
+
+    console.log(tableEl)
     // const groupTime = ref(store.state.groupTime.rows[props.index])
     // const days = 1
     //
