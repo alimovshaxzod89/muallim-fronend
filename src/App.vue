@@ -117,7 +117,19 @@ export default {
   td {
     min-width: 110px;
     width: 100px !important;
-    
   }
+}
+
+.my-table-width table {
+  width: auto !important;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+}
+
+.my-td {
+  max-width: 55px;
+  min-width: 55px;
+  width: 55px !important;
+  height: 50px !important;
 }
 </style>
