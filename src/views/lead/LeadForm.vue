@@ -17,7 +17,7 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <h4 class="text-required no-text"><span>*</span></h4> 
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
                   label="NOMI"
                   v-model="formData.name"
@@ -48,7 +48,7 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import LidStoreModule from './LidStoreModule'
+import LeadStoreModule from './LeadStoreModule'
 
 import axios from '@axios'
 
@@ -56,7 +56,7 @@ import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import Button from '../components/button/Button.vue'
 
-const MODULE_NAME = 'lid'
+const MODULE_NAME = 'lead'
 
 export default {
   components: { Button },
@@ -66,7 +66,7 @@ export default {
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, LidStoreModule)
+      store.registerModule(MODULE_NAME, LeadStoreModule)
     }
 
     // show, hide

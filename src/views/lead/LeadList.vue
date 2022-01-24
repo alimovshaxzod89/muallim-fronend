@@ -4,7 +4,7 @@
   <v-card id="data-list">
     <h3 class="titleS">So'rovlar</h3>
     <!-- button -->
-    <v-btn v-if="$can('create', 'Teacher')" x-small class="btn primary" @click="openForm()">Qo'shish</v-btn>
+    <v-btn v-if="$can('create', 'Lead')" x-small class="btn primary" @click="openForm()">Qo'shish</v-btn>
 
     <!-- table -->
     <v-data-table
@@ -28,7 +28,7 @@
       <template late #[`item.actions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
-          <v-tooltip bottom v-if="$can('delete', 'Teacher')">
+          <v-tooltip bottom v-if="$can('delete', 'Lead')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
                 <v-icon size="18">
@@ -40,7 +40,7 @@
           </v-tooltip>
 
           <!-- view  -->
-          <v-tooltip bottom v-if="$can('update', 'Teacher')">
+          <v-tooltip bottom v-if="$can('update', 'Lead')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
                 <v-icon size="18">
@@ -60,8 +60,8 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <lid-form
-      ref="lidForm"
+    <lead-form
+      ref="leadForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -74,7 +74,7 @@
     <h3 class="titleK">Kutish</h3>
 
     <!-- button -->
-    <v-btn v-if="$can('create', 'Teacher')" x-small class="btn primary" @click="openSecondForm()">Qo'shish</v-btn>
+    <v-btn v-if="$can('create', 'Lead')" x-small class="btn primary" @click="openSecondForm()">Qo'shish</v-btn>
 
     <!-- table -->
     <v-data-table
@@ -100,7 +100,7 @@
     <template late #[`item.actions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
-          <v-tooltip bottom v-if="$can('delete', 'Teacher')">
+          <v-tooltip bottom v-if="$can('delete', 'Lead')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
                 <v-icon size="18">
@@ -112,7 +112,7 @@
           </v-tooltip>
 
           <!-- view  -->
-          <v-tooltip bottom v-if="$can('update', 'Teacher')">
+          <v-tooltip bottom v-if="$can('update', 'Lead')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openSecondForm(item.id)">
                 <v-icon size="18">
@@ -127,8 +127,8 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <lid-second-form
-      ref="lidSecondForm"
+    <lead-second-form
+      ref="leadSecondForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -139,7 +139,7 @@
     <h3 class="titleK">To'plam</h3>
 
     <!-- button -->
-    <v-btn v-if="$can('create', 'Teacher')" x-small class="btn primary" @click="openThirdForm()">Qo'shish</v-btn>
+    <v-btn v-if="$can('create', 'Lead')" x-small class="btn primary" @click="openThirdForm()">Qo'shish</v-btn>
 
     <!-- table -->
     <v-data-table
@@ -165,7 +165,7 @@
     <template late #[`item.actions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
-          <v-tooltip bottom v-if="$can('delete', 'Teacher')">
+          <v-tooltip bottom v-if="$can('delete', 'Lead')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
                 <v-icon size="18">
@@ -177,7 +177,7 @@
           </v-tooltip>
 
           <!-- view  -->
-          <v-tooltip bottom v-if="$can('update', 'Teacher')">
+          <v-tooltip bottom v-if="$can('update', 'Lead')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openThirdForm(item.id)">
                 <v-icon size="18">
@@ -192,8 +192,8 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <lid-third-form
-      ref="lidThirdForm"
+    <lead-third-form
+      ref="leadThirdForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -215,24 +215,24 @@ numeral.locale('ru')
 import envParams from '@envParams'
 
 // store module
-import LidStoreModule from './LidStoreModule'
+import LeadStoreModule from './LeadStoreModule'
 
 // composition function
-import useLidList from './useLidList'
-import useLidSecondList from './useLidSecondList'
-import useLidThirdList from './useLidThirdList'
-import LidForm from './LidForm'
-import LidSecondForm from './LidSecondForm.vue'
-import LidThirdForm from './LidThirdForm.vue'
+import useLeadList from './useLeadList'
+import useLeadSecondList from './useLeadSecondList'
+import useLeadThirdList from './useLeadThirdList'
+import LeadForm from './LeadForm'
+import LeadSecondForm from './LeadSecondForm.vue'
+import LeadThirdForm from './LeadThirdForm.vue'
 import DialogConfirm from '../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'lid'
+const MODULE_NAME = 'lead'
 
 export default {
   components: {
-    LidForm,
-    LidSecondForm,
-    LidThirdForm,
+    LeadForm,
+    LeadSecondForm,
+    LeadThirdForm,
     DialogConfirm,
   },
   filters: {
@@ -243,7 +243,7 @@ export default {
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, LidStoreModule)
+      store.registerModule(MODULE_NAME, LeadStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -264,21 +264,21 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useLidList(MODULE_NAME)
+    } = useLeadList(MODULE_NAME)
 
     const {
       secondSelectedTableData,
       secondTableColumns,
       secondOptions,
       secondLoading,
-    } = useLidSecondList(MODULE_NAME)
+    } = useLeadSecondList(MODULE_NAME)
 
     const {
       thirdSelectedTableData,
       thirdTableColumns,
       thirdOptions,
       thirdLoading,
-    } = useLidThirdList(MODULE_NAME)
+    } = useLeadThirdList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -290,19 +290,19 @@ export default {
     ]
 
     //Form
-    const lidForm = ref(null)
+    const leadForm = ref(null)
     const openForm = id => {
-      lidForm.value.open(id)
+      leadForm.value.open(id)
     }
 
-    const lidSecondForm = ref(null)
+    const leadSecondForm = ref(null)
     const openSecondForm = id => {
-      lidSecondForm.value.open(id)
+      leadSecondForm.value.open(id)
     }
 
-    const lidThirdForm = ref(null)
+    const leadThirdForm = ref(null)
     const openThirdForm = id => {
-      lidThirdForm.value.open(id)
+      leadThirdForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -345,13 +345,13 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      lidForm,
+      leadForm,
       openForm,
 
-      lidSecondForm,
+      leadSecondForm,
       openSecondForm,
 
-      lidThirdForm,
+      leadThirdForm,
       openThirdForm,
 
       MODULE_NAME,

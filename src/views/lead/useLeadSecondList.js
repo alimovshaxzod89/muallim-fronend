@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useLidSecondList(MODULE_NAME) {
+export default function useLeadSecondList(MODULE_NAME) {
 
   const selectedSecondTableData = ref([])
   const secondNotify = ref({})
