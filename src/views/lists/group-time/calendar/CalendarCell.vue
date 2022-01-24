@@ -16,7 +16,7 @@
 <script>
 // v-if="stategroupTime.indexCalendar && stategroupTime.indexCalendar.includes(`${date}_${room.id}`)"
 
-import { ref } from '@vue/composition-api/dist/vue-composition-api'
+import { ref, onMounted } from '@vue/composition-api/dist/vue-composition-api'
 import { mdiDeleteOutline, mdiPencilOutline } from '@mdi/js'
 import moment from 'moment'
 
@@ -51,7 +51,6 @@ export default {
 
     const tableEl = document.querySelector('.my-table-width tbody .my-td')
 
-    console.log(tableEl)
     // const groupTime = ref(store.state.groupTime.rows[props.index])
     // const days = 1
     //
@@ -77,7 +76,7 @@ export default {
     const time1_00 = moment(moment(groupTime.time_begin, 'HH:mm').format('HH') + ':00', 'HH:mm')
     const minutesForBegin = time1.diff(time1_00, 'minutes')
 
-    let colWidth = 55
+    let colWidth = tableEl ? tableEl.clientWidth : 55
     let right
     if (minutesForBegin) {
       right = -1 * (minutesForEnd / 60) * colWidth + (minutesForBegin / 60) * colWidth
@@ -96,6 +95,8 @@ export default {
       // 'border-right-width': props.date == groupTime.end_date ? '1px' : '0',
       // 'border-right-radius': props.date == groupTime.end_date ? '10px' : '0',
     })
+
+    console.log(colWidth)
 
     return {
       cellStyles,
