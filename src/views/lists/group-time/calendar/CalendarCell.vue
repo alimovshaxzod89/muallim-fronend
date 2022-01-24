@@ -9,9 +9,6 @@
 			{{ icons.mdiPencilOutline }}
 		</v-icon>
 		{{ groupTime.group.number }}
-		{{ groupTime.time_begin }}
-		-
-		{{ groupTime.time_end }}
 		<!--		</div>-->
 	</div>
 </template>
@@ -77,8 +74,12 @@ export default {
     const minutesForBegin = time1.diff(time1_00, 'minutes')
 
     let colWidth = 55
-
-    const right = -1 * (minutesForEnd / 60) * colWidth + (minutesForBegin / 60) * colWidth
+    let right
+    if (minutesForBegin) {
+      right = -1 * (minutesForEnd / 60) * colWidth + (minutesForBegin / 60) * colWidth
+    } else {
+      right = -1 * (minutesForEnd / 60) * colWidth + (1 + minutesForBegin / 60) * colWidth
+    }
 
     let left = 0 + (minutesForBegin / 60) * colWidth
 
