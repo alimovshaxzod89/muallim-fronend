@@ -72,12 +72,15 @@ export default {
 		const time1 = moment(groupTime.time_begin, 'HH:mm')
 		const time2 = moment(groupTime.time_end, 'HH:mm')
 		const minutesForEnd = time2.diff(time1, 'minutes')
+
 		const time1_00 = moment(moment(groupTime.time_begin, 'HH:mm').format('HH') + ':00', 'HH:mm')
 		const minutesForBegin = time1.diff(time1_00, 'minutes')
 
-		const right = -1 * (minutesForEnd / 60 - 1) * 55
+		let colWidth = 55;
 
-		let left = 0 + (minutesForBegin / 60) * 55
+		const right = -1 * (minutesForEnd / 60) * colWidth + ((minutesForBegin / 60) * colWidth)
+
+		let left = 0 + (minutesForBegin / 60) * colWidth
 
 		const cellStyles = ref({
 			// "background-color": this.bgColor,
