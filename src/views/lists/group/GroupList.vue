@@ -11,6 +11,14 @@
           label="Qidiruv"
           class="data-list-search me-3"
         ></v-text-field>
+        <v-text-field
+          v-model="filter.query"
+          dense
+          outlined
+          hide-details
+          label="Bino"
+          class="data-list-search me-3"
+        ></v-text-field>
 
 				<v-expansion-panels class="my-accordion" accordion>
 					<v-expansion-panel>
