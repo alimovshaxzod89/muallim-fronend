@@ -10,8 +10,6 @@
 			{{ icons.mdiPencilOutline }}
 		</v-icon>
 		{{ groupTime.group.number }}
-		{{ groupTime.time_begin }}
-		{{ groupTime.time_end }}
 		<!--		</div>-->
 	</div>
 </template>
