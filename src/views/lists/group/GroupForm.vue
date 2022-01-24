@@ -366,7 +366,7 @@ export default {
         }
       }
     }
-
+    
     // Load subjects
     const subjects = ref()
     const loadSubjects = () => {

@@ -26,14 +26,14 @@ export default function useGroupList(MODULE_NAME) {
   ]
 
   const filter = ref({
-    name: '',
+    query: '',
+    place_id: '',
   })
 
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
     number: null,
-    place_id: null,
     subject_id: null,
     stage_id: null,
     teacher_id: null,
@@ -42,6 +42,8 @@ export default function useGroupList(MODULE_NAME) {
     max_students: null,
     begin_date: null,
     end_date: null,
+    limit: 10,
+    skip: 0,
   })
   const loading = ref(false)
 
@@ -61,7 +63,6 @@ export default function useGroupList(MODULE_NAME) {
 				queryParams[key] = value
 			}
 		}
-
 
     const newQuery = JSON.stringify(queryParams)
 
