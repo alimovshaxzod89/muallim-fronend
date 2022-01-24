@@ -26,11 +26,12 @@
 							<div
 								style="position: relative; height: 100%; margin-top: 5px; width: 50px;"
 								class="cell"
-								v-if="getters[`${MODULE_NAME}/indexCalendar`].includes(`${time}_${room.id}`)"
+								v-if="getters[`${MODULE_NAME}/indexCalendar`].includes(`${day}_${time.hour}_${room.id}`)"
 							>
 								<calendar-cell
-									:group-time="stateGroupTime.rows[getters[`group-time/indexCalendar`].indexOf(`${time}_${room.id}`)]"
+									:group-time="stateGroupTime.rows[getters[`group-time/indexCalendar`].indexOf(`${day}_${time.hour}_${room.id}`)]"
 									:time="time"
+									:day="day"
 									:room_id="room.id"
 									v-on:open-group-time-form="openGroupTimeForm($event)"
 								/>
@@ -39,8 +40,8 @@
 							<div
 								style="position: relative; height: 100%; margin-top: 5px; width: 50px;"
 								class="cell"
-								v-if="!getters[`${MODULE_NAME}/indexCalendar`].includes(`${time}_${room.id}`)"
-								@dblclick="openGroupTimeForm(null, {place_id, room_id: room.id, time_begin: time})"
+								v-if="!getters[`${MODULE_NAME}/indexCalendar`].includes(`${day}_${time.hour}_${room.id}`)"
+								@dblclick="openGroupTimeForm(null, {place_id, room_id: room.id, time_begin: time.time, day: day})"
 							>
 							</div>
 						</td>
@@ -123,10 +124,10 @@ export default {
     //form
     const groupTimeForm = ref()
     const openGroupTimeForm = (id, fields = {}) => {
-      if (id && vm.$can('update', 'Bron')) {
-        groupTimeForm.value.open(id, fields)
-      } else if (vm.$can('create', 'Bron')) {
-        groupTimeForm.value.open(id, fields)
+      if (id && vm.$can('update', 'GroupTime')) {
+        groupTimeForm.value.open2(id, fields)
+      } else if (vm.$can('create', 'GroupTime')) {
+        groupTimeForm.value.open2(id, fields)
       }
     }
 

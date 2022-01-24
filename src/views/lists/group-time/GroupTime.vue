@@ -115,7 +115,6 @@ export default {
 		loadPlaces()
 
 		const selectPlace = id => {
-			console.log(id, typeof id)
 			filter.value.place_id = id
 
 			router.push({
@@ -132,7 +131,7 @@ export default {
 			weekDays: [],
 		})
 
-		filter.value.weekDays.push(parseInt(moment().format('e')))
+		filter.value.weekDays.push((new Date()).getDay())
 
 		const weekDays = {
 			1: 'Dushanba',
