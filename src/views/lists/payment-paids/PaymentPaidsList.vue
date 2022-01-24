@@ -216,13 +216,14 @@ export default {
     DialogConfirm,
   },
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		summa: value => numeral(value).format('0,0'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    date: value => moment(value).format('D MMMM YYYY'),
+    summa: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup(props, { emit }) {
     const MODULE_NAME = 'payment-paids'
     const BASE_URL = envParams.BASE_URL
+    const BACKEND_URL = envParams.BACKEND_URL
 
     const { router } = useRouter()
 
@@ -367,7 +368,7 @@ export default {
 
     const printCheck = data => {
       var myWindow = window.open(
-        '/print/' + data.id,
+        BACKEND_URL + '/print/' + data.id,
         'MsgWindow',
         'toolbar=no,status=no,menubar=no,width=600,height=600',
       )
