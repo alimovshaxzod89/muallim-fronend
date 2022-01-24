@@ -436,7 +436,6 @@ export default {
       validate,
       show,
       onSubmit,
-      selectRule,
       open,
       close,
       subjects,
