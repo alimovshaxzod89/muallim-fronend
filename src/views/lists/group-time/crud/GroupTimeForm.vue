@@ -121,6 +121,9 @@
         </v-card-text>
 
         <v-card-actions>
+          <div v-show="formData.id !==  null">					
+						<v-btn color="error" type="button" @click.prevent="$emit('delete-form', formData.id), close()">O'chirish</v-btn>
+					</div>          
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
           <v-btn color="success" type="submit" @click.prevent="onSubmit()">Saqlash</v-btn>
