@@ -10,6 +10,16 @@ const views = [
     },
   },
   {
+    path: '/lids',
+    name: 'lids',
+    component: () => import('@/views/lid/LidList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'Lid',
+      action: 'manage',
+    },
+  },
+  {
     path: '/rooms',
     name: 'rooms',
     component: () => import('@/views/lists/room/RoomList.vue'),

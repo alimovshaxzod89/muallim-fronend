@@ -9,7 +9,8 @@ import {
   mdiFilterVariant, mdiGoogleAnalytics, mdiHome,
   mdiHumanCapacityDecrease,
   mdiHumanMaleFemale, mdiMapMarkerMultipleOutline, mdiMapMarkerRadiusOutline, mdiOfficeBuilding, mdiPercent,
-  mdiShieldAccount
+  mdiShieldAccount,
+  mdiChartLine,
 } from '@mdi/js'
 
 export default [
@@ -17,6 +18,13 @@ export default [
     title: 'Asosiy panel',
     icon: mdiHome,
     to: 'dashboard-eCommerce',
+  },
+  {
+    title: 'Lidlar',
+    to: 'lids',
+    resource: 'Lid',
+    action: 'read',
+    icon: mdiChartLine,
   },
   {
     title: "Ro'yxatlar",
