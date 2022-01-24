@@ -44,7 +44,7 @@
 								style="position: relative; height: 100%; margin-top: 5px; width: 50px;"
 								class="cell"
 								v-if="!getters[`${MODULE_NAME}/indexCalendar`].includes(`${day}_${time.hour}_${room.id}`)"
-								@dblclick="openGroupTimeForm(null, {place_id, room_id: room.id, time_begin: time.time, day: day})"
+								@dblclick="openGroupTimeForm(null, {place_id: place_id, room_id: room.id, time_begin: time.time, week_day: day})"
 							>
 							</div>
 						</td>

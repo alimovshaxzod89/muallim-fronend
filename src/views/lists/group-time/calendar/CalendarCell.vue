@@ -49,21 +49,6 @@ export default {
 		if (!props.groupTime.group) {
 			console.log(props.groupTime, props.day, props.time, props.room_id)
 		}
-		// const groupTime = ref(store.state.groupTime.rows[props.index])
-		// const days = 1
-		//
-		// const date1 = new Date(groupTime.value.begin_date)
-		// const date2 = new Date(groupTime.value.end_date)
-		// let diffDays = Math.ceil(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24))
-		//
-		// const firstDate = date1.getDate()
-		// if (firstDate + diffDays > props.monthLastDate) {
-		// 	diffDays = props.monthLastDate - firstDate
-		// }
-		//
-		// const right = (-1 * diffDays * 55) + (groupTime.value.end_half_day == 1 ? 27 : 0)
-		//
-		// const left = groupTime.value.begin_half_day == 1 ? 0 : 27
 
 		const groupTime = props.groupTime
 
