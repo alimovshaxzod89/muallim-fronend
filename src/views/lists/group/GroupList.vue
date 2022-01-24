@@ -236,6 +236,8 @@
       <!-- <template #[`item.begin_date`]="{ item }"> {{ item.begin_date | date }}</template>
       <template #[`item.end_date`]="{ item }"> {{ item.end_date | date }}</template> -->
 
+      <template #[`item.price`]="{ item }"> {{ item.price | summa }}</template>
+
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
@@ -274,6 +276,9 @@ import axios from '@axios'
 import moment from 'moment'
 moment.locale('uz-latn')
 
+import numeral from 'numeral'
+numeral.locale('ru')
+
 import envParams from '@envParams'
 
 // store module
@@ -295,7 +300,7 @@ export default {
   },
   filters: {
 		date: value => moment(value).format('D MMMM YYYY'),
-		// sum: value => numeral(value).format('0,0'),
+		summa: value => numeral(value).format('0,0'),
 		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
 	},
   setup() {

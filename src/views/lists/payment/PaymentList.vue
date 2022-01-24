@@ -185,11 +185,11 @@
       </template>
 
 			<template #[`item.paid`]="{ item }">
-				<v-btn outlined color="success" title="To'lov amalga oshirish uchun bosing" @click="openPaymentPaidsList(item)">{{item.paid}}</v-btn>
+				<v-btn outlined color="success" title="To'lov amalga oshirish uchun bosing" @click="openPaymentPaidsList(item)">{{item.paid | summa}}</v-btn>
       </template>
 
 			<template #[`item.dept`]="{ item }">
-				{{item.amount - item.paid}}
+				{{item.amount - item.paid | summa}}
       </template>
 
       <template #[`item.month`]="{ item }">
@@ -227,6 +227,8 @@
 
 		<payment-paids-list
       ref="paymentPaidsList"
+			v-on:refresh-list="fetchDatas(true)"
+			v-on:delete-row="fetchDatas(true)"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -249,6 +251,8 @@ import { onMounted, ref } from '@vue/composition-api'
 
 import store from '@/store'
 import axios from '@axios'
+import numeral from 'numeral'
+numeral.locale('ru')
 
 import envParams from '@envParams'
 
@@ -263,7 +267,7 @@ import PaymentForm from './PaymentForm.vue'
 import PaymentPaidsList from '@/views/lists/payment-paids/PaymentPaidsList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
-const MODULE_NAME = 'student'
+const MODULE_NAME = 'payment'
 
 export default {
   components: {
@@ -271,6 +275,11 @@ export default {
     PaymentPaidsList,
     DialogConfirm,
   },
+  filters: {
+		date: value => moment(value).format('D MMMM YYYY'),
+		summa: value => numeral(value).format('0,0'),
+		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
+	},
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
@@ -291,6 +300,7 @@ export default {
       filter,
       tableColumns,
       deleteRow,
+      fetchDatas,
 
       options,
       loading,
@@ -472,6 +482,7 @@ export default {
       totalDebt,
       paymentPaidsList,
       openPaymentPaidsList,
+      fetchDatas,
 
       picker,
       isDate,

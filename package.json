@@ -42,6 +42,7 @@
 		"xlsx": "^0.17.5"
 	},
 	"devDependencies": {
+		"@types/numeral": "^2.0.2",
 		"@vue/cli-plugin-babel": "~4.5.0",
 		"@vue/cli-plugin-eslint": "~4.5.0",
 		"@vue/cli-plugin-router": "~4.5.0",

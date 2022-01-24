@@ -55,7 +55,7 @@
                   outlined
                   required
                   hide-details
-                  :rules="[required, minLengthValidator(formData.first_name, 3)]"
+                  :rules="[required, minLengthValidator(formData.amount, 3)]"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">

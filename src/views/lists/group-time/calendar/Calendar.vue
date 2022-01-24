@@ -1,17 +1,19 @@
 <template>
 	<v-card>
-		<v-simple-table class="my-table">
+		<v-simple-table class="my-table my-table-width">
 			<template v-slot:default>
 				<thead>
-				<tr>
-					<th>Xona / Soat</th>
-					<th v-for='time in times'
+					<tr>
+						<th>Xona / Soat</th>
+						<th
+							class="my-td"
+							v-for='time in times'
 							:key='time.hour'
 							style='text-align: left !important;'
-					>
-						{{ time.hour }}
-					</th>
-				</tr>
+						>
+							{{ time.hour }}
+						</th>
+					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="room in rooms" :key="room.id">
@@ -20,6 +22,7 @@
 						</td>
 
 						<td
+							class="my-td"
 							v-for="time in times"
 							:key="time.hour"
 						>
@@ -45,7 +48,6 @@
 							>
 							</div>
 						</td>
-
 					</tr>
 				</tbody>
 			</template>
@@ -96,10 +98,10 @@ export default {
 
     const vm = getCurrentInstance().proxy
 
-		let times = ref([])
-		for (let hour = 6; hour <= 23; hour += 1) {
-			times.value.push({ time: moment.utc(hour * 3600 * 1000).format('H:mm'), hour })
-		}
+    let times = ref([])
+    for (let hour = 6; hour <= 23; hour += 1) {
+      times.value.push({ time: moment.utc(hour * 3600 * 1000).format('H:mm'), hour })
+    }
 
     onMounted(() => {
       loadRooms(props.place_id)
@@ -145,7 +147,7 @@ export default {
       groupTimeForm,
       openGroupTimeForm,
 
-			MODULE_NAME,
+      MODULE_NAME,
     }
   },
 }
