@@ -198,6 +198,7 @@ import { useRouter } from '@core/utils'
 import envParams from '@envParams'
 import XLSX from 'xlsx'
 import moment from 'moment'
+import numeral from 'numeral'
 
 require('moment/locale/uz-latn')
 
