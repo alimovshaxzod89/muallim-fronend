@@ -85,7 +85,7 @@ export default function useGroupList(MODULE_NAME) {
 
   watch(filter, () => {
     if (options.value.page != 1) options.value.page
-      options.value = true
+      options.value.page = 1
 
       setTimeout(() => fetchDatas(), 1000);
   }, {deep: true})

@@ -11,47 +11,23 @@
     <v-card>
       <v-form ref="form">
         <v-card-title>
-          <span class="headline">Bosqich qo'shish</span>
+          <span class="headline">Yangi bo'lim yaratish</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12">
-                <h4 class="text-required no-text"><span>*</span></h4>
-                <v-autocomplete
-                  v-model="formData.subject_id"
-                  :items="selectsDatas.subject"
-                  item-text="name"
-                  item-value="id"
-                  label="FAN"
-                  dense
-                  outlined
-                  hide-details
-                  clearable
-                  :rules="selectRule"
-                >
-                </v-autocomplete>
-              </v-col>
-              <v-col cols="12">
-                <h4 class="text-required no-text"><span>*</span></h4>  
+                <h4 class="text-required no-text"><span>*</span></h4> 
                 <v-text-field
                   label="NOMI"
                   v-model="formData.name"
                   type="text"
                   dense
                   outlined
+                  required
                   hide-details
                   :rules="[required]"
                 ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-checkbox
-                  v-model="formData.status"
-                  hide-details
-                  label="AKTIV"
-                  false-value="0"
-                  true-value="1"
-                ></v-checkbox>
               </v-col>
             </v-row>
           </v-container>
@@ -65,7 +41,6 @@
       </v-form>
     </v-card>
 
-    <subject-form ref="subjectForm" />
   </v-dialog>
 </template>
 
@@ -73,38 +48,31 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import StageStoreModule from './StageStoreModule'
+import LidStoreModule from './LidStoreModule'
 
 import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
-import SubjectForm from '@/views/lists/subject/SubjectForm.vue'
-import Button from '../../components/button/Button'
+import Button from '../components/button/Button.vue'
 
-const MODULE_NAME = 'stage'
+const MODULE_NAME = 'lid'
 
 export default {
-  components: { SubjectForm, Button },
+  components: { Button },
   // props: {
   //
   // },
-  created() {
-    this.loadSubject()
-  },
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, StageStoreModule)
+      store.registerModule(MODULE_NAME, LidStoreModule)
     }
 
     // show, hide
     const show = ref(false)
     const open = (id = null) => {
       show.value = true
-      setTimeout(() => {
-        form.value.$el[0].focus()
-      }, 100)
       if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
     }
     const close = () => {
@@ -116,42 +84,25 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      subject_id: null,
       name: null,
-      status: "1",
     }
 
     //validation
-    const formData = ref({})
+    const formData = ref({ ...emptyFormData })
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     const validate = () => {
       form.value.validate()
     }
 
-    //form options for selects
-    const selectsDatas = ref({})
-    // ! METHODS
-    const loadSubject = () => {
-      axios
-        .get('/api/subjects', { params: { itemsPerPage: -1 } })
-        .then(response => {
-          if (response.data.success) {
-            selectsDatas.value.subject = response.data.data
-          }
-        })
-        .catch(error => console.log(error))
-    }
-
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.subject_id) {
+        if (formData.value.name) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(({ data, message }) => {
+            .then(({ message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
-              return data
             })
             .catch(error => {
               console.log(error)
@@ -164,7 +115,7 @@ export default {
           })
         }
       } else {
-        if (formData.value.subject_id) {
+        if (formData.value.name) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ message }) => {
@@ -184,28 +135,17 @@ export default {
       }
     }
 
-    // StageForm
-    const subjectForm = ref(null)
-    const addSubject = (id = null) => {
-      subjectForm.value.open(id)
-    }
-
     return {
       form,
       required,
       minLengthValidator,
       formData,
-      selectsDatas,
       selectRule,
-      loadSubject,
       validate,
       show,
       onSubmit,
       open,
       close,
-
-      subjectForm,
-      addSubject,
 
       icons: {
         mdiPlusCircleOutline,
@@ -225,5 +165,8 @@ export default {
   padding-right: 15px !important;
   padding-left: 15px !important;
   border-color: rgba(94, 86, 105, 0.15) !important;
+}
+.amount {
+    margin-top: -45px
 }
 </style>

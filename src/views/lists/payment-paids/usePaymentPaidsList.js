@@ -29,6 +29,11 @@ export default function useGroupList(MODULE_NAME) {
   })
   const filter = ref({
     group_id: null,
+    student_id: null,
+    payment_id: null,
+    year: null,
+    month: null,
+    day: null,
   })
   const loading = ref(false)
 
@@ -82,15 +87,23 @@ export default function useGroupList(MODULE_NAME) {
     lastQuery = JSON.stringify(queryParams)
   }
 
-  watch(searchQuery, () => {
-    if (options.value.page != 1) options.value.page = 1
-  })
+  watch(
+    filter,
+    () => {
+      if (options.value.page != 1) options.value.page = 1
+    },
+    { deep: true },
+  )
 
-  watch([searchQuery, options], () => {
-    loading.value = true
-    fetchDatas()
-    // selectedTableData.value = []
-  })
+  watch(
+    [filter, options],
+    () => {
+      loading.value = true
+      fetchDatas()
+      // selectedTableData.value = []
+    },
+    { deep: true },
+  )
 
   return {
     tableColumns,

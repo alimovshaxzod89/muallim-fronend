@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="align-start">
-      <span class="font-weight-semibold">Statistics Card</span>
+      <span class="font-weight-semibold">Qarzdorlar</span>
 
       <v-spacer></v-spacer>
 
@@ -16,9 +16,21 @@
       </v-btn>
     </v-card-title>
 
-    <v-card-subtitle class="mb-7">
-      <span class="font-weight-semibold text--primary me-1">Total 48.5% growth</span>
-      <span>😎 this month</span>
+    <v-card-subtitle class='mb-1'>
+
+			<div class='row justify-content-between'>
+				<div class='col'><v-select
+					:items="years"
+					v-model='selectedYear'
+
+					outlined
+				></v-select> </div>
+				<div class='col'><v-select
+					:items="monthes"
+					v-model='selectedMonth'
+					outlined
+				></v-select></div>
+			</div>
     </v-card-subtitle>
 
     <v-card-text>
@@ -32,26 +44,19 @@
         >
           <v-avatar
             size="44"
-            :color="resolveStatisticsIconVariation (data.title).color"
+            :color="resolveStatisticsIconVariation (data.title)"
             rounded
             class="elevation-1"
           >
-            <v-icon
-              dark
-              color="white"
-              size="30"
-            >
-              {{ resolveStatisticsIconVariation (data.title).icon }}
-            </v-icon>
           </v-avatar>
 
           <div class="ms-3">
             <p class="text-xs mb-0">
               {{ data.title }}
             </p>
-            <h3 class="text-xl font-weight-bold">
+            <h2 class=" font-weight-bold bg-primary">
               {{ data.total }}
-            </h3>
+            </h2>
           </div>
         </v-col>
       </v-row>
@@ -61,35 +66,59 @@
 
 <script>
 // eslint-disable-next-line object-curly-newline
-import { mdiAccountOutline, mdiTrendingUp, mdiDotsVertical, mdiLabelOutline } from '@mdi/js'
+import { mdiAccountOutline, mdiTrendingUp, mdiDotsVertical, mdiLabelOutline, mdiCashMultiple, mdiTicketPercentOutline, mdiCurrencyUsd } from '@mdi/js'
 
 export default {
   setup() {
+		const selectedYear = '2022'
+		const selectedMonth = 'Yanvar'
+		const years = ['2020', '2021', '2022']
+		const monthes = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr']
+
     const statisticsData = [
       {
-        title: 'Sales',
+        title: 'Talabalar to\'lashi zarur',
         total: '245k',
       },
       {
-        title: 'Customers',
+        title: 'Ustozlardan qarz',
         total: '12.5k',
       },
       {
-        title: 'Product',
+        title: 'Ustozlar mablag\'i',
         total: '1.54k',
       },
+			{
+				title: 'Talabalar qarzi',
+				total: '245k',
+			},
+			{
+				title: 'Markaz ulushi',
+				total: '12.5k',
+			},
+			{
+				title: 'Markaz ololmayotgan summa',
+				total: '1.54k',
+			},
     ]
 
     const resolveStatisticsIconVariation = data => {
-      if (data === 'Sales') return { icon: mdiTrendingUp, color: 'primary' }
-      if (data === 'Customers') return { icon: mdiAccountOutline, color: 'success' }
-      if (data === 'Product') return { icon: mdiLabelOutline, color: 'warning' }
+      if (data === 'Talabalar to\'lashi zarur') return { icon: mdiTrendingUp, color: 'primary' }
+      if (data === 'Ustozlardan qarz') return { icon: mdiAccountOutline, color: 'success' }
+      if (data === 'Ustozlar mablag\'i') return { icon: mdiLabelOutline, color: 'warning' }
+			if (data === 'Talabalar qarzi') return { icon: mdiCashMultiple, color: 'info' }
+			if (data === 'Markaz ulushi') return { icon: mdiTicketPercentOutline, color: 'warning' }
+			if (data === 'Markaz ololmayotgan summa') return { icon: mdiCurrencyUsd, color: 'secondary' }
 
       return { icon: mdiAccountOutline, color: 'success' }
     }
 
     return {
       statisticsData,
+			selectedYear,
+			selectedMonth,
+			years,
+			monthes,
       resolveStatisticsIconVariation,
 
       // icons

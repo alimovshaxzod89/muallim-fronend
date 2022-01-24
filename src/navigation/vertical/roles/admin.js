@@ -6,10 +6,13 @@ import {
   mdiCashMinus,
   mdiCashMultiple,
   mdiDoor,
-  mdiFilterVariant, mdiGoogleAnalytics, mdiHome,
+  mdiFilterVariant,
+  mdiGoogleAnalytics,
+  mdiHome,
   mdiHumanCapacityDecrease,
   mdiHumanMaleFemale, mdiMapMarkerMultipleOutline, mdiMapMarkerRadiusOutline, mdiOfficeBuilding, mdiPercent,
-  mdiShieldAccount
+  mdiShieldAccount,
+  mdiChartLine,
 } from '@mdi/js'
 
 export default [
@@ -17,6 +20,13 @@ export default [
     title: 'Asosiy panel',
     icon: mdiHome,
     to: 'dashboard-eCommerce',
+  },
+  {
+    title: 'Lidlar',
+    to: 'lids',
+    resource: 'Lid',
+    action: 'read',
+    icon: mdiChartLine,
   },
   {
     title: "Ro'yxatlar",
@@ -118,13 +128,19 @@ export default [
     resource: 'payments',
     action: 'read',
   },
-
   {
-    title: "Binolar",
+    title: 'Guruh vaqtlari',
+    icon: mdiAccountDetailsOutline,
+    to: 'group-times',
+    resource: 'GroupTime',
+    action: 'read',
+  },
+  {
+    title: 'Binolar',
     icon: mdiOfficeBuilding,
     to: 'places',
     resource: 'Place',
-    action: 'read' 
+    action: 'read',
   },
 
   // {

@@ -18,6 +18,7 @@
             <v-row>
               <v-col cols="6">
                 <v-list-item-title>Talaba</v-list-item-title>
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.student_id"
                   :items="selectsDatas.student"
@@ -29,6 +30,7 @@
                   hide-details
                   clearable
                   :rules="selectRule"
+                  required
                 >
                   <template v-slot:append-outer>
                     <v-btn
@@ -47,6 +49,7 @@
               </v-col>
               <v-col cols="6">
                 <v-list-item-title>Guruh</v-list-item-title>
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.group_id"
                   :items="selectsDatas.group"
@@ -143,16 +146,24 @@
           <v-btn color="success" type="submit" @click.prevent="onSubmit"> Saqlash</v-btn>
         </v-card-actions>
       </v-form>
+
+      <template #[`item.begin_date`]="{ item }"> {{ item.begin_date | date }}</template>
     </v-card>
 
   <student-form ref="studentForm" v-on:add-student-to-options="addStudentToOptions($event)" />
   <group-form ref="groupForm" v-on:add-group-to-options="addGroupToOptions($event)" />
 
+
+  
   </v-dialog>
 </template>
 
 <script>
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
+
+// formats
+import moment from 'moment'
+moment.locale('uz')
 
 import store from '@/store'
 import StudentGroupStoreModule from './StudentGroupStoreModule'
@@ -169,6 +180,12 @@ const MODULE_NAME = 'studentGroup'
 
 export default {
   components: { StudentForm, GroupForm, Button },
+
+  filters: {
+		date: value => moment(value).format('D MMMM YYYY'),
+		// sum: value => numeral(value).format('0,0'),
+		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
+	},
   
   created() {
     this.loadStudent()

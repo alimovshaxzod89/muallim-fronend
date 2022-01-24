@@ -64,6 +64,10 @@
           </v-tooltip>
         </div>
       </template>
+
+      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+
+      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
@@ -80,6 +84,11 @@ import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutlin
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
+import moment from 'moment'
+moment.locale('uz-latn')
+
+import numeral from 'numeral'
+numeral.locale('ru')
 
 import envParams from '@envParams'
 
@@ -98,6 +107,11 @@ export default {
     CostForm,
     DialogConfirm,
   },
+  filters: {
+		date: value => moment(value).format('D MMMM YYYY'),
+		summa: value => numeral(value).format('0,0'),
+		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
+	},
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {

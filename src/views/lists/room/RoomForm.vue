@@ -16,6 +16,7 @@
           <v-container>
             <v-row>
               <v-col cols="12">
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.place_id"
                   :items="selectsDatas.room"
@@ -27,10 +28,12 @@
                   hide-details
                   clearable
                   :rules="selectRule"
+                  required
                 >
                 </v-autocomplete>
               </v-col>
               <v-col cols="12">
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
                   label="Nomi"
                   v-model="formData.name"

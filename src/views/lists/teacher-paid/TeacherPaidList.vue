@@ -64,6 +64,10 @@
           </v-tooltip>
         </div>
       </template>
+
+      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+
+      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
@@ -91,12 +95,23 @@ import useTeacherPaidList from './useTeacherPaidList'
 import TeacherPaidForm from './TeacherPaidForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
+import moment from 'moment'
+moment.locale('uz-latn')
+
+import numeral from 'numeral'
+numeral.locale('ru')
+
 const MODULE_NAME = 'teacherPaid'
 
 export default {
   components: {
     TeacherPaidForm,
     DialogConfirm,
+  },
+  filters: {
+    date: value => moment(value).format('D MMMM YYYY'),
+    summa: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
   },
   setup() {
     // Register module

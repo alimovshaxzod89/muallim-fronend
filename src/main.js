@@ -11,6 +11,9 @@ import store from './store'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
+import vueNumeralFilterInstaller from 'vue-numeral-filter';
+Vue.use(vueNumeralFilterInstaller, { locale: 'ru' });
+
 Vue.config.productionTip = false
 Vue.use(Toast)
 

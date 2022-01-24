@@ -222,6 +222,8 @@
         />
       </template>
 
+      <template #[`item.birth_date`]="{ item }"> {{ item.birth_date | date }}</template>
+
       <template #[`item.sale`]="{ item }">
         {{ item.sale ? 'Ha' : 'Yo\'q' }}
       </template>
@@ -257,6 +259,8 @@ import {
 import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
+import moment from 'moment'
+moment.locale('uz-latn')
 
 import envParams from '@envParams'
 
@@ -277,6 +281,11 @@ export default {
     StudentPhoto,
     DialogConfirm,
   },
+  filters: {
+		date: value => moment(value).format('D MMMM YYYY'),
+		// sum: value => numeral(value).format('0,0'),
+		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
+	},
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {

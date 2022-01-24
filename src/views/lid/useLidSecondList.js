@@ -1,12 +1,12 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useStudentGroupList(MODULE_NAME) {
+export default function useLidSecondList(MODULE_NAME) {
 
-  const selectedTableData = ref([])
-  const notify = ref({})
+  const selectedSecondTableData = ref([])
+  const secondNotify = ref({})
 
-  const tableColumns = [
+  const secondTableColumns = [
     { text: '#', sortable: false, value: 'index' },
     {
         text: 'AMALLAR',
@@ -14,33 +14,28 @@ export default function useStudentGroupList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
-    { text: 'USTOZ', value: 'teacher' },
-    { text: 'GURUH', value: 'group.number' },
-    { text: 'TALABA', value: 'student.full_name' },
-    { text: 'BOSHLANGAN SANA', value: 'begin_date' },
-    { text: 'TUGAGAN SANA', value: 'end_date' },
-    { text: 'AKTIV', value: 'status' },
+    { text: 'NOMI', value: 'name' },
     ]
 
   const filter = ref({
     query: '',
   })
-  const options = ref({
+  const secondOptions = ref({
     sortBy: ['id'],
     sortDesc: [true],
     limit: 10,
     skip: 0,
   })
-  const loading = ref(false)
+  const secondLoading = ref(false)
 
   let lastQuery = '';
   const fetchDatas = (force = false) => {
 
-    options.value.skip = options.value.page -1
-    options.value.limit = options.value.itemsPerPage
+    optsecondOptionsions.value.skip = secondOptions.value.page -1
+    secondOptions.value.limit = secondOptions.value.itemsPerPage
 
     const queryParams = {
-      ...options.value,
+      ...secondOptions.value,
     }
 
 		for (let key in filter.value) {
@@ -58,12 +53,12 @@ export default function useStudentGroupList(MODULE_NAME) {
       store
         .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
         .then(() => {
-          loading.value = false
+            secondLoading.value = false
         })
         .catch(error => {
           console.log(error)
-          loading.value = false
-          notify.value = { type: 'error', text: error, time: Date.now() }
+          secondLoading.value = false
+          secondNotify.value = { type: 'error', text: error, time: Date.now() }
         })
     }
 
@@ -72,47 +67,44 @@ export default function useStudentGroupList(MODULE_NAME) {
   }
 
   watch(filter, () => {
-    if (options.value.page != 1) options.value.page = 1
-    loading.value = true
+    if (secondOptions.value.page != 1) secondOptions.value.page = 1
+    secondLoading.value = true
 
     setTimeout(() => fetchDatas(), 1000);
   }, {deep: true})
 
-  watch(options, () => {
-    loading.value = true
+  watch(secondOptions, () => {
+    secondLoading.value = true
     fetchDatas()
-    // selectedTableData.value = []
+    // selectedSecondTableData.value = []
   })
 
   //delete
-  const deleteRow = (id) => {
+  const deleteSecondRow = (id) => {
 
     store.
         dispatch(`${MODULE_NAME}/removeRow`, id)
         .then((message) => {
-            notify.value = { type: 'success', text: message, time: Date.now() }
+            secondNotify.value = { type: 'success', text: message, time: Date.now() }
 
             fetchDatas(true)
 
     }).catch(error => {
       console.log(error)
-      notify.value = { type: 'error', text: error.message, time: Date.now() }
+      secondNotify.value = { type: 'error', text: error.message, time: Date.now() }
     })
 
   }
 
   return {
-    tableColumns,
+    secondTableColumns,
     filter,
     fetchDatas,
-    deleteRow,
+    deleteSecondRow,
 
-    options,
-    loading,
-    notify,
-    selectedTableData
+    secondOptions,
+    secondLoading,
+    secondNotify,
+    selectedSecondTableData
   }
 }
-
-
-

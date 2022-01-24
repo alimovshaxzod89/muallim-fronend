@@ -60,10 +60,10 @@
 
 							<v-col cols="6">
                 <v-autocomplete
-                  v-model="formData.month"
-                  :items="month"
-                  item-text="name"
-                  item-value="key"
+                  v-model="formData.payment_id"
+                  :items="monthsYears"
+                  item-text="value"
+                  item-value="id"
                   label="OY/YIL"
                   dense
                   outlined
@@ -127,8 +127,11 @@ import { mdiCalendar, mdiClockTimeFourOutline } from '@mdi/js'
 
 import store from '@/store'
 import axios from '@axios'
+import moment from 'moment'
 
-import { ref, onMounted } from '@vue/composition-api'
+require('moment/locale/uz-latn')
+
+import { ref, onMounted, watch } from '@vue/composition-api'
 
 export default {
   props: {
@@ -149,16 +152,27 @@ export default {
       id: null,
       subject_id: null,
       student_id: null,
-      month: null,
+      payment_id: null,
       group_id: null,
       amount: null,
       date: null,
     }
     const formData = ref({ ...emptyFormData })
-    const open = (item = null) => {
+    const open = (item = null, data = null) => {
       show.value = true
       if (item) {
-        formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](item.id)))
+        formData.value = {
+          ...JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](item.id))),
+          subject_id: item.payment.group.subject_id,
+          group_id: item.payment.group.id,
+          student_id: item.payment.student_id,
+        }
+      }
+
+      if (!item && data) {
+        formData.value = {
+          ...data,
+        }
       }
     }
     const close = () => {
@@ -175,7 +189,7 @@ export default {
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
-              // emit('refresh-list')
+              emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
@@ -195,7 +209,7 @@ export default {
             .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
-              // emit('refresh-list')
+              emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
@@ -219,17 +233,10 @@ export default {
       { key: 6, name: 'Shanba' },
       { key: 7, name: 'Yakshanba' },
     ])
-    const month = ref([
-      { key: 1, name: 'Yanvar' },
-      { key: 2, name: 'Fevral' },
-      { key: 3, name: 'Mart' },
-      { key: 4, name: 'Aprel' },
-      { key: 5, name: 'May' },
-    ])
     // const monthOptions = () => {
-    //   const arr = [{ value: '', text: '' }]
+    //   const arr = [{ value: null, text: 'Oy' }]
     //   for (let i = 1; i <= 12; i++) {
-    //     arr.push({ value: i, text: `2000-${i}-01` })
+    //     arr.push({ value: i, text: moment(`2000-${i}-01`).format('MMMM') })
     //   }
     //   return arr
     // }
@@ -246,7 +253,10 @@ export default {
 
     const groups = ref(null)
     const loadGroups = () => {
-      axios.get('/api/groups').then(response => {
+      const params = {}
+      if (formData.value.subject_id) params.subject_id = formData.value.subject_id
+
+      axios.get('/api/groups', { params }).then(response => {
         if (response.data.success) {
           groups.value = response.data.data
         }
@@ -255,18 +265,83 @@ export default {
 
     const students = ref(null)
     const loadStudents = () => {
-      axios.get('/api/students').then(response => {
+      const params = {}
+      if (formData.value.group_id) params.group_id = formData.value.group_id
+
+      axios.get('/api/students', { params }).then(response => {
         if (response.data.success) {
           students.value = response.data.data
         }
       })
     }
 
+    const payments = ref(null)
+    const monthsYears = ref([])
+    const loadPayments = () => {
+      const params = {}
+      if (formData.value.subject_id) params.subject_id = formData.value.subject_id
+      if (formData.value.group_id) params.group_id = formData.value.group_id
+      if (formData.value.student_id) params.student_id = formData.value.student_id
+
+      // if (this.sElectedYear) params.year = this.sElectedYear
+      // if (this.sElectedMonth) params.month = this.sElectedMonth
+
+      axios.get('/api/payments', { params }).then(response => {
+        if (response.data.success) {
+          payments.value = response.data.data
+
+          monthsYears.value = []
+
+          payments.value.forEach((item, i) => {
+            const date = new Date(item.date)
+            const year = date.getFullYear()
+            const month = date.getMonth() + 1
+
+            if (formData.value.payment_id && formData.value.payment_id == item.id) {
+              if (!formData.value.amount) {
+                formData.value.amount = item.amount
+              }
+            } else {
+              // year, month mosini tanlash
+              // if (selectedYear.value == year && selectedMonth.value == month) {
+              //   formData.value.payment_id = item.id
+              // }
+            }
+
+            const payment = {
+              id: item.id,
+              value: `${moment(`${year}-${month}-01`).format('MMMM')}-${year}`,
+            }
+
+            // todo closed ni hisobga olish
+            // if (item.closed && item.paid !== 0) payment.disabled = true
+            monthsYears.value.push(payment)
+          })
+        }
+      })
+    }
+
+    // ! Created
     onMounted(() => {
       loadSubjects()
       loadGroups()
       loadStudents()
+      loadPayments()
     })
+
+    // ! Watch
+    watch(
+      () => formData.value.subject_id,
+      () => loadGroups(),
+    )
+    watch(
+      () => formData.value.group_id,
+      () => loadStudents(),
+    )
+    watch(
+      () => formData.value.student_id,
+      () => loadPayments(),
+    )
 
     return {
       isDate,
@@ -281,7 +356,7 @@ export default {
       groups,
       students,
       days,
-      month,
+      monthsYears,
 
       icons: {
         mdiCalendar,

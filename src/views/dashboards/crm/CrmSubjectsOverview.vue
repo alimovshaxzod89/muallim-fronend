@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="align-start">
-      <span>Oylik tushum sarhisobi</span>
+      <span>Fanlar sarhisobi</span>
       <v-spacer></v-spacer>
 
       <v-btn
@@ -36,22 +36,22 @@
         >
           <div class="d-flex align-center">
             <v-avatar
-              class="v-avatar-light-bg primary--text"
+              class="v-avatar-light-bg warning--text"
               rounded
               size="40"
             >
               <v-icon
                 size="30"
-                color="primary"
+                color="warning"
               >
-                {{ icons.mdiCurrencyUsd }}
+                {{ icons.mdiFormatListNumberedRtl }}
               </v-icon>
             </v-avatar>
             <div class="ms-4 d-flex flex-column">
-              <p class="text--primary mb-0 text-base">
-                Joriy oy olinishi kerak
+              <p class="text--warning mb-0 text-base">
+                Umumiy fanlar soni
               </p>
-              <span class="text--primary font-weight-semibold text-xl">$86,400</span>
+              <span class="text--primary font-weight-semibold text-xl">2</span>
             </div>
           </div>
 
@@ -61,17 +61,17 @@
             <tr>
               <td>
                 <div class="mb-0">
-                  <div class="stats-dot primary d-inline-block rounded-circle me-2"></div>
-                  <span>Tushum</span>
+                  <div class="stats-dot warning d-inline-block rounded-circle me-2"></div>
+                  <span>Ingliz  tili</span>
                 </div>
-                <span class="text-base text--primary font-weight-semibold ms-4">$1,840</span>
+                <span class="text-base text--primary font-weight-semibold ms-4">100  ta</span>
               </td>
 							<td>
 								<div class="mb-0">
 									<div class="stats-dot secondary d-inline-block rounded-circle me-2"></div>
-									<span>Olinishi zarur</span>
+									<span>Arab tili</span>
 								</div>
-								<span class="text-base text--primary font-weight-semibold ms-4">$46,054</span>
+								<span class="text-base text--primary font-weight-semibold ms-4">500  ta</span>
 							</td>
             </tr>
             <tr>
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { mdiDotsVertical, mdiCurrencyUsd } from '@mdi/js'
+import { mdiDotsVertical, mdiCurrencyUsd, mdiFormatListNumberedRtl } from '@mdi/js'
 import { getVuetify, addAlpha } from '@core/utils'
 
 export default {
@@ -100,8 +100,8 @@ export default {
     const chartOptions = {
       labels: ['Tushum','Olinishi zarur' ],
       colors: [
-        $vuetify.theme.currentTheme.primary,
-        addAlpha($vuetify.theme.currentTheme.secondary, 0.1),
+        $vuetify.theme.currentTheme.warning,
+        addAlpha($vuetify.theme.currentTheme.warning, 0.1),
       ],
       chart: {
         type: 'donut',
@@ -130,7 +130,7 @@ export default {
               },
               total: {
                 show: true,
-                label: 'Bugungi tushum',
+                label: 'Talabalar',
                 color: 'rgba(94, 86, 105, 0.68)',
                 formatter(value) {
                   return `${value.globals.seriesTotals.reduce((total, num) => total + num)}k`
@@ -150,6 +150,7 @@ export default {
       icons: {
         mdiDotsVertical,
         mdiCurrencyUsd,
+				mdiFormatListNumberedRtl
       },
     }
   },

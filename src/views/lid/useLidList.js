@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useStudentGroupList(MODULE_NAME) {
+export default function useLidList(MODULE_NAME) {
 
   const selectedTableData = ref([])
   const notify = ref({})
@@ -14,12 +14,7 @@ export default function useStudentGroupList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
-    { text: 'USTOZ', value: 'teacher' },
-    { text: 'GURUH', value: 'group.number' },
-    { text: 'TALABA', value: 'student.full_name' },
-    { text: 'BOSHLANGAN SANA', value: 'begin_date' },
-    { text: 'TUGAGAN SANA', value: 'end_date' },
-    { text: 'AKTIV', value: 'status' },
+    { text: 'NOMI', value: 'name' },
     ]
 
   const filter = ref({
@@ -113,6 +108,3 @@ export default function useStudentGroupList(MODULE_NAME) {
     selectedTableData
   }
 }
-
-
-

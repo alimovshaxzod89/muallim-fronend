@@ -17,11 +17,81 @@
 						<v-col cols="12">
 							<div id="data-list">
 								<v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
+									<div class="d-flex pb-5" style="width: 100%">
+
+										<v-autocomplete
+											v-model="filter.group_id"
+											:items="groups"
+											item-text="number"
+											item-value="id"
+											dense
+											outlined
+											hide-details
+											label="Guruh"
+											class="data-list-search me-3"
+											clearable
+										></v-autocomplete>
+
+										<v-autocomplete
+											v-model="filter.student_id"
+											:items="students"
+											item-text="full_name"
+											item-value="id"
+											dense
+											outlined
+											hide-details
+											label="Talaba"
+											class="data-list-search me-3"
+											clearable
+										></v-autocomplete>
+
+										<v-autocomplete
+											v-model="filter.year"
+											:items="yearOptions"
+											item-text="text"
+											item-value="value"
+											dense
+											outlined
+											hide-details
+											label="Yil"
+											class="data-list-search me-3"
+											clearable
+										></v-autocomplete>
+
+										<v-autocomplete
+											v-model="filter.month"
+											:items="monthOptions"
+											item-text="text"
+											item-value="value"
+											dense
+											outlined
+											hide-details
+											label="Oy"
+											class="data-list-search me-3"
+											clearable
+										></v-autocomplete>
+
+										<v-text-field
+											v-model="filter.day"
+											dense
+											outlined
+											hide-details
+											label="Kun"
+											class="data-list-search me-3"
+										></v-text-field>
+									</div>
+
+									<v-spacer></v-spacer>
+
 									<v-btn class="primary" @click="openPaidsForm()">Qo'shish</v-btn>
+									<div v-if="state.rows.length > 0" class="ml-5">
+										<v-btn v-if="$can('create', 'Room')" class="success exportXlsx" color="white" outlined @click="ExportExcel()">Jadvalni yuklab olish</v-btn>
+									</div>
 								</v-card-text>
 
 								<!-- table -->
 								<v-data-table
+									ref="excel"
 									v-model="selectedTableData"
 									:headers="tableColumns"
 									:items="state.rows"
@@ -65,8 +135,22 @@
 												</template>
 												<span>Tahrirlash</span>
 											</v-tooltip>
+
+											<!-- print  -->
+											<v-tooltip bottom>
+												<template #activator="{ on, attrs }">
+													<v-btn icon small v-bind="attrs" v-on="on" @click="printCheck(item)">
+														<v-icon size="18">
+															{{ icons.mdiPrinter   }}
+														</v-icon>
+													</v-btn>
+												</template>
+												<span>Chop etish</span>
+											</v-tooltip>
 										</div>
 									</template>
+
+                  <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
 								</v-data-table>
 							</div>
 						</v-col>
@@ -85,8 +169,8 @@
 				<payment-paids-form
 					ref="PaymentPaidsForm"
 					:MODULE_NAME="MODULE_NAME"
-					v-on:refresh-list="$emit('refresh-list')"
-					v-on:delete-row="$emit('delete-row')"
+					v-on:refresh-list="$emit('refresh-list'), fetchDatas(true)"
+					v-on:delete-row="$emit('delete-row'), fetchDatas(true)"
 					v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
 				/>
   </v-dialog>
@@ -103,13 +187,20 @@ import {
   mdiCalendar,
   mdiImageEditOutline,
   mdiFilterOutline,
+  mdiPrinter,
 } from '@mdi/js'
 
-import { onUnmounted, ref } from '@vue/composition-api'
+import { onUnmounted, ref, onMounted } from '@vue/composition-api'
 import store from '@/store'
+import axios from '@axios'
 import { useRouter } from '@core/utils'
 
 import envParams from '@envParams'
+import XLSX from 'xlsx'
+import moment from 'moment'
+import numeral from 'numeral'
+
+require('moment/locale/uz-latn')
 
 // store module
 import PaymentPaidsStoreModule from './PaymentPaidsStoreModule'
@@ -124,9 +215,15 @@ export default {
     PaymentPaidsForm,
     DialogConfirm,
   },
+  filters: {
+    date: value => moment(value).format('D MMMM YYYY'),
+    summa: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup(props, { emit }) {
     const MODULE_NAME = 'payment-paids'
     const BASE_URL = envParams.BASE_URL
+    const BACKEND_URL = envParams.BACKEND_URL
 
     const { router } = useRouter()
 
@@ -142,9 +239,12 @@ export default {
     // Modal
     const show = ref(false)
     const group_id = ref(null)
-    const open = (group_id = null) => {
+    const open = (item = null) => {
       show.value = true
-      filter.value.group_id = group_id.group_id
+      filter.value.group_id = item.group_id
+      filter.value.student_id = item.student_id
+      filter.value.year = item.year
+      filter.value.month = item.month
 
       fetchDatas(true)
     }
@@ -184,7 +284,14 @@ export default {
     // Form
     const PaymentPaidsForm = ref(null)
     const openPaidsForm = item => {
-      PaymentPaidsForm.value.open(item)
+      const data = {
+        // subject_id: filter.value.subject_id ? filter.value.subject_id.id : null,
+        student_id: filter.value.student_id ? filter.value.student_id : null,
+        group_id: filter.value.group_id ? filter.value.group_id : null,
+        payment_id: filter.value.payment_id ? filter.value.payment_id : null,
+      }
+
+      PaymentPaidsForm.value.open(item, data)
     }
 
     //Delete Confirm Dialog
@@ -231,6 +338,81 @@ export default {
       return result[0].name
     }
 
+    const yearOptions = ref([
+      { value: '2020', text: '2020' },
+      { value: '2021', text: '2021' },
+      { value: '2022', text: '2022' },
+    ])
+
+    const monthOptions = (function () {
+      const arr = [{ value: '', text: '' }]
+      for (let i = 1; i <= 12; i++) {
+        arr.push({ value: i, text: moment(`2000-${i}-01`).format('MMMM') })
+      }
+      return arr
+    })()
+
+    // eport xlsx
+    const excel = ref(null)
+    const ExportExcel = (type, fn, dl) => {
+      let elt = excel.value.$el.children[0]
+      let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+      return dl
+        ? XLSX.write(wb, {
+            bookType: type,
+            bookSST: true,
+            type: 'base64',
+          })
+        : XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+    }
+
+    const printCheck = data => {
+      var myWindow = window.open(
+        BACKEND_URL + '/print/' + data.id,
+        'MsgWindow',
+        'toolbar=no,status=no,menubar=no,width=600,height=600',
+      )
+      //myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
+    }
+
+    // Loads
+    const subjects = ref(null)
+    const loadSubjects = () => {
+      axios.get('/api/subjects').then(response => {
+        if (response.data.success) {
+          subjects.value = response.data.data
+        }
+      })
+    }
+
+    const groups = ref(null)
+    const loadGroups = () => {
+      axios.get('/api/groups').then(response => {
+        if (response.data.success) {
+          groups.value = response.data.data
+        }
+      })
+    }
+
+    const students = ref(null)
+    const loadStudents = () => {
+      const params = {}
+      if (filter.value.group_id) params.group_id = filter.value.group_id
+
+      axios.get('/api/students', { params }).then(response => {
+        if (response.data.success) {
+          students.value = response.data.data
+        }
+      })
+    }
+
+    // ! Created
+    onMounted(() => {
+      loadSubjects()
+      loadGroups()
+      loadStudents()
+    })
+
     // Return
     return {
       show,
@@ -238,6 +420,19 @@ export default {
       close,
       BASE_URL,
       state,
+      fetchDatas,
+
+      // Loads
+      subjects,
+      groups,
+      students,
+
+      monthOptions,
+      yearOptions,
+      excel,
+      ExportExcel,
+
+      printCheck,
 
       picker,
       isDate,
@@ -277,6 +472,7 @@ export default {
         mdiEyeOutline,
         mdiImageEditOutline,
         mdiFilterOutline,
+        mdiPrinter,
       },
     }
   },
