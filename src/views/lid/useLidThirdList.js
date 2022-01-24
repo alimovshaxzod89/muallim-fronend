@@ -1,12 +1,12 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useLidSecondList(MODULE_NAME) {
+export default function useThirdList(MODULE_NAME) {
 
-  const selectedSecondTableData = ref([])
-  const secondNotify = ref({})
+  const selectedThirdTableData = ref([])
+  const thirdNotify = ref({})
 
-  const secondTableColumns = [
+  const thirdTableColumns = [
     { text: '#', sortable: false, value: 'index' },
     {
         text: 'AMALLAR',
@@ -20,22 +20,22 @@ export default function useLidSecondList(MODULE_NAME) {
   const filter = ref({
     query: '',
   })
-  const secondOptions = ref({
+  const thirdOptions = ref({
     sortBy: ['id'],
     sortDesc: [true],
     limit: 10,
     skip: 0,
   })
-  const secondLoading = ref(false)
+  const thirdLoading = ref(false)
 
   let lastQuery = '';
   const fetchDatas = (force = false) => {
 
-    secondOptions.value.skip = secondOptions.value.page -1
-    secondOptions.value.limit = secondOptions.value.itemsPerPage
+    thirdOptions.value.skip = thirdOptions.value.page -1
+    thirdOptions.value.limit = thirdOptions.value.itemsPerPage
 
     const queryParams = {
-      ...secondOptions.value,
+      ...thirdOptions.value,
     }
 
 		for (let key in filter.value) {
@@ -53,12 +53,12 @@ export default function useLidSecondList(MODULE_NAME) {
       store
         .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
         .then(() => {
-            secondLoading.value = false
+            thirdLoading.value = false
         })
         .catch(error => {
           console.log(error)
-          secondLoading.value = false
-          secondNotify.value = { type: 'error', text: error, time: Date.now() }
+          thirdLoading.value = false
+          thirdNotify.value = { type: 'error', text: error, time: Date.now() }
         })
     }
 
@@ -67,44 +67,44 @@ export default function useLidSecondList(MODULE_NAME) {
   }
 
   watch(filter, () => {
-    if (secondOptions.value.page != 1) secondOptions.value.page = 1
-    secondLoading.value = true
+    if (thirdOptions.value.page != 1) thirdOptions.value.page = 1
+    thirdLoading.value = true
 
     setTimeout(() => fetchDatas(), 1000);
   }, {deep: true})
 
-  watch(secondOptions, () => {
-    secondLoading.value = true
+  watch(thirdOptions, () => {
+    thirdLoading.value = true
     fetchDatas()
     // selectedSecondTableData.value = []
   })
 
   //delete
-  const deleteSecondRow = (id) => {
+  const deleteThirdRow = (id) => {
 
     store.
         dispatch(`${MODULE_NAME}/removeRow`, id)
         .then((message) => {
-            secondNotify.value = { type: 'success', text: message, time: Date.now() }
+            thirdNotify.value = { type: 'success', text: message, time: Date.now() }
 
             fetchDatas(true)
 
     }).catch(error => {
       console.log(error)
-      secondNotify.value = { type: 'error', text: error.message, time: Date.now() }
+      thirdNotify.value = { type: 'error', text: error.message, time: Date.now() }
     })
 
   }
 
   return {
-    secondTableColumns,
+    thirdTableColumns,
     filter,
     fetchDatas,
-    deleteSecondRow,
+    deleteThirdRow,
 
-    secondOptions,
-    secondLoading,
-    secondNotify,
-    selectedSecondTableData
+    thirdOptions,
+    thirdLoading,
+    thirdNotify,
+    selectedThirdTableData
   }
 }
