@@ -163,6 +163,18 @@ export default {
         formData.value.group_id = group_id
       }
     }
+		const open2 = (id = null, item = null) => {
+			show.value = true
+			if (id) {
+				formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+			} else if (item) {
+				const t = JSON.parse(JSON.stringify(formData.value))
+				for (const field in item) {
+					t[field] = item[field]
+				}
+				formData.value = t
+			}
+		}
     const close = () => {
       show.value = false
       formData.value = { ...emptyFormData }
@@ -246,6 +258,7 @@ export default {
       show,
       onSubmit,
       open,
+      open2,
       close,
       rooms,
       days,

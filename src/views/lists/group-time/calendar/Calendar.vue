@@ -1,17 +1,19 @@
 <template>
 	<v-card>
-		<v-simple-table class="my-table">
+		<v-simple-table class="my-table my-table-width">
 			<template v-slot:default>
 				<thead>
-				<tr>
-					<th>Xona / Soat</th>
-					<th v-for='time in times'
+					<tr>
+						<th>Xona / Soat</th>
+						<th
+							class="my-td"
+							v-for='time in times'
 							:key='time.hour'
 							style='text-align: left !important;'
-					>
-						{{ time.hour }}
-					</th>
-				</tr>
+						>
+							{{ time.hour }}
+						</th>
+					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="room in rooms" :key="room.id">
@@ -20,17 +22,19 @@
 						</td>
 
 						<td
+							class="my-td"
 							v-for="time in times"
 							:key="time.hour"
 						>
 							<div
-								style="position: relative; height: 100%; margin-top: 5px; width: 50px;"
+								style="position: relative; height: 100%; margin-top: 5px;"
 								class="cell"
-								v-if="getters[`${MODULE_NAME}/indexCalendar`].includes(`${time}_${room.id}`)"
+								v-if="getters[`${MODULE_NAME}/indexCalendar`].includes(`${day}_${time.hour}_${room.id}`)"
 							>
 								<calendar-cell
-									:group-time="stateGroupTime.rows[getters[`group-time/indexCalendar`].indexOf(`${time}_${room.id}`)]"
+									:group-time="stateGroupTime.rows[getters[`group-time/indexCalendar`].indexOf(`${day}_${time.hour}_${room.id}`)]"
 									:time="time"
+									:day="day"
 									:room_id="room.id"
 									v-on:open-group-time-form="openGroupTimeForm($event)"
 								/>
@@ -39,12 +43,11 @@
 							<div
 								style="position: relative; height: 100%; margin-top: 5px; width: 50px;"
 								class="cell"
-								v-if="!getters[`${MODULE_NAME}/indexCalendar`].includes(`${time}_${room.id}`)"
-								@dblclick="openGroupTimeForm(null, {place_id, room_id: room.id, time_begin: time})"
+								v-if="!getters[`${MODULE_NAME}/indexCalendar`].includes(`${day}_${time.hour}_${room.id}`)"
+								@dblclick="openGroupTimeForm(null, {place_id: place_id, room_id: room.id, time_begin: time.time, week_day: day})"
 							>
 							</div>
 						</td>
-
 					</tr>
 				</tbody>
 			</template>
@@ -95,10 +98,10 @@ export default {
 
     const vm = getCurrentInstance().proxy
 
-		let times = ref([])
-		for (let hour = 6; hour <= 23; hour += 1) {
-			times.value.push({ time: moment.utc(hour * 3600 * 1000).format('H:mm'), hour })
-		}
+    let times = ref([])
+    for (let hour = 6; hour <= 23; hour += 1) {
+      times.value.push({ time: moment.utc(hour * 3600 * 1000).format('H:mm'), hour })
+    }
 
     onMounted(() => {
       loadRooms(props.place_id)
@@ -123,10 +126,10 @@ export default {
     //form
     const groupTimeForm = ref()
     const openGroupTimeForm = (id, fields = {}) => {
-      if (id && vm.$can('update', 'Bron')) {
-        groupTimeForm.value.open(id, fields)
-      } else if (vm.$can('create', 'Bron')) {
-        groupTimeForm.value.open(id, fields)
+      if (id && vm.$can('update', 'GroupTime')) {
+        groupTimeForm.value.open2(id, fields)
+      } else if (vm.$can('create', 'GroupTime')) {
+        groupTimeForm.value.open2(id, fields)
       }
     }
 
@@ -144,7 +147,7 @@ export default {
       groupTimeForm,
       openGroupTimeForm,
 
-			MODULE_NAME,
+      MODULE_NAME,
     }
   },
 }
