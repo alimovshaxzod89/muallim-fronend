@@ -223,7 +223,7 @@ import useLidSecondList from './useLidSecondList'
 import useLidThirdList from './useLidThirdList'
 import LidForm from './LidForm'
 import LidSecondForm from './LidSecondForm.vue'
-import LidThirdForm from './LidSecondForm.vue'
+import LidThirdForm from './LidThirdForm.vue'
 import DialogConfirm from '../components/DialogConfirm.vue'
 
 const MODULE_NAME = 'lid'
