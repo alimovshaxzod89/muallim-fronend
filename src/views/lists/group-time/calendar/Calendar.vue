@@ -27,7 +27,7 @@
 							:key="time.hour"
 						>
 							<div
-								style="position: relative; height: 100%; margin-top: 5px; width: 50px;"
+								style="position: relative; height: 100%; margin-top: 5px;"
 								class="cell"
 								v-if="getters[`${MODULE_NAME}/indexCalendar`].includes(`${day}_${time.hour}_${room.id}`)"
 							>
