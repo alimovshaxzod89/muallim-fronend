@@ -15,7 +15,7 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody ref="tbody">
 					<tr v-for="room in rooms" :key="room.id">
 						<td>
 							<div style="min-width: 50px; white-space: nowrap;">{{ room.name  }} ({{room.capacity}}x)</div>
@@ -36,6 +36,7 @@
 									:time="time"
 									:day="day"
 									:room_id="room.id"
+									:tbody="tbody"
 									v-on:open-group-time-form="openGroupTimeForm($event)"
 								/>
 							</div>
@@ -135,7 +136,10 @@ export default {
 
     const currentDate = moment().format('YYYY-MM-DD')
 
+    const tbody = ref()
+
     return {
+      tbody,
       times,
       rooms,
 

@@ -43,13 +43,14 @@ export default {
       type: Object,
       required: true,
     },
+    tbody: {
+      required: true,
+    },
   },
   setup(props) {
     if (!props.groupTime.group) {
       console.log(props.groupTime, props.day, props.time, props.room_id)
     }
-
-    const tableEl = document.querySelector('.my-table-width tbody .my-td')
 
     // const groupTime = ref(store.state.groupTime.rows[props.index])
     // const days = 1
@@ -66,6 +67,10 @@ export default {
     // const right = (-1 * diffDays * 55) + (groupTime.value.end_half_day == 1 ? 27 : 0)
     //
     // const left = groupTime.value.begin_half_day == 1 ? 0 : 27
+
+    const tableEl = document.querySelector('.my-table-width tbody .my-td')
+
+    console.log(props.tbody.querySelector('.my-td'))
 
     const groupTime = props.groupTime
 
