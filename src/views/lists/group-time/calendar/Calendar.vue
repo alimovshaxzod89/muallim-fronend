@@ -17,7 +17,7 @@
 				</thead>
 				<tbody>
 					<tr v-for="room in rooms" :key="room.id">
-						<td>
+						<td style='padding: 2px !important;'>
 							<div style="min-width: 50px; white-space: nowrap;">{{ room.name  }} ({{room.capacity}}x)</div>
 						</td>
 
@@ -55,9 +55,9 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-		<group-time-form 
+		<group-time-form
       ref="groupTimeForm"
-      v-on:delete-form="confirmDelete($event)" 
+      v-on:delete-form="confirmDelete($event)"
     />
 	</v-card>
 </template>
@@ -204,7 +204,7 @@ table th {
 }
 
 table td {
-  padding: 2px !important;
+  padding: 0px !important;
 }
 
 table {

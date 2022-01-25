@@ -1,4 +1,14 @@
 const views = [
+	{
+		path: '/apps/calendar',
+		name: 'apps-calendar',
+		component: () => import('@/views/apps/calendar/Calendar.vue'),
+		meta: {
+			layout: 'content',
+			resource: 'Public',
+			action: 'read',
+		},
+	},
   {
     path: '/main',
     name: 'dashboard-eCommerce',
