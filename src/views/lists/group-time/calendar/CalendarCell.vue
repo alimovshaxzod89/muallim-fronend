@@ -73,7 +73,7 @@ export default {
 			const left = minutesForBegin / 60 * 100
 
 			const width = minutesForEnd / 60 * 100
-			const minusWidthForBorder = 4 - minutesForEnd / 60
+			const minusWidthForBorder = 4 - (minutesForEnd / 60)
 
 			cellStyles.value.left = left ? `calc( ${left}% + 2px)` : '2px'
 			cellStyles.value.width = `calc( ${width}% - ${minusWidthForBorder}px )`
