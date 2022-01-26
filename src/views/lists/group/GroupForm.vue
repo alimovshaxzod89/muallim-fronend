@@ -366,7 +366,7 @@ export default {
         }
       }
     }
-
+    
     // Load subjects
     const subjects = ref()
     const loadSubjects = () => {
@@ -412,6 +412,16 @@ export default {
       loadPlace()
     })
 
+    // ProductTypeForm
+    const roomForm = ref(null)
+    const addPlace = (id = null) => {
+      roomForm.value.open(id)
+    }
+    const addPlaceToOptions = row => {
+      selectsDatas.value.room = selectsDatas.value.room.concat([row])
+      formData.value.place_id = row.id
+    }
+
     return {
       form,
       picker,
@@ -426,7 +436,6 @@ export default {
       validate,
       show,
       onSubmit,
-      selectRule,
       open,
       close,
       subjects,
@@ -434,6 +443,10 @@ export default {
       rooms,
       teachers,
       isDate2,
+
+      addPlace,
+      roomForm,
+      addPlaceToOptions,
 
       icons: {
         mdiCalendar,

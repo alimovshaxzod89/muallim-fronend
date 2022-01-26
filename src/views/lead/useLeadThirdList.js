@@ -1,12 +1,12 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useLidList(MODULE_NAME) {
+export default function useThirdList(MODULE_NAME) {
 
-  const selectedTableData = ref([])
-  const notify = ref({})
+  const selectedThirdTableData = ref([])
+  const thirdNotify = ref({})
 
-  const tableColumns = [
+  const thirdTableColumns = [
     { text: '#', sortable: false, value: 'index' },
     {
         text: 'AMALLAR',
@@ -20,22 +20,22 @@ export default function useLidList(MODULE_NAME) {
   const filter = ref({
     query: '',
   })
-  const options = ref({
+  const thirdOptions = ref({
     sortBy: ['id'],
     sortDesc: [true],
     limit: 10,
     skip: 0,
   })
-  const loading = ref(false)
+  const thirdLoading = ref(false)
 
   let lastQuery = '';
   const fetchDatas = (force = false) => {
 
-    options.value.skip = options.value.page -1
-    options.value.limit = options.value.itemsPerPage
+    thirdOptions.value.skip = thirdOptions.value.page -1
+    thirdOptions.value.limit = thirdOptions.value.itemsPerPage
 
     const queryParams = {
-      ...options.value,
+      ...thirdOptions.value,
     }
 
 		for (let key in filter.value) {
@@ -53,12 +53,12 @@ export default function useLidList(MODULE_NAME) {
       store
         .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
         .then(() => {
-          loading.value = false
+            thirdLoading.value = false
         })
         .catch(error => {
           console.log(error)
-          loading.value = false
-          notify.value = { type: 'error', text: error, time: Date.now() }
+          thirdLoading.value = false
+          thirdNotify.value = { type: 'error', text: error, time: Date.now() }
         })
     }
 
@@ -67,44 +67,44 @@ export default function useLidList(MODULE_NAME) {
   }
 
   watch(filter, () => {
-    if (options.value.page != 1) options.value.page = 1
-    loading.value = true
+    if (thirdOptions.value.page != 1) thirdOptions.value.page = 1
+    thirdLoading.value = true
 
     setTimeout(() => fetchDatas(), 1000);
   }, {deep: true})
 
-  watch(options, () => {
-    loading.value = true
+  watch(thirdOptions, () => {
+    thirdLoading.value = true
     fetchDatas()
-    // selectedTableData.value = []
+    // selectedSecondTableData.value = []
   })
 
   //delete
-  const deleteRow = (id) => {
+  const deleteThirdRow = (id) => {
 
     store.
         dispatch(`${MODULE_NAME}/removeRow`, id)
         .then((message) => {
-            notify.value = { type: 'success', text: message, time: Date.now() }
+            thirdNotify.value = { type: 'success', text: message, time: Date.now() }
 
             fetchDatas(true)
 
     }).catch(error => {
       console.log(error)
-      notify.value = { type: 'error', text: error.message, time: Date.now() }
+      thirdNotify.value = { type: 'error', text: error.message, time: Date.now() }
     })
 
   }
 
   return {
-    tableColumns,
+    thirdTableColumns,
     filter,
     fetchDatas,
-    deleteRow,
+    deleteThirdRow,
 
-    options,
-    loading,
-    notify,
-    selectedTableData
+    thirdOptions,
+    thirdLoading,
+    thirdNotify,
+    selectedThirdTableData
   }
 }

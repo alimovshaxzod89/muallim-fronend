@@ -17,7 +17,7 @@
 				</thead>
 				<tbody ref="tbody">
 					<tr v-for="room in rooms" :key="room.id">
-						<td>
+						<td style='padding: 2px !important;'>
 							<div style="min-width: 50px; white-space: nowrap;">{{ room.name  }} ({{room.capacity}}x)</div>
 						</td>
 
@@ -54,7 +54,12 @@
 			</template>
 		</v-simple-table>
 
-		<group-time-form ref="groupTimeForm" />
+    <dialog-confirm ref="dialogConfirm" />
+
+		<group-time-form
+      ref="groupTimeForm"
+      v-on:delete-form="confirmDelete($event)"
+    />
 	</v-card>
 </template>
 
@@ -66,6 +71,7 @@ import store from '@/store'
 import GroupTimeStoreModule from '../GroupTimeStoreModule'
 import GroupTimeForm from './../crud/GroupTimeForm'
 import CalendarCell from './CalendarCell'
+import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 const MODULE_NAME = 'group-time'
 
@@ -74,6 +80,7 @@ export default {
   components: {
     CalendarCell,
     GroupTimeForm,
+    DialogConfirm,
   },
   props: {
     day: {
@@ -134,6 +141,31 @@ export default {
       }
     }
 
+    //Delete Confirm Dialog
+    const dialogConfirm = ref(null)
+    const confirmDelete = id => {
+      dialogConfirm.value
+        .open('Ўчиришга аминмисиз?')
+        .then(() => deleteRow(id))
+        .catch(() => {})
+    }
+
+    //delete
+    const deleteRow = id => {
+      store
+        .dispatch(`${MODULE_NAME}/removeRow`, id)
+        .then(message => {
+          // notify.value = { type: 'success', text: message, time: Date.now() }
+
+          fetchDatas(true)
+          emit('delete-row')
+        })
+        .catch(error => {
+          console.log(error)
+          // notify.value = { type: 'error', text: error.message, time: Date.now() }
+        })
+    }
+
     const currentDate = moment().format('YYYY-MM-DD')
 
     const tbody = ref()
@@ -144,6 +176,10 @@ export default {
       rooms,
 
       currentDate,
+
+      confirmDelete,
+      dialogConfirm,
+      deleteRow,
 
       stateGroupTime,
       getters,
@@ -172,7 +208,7 @@ table th {
 }
 
 table td {
-  padding: 2px !important;
+  padding: 0px !important;
 }
 
 table {

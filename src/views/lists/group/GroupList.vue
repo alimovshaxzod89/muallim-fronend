@@ -11,14 +11,19 @@
           label="Qidiruv"
           class="data-list-search me-3"
         ></v-text-field>
-        <v-text-field
-          v-model="filter.query"
+        <v-autocomplete
+          v-model="filter.place_id"
+          :items="places"
+          item-text="name"
+          item-value="id"
+          label="BINO"
+          class="data-list-search me-3"
           dense
           outlined
           hide-details
-          label="Bino"
-          class="data-list-search me-3"
-        ></v-text-field>
+          clearable
+        >
+        </v-autocomplete>
 
 				<v-expansion-panels class="my-accordion" accordion>
 					<v-expansion-panel>
@@ -394,6 +399,16 @@ export default {
       return result[0].name
     }
 
+
+    // ! METHODS
+    const places = ref([])
+		const loadPlace = () => {
+			axios.get('/api/places')
+				.then(response => {
+					places.value = response.data.data
+				})
+		}
+
     // LoadApis
     const regions = ref([])
     const loadRegions = () => {
@@ -404,13 +419,21 @@ export default {
 
     onMounted(() => {
       loadRegions()
+      loadPlace()
     })
+
+     // PlaceForm
+    const placeForm = ref(null)
+    const addPlace = (id = null) => {
+      placeForm.value.open(id)
+    }
 
     // Return
     return {
       BASE_URL,
       state,
       filter,
+      loadPlace,
 
       picker,
       isDate,
@@ -421,6 +444,12 @@ export default {
       loading,
       notify,
       selectedTableData,
+
+      placeForm,
+      addPlace,
+
+      // LoadApis
+			places,
 
       actions,
       actionOptions,

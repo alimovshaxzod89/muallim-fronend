@@ -13,6 +13,7 @@ export default function useGroupList(MODULE_NAME) {
       align: 'start',
       sortable: false,
     },
+    { text: 'GRURH', value: 'group.name' },
     { text: 'KUN', value: 'week_day' },
     { text: 'XONA', value: 'room.name' },
     { text: 'VAQT ...DAN', value: 'time_begin' },
@@ -22,6 +23,7 @@ export default function useGroupList(MODULE_NAME) {
   const searchQuery = ref('')
   const options = ref({
     sortBy: ['id'],
+    group_id: null,
     sortDesc: [true],
     skip: 0,
     limit: 10,

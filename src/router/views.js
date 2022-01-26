@@ -1,4 +1,14 @@
 const views = [
+	{
+		path: '/apps/calendar',
+		name: 'apps-calendar',
+		component: () => import('@/views/apps/calendar/Calendar.vue'),
+		meta: {
+			layout: 'content',
+			resource: 'Public',
+			action: 'read',
+		},
+	},
   {
     path: '/main',
     name: 'dashboard-eCommerce',
@@ -10,13 +20,13 @@ const views = [
     },
   },
   {
-    path: '/lids',
-    name: 'lids',
-    component: () => import('@/views/lid/LidList.vue'),
+    path: '/leads',
+    name: 'leads',
+    component: () => import('@/views/lead/LeadList.vue'),
     meta: {
       layout: 'content',
-      resource: 'Lid',
-      action: 'manage',
+      resource: 'Lead',
+      action: 'read',
     },
   },
   {

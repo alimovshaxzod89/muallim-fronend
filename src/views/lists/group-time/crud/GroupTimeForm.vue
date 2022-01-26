@@ -16,6 +16,24 @@
         <v-card-text>
           <v-container>
             <v-row>
+
+              <v-col cols="6">
+                <h4 class="text-required no-texts"><span>*</span></h4>
+                <v-autocomplete
+                  v-model="formData.group_id"
+                  :items="selectsDatas.groups"
+                  item-text="number"
+                  item-value="id"
+                  label="GURUH"
+                  dense
+                  outlined
+                  hide-details
+                  clearable
+                  :rules="selectRule"
+                >
+                </v-autocomplete>
+              </v-col>
+
 							<v-col cols="6">
 								<h4 class="text-required no-texts"><span>*</span></h4>
                 <v-autocomplete
@@ -121,6 +139,9 @@
         </v-card-text>
 
         <v-card-actions>
+          <div v-show="formData.id !==  null">					
+						<v-btn color="error" type="button" @click.prevent="$emit('delete-form', formData.id), close()">O'chirish</v-btn>
+					</div>          
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
           <v-btn color="success" type="submit" @click.prevent="onSubmit()">Saqlash</v-btn>
@@ -147,6 +168,7 @@ export default {
     const show = ref(false)
     const emptyFormData = {
       id: null,
+      group_id: null,
       week_day: null,
       room_id: null,
       time_begin: null,
@@ -180,10 +202,31 @@ export default {
       formData.value = { ...emptyFormData }
       form.value.resetValidation()
     }
+
+    const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
+
+    //form options for selects
+    const selectsDatas = ref({})
+    // ! METHODS
+    const loadPlace = () => {
+      axios
+        .get('/api/groups', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.groups = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
+
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.week_day && formData.value.room_id) {
+        if (
+            formData.value.week_day && 
+            formData.value.room_id &&
+            formData.value.group_id
+            ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
@@ -203,7 +246,12 @@ export default {
         }
       } else {
         //create
-        if (formData.value.week_day && formData.value.room_id) {
+        if (
+            formData.value.week_day && 
+            formData.value.room_id &&
+            formData.value.group_id
+        
+        ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(message => {
@@ -246,11 +294,22 @@ export default {
 
     onMounted(() => {
       loadRooms()
+      loadPlace()
     })
 
     // time settings
     const time = ref(null)
     const time2 = ref(null)
+
+    // ProductTypeForm
+    const roomForm = ref(null)
+    const addPlace = (id = null) => {
+      roomForm.value.open(id)
+    }
+    const addPlaceToOptions = row => {
+      selectsDatas.value.groups = selectsDatas.value.groups.concat([row])
+      formData.value.group_id = row.id
+    }
 
     return {
       form,
@@ -265,6 +324,13 @@ export default {
 
       time,
       time2,
+
+      roomForm,
+      addPlace,
+      addPlaceToOptions,
+      selectsDatas,
+      selectRule,
+
 
       icons: {
         mdiCalendar,
