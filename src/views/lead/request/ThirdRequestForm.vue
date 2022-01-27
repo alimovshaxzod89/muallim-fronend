@@ -10,17 +10,14 @@
   >
     <v-card>
       <v-form ref="form">
-        <v-card-title>
-          <span class="headline">Yangi bo'lim yaratish</span>
-        </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12">
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
-                  label="NOMI"
-                  v-model="formData.name"
+                  label="FIO"
+                  v-model="formData.full_name"
                   type="text"
                   dense
                   outlined
@@ -28,6 +25,32 @@
                   hide-details
                   :rules="[required]"
                 ></v-text-field>
+              </v-col>
+
+              <v-col cols="12">
+                <h4 class="text-required no-text"><span>*</span></h4>
+                <v-text-field
+                  prefix="+998"
+                  label="TELEFON"
+                  v-model="formData.phone"
+                  type="phone"
+                  dense
+                  outlined
+                  hide-details
+                  :rules="[required]"
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12">
+                <v-textarea
+                    v-model="formData.note"
+                    label="IZOH"
+                    dense
+                    outlined
+                    hide-details
+                    height="80px"
+                >
+                  </v-textarea>
               </v-col>
             </v-row>
           </v-container>
@@ -48,13 +71,13 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import LeadStoreModule from './storeModule/LeadStoreModule'
+import LeadStoreModule from '../storeModule/LeadStoreModule'
 
 import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
-import Button from '../components/button/Button.vue'
+import Button from '../../components/button/Button.vue'
 
 const MODULE_NAME = 'lead'
 
@@ -84,11 +107,10 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      name: null,
+      full_name: null,
+      phone: null,
+      note: null,
     }
-
-    const picker = new Date().toISOString().substr(0, 10)
-    const isDate = ref(false)
 
     //validation
     const formData = ref({ ...emptyFormData })
@@ -100,7 +122,7 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.name) {
+        if (formData.value.full_name && formData.value.phone) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
@@ -118,12 +140,12 @@ export default {
           })
         }
       } else {
-        if (formData.value.name) {
-          const newValue = {
+        if (formData.value.full_name && formData.value.phone) {
+            const newValue = {
             ...formData.value,
             position: 1,
+            name: '1',
           }
-
           store
             .dispatch(`${MODULE_NAME}/addRow`, newValue)
             .then(({ message }) => {
@@ -145,8 +167,6 @@ export default {
 
     return {
       form,
-      picker,
-      isDate,
       required,
       minLengthValidator,
       formData,
@@ -177,6 +197,6 @@ export default {
   border-color: rgba(94, 86, 105, 0.15) !important;
 }
 .amount {
-  margin-top: -45px;
+    margin-top: -45px
 }
 </style>

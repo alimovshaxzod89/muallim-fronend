@@ -10,7 +10,7 @@ export default function useThirdList(MODULE_NAME) {
     { text: '#', sortable: false, value: 'index' },
     {
         text: 'AMALLAR',
-        value: 'actions',
+        value: 'thirdActions',
         align: 'center',
         sortable: false,
     },

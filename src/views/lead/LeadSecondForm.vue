@@ -48,7 +48,7 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import LeadStoreModule from './LeadStoreModule'
+import LeadStoreModule from './storeModule/LeadStoreModule'
 
 import axios from '@axios'
 
@@ -99,7 +99,7 @@ export default {
       if (formData.value.id) {
         if (formData.value.name) {
           store
-            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/updateSecondRow`, formData.value)
             .then(({ message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -116,8 +116,12 @@ export default {
         }
       } else {
         if (formData.value.name) {
+          const newSecondValue = {
+            ...formData.value,
+            position: 1,
+          }
           store
-            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/addSecondRow`, newSecondValue)
             .then(({ message }) => {
               close()
               emit('notify', { type: 'success', text: message })

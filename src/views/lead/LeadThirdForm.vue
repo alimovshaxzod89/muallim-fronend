@@ -125,7 +125,7 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import LeadStoreModule from './LeadStoreModule'
+import LeadStoreModule from './storeModule/LeadStoreModule'
 
 import axios from '@axios'
 

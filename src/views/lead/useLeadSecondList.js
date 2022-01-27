@@ -10,7 +10,7 @@ export default function useLeadSecondList(MODULE_NAME) {
     { text: '#', sortable: false, value: 'index' },
     {
         text: 'AMALLAR',
-        value: 'actions',
+        value: 'secondActions',
         align: 'center',
         sortable: false,
     },
