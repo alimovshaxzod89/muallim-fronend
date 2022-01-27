@@ -1,26 +1,41 @@
 <template>
-	<div
-		class='group-time-cell'
-		:style='cellStyles'
-		@click="$emit('open-group-time-form', groupTime.id)"
-	>
-		<!--		<div style="width: 50px; overflow: hidden; height: 30px; text-overflow: ellipsis;">-->
-		<v-icon v-if="$can('update', 'groupTime')" size='18'
-						@click="$emit('open-group-time-form', groupTime.id)">
-			{{ icons.mdiPencilOutline }}
-		</v-icon>
-		{{ groupTime.group.number }}
-		<!--		</div>-->
-	</div>
+	<v-tooltip top>
+		<template #activator="{ on, attrs }">
+			<div
+				class='group-time-cell'
+				:style='cellStyles'
+				@click="$emit('open-group-time-form', groupTime.id)"
+				v-bind="attrs"
+				v-on="on"
+			>
+				<v-icon v-if="$can('update', 'groupTime')" size='18' @click="$emit('open-group-time-form', groupTime.id)">
+					{{ icons.mdiPencilOutline }}
+				</v-icon>
+				<span class="text-dots">
+					Guruh:
+					<b>{{ groupTime.group.number }}</b>
+					<!-- Xona:
+					<b>{{ groupTime.room.name }}</b>,
+					Soat:
+					<b>{{ groupTime.time_begin }}</b>
+					-
+					<b>{{ groupTime.time_end }}</b> -->
+				</span>
+			</div>
+		</template>
+		<span>
+			Guruh:
+			<b>{{ groupTime.group.number }}</b>
+		</span>
+	</v-tooltip>
 </template>
 
 <script>
 // v-if="stategroupTime.indexCalendar && stategroupTime.indexCalendar.includes(`${date}_${room.id}`)"
+import { mdiDeleteOutline, mdiPencilOutline } from '@mdi/js'
 
 import { ref } from '@vue/composition-api/dist/vue-composition-api'
-import { mdiDeleteOutline, mdiPencilOutline } from '@mdi/js'
 import moment from 'moment'
-import { watch } from '@vue/composition-api'
 
 export default {
   name: 'CalendarCell',
@@ -37,21 +52,21 @@ export default {
       type: String | Number,
       required: true,
     },
-    // index: {
-    // 	type: Number,
-    // 	required: true,
-    // },
     groupTime: {
       type: Object,
       required: true,
     },
+    // index: {
+    // 	type: Number,
+    // 	required: true,
+    // },
   },
   setup(props) {
     const cellStyles = ref({
-      // "background-color": this.bgColor,
       left: 0,
-      // right: 'none',
       width: '99%',
+      // "background-color": this.bgColor,
+      // right: 'none',
       // 'border-left-width': props.date == groupTime.begin_date ? '1px' : '0',
       // 'border-left-radius': props.date == groupTime.begin_date ? '10px' : '0',
       // 'border-right-width': props.date == groupTime.end_date ? '1px' : '0',
@@ -91,13 +106,28 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .group-time-cell {
+  display: flex;
+  align-items: center;
   left: 0;
   position: absolute;
   border: 1px solid #4a0c60;
   height: 30px;
   background-color: rgba(2, 119, 3, 0.29);
   z-index: 3;
+  button {
+    transform: translateX(7px);
+  }
+}
+
+.text-dots {
+  display: -webkit-box;
+  height: 20px;
+  margin-left: 15px;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>
