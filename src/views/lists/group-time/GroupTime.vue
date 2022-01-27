@@ -1,6 +1,5 @@
 <template>
 	<div>
-
 		<select-place v-if='!filter.place_id' v-on:select-place='selectPlace($event)' />
 		<div v-if='filter.place_id'>
 			<div class='row justify-content-between' style='display: flex;'>
@@ -12,12 +11,7 @@
 							color='primary'
 							@click='selectPlace(null)'
 						>
-							<v-icon
-								dark
-								left
-							>
-								{{ icons.mdiArrowLeft }}
-							</v-icon>
+							<v-icon dark left>{{ icons.mdiArrowLeft }}</v-icon>
 							Орқага
 						</v-btn>
 						<h2>
@@ -25,7 +19,6 @@
 							}}</h2>
 					</div>
 					<div>
-
 						<div class='month'>
 							<v-btn
 								v-for='(day, dayIndex) in weekDays'
@@ -42,9 +35,7 @@
 						</div>
 					</div>
 				</v-col>
-
 			</div>
-
 			<br>
 			<div v-for='day in filter.weekDays'>
 				<h2>{{ weekDays[day] }}</h2>
@@ -55,152 +46,142 @@
 				/>
 				<br />
 			</div>
-
-
 		</div>
-
 	</div>
 </template>
 
 <script>
-import { useRouter } from '@core/utils'
-import SelectPlace from './SelectPlace'
+import { mdiArrowLeft } from '@mdi/js'
 
 import { onMounted, ref, watch } from '@vue/composition-api'
-import Calendar from './calendar/Calendar'
+import { useRouter } from '@core/utils'
+
 import store from '@/store'
-import GroupTimeStoreModule from './GroupTimeStoreModule'
-import { mdiArrowLeft } from '@mdi/js'
 import axios from '@axios'
-import moment from 'moment'
+
+import SelectPlace from './SelectPlace'
+import Calendar from './calendar/Calendar'
+import GroupTimeStoreModule from './GroupTimeStoreModule'
 
 const MODULE_NAME = 'group-time'
 
 export default {
-	components: {
-		SelectPlace,
-		Calendar,
-	},
-	setup() {
+  components: {
+    SelectPlace,
+    Calendar,
+  },
+  setup() {
+    // Register module
+    if (!store.hasModule(MODULE_NAME)) {
+      store.registerModule(MODULE_NAME, GroupTimeStoreModule)
+    }
 
-		// Register module
-		if (!store.hasModule(MODULE_NAME)) {
-			store.registerModule(MODULE_NAME, GroupTimeStoreModule)
-		}
+    //store state
+    // const stateBron = ref(store.state[MODULE_NAME])
 
-		//store state
-		// const stateBron = ref(store.state[MODULE_NAME])
+    onMounted(() => {
+      filter.value.place_id = route.value.query.place_id ? parseInt(route.value.query.place_id) : null
+    })
 
-		onMounted(() => {
-			filter.value.place_id = route.value.query.place_id ? parseInt(route.value.query.place_id) : null
-		})
+    const { router, route } = useRouter()
 
-		const {
-			router,
-			route,
-		} = useRouter()
+    const places = ref({})
+    const loadPlaces = () => {
+      axios.get('/api/places').then(response => {
+        if (response.data.success) {
+          const res = response.data.data
+          for (const resKey in res) {
+            places.value[res[resKey].id] = res[resKey].name
+          }
+        }
+      })
+    }
 
-		const places = ref({})
-		const loadPlaces = () => {
-			axios.get('/api/places')
-				.then(response => {
-					if (response.data.success) {
-						const res = response.data.data
-						for (const resKey in res) {
-							places.value[res[resKey].id] = res[resKey].name
-						}
-					}
-				})
-		}
-		loadPlaces()
+    loadPlaces()
 
-		const selectPlace = id => {
-			filter.value.place_id = id
+    const selectPlace = id => {
+      filter.value.place_id = id
 
-			router.push({
-				query: {
-					...router.query,
-					place_id: id,
-				},
-			})
-		}
+      router.push({
+        query: {
+          ...router.query,
+          place_id: id,
+        },
+      })
+    }
 
-		//filters
-		const filter = ref({
-			place_id: null,
-			weekDays: [],
-		})
+    //filters
+    const filter = ref({
+      place_id: null,
+      weekDays: [],
+    })
 
-		filter.value.weekDays.push((new Date()).getDay())
+    filter.value.weekDays.push(new Date().getDay())
 
-		const weekDays = {
-			1: 'Dushanba',
-			2: 'Seshanba',
-			3: 'Chorshanba',
-			4: 'Payshanba',
-			5: 'Juma',
-			6: 'Shanba',
-			7: 'Yakshanba',
-		}
-		const setWeekDay = day => {
-			filter.value.weekDays = [day]
-		}
-		const setWeekDays = day => {
-			if (filter.value.weekDays.indexOf(day) !== -1) {
-				//remove
-				const pos = filter.value.weekDays.indexOf(day)
-				filter.value.weekDays.splice(pos, 1)
-			} else {
-				//add
-				filter.value.weekDays.push(day)
-			}
-		}
-		watch(
-			filter,
-			value => {
-				const {
-					place_id,
-					weekDays,
-				} = value
+    const weekDays = {
+      1: 'Dushanba',
+      2: 'Seshanba',
+      3: 'Chorshanba',
+      4: 'Payshanba',
+      5: 'Juma',
+      6: 'Shanba',
+      7: 'Yakshanba',
+    }
+    const setWeekDay = day => {
+      filter.value.weekDays = [day]
+    }
+    const setWeekDays = day => {
+      if (filter.value.weekDays.indexOf(day) !== -1) {
+        //remove
+        const pos = filter.value.weekDays.indexOf(day)
+        filter.value.weekDays.splice(pos, 1)
+      } else {
+        //add
+        filter.value.weekDays = [...filter.value.weekDays, day].sort()
+      }
+    }
 
-				if (place_id && weekDays.length > 0) {
-					store
-						.dispatch(`${MODULE_NAME}/fetchDatas`, filter.value)
-						.then(() => {
-						})
-						.catch(error => {
-							console.log(error)
-							notify.value = {
-								type: 'error',
-								text: error,
-								time: Date.now(),
-							}
-						})
-				}
-			},
-			{ deep: true },
-		)
+    watch(
+      filter,
+      value => {
+        const { place_id, weekDays } = value
 
-		return {
-			router,
-			places,
-			selectPlace,
-			filter,
-			weekDays,
-			setWeekDays,
-			setWeekDay,
+        if (place_id && weekDays.length > 0) {
+          store
+            .dispatch(`${MODULE_NAME}/fetchDatas`, filter.value)
+            .then(() => {})
+            .catch(error => {
+              console.log(error)
+              notify.value = {
+                type: 'error',
+                text: error,
+                time: Date.now(),
+              }
+            })
+        }
+      },
+      { deep: true },
+    )
 
-			icons: {
-				mdiArrowLeft,
-			},
-		}
-	},
+    return {
+      router,
+      places,
+      selectPlace,
+      filter,
+      weekDays,
+      setWeekDays,
+      setWeekDay,
+
+      icons: {
+        mdiArrowLeft,
+      },
+    }
+  },
 }
 </script>
 
 <style scoped>
-
 .month {
-	width: 140%;
+  width: 140%;
 }
 </style>
