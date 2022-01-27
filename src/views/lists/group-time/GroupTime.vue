@@ -137,9 +137,10 @@ export default {
         filter.value.weekDays.splice(pos, 1)
       } else {
         //add
-        filter.value.weekDays.push(day)
+        filter.value.weekDays = [...filter.value.weekDays, day].sort()
       }
     }
+
     watch(
       filter,
       value => {
