@@ -24,7 +24,7 @@ export default [
   {
     title: 'Lidlar',
     to: 'leads',
-    resource: 'Lid',
+    resource: 'Lead',
     action: 'read',
     icon: mdiChartLine,
   },
@@ -73,13 +73,6 @@ export default [
         icon: mdiBookOpenVariant,
       },
       {
-        title: '!!!Qarzdor talabalar',
-        to: 'student-depts',
-        resource: 'Teacher',
-        action: 'read',
-        icon: mdiCashMinus,
-      },
-      {
         title: 'Bosqichlar',
         to: 'stages',
         resource: 'Teacher',
@@ -107,6 +100,13 @@ export default [
     to: 'center-profit',
     icon: mdiPercent,
   },
+	{
+		title: 'Qarzdor talabalar',
+		to: 'student-depts',
+		resource: 'Teacher',
+		action: 'read',
+		icon: mdiCashMinus,
+	},
   {
     title: 'Talabalar',
     icon: mdiAccountDetailsOutline,

@@ -23,13 +23,6 @@ export default [
     resource: 'Public',
     action: 'read',
   },
-  {
-    title: 'Darslar va xonalar',
-    icon: mdiAccountDetailsOutline,
-    to: 'lessons-rooms',
-    resource: 'Group',
-    action: 'read',
-  },
 	{
 		title: 'Guruh vaqtlari',
 		icon: mdiAccountDetailsOutline,
@@ -40,7 +33,7 @@ export default [
   {
     title: 'Lidlar',
     icon: mdiAccountDetailsOutline,
-    to: '',
+    to: 'leads',
     resource: 'Public',
     action: 'read',
   },
@@ -54,14 +47,14 @@ export default [
   {
     title: "To'lovlar",
     icon: mdiAccountDetailsOutline,
-    to: '',
+    to: 'payments',
     resource: 'Public',
     action: 'read',
   },
   {
     title: 'Qarzdor talabalar',
     icon: mdiAccountDetailsOutline,
-    to: '',
+    to: 'student-depts',
     resource: 'Public',
     action: 'read',
   },
