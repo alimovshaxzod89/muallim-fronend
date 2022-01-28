@@ -23,13 +23,6 @@ export default [
     resource: 'Public',
     action: 'read',
   },
-  {
-    title: 'Darslar va xonalar',
-    icon: mdiAccountDetailsOutline,
-    to: 'lessons-rooms',
-    resource: 'Group',
-    action: 'read',
-  },
 	{
 		title: 'Guruh vaqtlari',
 		icon: mdiAccountDetailsOutline,
