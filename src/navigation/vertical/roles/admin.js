@@ -24,7 +24,7 @@ export default [
   {
     title: 'Lidlar',
     to: 'leads',
-    resource: 'Lid',
+    resource: 'Lead',
     action: 'read',
     icon: mdiChartLine,
   },

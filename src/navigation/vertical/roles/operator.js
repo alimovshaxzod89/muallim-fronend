@@ -33,7 +33,7 @@ export default [
   {
     title: 'Lidlar',
     icon: mdiAccountDetailsOutline,
-    to: '',
+    to: 'leads',
     resource: 'Public',
     action: 'read',
   },

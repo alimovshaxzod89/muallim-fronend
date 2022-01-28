@@ -36,10 +36,10 @@ export default [
 		action: 'read',
 	},
   {
-    title: 'Lidlar',
+		title: 'Lidlar',
     icon: mdiAccountDetailsOutline,
-    to: '',
-    resource: 'Public',
+    to: 'leads',
+		resource: 'Lead',
     action: 'read',
   },
   {
