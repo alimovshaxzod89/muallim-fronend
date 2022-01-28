@@ -214,9 +214,9 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.subject_id && formData.value.amount) {
+        if (formData.value.name && formData.value.subject_id && formData.value.teacher_id && formData.value.day_id) {
           store
-            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/updateThirdRow`, formData.value)
             .then(({ message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -232,9 +232,13 @@ export default {
           })
         }
       } else {
-        if (formData.value.subject_id && formData.value.amount) {
+        if (formData.value.name && formData.value.subject_id && formData.value.teacher_id && formData.value.day_id) {
+          const newValue = {
+            ...formData.value,
+            position: 1,
+          }
           store
-            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/addThirdRow`, newValue)
             .then(({ message }) => {
               close()
               emit('notify', { type: 'success', text: message })

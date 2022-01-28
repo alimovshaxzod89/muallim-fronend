@@ -51,7 +51,7 @@ export default function useLeadSecondList(MODULE_NAME) {
       lastQuery = newQuery
 
       store
-        .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
+        .dispatch(`${MODULE_NAME}/fetchSecondDatas`, queryParams)
         .then(() => {
             secondLoading.value = false
         })

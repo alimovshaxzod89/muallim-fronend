@@ -127,6 +127,20 @@ export default {
           .catch(error => reject(error))
       })
     },
+    fetchThirdDatas({ commit }, queryParams) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/leads', { params: queryParams })
+          .then(response => {
+            const { data, total } = response.data
+            commit('setThirdRows', data)
+            commit('setThirdTotal', total)
+ 
+            resolve(response.data.message)
+          })
+          .catch(error => reject(error))
+      })
+    },
     addRow({ commit }, row) {
       return new Promise((resolve, reject) => {
         axios
