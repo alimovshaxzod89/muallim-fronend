@@ -107,7 +107,21 @@ export default {
             const { data, total } = response.data
             commit('setRows', data)
             commit('setTotal', total)
-
+ 
+            resolve(response.data.message)
+          })
+          .catch(error => reject(error))
+      })
+    },
+    fetchSecondDatas({ commit }, queryParams) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/leads', { params: queryParams })
+          .then(response => {
+            const { data, total } = response.data
+            commit('setSecondRows', data)
+            commit('setSecondTotal', total)
+ 
             resolve(response.data.message)
           })
           .catch(error => reject(error))

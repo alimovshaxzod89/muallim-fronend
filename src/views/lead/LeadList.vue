@@ -160,7 +160,6 @@
                 <v-icon size="18">
                   {{ icons.mdiDeleteOutline }}
                 </v-icon>
-                sss
               </v-btn>
             </template>
             <span>Delete</span>
