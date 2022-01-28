@@ -39,7 +39,7 @@ export default [
   {
     title: 'Qarzdor talabalar',
     icon: mdiAccountDetailsOutline,
-    to: '',
+    to: 'student-depts',
     resource: 'Public',
     action: 'read',
   },

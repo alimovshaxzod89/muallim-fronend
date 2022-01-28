@@ -52,14 +52,14 @@ export default [
   {
     title: "To'lovlar",
     icon: mdiAccountDetailsOutline,
-    to: '',
+    to: 'payments',
     resource: 'Public',
     action: 'read',
   },
   {
     title: 'Qarzdor talabalar',
     icon: mdiAccountDetailsOutline,
-    to: '',
+    to: 'student-depts',
     resource: 'Public',
     action: 'read',
   },
