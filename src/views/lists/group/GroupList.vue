@@ -224,6 +224,10 @@
         </div>
       </template>
 
+      <template #[`item.status`]="{ item }">
+          {{item.status ? 'ha' : 'yo\'q'}}
+      </template>
+
 			<template #[`item.begin_date`]="{ item }">
 				{{item.begin_date | date}} <br>
 				<b>{{ item.end_date | date}}</b>

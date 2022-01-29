@@ -209,6 +209,7 @@
               </v-col>
 
 							<v-col cols="12">
+                <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-checkbox
                   v-model="formData.status"
                   hide-details
@@ -311,11 +312,12 @@ export default {
         // update
         if (
             formData.value.number && 
-            formData.value.subject_id && 
+            formData.value.place_id && 
+            formData.value.subject_id &&
             formData.value.teacher_id && 
             formData.value.price && 
-            formData.begin_date &&
-            formData.value.place_id
+            formData.value.begin_date &&
+            formData.value.status
           ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
@@ -340,16 +342,18 @@ export default {
         // create
         if (
             formData.value.number && 
-            formData.value.subject_id && 
+            formData.value.place_id && 
+            formData.value.subject_id &&
             formData.value.teacher_id && 
-            formData.value.price &&
-            formData.value.place_id
+            formData.value.price && 
+            formData.value.begin_date &&
+            formData.value.status
           ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({data, message}) => {
               close()
-              // emit('notify', { type: 'success', text: message })
+              emit('notify', { type: 'success', text: message })
               emit('add-group-to-options', data)
             })
             .catch(error => {
