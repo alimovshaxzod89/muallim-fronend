@@ -43,19 +43,6 @@
                   clearable
                   :rules="selectRule"
                 >
-                  <template v-slot:append-outer>
-                    <v-btn
-                      class="btn-dialog-add-item"
-                      color="secondary"
-                      height="40px !important"
-                      outlined
-                      @click="addSubject()"
-                    >
-                      <v-icon size="22">
-                        {{ icons.mdiPlusCircleOutline }}
-                      </v-icon>
-                    </v-btn>
-                  </template>
                 </v-autocomplete>
               </v-col>
               <v-col cols="12">
@@ -72,19 +59,6 @@
                   clearable
                   :rules="selectRule"
                 >
-                  <template v-slot:append-outer>
-                    <v-btn
-                      class="btn-dialog-add-item"
-                      color="secondary"
-                      height="40px !important"
-                      outlined
-                      @click="addTeacher()"
-                    >
-                      <v-icon size="22">
-                        {{ icons.mdiPlusCircleOutline }}
-                      </v-icon>
-                    </v-btn>
-                  </template>
                 </v-autocomplete>
               </v-col>
               <v-col cols="12">
@@ -235,7 +209,7 @@ export default {
         if (formData.value.name && formData.value.subject_id && formData.value.teacher_id && formData.value.day_id) {
           const newValue = {
             ...formData.value,
-            position: 1,
+            position: 3,
           }
           store
             .dispatch(`${MODULE_NAME}/addThirdRow`, newValue)

@@ -18,8 +18,62 @@
             +So'rov qo'shing 
         </v-btn>
       </v-col>  
-      <v-spacer></v-spacer>
-      <v-col cols="6">
+    </v-row> 
+
+    <v-data-table
+      v-model="requestSelectedTableData"
+      :headers="requestTableColumns"
+      :items="state.requestRows"
+      :options.sync="requestOptions"
+      :server-items-length="state.requestTotal"
+      :loading="requestLoading"
+      :items-per-page="requestOptions.requestItemsPerPage"
+      :footer-props="requestFooterProps"
+      class="text-no-wrap"
+    >
+      <template slot="item.index" scope="props">
+        {{ props.index + 1 + (requestOptions.page - 1) * requestOptions.requestItemsPerPage }}
+      </template>
+
+      <!-- total -->
+      <template #[`item.requestTotal`]="{ item }"> ${{ item.reuestTotal }}</template>
+
+      <template late #[`item.actions`]="{ item }">
+        <div class="d-flex align-center justify-center">
+          <!-- delete -->
+          <v-tooltip bottom v-if="$can('delete', 'Lead')">
+            <template #activator="{ on, attrs }">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="requestConfirmDelete(item.id)">
+                <v-icon size="18">
+                  {{ icons.mdiDeleteOutline }}
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Delete</span>
+          </v-tooltip>
+
+          <!-- view  -->
+          <v-tooltip bottom v-if="$can('update', 'Lead')">
+            <template #activator="{ on, attrs }">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="requestOpenForm(item.id)">
+                <v-icon size="18">
+                  {{ icons.mdiPencilOutline }}
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Edit</span>
+          </v-tooltip>
+        </div>
+      </template>
+
+      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+
+      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+    </v-data-table>  
+
+    <!-- table -->
+    <v-row>
+      <v-col class="submit_btn">
         <v-btn 
           v-if="$can('create', 'Lead')" 
           x-small 
@@ -29,9 +83,7 @@
           Qo'shish
         </v-btn>
       </v-col>
-    </v-row>   
-
-    <!-- table -->
+    </v-row>
     <v-data-table
       v-model="selectedTableData"
       :headers="tableColumns"
@@ -315,6 +367,7 @@ import LeadStoreModule from './storeModule/LeadStoreModule'
 
 // composition function
 import useLeadList from './useLeadList'
+import useRequestList from './request/useRequestList'
 import useLeadSecondList from './useLeadSecondList'
 import useLeadThirdList from './useLeadThirdList'
 import LeadForm from './LeadForm'
@@ -369,6 +422,15 @@ export default {
     } = useLeadList(MODULE_NAME)
 
     const {
+      requestTableColumns,
+      requestDeleteRow,
+
+      requestOptions,
+      requestLoading,
+      requestSelectedTableData,
+    } = useRequestList(MODULE_NAME)
+
+    const {
       secondSelectedTableData,
       secondTableColumns,
       secondOptions,
@@ -384,6 +446,7 @@ export default {
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
+    const requestFooterProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
     const actions = ['Delete', 'Edit']
     const secondActions = ['Delete', 'Edit']
     const thirdActions = ['Delete', 'Edit']
@@ -444,6 +507,12 @@ export default {
         .then(() => deleteRow(id))
         .catch(() => {})
     }
+    const requestConfirmDelete = id => {
+      dialogConfirm.value
+        .open("O'chirishga aminmisiz?")
+        .then(() => requestDeleteRow(id))
+        .catch(() => {})
+    }
     const confirmSecondDelete = id => {
       dialogConfirm.value
         .open("O'chirishga aminmisiz?")
@@ -465,17 +534,21 @@ export default {
       state,
 
       tableColumns,
+      requestTableColumns,
       secondTableColumns,
       thirdTableColumns,
       searchQuery,
       options,
+      requestOptions,
       secondOptions,
       thirdOptions,
       loading,
+      requestLoading,
       secondLoading,
       thirdLoading,
       notify,
       selectedTableData,
+      requestSelectedTableData,
       secondSelectedTableData,
       thirdSelectedTableData,
       filter,
@@ -490,9 +563,11 @@ export default {
       selectedSecondAction,
       selectedThirdAction,
       footerProps,
+      requestFooterProps,
 
       dialogConfirm,
       confirmDelete,
+      requestConfirmDelete,
       confirmSecondDelete,
       confirmThirdDelete,
 
@@ -574,5 +649,7 @@ export default {
   margin-left: 38%;
   padding-top: 3%;
 }
-
+.submit_btn {
+  margin-left: 40% ;
+}
 </style>

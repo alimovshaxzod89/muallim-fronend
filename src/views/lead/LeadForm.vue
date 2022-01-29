@@ -121,7 +121,7 @@ export default {
         if (formData.value.name) {
           const newValue = {
             ...formData.value,
-            position: 1,
+            position: 0,
           }
 
           store

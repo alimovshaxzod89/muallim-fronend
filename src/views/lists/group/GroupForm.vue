@@ -209,13 +209,10 @@
               </v-col>
 
 							<v-col cols="12">
-                <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-checkbox
                   v-model="formData.status"
                   hide-details
                   label="Aktiv"
-                  false-value="0"
-                  true-value="1"
                 ></v-checkbox>
               </v-col>
             </v-row>
@@ -268,7 +265,7 @@ export default {
       max_students: null,
       begin_date: null,
       end_date: null,
-      status: "1",
+      status: true,
       
     }
     const picker = new Date().toISOString().substr(0, 10)
@@ -316,8 +313,7 @@ export default {
             formData.value.subject_id &&
             formData.value.teacher_id && 
             formData.value.price && 
-            formData.value.begin_date &&
-            formData.value.status
+            formData.value.begin_date 
           ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
@@ -346,8 +342,7 @@ export default {
             formData.value.subject_id &&
             formData.value.teacher_id && 
             formData.value.price && 
-            formData.value.begin_date &&
-            formData.value.status
+            formData.value.begin_date 
           ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)

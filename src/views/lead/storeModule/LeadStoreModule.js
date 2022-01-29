@@ -4,15 +4,20 @@ export default {
   namespaced: true,
   state: {
     rows: [],
+    requestRows: [],
     secondRows: [],
     thirdRows: [],
     total: 0,
+    requestTotal: 0,
     secondTotal: 0,
     thirdTotal: 0,
   },
   getters: {
     indexIds(state) {
       return state.rows.map(el => parseInt(el.id)) 
+    },
+    requestIndexIds(state) {
+      return state.requestRows.map(el => parseInt(el.id)) 
     },
     indexSecondIds(state){
       return state.secondRows.map(el => parseInt(el.id))
@@ -23,6 +28,10 @@ export default {
     getById: (state, getters) => (id) => {
       const index = getters.indexIds.indexOf(parseInt(id))
       return state.rows[index]
+    },
+    requestGetById: (state, getters) => (id) => {
+      const index = getters.requestIndexIds.indexOf(parseInt(id))
+      return state.requestRows[index]
     },
     getSecondById: (state, getters) => (id) => {
       const index = getters.indexSecondIds.indexOf(parseInt(id))
@@ -37,6 +46,9 @@ export default {
     setRows(state, payload) {
       state.rows = payload;
     },
+    requestSetRows(state, payload) {
+      state.requestRows = payload;
+    },
     setSecondRows(state, payload){
       state.secondRows = payload;
     },
@@ -45,6 +57,9 @@ export default {
     },
     addRow(state, payload) {
       state.rows.push(payload);
+    },
+    requestAddRow(state, payload) {
+      state.requestRows.push(payload);
     },
     addSecondRow(state, payload){
       state.secondRows.push(payload);
@@ -55,6 +70,9 @@ export default {
     updateRow(state, { row, index }) {
       state.rows.splice(index, 1, row);
     },
+    requestUpdateRow(state, { row, index }) {
+      state.requestRows.splice(index, 1, row);
+    },
     updateSecondRow(state, { row, index }) {
       state.secondRows.splice(index, 1, row);
     },
@@ -63,6 +81,9 @@ export default {
     },
     removeRow(state, index) {
       state.rows.splice(index, 1);
+    },
+    requestRemoveRow(state, index) {
+      state.requestRows.splice(index, 1);
     },
     removeSecondRow(state, index) {
       state.secondRows.splice(index, 1);
@@ -73,6 +94,9 @@ export default {
     setTotal(state, payload) {
       state.total = payload;
     },
+    requestSetTotal(state, payload) {
+      state.requestTotal = payload;
+    },
     setSecondTotal(state, payload) {
       state.secondTotal = payload;
     },
@@ -82,6 +106,9 @@ export default {
     incrementTotal(state) {
       state.total++
     },
+    requestIncrementTotal(state) {
+      state.requestTotal++
+    },
     incrementSecondTotal(state) {
       state.secondTotal++
     },
@@ -90,6 +117,9 @@ export default {
     },
     decrementTotal(state) {
       state.total--
+    },
+    requestDecrementTotal(state) {
+      state.requestTotal--
     },
     decrementSecondTotal(state) {
       state.secondTotal--
@@ -107,6 +137,20 @@ export default {
             const { data, total } = response.data
             commit('setRows', data)
             commit('setTotal', total)
+ 
+            resolve(response.data.message)
+          })
+          .catch(error => reject(error))
+      })
+    },
+    requestFetchDatas({ commit }, queryParams) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/leads', { params: queryParams })
+          .then(response => {
+            const { data, total } = response.data
+            commit('requestSetRows', data)
+            commit('requestSetTotal', total)
  
             resolve(response.data.message)
           })
@@ -155,6 +199,20 @@ export default {
           .catch(error => reject(error))
       })
     },
+    requestAddRow({ commit }, row) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post('api/leads', row)
+          .then(response => {
+            if (response.data.success) {
+              commit('requestAddRow', response.data.data)
+              commit('requestIncrementTotal')
+              resolve(response.data.message)
+            }
+          })
+          .catch(error => reject(error))
+      })
+    },
     addSecondRow({ commit }, row) {
       return new Promise((resolve, reject) => {
         axios
@@ -196,6 +254,19 @@ export default {
           }).catch(error => reject(error))
       })
     },
+    requestUpdateRow({ commit, getters }, row) {
+      return new Promise((resolve, reject) => {
+        axios
+          .put(`api/leads/${row.id}`, row)
+          .then(response => {
+            if (response.data.success) {
+              const index = getters.indexIds.indexOf(parseInt(row.id))
+              commit('requestUpdateRow', { row: response.data.data, index })
+              resolve(response.data.message)
+            }
+          }).catch(error => reject(error))
+      })
+    },
     updateSecondRow({ commit, getters }, row) {
       return new Promise((resolve, reject) => {
         axios
@@ -229,6 +300,18 @@ export default {
             const index = getters.indexIds.indexOf(id)
             commit('removeRow', index)
             commit('decrementTotal')
+            resolve(response.data.message)
+          }
+        }).catch(error => reject(error))
+      })
+    },
+    requestRemoveRow({ commit, getters }, id) {
+      return new Promise((resolve, reject) => {
+        axios.delete(`api/leads/${id}`).then(response => {
+          if (response.data.success) {
+            const index = getters.requestIndexIds.indexOf(id)
+            commit('requestRemoveRow', index)
+            commit('requestDecrementTotal')
             resolve(response.data.message)
           }
         }).catch(error => reject(error))
