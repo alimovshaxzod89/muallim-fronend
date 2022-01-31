@@ -124,7 +124,7 @@ export default {
       if (formData.value.id) {
         if (formData.value.full_name && formData.value.phone) {
           store
-            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/requestUpdateRow`, formData.value)
             .then(({ message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -141,13 +141,14 @@ export default {
         }
       } else {
         if (formData.value.full_name && formData.value.phone) {
-            const newValue = {
+          const newValue = {
             ...formData.value,
             position: 1,
             name: '1',
           }
+          console.log(newValue)
           store
-            .dispatch(`${MODULE_NAME}/addRow`, newValue)
+            .dispatch(`${MODULE_NAME}/requestAddRow`, newValue)
             .then(({ message }) => {
               close()
               emit('notify', { type: 'success', text: message })
@@ -197,6 +198,6 @@ export default {
   border-color: rgba(94, 86, 105, 0.15) !important;
 }
 .amount {
-    margin-top: -45px
+  margin-top: -45px;
 }
 </style>

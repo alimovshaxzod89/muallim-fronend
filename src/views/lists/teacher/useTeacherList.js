@@ -43,6 +43,7 @@ export default function useTeacherList(MODULE_NAME) {
 
     options.value.skip = options.value.page - 1
     options.value.limit = options.value.itemsPerPage
+    
 
     const queryParams = {
       ...options.value,

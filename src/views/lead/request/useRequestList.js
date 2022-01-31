@@ -34,7 +34,7 @@ export default function useRequestList(MODULE_NAME) {
   const requestFetchDatas = (force = false) => {
 
     requestOptions.value.skip = requestOptions.value.page -1
-    requestOptions.value.limit = requestOptions.value.requestItemsPerPage
+    requestOptions.value.limit = requestOptions.value.itemsPerPage
 
     const queryParams = {
       ...requestOptions.value,

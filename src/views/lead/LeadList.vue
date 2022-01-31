@@ -12,7 +12,7 @@
         <v-btn 
           v-if="$can('create', 'Lead')" 
           x-small 
-          class="button"
+          class="requestButton"
           @click="openRequestForm()"
         >
             +So'rov qo'shing 
@@ -27,12 +27,12 @@
       :options.sync="requestOptions"
       :server-items-length="state.requestTotal"
       :loading="requestLoading"
-      :items-per-page="requestOptions.requestItemsPerPage"
+      :items-per-page="requestOptions.itemsPerPage"
       :footer-props="requestFooterProps"
       class="text-no-wrap"
     >
       <template slot="item.index" scope="props">
-        {{ props.index + 1 + (requestOptions.page - 1) * requestOptions.requestItemsPerPage }}
+        {{ props.index + 1 + (requestOptions.page - 1) * requestOptions.itemsPerPage }}
       </template>
 
       <!-- total -->
@@ -638,8 +638,9 @@ export default {
 .btn {
     margin-left: 58%;
 }
-.button{
-  background-color: rgb(109, 109, 109) ;
+.requestButton{
+  justify-content: right;
+  justify-self: right;
 }
 .titleS{
     margin-left: 38%;
