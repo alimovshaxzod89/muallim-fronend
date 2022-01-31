@@ -55,7 +55,7 @@
           <!-- view  -->
           <v-tooltip bottom v-if="$can('update', 'Lead')">
             <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="requestOpenForm(item.id)">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="openRequestForm(item.id)">
                 <v-icon size="18">
                   {{ icons.mdiPencilOutline }}
                 </v-icon>
@@ -164,7 +164,7 @@
           v-if="$can('create', 'Lead')" 
           x-small 
           class="button"
-          @click="openSecondRequestForm()"
+          @click="openSecondForm()"
         >
             +So'rov qo'shing 
         </v-btn>
@@ -364,6 +364,7 @@ import envParams from '@envParams'
 
 // store module
 import LeadStoreModule from './storeModule/LeadStoreModule'
+import RequestStoreModule from './storeModule/RequestStoreModule'
 
 // composition function
 import useLeadList from './useLeadList'
@@ -398,7 +399,8 @@ export default {
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, LeadStoreModule)
+      store.registerModule(MODULE_NAME, LeadStoreModule) 
+      store.registerModule(MODULE_NAME, RequestStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
