@@ -210,12 +210,9 @@
 
 							<v-col cols="12">
                 <v-checkbox
-                  v-model="formData.status"
-                  hide-details
-                  label="Aktiv"
-                  true-value="1"
-                  false-value="0"
-                ></v-checkbox>
+                  v-model="checkbox.status"
+                  label="AKTIV"
+                ></v-checkbox>         
               </v-col>
             </v-row>
           </v-container>
@@ -267,8 +264,9 @@ export default {
       max_students: null,
       begin_date: null,
       end_date: null,
-      status: "1",
-      
+    }
+    const checkbox = {
+      status: true,
     }
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
@@ -444,6 +442,7 @@ export default {
       rooms,
       teachers,
       isDate2,
+      checkbox,
 
       addPlace,
       roomForm,
