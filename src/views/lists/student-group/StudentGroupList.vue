@@ -2,20 +2,163 @@
   <v-card id="data-list">
     <!-- search -->
     <v-card-text class="d-flex align-center flex-wrap pb-0">
-      <div class="d-flex align-center pb-5">
-        <v-text-field
-          v-model="filter.query"
-          dense
-          outlined
-          hide-details
-          label="Qidirish"
-          class="data-list-search me-3"
-        ></v-text-field>
-      </div>
 
+        <v-col cols="3">
+          <v-text-field
+            v-model="filter.query"
+            dense
+            outlined
+            hide-details
+            label="Qidirish"
+            class="data-list-search me-3"
+          ></v-text-field>
+        </v-col>
+
+        <v-col cols="9">
+          <v-expansion-panels class="my-accordion" accordion>
+            <v-expansion-panel>
+              <v-expansion-panel-header disable-icon-rotate>
+                Ko'proq
+                <template #actions>
+                <v-icon color="secondary">
+                  {{ icons.mdiFilterOutline  }}
+                </v-icon>
+              </template>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+
+                <v-col cols="3">
+                  <v-autocomplete
+                    v-model="filter.teacher_id"
+                    :items="teachers"
+                    item-text="full_name"
+                    item-value="id"
+                    dense
+                    outlined
+                    hide-details
+                    label="USTOZ"
+                    class="data-list-search me-3"
+                    clearable
+                  ></v-autocomplete>
+                </v-col>
+
+                <v-col cols="3">
+                  <v-autocomplete
+                    v-model="filter.group_id"
+                    :items="groups"
+                    item-text="number"
+                    item-value="id"
+                    dense
+                    outlined
+                    hide-details
+                    label="GURUH"
+                    class="data-list-search me-3"
+                    clearable
+                  ></v-autocomplete>
+                </v-col>
+
+                <v-col cols="3">
+                  <v-autocomplete
+                    v-model="filter.student_id"
+                    :items="students"
+                    item-text="full_name"
+                    item-value="id"
+                    dense
+                    outlined
+                    hide-details
+                    label="TALABA"
+                    class="data-list-search me-3"
+                    clearable
+                  ></v-autocomplete>
+                </v-col>
+
+                <v-col cols="3">
+                  <v-autocomplete
+                    v-model="filter.status"
+                    :items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
+                    item-text="name"
+                    item-value="value"
+                    dense
+                    outlined
+                    hide-details
+                    label="Aktiv"
+                    class="data-list-search me-3"
+                    clearable
+                  ></v-autocomplete>
+                </v-col>
+
+                <v-col cols="3">
+                  <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        class="my-date-picker"
+                        v-model="filter.begin_date"
+                        label="Boshlangan sana"
+                        readonly
+                        v-bind="attrs"
+                        hide-details
+                        v-on="on"
+                        style="height: 40px !important; width: 170px !important"
+                        outlined
+                        clearable
+                        :append-icon="icons.mdiCalendar"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="filter.begin_date"
+                      color="primary"
+                      @input="isDate = false"
+                      no-title
+                      :first-day-of-week="1"
+                      locale="ru-ru"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-col>
+
+                <v-col cols="3">
+                  <!-- <v-menu 
+                    v-model="isDateTwo" 
+                    :close-on-content-click="false" 
+                    offset-y min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        class="my-date-picker"
+                        v-model="filter.end_date"
+                        label="Tugagan sana"
+                        readonly
+                        v-bind="attrs"
+                        hide-details
+                        v-on="on"
+                        style="height: 40px !important; width: 170px !important"
+                        outlined
+                        clearable
+                        :append-icon="icons.mdiCalendar"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="filter.end_date"
+                      color="primary"
+                      @input="isDateTwo = false"
+                      no-title
+                      :first-day-of-week="1"
+                      locale="ru-ru"
+                    ></v-date-picker>
+                  </v-menu> -->
+                </v-col>
+
+              </v-expansion-panel-content>
+              <v-expansion-panel-content>
+                
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-col>
       <v-spacer></v-spacer>
 
+    <div class="btnAdd ml-auto">
       <v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
+    </div>
     </v-card-text>
 
     <!-- table -->
@@ -91,11 +234,21 @@
 </template>
 
 <script>
-import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
+import { 
+  mdiFilterOutline, 
+  mdiCalendar, 
+  mdiTrendingUp, 
+  mdiPlus, 
+  mdiDeleteOutline, 
+  mdiDotsVertical, 
+  mdiEyeOutline, 
+  mdiPencilOutline 
+} from '@mdi/js'
 
 
-import { onUnmounted, ref } from '@vue/composition-api'
+import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
+import axios from '@axios'
 import moment from 'moment'
 moment.locale('uz-latn')
 
@@ -159,6 +312,11 @@ export default {
       { title: 'Edit', icon: mdiPencilOutline },
     ]
 
+    // Datepicker
+    const picker = new Date().toISOString().substr(0, 10)
+    const isDate = ref(false)
+    // const isDateTwo = ref(false)
+
     //Form
     const studentGroupForm = ref(null)
     const openForm = id => {
@@ -174,7 +332,36 @@ export default {
         .catch(() => {})
     }
 
+    
     const BASE_URL = envParams.BASE_URL
+
+    const teachers = ref([])
+    const loadTeachers = () => {
+      axios.get('/api/teachers').then(response => {
+        teachers.value = response.data.data 
+      })
+    }
+
+    const groups = ref([])
+    const loadGroups = () => {
+      axios.get('/api/groups').then(response => {
+        groups.value = response.data.data 
+      })
+    }
+
+    const students = ref([])
+    const loadStudents = () => {
+      axios.get('/api/students').then(response => {
+        students.value = response.data.data 
+      })
+    }
+
+
+    onMounted(() => {
+      loadTeachers(),
+      loadGroups(),
+      loadStudents()
+    })
 
     // Return
     return {
@@ -188,6 +375,11 @@ export default {
       notify,
       selectedTableData,
       filter,
+      picker,
+
+      isDate,
+      // isDateTwo,
+      picker,
 
       actions,
       actionOptions,
@@ -202,6 +394,11 @@ export default {
 
       MODULE_NAME,
 
+      // LoadApis
+      teachers,
+      groups,
+      students,
+
       icons: {
         mdiTrendingUp,
         mdiPlus,
@@ -209,6 +406,8 @@ export default {
         mdiDeleteOutline,
         mdiDotsVertical,
         mdiEyeOutline,
+        mdiFilterOutline,
+        mdiCalendar,
       },
     }
   },

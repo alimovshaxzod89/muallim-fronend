@@ -14,7 +14,7 @@ export default function useStudentGroupList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
-    { text: 'USTOZ', value: 'teacher' },
+    { text: 'USTOZ', value: 'teacher.full_name' },
     { text: 'GURUH', value: 'group.number' },
     { text: 'TALABA', value: 'student.full_name' },
     { text: 'BOSHLANGAN SANA', value: 'begin_date' },
@@ -24,6 +24,12 @@ export default function useStudentGroupList(MODULE_NAME) {
 
   const filter = ref({
     query: '',
+    teacher_id: '',
+    group_id: '',
+    student_id: '',
+    status: '',
+    begin_date: '',
+    end_date: '',
   })
   const options = ref({
     sortBy: ['id'],
