@@ -139,9 +139,9 @@
         </v-card-text>
 
         <v-card-actions>
-          <div v-show="formData.id !==  null">					
+          <div v-show="formData.id !==  null">
 						<v-btn color="error" type="button" @click.prevent="$emit('delete-form', formData.id), close()">O'chirish</v-btn>
-					</div>          
+					</div>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
           <v-btn color="success" type="submit" @click.prevent="onSubmit()">Saqlash</v-btn>
@@ -185,18 +185,18 @@ export default {
         formData.value.group_id = group_id
       }
     }
-		const open2 = (id = null, item = null) => {
-			show.value = true
-			if (id) {
-				formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
-			} else if (item) {
-				const t = JSON.parse(JSON.stringify(formData.value))
-				for (const field in item) {
-					t[field] = item[field]
-				}
-				formData.value = t
-			}
-		}
+    const open2 = (id = null, item = null) => {
+      show.value = true
+      if (id) {
+        formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+      } else if (item) {
+        const t = JSON.parse(JSON.stringify(formData.value))
+        for (const field in item) {
+          t[field] = item[field]
+        }
+        formData.value = t
+      }
+    }
     const close = () => {
       show.value = false
       formData.value = { ...emptyFormData }
@@ -222,16 +222,12 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (
-            formData.value.week_day && 
-            formData.value.room_id &&
-            formData.value.group_id
-            ) {
+        if (formData.value.week_day && formData.value.room_id && formData.value.group_id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
               close()
-              // emit('notify', { type: 'success', text: message })
+              // emit('notify', { type: 'success', text: message })')
               emit('refresh-list')
             })
             .catch(error => {
@@ -246,12 +242,7 @@ export default {
         }
       } else {
         //create
-        if (
-            formData.value.week_day && 
-            formData.value.room_id &&
-            formData.value.group_id
-        
-        ) {
+        if (formData.value.week_day && formData.value.room_id && formData.value.group_id) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(message => {
@@ -330,7 +321,6 @@ export default {
       addPlaceToOptions,
       selectsDatas,
       selectRule,
-
 
       icons: {
         mdiCalendar,
