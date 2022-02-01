@@ -46,7 +46,7 @@
                 </v-autocomplete>
               </v-col>
 
-							<v-col cols="6">
+							<v-col cols="12">
 								<h4 class="text-required no-texts"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.subject_id"
@@ -109,7 +109,7 @@
 							<v-col cols="6">
                 <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-text-field
-                  type="text"
+                  type="number"
                   label="NARX"
                   v-model="formData.price"
                   :rules="[required]"
@@ -210,8 +210,10 @@
 
 							<v-col cols="12">
                 <v-checkbox
-                  v-model="checkbox.status"
+                  v-model="formData.status"
                   label="AKTIV"
+                  true-value="1"
+                  false-value="0"
                 ></v-checkbox>         
               </v-col>
             </v-row>
@@ -250,7 +252,7 @@ export default {
 
     //show, hide
     const show = ref(false)
-    const formData = ref({})
+    const formData = ref({...emptyFormData})
     const form = ref(null)
     const emptyFormData = {
       id: null,
@@ -264,10 +266,9 @@ export default {
       max_students: null,
       begin_date: null,
       end_date: null,
+      status: "1"
     }
-    const checkbox = {
-      status: true,
-    }
+    
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
     const isDate2 = ref(false)
@@ -310,6 +311,7 @@ export default {
         if (
             formData.value.number && 
             formData.value.place_id && 
+            formData.value.status &&
             formData.value.subject_id &&
             formData.value.teacher_id && 
             formData.value.price && 
@@ -337,7 +339,8 @@ export default {
       } else {
         // create
         if (
-            formData.value.number && 
+            formData.value.number &&
+            formData.value.status && 
             formData.value.place_id && 
             formData.value.subject_id &&
             formData.value.teacher_id && 
@@ -442,7 +445,6 @@ export default {
       rooms,
       teachers,
       isDate2,
-      checkbox,
 
       addPlace,
       roomForm,

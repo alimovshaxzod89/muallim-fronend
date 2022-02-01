@@ -22,7 +22,7 @@ export default function useTeacherList(MODULE_NAME) {
     { text: "MANZIL", value: 'address' },
     { text: "D.Y. TUMAN", value: 'permanent_region_id' },
     { text: "D.Y. Manzili", value: 'permanent_address' },
-    { text: "JINSI", value: '' },
+    { text: "JINSI", value: 'gender' },
     { text: "TUG'ILGAN SANASI", value: 'birth_date' },
   ]
 

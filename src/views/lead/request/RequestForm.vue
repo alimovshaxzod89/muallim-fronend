@@ -71,7 +71,7 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import LeadStoreModule from '../storeModule/LeadStoreModule'
+import RequestStoreModule from '../storeModule/RequestStoreModule' 
 
 import axios from '@axios'
 
@@ -89,14 +89,14 @@ export default {
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, LeadStoreModule)
+      store.registerModule(MODULE_NAME, RequestStoreModule)
     }
 
     // show, hide
     const show = ref(false)
     const open = (id = null) => {
       show.value = true
-      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/requestGetById`](id)))
     }
     const close = () => {
       show.value = false
@@ -143,8 +143,8 @@ export default {
         if (formData.value.full_name && formData.value.phone) {
           const newValue = {
             ...formData.value,
-            position: 1,
-            name: '1',
+            days: '1',
+            hours: '1',
           }
           console.log(newValue)
           store

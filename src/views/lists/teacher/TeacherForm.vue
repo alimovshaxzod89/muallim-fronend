@@ -224,7 +224,7 @@ export default {
       address: null,
       permanent_region_id: null,
       permanent_address: null,
-      gender: null,
+      gender: "1",
       birth_date: null,  
     }
     const formData = ref({})

@@ -9,9 +9,9 @@ export default function useStudentDeptList(MODULE_NAME) {
   const tableColumns = [
     { text: '#', sortable: false, value: 'index' },
     { text: 'GURUH', value: 'group.number' },
-    { text: 'USTOZ', value: 'teacher.full_name' },
+    { text: 'USTOZ', value: 'group.teacher.full_name' },
     { text: "TALABA", value: 'student.full_name' },
-    { text: "TELEFON", value: 'phone' },
+    { text: "TELEFON", value: 'student.phone' },
     { text: "OYLIK TO'LOV", value: 'month_paids' },
     { text: "TO'lADI", value: 'paid' },
     { text: "QARZ", value: 'depts' },
