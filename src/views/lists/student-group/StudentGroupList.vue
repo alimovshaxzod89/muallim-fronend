@@ -116,7 +116,7 @@
                 </v-col>
 
                 <v-col cols="3">
-                  <!-- <v-menu 
+                  <v-menu 
                     v-model="isDateTwo" 
                     :close-on-content-click="false" 
                     offset-y min-width="auto"
@@ -144,7 +144,7 @@
                       :first-day-of-week="1"
                       locale="ru-ru"
                     ></v-date-picker>
-                  </v-menu> -->
+                  </v-menu>
                 </v-col>
 
               </v-expansion-panel-content>
@@ -157,7 +157,7 @@
       <v-spacer></v-spacer>
 
     <div class="btnAdd ml-auto">
-      <v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
+      <v-btn class="primary mb-3" @click="openForm()">Qo'shish</v-btn>
     </div>
     </v-card-text>
 
@@ -315,7 +315,7 @@ export default {
     // Datepicker
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
-    // const isDateTwo = ref(false)
+    const isDateTwo = ref(false)
 
     //Form
     const studentGroupForm = ref(null)
@@ -378,7 +378,7 @@ export default {
       picker,
 
       isDate,
-      // isDateTwo,
+      isDateTwo,
       picker,
 
       actions,
