@@ -48,7 +48,7 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import LeadStoreModule from './LeadStoreModule'
+import LeadStoreModule from './storeModule/LeadStoreModule'
 
 import axios from '@axios'
 
@@ -119,8 +119,13 @@ export default {
         }
       } else {
         if (formData.value.name) {
+          const newValue = {
+            ...formData.value,
+            position: 0,
+          }
+
           store
-            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/addRow`, newValue)
             .then(({ message }) => {
               close()
               emit('notify', { type: 'success', text: message })
@@ -172,6 +177,6 @@ export default {
   border-color: rgba(94, 86, 105, 0.15) !important;
 }
 .amount {
-    margin-top: -45px
+  margin-top: -45px;
 }
 </style>

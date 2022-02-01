@@ -65,6 +65,10 @@
         </div>
       </template>
 
+      <template #[`item.gender`]="{ item }">
+          {{item.gender ? 'erkak' : 'ayol'}}
+      </template>
+
       <template #[`item.birth_date`]="{ item }"> {{ item.birth_date | date }}</template>
     </v-data-table>
 

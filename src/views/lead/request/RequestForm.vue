@@ -10,17 +10,14 @@
   >
     <v-card>
       <v-form ref="form">
-        <v-card-title>
-          <span class="headline">Yangi bo'lim yaratish</span>
-        </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12">
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
-                  label="NOMI"
-                  v-model="formData.name"
+                  label="FIO"
+                  v-model="formData.full_name"
                   type="text"
                   dense
                   outlined
@@ -28,6 +25,32 @@
                   hide-details
                   :rules="[required]"
                 ></v-text-field>
+              </v-col>
+
+              <v-col cols="12">
+                <h4 class="text-required no-text"><span>*</span></h4>
+                <v-text-field
+                  prefix="+998"
+                  label="TELEFON"
+                  v-model="formData.phone"
+                  type="phone"
+                  dense
+                  outlined
+                  hide-details
+                  :rules="[required]"
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12">
+                <v-textarea
+                    v-model="formData.note"
+                    label="IZOH"
+                    dense
+                    outlined
+                    hide-details
+                    height="80px"
+                >
+                  </v-textarea>
               </v-col>
             </v-row>
           </v-container>
@@ -48,13 +71,13 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import LeadStoreModule from './storeModule/LeadStoreModule'
+import RequestStoreModule from '../storeModule/RequestStoreModule' 
 
 import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
-import Button from '../components/button/Button.vue'
+import Button from '../../components/button/Button.vue'
 
 const MODULE_NAME = 'lead'
 
@@ -66,14 +89,14 @@ export default {
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, LeadStoreModule)
+      store.registerModule(MODULE_NAME, RequestStoreModule)
     }
 
     // show, hide
     const show = ref(false)
     const open = (id = null) => {
       show.value = true
-      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/requestGetById`](id)))
     }
     const close = () => {
       show.value = false
@@ -84,7 +107,9 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      name: null,
+      full_name: null,
+      phone: null,
+      note: null,
     }
 
     //validation
@@ -97,9 +122,9 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.name) {
+        if (formData.value.full_name && formData.value.phone) {
           store
-            .dispatch(`${MODULE_NAME}/updateSecondRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/requestUpdateRow`, formData.value)
             .then(({ message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -115,13 +140,15 @@ export default {
           })
         }
       } else {
-        if (formData.value.name) {
-          const newSecondValue = {
+        if (formData.value.full_name && formData.value.phone) {
+          const newValue = {
             ...formData.value,
-            position: 1,
+            days: '1',
+            hours: '1',
           }
+          console.log(newValue)
           store
-            .dispatch(`${MODULE_NAME}/addSecondRow`, newSecondValue)
+            .dispatch(`${MODULE_NAME}/requestAddRow`, newValue)
             .then(({ message }) => {
               close()
               emit('notify', { type: 'success', text: message })
@@ -171,6 +198,6 @@ export default {
   border-color: rgba(94, 86, 105, 0.15) !important;
 }
 .amount {
-    margin-top: -45px
+  margin-top: -45px;
 }
 </style>

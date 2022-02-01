@@ -10,11 +10,14 @@ export default function useThirdList(MODULE_NAME) {
     { text: '#', sortable: false, value: 'index' },
     {
         text: 'AMALLAR',
-        value: 'actions',
+        value: 'thirdActions',
         align: 'center',
         sortable: false,
     },
     { text: 'NOMI', value: 'name' },
+    { text: 'FAN', value: 'subject' },
+    { text: 'USTOZ', value: 'teacher.full_name' },
+    { text: 'KUNLAR', value: 'day.name' },
     ]
 
   const filter = ref({
@@ -29,7 +32,7 @@ export default function useThirdList(MODULE_NAME) {
   const thirdLoading = ref(false)
 
   let lastQuery = '';
-  const fetchDatas = (force = false) => {
+  const fetchThirdDatas = (force = false) => {
 
     thirdOptions.value.skip = thirdOptions.value.page -1
     thirdOptions.value.limit = thirdOptions.value.itemsPerPage
@@ -51,7 +54,7 @@ export default function useThirdList(MODULE_NAME) {
       lastQuery = newQuery
 
       store
-        .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
+        .dispatch(`${MODULE_NAME}/fetchThirdDatas`, queryParams)
         .then(() => {
             thirdLoading.value = false
         })
@@ -70,12 +73,12 @@ export default function useThirdList(MODULE_NAME) {
     if (thirdOptions.value.page != 1) thirdOptions.value.page = 1
     thirdLoading.value = true
 
-    setTimeout(() => fetchDatas(), 1000);
+    setTimeout(() => fetchThirdDatas(), 1000);
   }, {deep: true})
 
   watch(thirdOptions, () => {
     thirdLoading.value = true
-    fetchDatas()
+    fetchThirdDatas()
     // selectedSecondTableData.value = []
   })
 
@@ -87,7 +90,7 @@ export default function useThirdList(MODULE_NAME) {
         .then((message) => {
             thirdNotify.value = { type: 'success', text: message, time: Date.now() }
 
-            fetchDatas(true)
+            fetchThirdDatas(true)
 
     }).catch(error => {
       console.log(error)
@@ -99,7 +102,7 @@ export default function useThirdList(MODULE_NAME) {
   return {
     thirdTableColumns,
     filter,
-    fetchDatas,
+    fetchThirdDatas,
     deleteThirdRow,
 
     thirdOptions,

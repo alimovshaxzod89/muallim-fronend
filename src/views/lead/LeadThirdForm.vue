@@ -43,19 +43,6 @@
                   clearable
                   :rules="selectRule"
                 >
-                  <template v-slot:append-outer>
-                    <v-btn
-                      class="btn-dialog-add-item"
-                      color="secondary"
-                      height="40px !important"
-                      outlined
-                      @click="addSubject()"
-                    >
-                      <v-icon size="22">
-                        {{ icons.mdiPlusCircleOutline }}
-                      </v-icon>
-                    </v-btn>
-                  </template>
                 </v-autocomplete>
               </v-col>
               <v-col cols="12">
@@ -72,19 +59,6 @@
                   clearable
                   :rules="selectRule"
                 >
-                  <template v-slot:append-outer>
-                    <v-btn
-                      class="btn-dialog-add-item"
-                      color="secondary"
-                      height="40px !important"
-                      outlined
-                      @click="addTeacher()"
-                    >
-                      <v-icon size="22">
-                        {{ icons.mdiPlusCircleOutline }}
-                      </v-icon>
-                    </v-btn>
-                  </template>
                 </v-autocomplete>
               </v-col>
               <v-col cols="12">
@@ -125,7 +99,7 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import LeadStoreModule from './LeadStoreModule'
+import LeadStoreModule from './storeModule/LeadStoreModule'
 
 import axios from '@axios'
 
@@ -214,9 +188,9 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.subject_id && formData.value.amount) {
+        if (formData.value.name && formData.value.subject_id && formData.value.teacher_id && formData.value.day_id) {
           store
-            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/updateThirdRow`, formData.value)
             .then(({ message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -232,9 +206,13 @@ export default {
           })
         }
       } else {
-        if (formData.value.subject_id && formData.value.amount) {
+        if (formData.value.name && formData.value.subject_id && formData.value.teacher_id && formData.value.day_id) {
+          const newValue = {
+            ...formData.value,
+            position: 3,
+          }
           store
-            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/addThirdRow`, newValue)
             .then(({ message }) => {
               close()
               emit('notify', { type: 'success', text: message })

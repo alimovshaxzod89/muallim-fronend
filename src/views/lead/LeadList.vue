@@ -3,10 +3,87 @@
 <v-col cols="4">
   <v-card id="data-list">
     <h3 class="titleS">So'rovlar</h3>
-    <!-- button -->
-    <v-btn v-if="$can('create', 'Lead')" x-small class="btn primary" @click="openForm()">Qo'shish</v-btn>
+    <!-- buttons -->
+    <v-row
+      align="center"
+      justify="space-around"
+    > 
+      <v-col cols="6">
+        <v-btn 
+          v-if="$can('create', 'Lead')" 
+          x-small 
+          class="requestButton"
+          @click="openRequestForm()"
+        >
+            +So'rov qo'shing 
+        </v-btn>
+      </v-col>  
+    </v-row> 
+
+    <v-data-table
+      v-model="requestSelectedTableData"
+      :headers="requestTableColumns"
+      :items="state.requestRows"
+      :options.sync="requestOptions"
+      :server-items-length="state.requestTotal"
+      :loading="requestLoading"
+      :items-per-page="requestOptions.itemsPerPage"
+      :footer-props="requestFooterProps"
+      class="text-no-wrap"
+    >
+      <template slot="item.index" scope="props">
+        {{ props.index + 1 + (requestOptions.page - 1) * requestOptions.itemsPerPage }}
+      </template>
+
+      <!-- total -->
+      <template #[`item.requestTotal`]="{ item }"> ${{ item.reuestTotal }}</template>
+
+      <template late #[`item.actions`]="{ item }">
+        <div class="d-flex align-center justify-center">
+          <!-- delete -->
+          <v-tooltip bottom v-if="$can('delete', 'Lead')">
+            <template #activator="{ on, attrs }">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="requestConfirmDelete(item.id)">
+                <v-icon size="18">
+                  {{ icons.mdiDeleteOutline }}
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Delete</span>
+          </v-tooltip>
+
+          <!-- view  -->
+          <v-tooltip bottom v-if="$can('update', 'Lead')">
+            <template #activator="{ on, attrs }">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="openRequestForm(item.id)">
+                <v-icon size="18">
+                  {{ icons.mdiPencilOutline }}
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Edit</span>
+          </v-tooltip>
+        </div>
+      </template>
+
+      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+
+      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+    </v-data-table>  
 
     <!-- table -->
+    <v-row>
+      <v-col class="submit_btn">
+        <v-btn 
+          v-if="$can('create', 'Lead')" 
+          x-small 
+          class="btn primary" 
+          @click="openForm()"
+        >
+          Qo'shish
+        </v-btn>
+      </v-col>
+    </v-row>
     <v-data-table
       v-model="selectedTableData"
       :headers="tableColumns"
@@ -64,27 +141,56 @@
       ref="leadForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
+    <request-form
+      ref="requestForm"
+      v-on:notify="notify= { type: $event.type, text: $event.text, time: Date.now() }"
+    />   
   </v-card>
 </v-col>
 
 
 
 <v-col cols="4">
-  <v-card id="data-list-third">
+  <v-card id="data-list-second">
     <h3 class="titleK">Kutish</h3>
 
     <!-- button -->
-    <v-btn v-if="$can('create', 'Lead')" x-small class="btn primary" @click="openSecondForm()">Qo'shish</v-btn>
+    <v-row
+      align="center"
+      justify="space-around"
+    > 
+      <v-col cols="6">
+        <v-btn 
+          v-if="$can('create', 'Lead')" 
+          x-small 
+          class="button"
+          @click="openSecondForm()"
+        >
+            +So'rov qo'shing 
+        </v-btn>
+      </v-col>  
+      <v-spacer></v-spacer>
+      <v-col cols="6">
+        <v-btn 
+          v-if="$can('create', 'Lead')" 
+          x-small 
+          class="btn primary" 
+          @click="openSecondForm()"
+        >
+          Qo'shish
+        </v-btn>
+      </v-col>
+    </v-row>  
 
     <!-- table -->
     <v-data-table
       v-model="secondSelectedTableData"
       :headers="secondTableColumns"
-      :items="state.rows"
-      :options.sync="options"
-      :server-items-length="state.total"
+      :items="state.secondRows"
+      :options.sync="secondOptions"
+      :server-items-length="state.secondTotal"
       :loading="secondLoading"
-      :items-per-page="options.itemsPerPage"
+      :items-per-page="secondOptions.itemsPerPage"
       :footer-props="footerProps"
       class="text-no-wrap"
     >
@@ -94,15 +200,15 @@
       </template>
 
     <!-- total -->
-      <template #[`item.total`]="{ item }"> ${{ item.total }}</template>
+      <template #[`item.secondTotal`]="{ item }"> ${{ item.secondTotal }}</template>
     </v-data-table>
 
-    <template late #[`item.actions`]="{ item }">
+    <template late #[`item.secondActions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
           <v-tooltip bottom v-if="$can('delete', 'Lead')">
             <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmSecondDelete(item.id)">
                 <v-icon size="18">
                   {{ icons.mdiDeleteOutline }}
                 </v-icon>
@@ -125,29 +231,63 @@
         </div>
       </template>
 
+      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+
+      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+
     <dialog-confirm ref="dialogConfirm" />
 
     <lead-second-form
       ref="leadSecondForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
+    
+    <second-request-form
+      ref="secondRequestForm"
+      v-on:notify="notify= { type: $event.type, text: $event.text, time: Date.now() }"
+    />
   </v-card>
 </v-col>
 
 <v-col cols="4">
-  <v-card id="data-list-second">
+  <v-card id="data-list-third">
     <h3 class="titleK">To'plam</h3>
 
     <!-- button -->
-    <v-btn v-if="$can('create', 'Lead')" x-small class="btn primary" @click="openThirdForm()">Qo'shish</v-btn>
+    <v-row
+      align="center"
+      justify="space-around"
+    > 
+      <v-col cols="6">
+        <v-btn 
+          v-if="$can('create', 'Lead')" 
+          x-small 
+          class="button"
+          @click="openThirdRequestForm()"
+        >
+            +So'rov qo'shing 
+        </v-btn>
+      </v-col>  
+      <v-spacer></v-spacer>
+      <v-col cols="6">
+        <v-btn 
+          v-if="$can('create', 'Lead')" 
+          x-small 
+          class="btn primary" 
+          @click="openThirdForm()"
+        >
+          Qo'shish
+        </v-btn>
+      </v-col>
+    </v-row>
 
     <!-- table -->
     <v-data-table
       v-model="thirdSelectedTableData"
       :headers="thirdTableColumns"
-      :items="state.rows"
+      :items="state.thirdRows"
       :options.sync="thirdOptions"
-      :server-items-length="state.total"
+      :server-items-length="state.thirdTotal"
       :loading="thirdLoading"
       :items-per-page="thirdOptions.itemsPerPage"
       :footer-props="footerProps"
@@ -159,15 +299,15 @@
       </template>
 
     <!-- total -->
-      <template #[`item.total`]="{ item }"> ${{ item.total }}</template>
+      <template #[`item.thirdTotal`]="{ item }"> ${{ item.total }}</template>
     </v-data-table>
 
-    <template late #[`item.actions`]="{ item }">
+    <template late #[`item.thirdActions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
           <v-tooltip bottom v-if="$can('delete', 'Lead')">
             <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmThirdDelete(item.id)">
                 <v-icon size="18">
                   {{ icons.mdiDeleteOutline }}
                 </v-icon>
@@ -190,11 +330,19 @@
         </div>
       </template>
 
+      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+
+      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+
     <dialog-confirm ref="dialogConfirm" />
 
     <lead-third-form
       ref="leadThirdForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
+    />
+    <third-request-form
+      ref="thirdRequestForm"
+      v-on:notify="notify= { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
 </v-col>
@@ -215,15 +363,20 @@ numeral.locale('ru')
 import envParams from '@envParams'
 
 // store module
-import LeadStoreModule from './LeadStoreModule'
+import LeadStoreModule from './storeModule/LeadStoreModule'
+import RequestStoreModule from './storeModule/RequestStoreModule'
 
 // composition function
 import useLeadList from './useLeadList'
+import useRequestList from './request/useRequestList'
 import useLeadSecondList from './useLeadSecondList'
 import useLeadThirdList from './useLeadThirdList'
 import LeadForm from './LeadForm'
 import LeadSecondForm from './LeadSecondForm.vue'
 import LeadThirdForm from './LeadThirdForm.vue'
+import RequestForm from './request/RequestForm.vue'
+import SecondRequestForm from './request/SecondRequestForm.vue'
+import ThirdRequestForm from './request/ThirdRequestForm.vue'
 import DialogConfirm from '../components/DialogConfirm.vue'
 
 const MODULE_NAME = 'lead'
@@ -231,6 +384,9 @@ const MODULE_NAME = 'lead'
 export default {
   components: {
     LeadForm,
+    RequestForm,
+    SecondRequestForm,
+    ThirdRequestForm,
     LeadSecondForm,
     LeadThirdForm,
     DialogConfirm,
@@ -243,7 +399,8 @@ export default {
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, LeadStoreModule)
+      store.registerModule(MODULE_NAME, LeadStoreModule) 
+      store.registerModule(MODULE_NAME, RequestStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -267,6 +424,15 @@ export default {
     } = useLeadList(MODULE_NAME)
 
     const {
+      requestTableColumns,
+      requestDeleteRow,
+
+      requestOptions,
+      requestLoading,
+      requestSelectedTableData,
+    } = useRequestList(MODULE_NAME)
+
+    const {
       secondSelectedTableData,
       secondTableColumns,
       secondOptions,
@@ -282,9 +448,22 @@ export default {
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
+    const requestFooterProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
     const actions = ['Delete', 'Edit']
+    const secondActions = ['Delete', 'Edit']
+    const thirdActions = ['Delete', 'Edit']
     const selectedAction = ref('')
+    const selectedSecondAction = ref('')
+    const selectedThirdAction = ref('')
     const actionOptions = [
+      { title: 'Delete', icon: mdiDeleteOutline },
+      { title: 'Edit', icon: mdiPencilOutline },
+    ]
+    const actionSecondOptions = [
+      { title: 'Delete', icon: mdiDeleteOutline },
+      { title: 'Edit', icon: mdiPencilOutline },
+    ]
+    const actionThirdOptions = [
       { title: 'Delete', icon: mdiDeleteOutline },
       { title: 'Edit', icon: mdiPencilOutline },
     ]
@@ -294,16 +473,33 @@ export default {
     const openForm = id => {
       leadForm.value.open(id)
     }
-
+    const leadThirdForm = ref(null)
+    const openThirdForm = id => {
+      leadThirdForm.value.open(id)
+    }
     const leadSecondForm = ref(null)
     const openSecondForm = id => {
       leadSecondForm.value.open(id)
     }
 
-    const leadThirdForm = ref(null)
-    const openThirdForm = id => {
-      leadThirdForm.value.open(id)
+    //RequestForm
+    const requestForm = ref(null)
+    const openRequestForm = id => {
+      requestForm.value.open(id)
     }
+    const secondRequestForm = ref(null)
+    const openSecondRequestForm = id => {
+      secondRequestForm.value.open(id)
+    }
+    const thirdRequestForm = ref(null)
+    const openThirdRequestForm = id => {
+      thirdRequestForm.value.open(id)
+    }  
+
+
+    
+
+    
 
     //Delete Confirm Dialog
     const dialogConfirm = ref(null)
@@ -311,6 +507,24 @@ export default {
       dialogConfirm.value
         .open("O'chirishga aminmisiz?")
         .then(() => deleteRow(id))
+        .catch(() => {})
+    }
+    const requestConfirmDelete = id => {
+      dialogConfirm.value
+        .open("O'chirishga aminmisiz?")
+        .then(() => requestDeleteRow(id))
+        .catch(() => {})
+    }
+    const confirmSecondDelete = id => {
+      dialogConfirm.value
+        .open("O'chirishga aminmisiz?")
+        .then(() => deleteSecondRow(id))
+        .catch(() => {})
+    }
+    const confirmThirdDelete = id => {
+      dialogConfirm.value
+        .open("O'chirishga aminmisiz?")
+        .then(() => deleteThirdRow(id))
         .catch(() => {})
     }
 
@@ -322,33 +536,57 @@ export default {
       state,
 
       tableColumns,
+      requestTableColumns,
       secondTableColumns,
       thirdTableColumns,
       searchQuery,
       options,
+      requestOptions,
       secondOptions,
       thirdOptions,
       loading,
+      requestLoading,
       secondLoading,
       thirdLoading,
       notify,
       selectedTableData,
+      requestSelectedTableData,
       secondSelectedTableData,
       thirdSelectedTableData,
       filter,
 
       actions,
+      secondActions,
+      thirdActions,
       actionOptions,
+      actionSecondOptions,
+      actionThirdOptions,
       selectedAction,
+      selectedSecondAction,
+      selectedThirdAction,
       footerProps,
+      requestFooterProps,
 
       dialogConfirm,
       confirmDelete,
+      requestConfirmDelete,
+      confirmSecondDelete,
+      confirmThirdDelete,
 
       leadForm,
       openForm,
 
+      requestForm,
+      openRequestForm,
+
+      secondRequestForm,
+      openSecondRequestForm,
+
+      thirdRequestForm,
+      openThirdForm,
+
       leadSecondForm,
+      openThirdRequestForm,
       openSecondForm,
 
       leadThirdForm,
@@ -400,8 +638,11 @@ export default {
   }
 }
 .btn {
-    margin-left: 75%;
-    margin-bottom: 2%;
+    margin-left: 58%;
+}
+.requestButton{
+  justify-content: right;
+  justify-self: right;
 }
 .titleS{
     margin-left: 38%;
@@ -410,5 +651,8 @@ export default {
 .titleK{
   margin-left: 38%;
   padding-top: 3%;
+}
+.submit_btn {
+  margin-left: 40% ;
 }
 </style>

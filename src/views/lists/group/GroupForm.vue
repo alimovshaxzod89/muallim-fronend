@@ -46,7 +46,7 @@
                 </v-autocomplete>
               </v-col>
 
-							<v-col cols="6">
+							<v-col cols="12">
 								<h4 class="text-required no-texts"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.subject_id"
@@ -109,7 +109,7 @@
 							<v-col cols="6">
                 <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-text-field
-                  type="text"
+                  type="number"
                   label="NARX"
                   v-model="formData.price"
                   :rules="[required]"
@@ -211,11 +211,10 @@
 							<v-col cols="12">
                 <v-checkbox
                   v-model="formData.status"
-                  hide-details
-                  label="Aktiv"
-                  false-value="0"
+                  label="AKTIV"
                   true-value="1"
-                ></v-checkbox>
+                  false-value="0"
+                ></v-checkbox>         
               </v-col>
             </v-row>
           </v-container>
@@ -253,7 +252,7 @@ export default {
 
     //show, hide
     const show = ref(false)
-    const formData = ref({})
+    const formData = ref({...emptyFormData})
     const form = ref(null)
     const emptyFormData = {
       id: null,
@@ -267,9 +266,9 @@ export default {
       max_students: null,
       begin_date: null,
       end_date: null,
-      status: "1",
-      
+      status: "1"
     }
+    
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
     const isDate2 = ref(false)
@@ -311,11 +310,12 @@ export default {
         // update
         if (
             formData.value.number && 
-            formData.value.subject_id && 
+            formData.value.place_id && 
+            formData.value.status &&
+            formData.value.subject_id &&
             formData.value.teacher_id && 
             formData.value.price && 
-            formData.begin_date &&
-            formData.value.place_id
+            formData.value.begin_date 
           ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
@@ -339,17 +339,19 @@ export default {
       } else {
         // create
         if (
-            formData.value.number && 
-            formData.value.subject_id && 
+            formData.value.number &&
+            formData.value.status && 
+            formData.value.place_id && 
+            formData.value.subject_id &&
             formData.value.teacher_id && 
-            formData.value.price &&
-            formData.value.place_id
+            formData.value.price && 
+            formData.value.begin_date 
           ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({data, message}) => {
               close()
-              // emit('notify', { type: 'success', text: message })
+              emit('notify', { type: 'success', text: message })
               emit('add-group-to-options', data)
             })
             .catch(error => {

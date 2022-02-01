@@ -39,7 +39,7 @@ export default [
   {
     title: 'Qarzdor talabalar',
     icon: mdiAccountDetailsOutline,
-    to: '',
+    to: 'student-depts',
     resource: 'Public',
     action: 'read',
   },
@@ -74,8 +74,8 @@ export default [
   {
     title: 'Lidlar',
     icon: mdiAccountDetailsOutline,
-    to: '',
-    resource: 'Public',
+		to: 'leads',
+		resource: 'Lead',
     action: 'read',
   },
   {

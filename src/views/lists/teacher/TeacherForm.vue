@@ -113,11 +113,13 @@
                   >
                   </v-textarea>
               </v-col>
-              <v-col cols="6"> 
+              <v-col cols="6">
+                <h4 class="text-required no-text"><span>*</span></h4> 
                 <v-radio-group
                  v-model="formData.gender"
                  class="mt-0"
                  hide-details
+                 :rules="[required]"
                 >
                     <v-radio
                       label="ERKAK"
@@ -132,14 +134,12 @@
               <v-col cols="6">  
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
-                    <h4 class="text-required no-text"><span>*</span></h4>
                     <v-text-field
                       v-model="formData.birth_date"
                       label="TUG'ilGAN SANASI"
                       readonly
                       v-bind="attrs"
                       v-on="on"
-                      :rules="[required]"
                       hide-details
                       outlined
                       :append-icon="icons.mdiCalendar"
@@ -224,7 +224,7 @@ export default {
       address: null,
       permanent_region_id: null,
       permanent_address: null,
-      gender: null,
+      gender: "1",
       birth_date: null,  
     }
     const formData = ref({})
@@ -258,8 +258,7 @@ export default {
       if (formData.value.id) {
         if (
             formData.value.first_name &&
-            formData.value.last_name &&
-            formData.value.birth_date
+            formData.value.last_name 
         ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
@@ -283,8 +282,7 @@ export default {
       } else {
         if (
             formData.value.first_name &&
-            formData.value.last_name &&
-            formData.value.birth_date
+            formData.value.last_name 
            ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)

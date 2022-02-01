@@ -1,12 +1,12 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useStudentGroupList(MODULE_NAME) {
+export default function useRequestList(MODULE_NAME) {
 
-  const selectedTableData = ref([])
+  const requestSelectedTableData = ref([])
   const notify = ref({})
 
-  const tableColumns = [
+  const requestTableColumns = [
     { text: '#', sortable: false, value: 'index' },
     {
         text: 'AMALLAR',
@@ -14,39 +14,30 @@ export default function useStudentGroupList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
-    { text: 'USTOZ', value: 'teacher.full_name' },
-    { text: 'GURUH', value: 'group.number' },
-    { text: 'TALABA', value: 'student.full_name' },
-    { text: 'BOSHLANGAN SANA', value: 'begin_date' },
-    { text: 'TUGAGAN SANA', value: 'end_date' },
-    { text: 'AKTIV', value: 'status' },
+    { text: 'FIO', value: 'full_name' },
+    { text: 'TELEFON', value: 'phone' },
+    { text: 'IZOH', value: 'note' },
     ]
 
   const filter = ref({
     query: '',
-    teacher_id: '',
-    group_id: '',
-    student_id: '',
-    status: '',
-    begin_date: '',
-    end_date: '',
   })
-  const options = ref({
+  const requestOptions = ref({
     sortBy: ['id'],
     sortDesc: [true],
     limit: 10,
     skip: 0,
   })
-  const loading = ref(false)
+  const requestLoading = ref(false)
 
   let lastQuery = '';
-  const fetchDatas = (force = false) => {
+  const requestFetchDatas = (force = false) => {
 
-    options.value.skip = options.value.page -1
-    options.value.limit = options.value.itemsPerPage
+    requestOptions.value.skip = requestOptions.value.page -1
+    requestOptions.value.limit = requestOptions.value.itemsPerPage
 
     const queryParams = {
-      ...options.value,
+      ...requestOptions.value,
     }
 
 		for (let key in filter.value) {
@@ -62,13 +53,13 @@ export default function useStudentGroupList(MODULE_NAME) {
       lastQuery = newQuery
 
       store
-        .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
+        .dispatch(`${MODULE_NAME}/requestFetchDatas`, queryParams)
         .then(() => {
-          loading.value = false
+            requestLoading.value = false
         })
         .catch(error => {
           console.log(error)
-          loading.value = false
+          requestLoading.value = false
           notify.value = { type: 'error', text: error, time: Date.now() }
         })
     }
@@ -78,23 +69,23 @@ export default function useStudentGroupList(MODULE_NAME) {
   }
 
   watch(filter, () => {
-    if (options.value.page != 1) options.value.page = 1
-    loading.value = true
+    if (requestOptions.value.page != 1) requestOptions.value.page = 1
+    requestLoading.value = true
 
-    setTimeout(() => fetchDatas(), 1000);
+    setTimeout(() => requestFetchDatas(), 1000);
   }, {deep: true})
 
-  watch(options, () => {
-    loading.value = true
-    fetchDatas()
+  watch(requestOptions, () => {
+    requestLoading.value = true
+    requestFetchDatas()
     // selectedTableData.value = []
   })
 
   //delete
-  const deleteRow = (id) => {
+  const requestDeleteRow = (id) => {
 
     store.
-        dispatch(`${MODULE_NAME}/removeRow`, id)
+        dispatch(`${MODULE_NAME}/requestRemoveRow`, id)
         .then((message) => {
             notify.value = { type: 'success', text: message, time: Date.now() }
 
@@ -108,17 +99,14 @@ export default function useStudentGroupList(MODULE_NAME) {
   }
 
   return {
-    tableColumns,
+    requestTableColumns,
     filter,
-    fetchDatas,
-    deleteRow,
+    requestFetchDatas,
+    requestDeleteRow,
 
-    options,
-    loading,
+    requestOptions,
+    requestLoading,
     notify,
-    selectedTableData
+    requestSelectedTableData
   }
 }
-
-
-

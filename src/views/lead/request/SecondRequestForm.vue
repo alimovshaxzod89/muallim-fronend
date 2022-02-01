@@ -10,16 +10,13 @@
   >
     <v-card>
       <v-form ref="form">
-        <v-card-title>
-          <span class="headline">Yangi bo'lim yaratish</span>
-        </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12">
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
-                  label="NOMI"
+                  label="FIO"
                   v-model="formData.name"
                   type="text"
                   dense
@@ -28,6 +25,32 @@
                   hide-details
                   :rules="[required]"
                 ></v-text-field>
+              </v-col>
+
+              <v-col cols="12">
+                <h4 class="text-required no-text"><span>*</span></h4>
+                <v-text-field
+                  prefix="+998"
+                  label="TELEFON"
+                  v-model="formData.phone"
+                  type="phone"
+                  dense
+                  outlined
+                  hide-details
+                  :rules="[required]"
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12">
+                <v-textarea
+                    v-model="formData.note"
+                    label="IZOH"
+                    dense
+                    outlined
+                    hide-details
+                    height="80px"
+                >
+                  </v-textarea>
               </v-col>
             </v-row>
           </v-container>
@@ -48,13 +71,13 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import LeadStoreModule from './storeModule/LeadStoreModule'
+import LeadStoreModule from '../storeModule/LeadStoreModule'
 
 import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
-import Button from '../components/button/Button.vue'
+import Button from '../../components/button/Button.vue'
 
 const MODULE_NAME = 'lead'
 
@@ -85,6 +108,8 @@ export default {
     const emptyFormData = {
       id: null,
       name: null,
+      phone: null,
+      note: null,
     }
 
     //validation
@@ -97,9 +122,9 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.name) {
+        if (formData.value.name && formData.value.phone) {
           store
-            .dispatch(`${MODULE_NAME}/updateSecondRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -115,13 +140,14 @@ export default {
           })
         }
       } else {
-        if (formData.value.name) {
-          const newSecondValue = {
+        if (formData.value.name && formData.value.phone) {
+            const newValue = {
             ...formData.value,
             position: 1,
+            name: '1',
           }
           store
-            .dispatch(`${MODULE_NAME}/addSecondRow`, newSecondValue)
+            .dispatch(`${MODULE_NAME}/addRow`, newValue)
             .then(({ message }) => {
               close()
               emit('notify', { type: 'success', text: message })
