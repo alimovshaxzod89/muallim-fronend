@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useRequestList(MODULE_NAME) {
+export default function useRequestList(MODULE_NAME2) {
 
   const requestSelectedTableData = ref([])
   const notify = ref({})
@@ -53,7 +53,7 @@ export default function useRequestList(MODULE_NAME) {
       lastQuery = newQuery
 
       store
-        .dispatch(`${MODULE_NAME}/requestFetchDatas`, queryParams)
+        .dispatch(`${MODULE_NAME2}/requestFetchDatas`, queryParams)
         .then(() => {
             requestLoading.value = false
         })
@@ -85,7 +85,7 @@ export default function useRequestList(MODULE_NAME) {
   const requestDeleteRow = (id) => {
 
     store.
-        dispatch(`${MODULE_NAME}/requestRemoveRow`, id)
+        dispatch(`${MODULE_NAME2}/requestRemoveRow`, id)
         .then((message) => {
             notify.value = { type: 'success', text: message, time: Date.now() }
 

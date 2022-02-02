@@ -79,7 +79,7 @@ import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import Button from '../../components/button/Button.vue'
 
-const MODULE_NAME = 'lead'
+const MODULE_NAME = 'request'
 
 export default {
   components: { Button },
