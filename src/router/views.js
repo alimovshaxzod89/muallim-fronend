@@ -60,6 +60,16 @@ const views = [
     },
   },
   {
+    path: '/student-paids',
+    name: 'student-paids',
+    component: () => import('@/views/lists/student-paid/StudentPaidList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'StudentPaid',
+      action: 'read',
+    },
+  },
+  {
     path: '/student-groups',
     name: 'student-groups',
     component: () => import('@/views/lists/student-group/StudentGroupList.vue'),
