@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useLeadList(MODULE_NAME) {
+export default function useStudentPaidList(MODULE_NAME) {
 
   const selectedTableData = ref([])
   const notify = ref({})
@@ -14,11 +14,22 @@ export default function useLeadList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
-    { text: 'NOMI', value: 'name' },
+    { text: 'FAN', value: 'subject.name' },
+    { text: 'GURUH', value: 'group.number' },
+    { text: 'TALABA', value: 'student.full_name' },
+    { text: 'OY/YIL', value: 'month_year' },
+    { text: 'SUMMA', value: 'amount' },
+    { text: 'SA\'NA', value: 'date' },
     ]
 
   const filter = ref({
     query: '',
+    teacher_id: '',
+    group_id: '',
+    student_id: '',
+    status: '',
+    begin_date: '',
+    end_date: '',
   })
   const options = ref({
     sortBy: ['id'],
@@ -81,6 +92,7 @@ export default function useLeadList(MODULE_NAME) {
 
   //delete
   const deleteRow = (id) => {
+
     store.
         dispatch(`${MODULE_NAME}/removeRow`, id)
         .then((message) => {
@@ -107,3 +119,6 @@ export default function useLeadList(MODULE_NAME) {
     selectedTableData
   }
 }
+
+
+

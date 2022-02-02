@@ -34,7 +34,7 @@
 // v-if="stategroupTime.indexCalendar && stategroupTime.indexCalendar.includes(`${date}_${room.id}`)"
 import { mdiDeleteOutline, mdiPencilOutline } from '@mdi/js'
 
-import { ref } from '@vue/composition-api/dist/vue-composition-api'
+import { ref, watch } from '@vue/composition-api/dist/vue-composition-api'
 import moment from 'moment'
 
 export default {
@@ -93,6 +93,8 @@ export default {
     }
 
     calcStyles()
+
+    watch(calcStyles, () => {})
 
     return {
       cellStyles,
