@@ -17,7 +17,7 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <h4 class="text-required no-text"><span>*</span></h4>  
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -42,16 +42,16 @@
                     locale="ru-ru"
                   ></v-date-picker>
                 </v-menu>
-              </v-col> 
+              </v-col>
               <v-col cols="12" class="amount">
-                <h4 class="text-required no-text"><span>*</span></h4> 
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
                   label="SUMMA"
                   v-model="formData.amount"
                   type="number"
                   dense
                   outlined
-                  required
+									required
                   hide-details
                   :rules="[required]"
                 ></v-text-field>
@@ -89,10 +89,8 @@ import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 import store from '@/store'
 import CostStoreModule from './CostStoreModule'
 
-import axios from '@axios'
-
 import { ref } from '@vue/composition-api'
-import { required, minLengthValidator } from '@core/utils/validation'
+import { required } from '@core/utils/validation'
 import Button from '../../components/button/Button'
 
 const MODULE_NAME = 'cost'
@@ -109,10 +107,26 @@ export default {
     }
 
     // show, hide
+    const emptyFormData = {
+      id: null,
+      date: null,
+      amount: null,
+      note: null,
+    }
+    const formData = ref({ ...emptyFormData })
+    const form = ref(null)
     const show = ref(false)
+    const picker = new Date().toISOString().substr(0, 10)
+    const isDate = ref(false)
     const open = (id = null) => {
       show.value = true
-      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+      if (id) {
+        const newFormData = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+        formData.value = {
+          ...newFormData,
+          amount: String(newFormData.amount),
+        }
+      }
     }
     const close = () => {
       show.value = false
@@ -120,24 +134,8 @@ export default {
       formData.value = { ...emptyFormData }
     }
 
-    const form = ref(null)
-    const emptyFormData = {
-      id: null,
-      date: null,
-      amount: null,
-      note: null,
-    }
-
-    const picker = new Date().toISOString().substr(0, 10)
-    const isDate = ref(false)
-
     //validation
-    const formData = ref({ ...emptyFormData })
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
-    const validate = () => {
-      form.value.validate()
-    }
-
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
@@ -184,10 +182,8 @@ export default {
       picker,
       isDate,
       required,
-      minLengthValidator,
       formData,
       selectRule,
-      validate,
       show,
       onSubmit,
       open,
@@ -213,6 +209,6 @@ export default {
   border-color: rgba(94, 86, 105, 0.15) !important;
 }
 .amount {
-    margin-top: -45px
+  margin-top: -45px;
 }
 </style>
