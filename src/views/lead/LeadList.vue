@@ -23,9 +23,9 @@
     <v-data-table
       v-model="requestSelectedTableData"
       :headers="requestTableColumns"
-      :items="state.requestRows"
+      :items="requestState.requestRows"
       :options.sync="requestOptions"
-      :server-items-length="state.requestTotal"
+      :server-items-length="requestState.requestTotal"
       :loading="requestLoading"
       :items-per-page="requestOptions.itemsPerPage"
       :footer-props="requestFooterProps"
@@ -380,6 +380,7 @@ import ThirdRequestForm from './request/ThirdRequestForm.vue'
 import DialogConfirm from '../components/DialogConfirm.vue'
 
 const MODULE_NAME = 'lead'
+const MODULE_NAME2 = 'request'
 
 export default {
   components: {
@@ -392,15 +393,18 @@ export default {
     DialogConfirm,
   },
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		summa: value => numeral(value).format('0,0'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    date: value => moment(value).format('D MMMM YYYY'),
+    summa: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, LeadStoreModule) 
-      store.registerModule(MODULE_NAME, RequestStoreModule)
+      store.registerModule(MODULE_NAME, LeadStoreModule)
+    }
+
+    if (!store.hasModule(MODULE_NAME2)) {
+      store.registerModule(MODULE_NAME2, RequestStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -409,6 +413,7 @@ export default {
 
     //store state
     const state = ref(store.state[MODULE_NAME])
+    const requestState = ref(store.state[MODULE_NAME2])
 
     //logics
     const {
@@ -430,21 +435,11 @@ export default {
       requestOptions,
       requestLoading,
       requestSelectedTableData,
-    } = useRequestList(MODULE_NAME)
+    } = useRequestList(MODULE_NAME2)
 
-    const {
-      secondSelectedTableData,
-      secondTableColumns,
-      secondOptions,
-      secondLoading,
-    } = useLeadSecondList(MODULE_NAME)
+    const { secondSelectedTableData, secondTableColumns, secondOptions, secondLoading } = useLeadSecondList(MODULE_NAME)
 
-    const {
-      thirdSelectedTableData,
-      thirdTableColumns,
-      thirdOptions,
-      thirdLoading,
-    } = useLeadThirdList(MODULE_NAME)
+    const { thirdSelectedTableData, thirdTableColumns, thirdOptions, thirdLoading } = useLeadThirdList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -494,12 +489,7 @@ export default {
     const thirdRequestForm = ref(null)
     const openThirdRequestForm = id => {
       thirdRequestForm.value.open(id)
-    }  
-
-
-    
-
-    
+    }
 
     //Delete Confirm Dialog
     const dialogConfirm = ref(null)
@@ -508,6 +498,7 @@ export default {
         .open("O'chirishga aminmisiz?")
         .then(() => deleteRow(id))
         .catch(() => {})
+      console.log(deleteRow())
     }
     const requestConfirmDelete = id => {
       dialogConfirm.value
@@ -534,6 +525,7 @@ export default {
     return {
       BASE_URL,
       state,
+      requestState,
 
       tableColumns,
       requestTableColumns,
@@ -593,6 +585,7 @@ export default {
       openThirdForm,
 
       MODULE_NAME,
+      MODULE_NAME2,
 
       icons: {
         mdiTrendingUp,
@@ -638,21 +631,20 @@ export default {
   }
 }
 .btn {
-    margin-left: 58%;
+  margin-left: 58%;
 }
-.requestButton{
-  justify-content: right;
-  justify-self: right;
+.requestButton {
+  margin-left: 80%;
 }
-.titleS{
-    margin-left: 38%;
-    padding-top: 3%;
+.titleS {
+  margin-left: 38%;
+  padding-top: 3%;
 }
-.titleK{
+.titleK {
   margin-left: 38%;
   padding-top: 3%;
 }
 .submit_btn {
-  margin-left: 40% ;
+  margin-left: 40%;
 }
 </style>

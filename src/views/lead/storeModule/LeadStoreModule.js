@@ -4,11 +4,9 @@ export default {
   namespaced: true,
   state: {
     rows: [],
-   
     secondRows: [],
     thirdRows: [],
     total: 0,
-    
     secondTotal: 0,
     thirdTotal: 0,
   },
@@ -16,7 +14,6 @@ export default {
     indexIds(state) {
       return state.rows.map(el => parseInt(el.id)) 
     },
-    
     indexSecondIds(state){
       return state.secondRows.map(el => parseInt(el.id))
     },
@@ -27,7 +24,6 @@ export default {
       const index = getters.indexIds.indexOf(parseInt(id))
       return state.rows[index]
     },
-    
     getSecondById: (state, getters) => (id) => {
       const index = getters.indexSecondIds.indexOf(parseInt(id))
       return state.secondRows[index]
@@ -41,7 +37,6 @@ export default {
     setRows(state, payload) {
       state.rows = payload;
     },
-    
     setSecondRows(state, payload){
       state.secondRows = payload;
     },
@@ -51,7 +46,6 @@ export default {
     addRow(state, payload) {
       state.rows.push(payload);
     },
-    
     addSecondRow(state, payload){
       state.secondRows.push(payload);
     },
@@ -61,7 +55,6 @@ export default {
     updateRow(state, { row, index }) {
       state.rows.splice(index, 1, row);
     },
-    
     updateSecondRow(state, { row, index }) {
       state.secondRows.splice(index, 1, row);
     },
@@ -71,7 +64,6 @@ export default {
     removeRow(state, index) {
       state.rows.splice(index, 1);
     },
-    
     removeSecondRow(state, index) {
       state.secondRows.splice(index, 1);
     },
@@ -81,7 +73,6 @@ export default {
     setTotal(state, payload) {
       state.total = payload;
     },
-    
     setSecondTotal(state, payload) {
       state.secondTotal = payload;
     },
@@ -91,7 +82,6 @@ export default {
     incrementTotal(state) {
       state.total++
     },
-    
     incrementSecondTotal(state) {
       state.secondTotal++
     },
@@ -101,7 +91,6 @@ export default {
     decrementTotal(state) {
       state.total--
     },
-    
     decrementSecondTotal(state) {
       state.secondTotal--
     },
@@ -124,7 +113,6 @@ export default {
           .catch(error => reject(error))
       })
     },
-    
     fetchSecondDatas({ commit }, queryParams) {
       return new Promise((resolve, reject) => {
         axios
@@ -167,7 +155,6 @@ export default {
           .catch(error => reject(error))
       })
     },
-    
     addSecondRow({ commit }, row) {
       return new Promise((resolve, reject) => {
         axios
@@ -209,7 +196,6 @@ export default {
           }).catch(error => reject(error))
       })
     },
-    
     updateSecondRow({ commit, getters }, row) {
       return new Promise((resolve, reject) => {
         axios
@@ -248,7 +234,6 @@ export default {
         }).catch(error => reject(error))
       })
     },
-    
     removeSecondRow({ commit, getters }, id) {
       return new Promise((resolve, reject) => {
         axios.delete(`api/leads/${id}`).then(response => {

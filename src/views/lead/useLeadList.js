@@ -81,7 +81,6 @@ export default function useLeadList(MODULE_NAME) {
 
   //delete
   const deleteRow = (id) => {
-
     store.
         dispatch(`${MODULE_NAME}/removeRow`, id)
         .then((message) => {
