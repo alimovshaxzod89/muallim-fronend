@@ -37,7 +37,6 @@ export default {
     decrementTotal(state) {
       state.total--
     }
-
   },
   actions: {
     fetchDatas({ commit }, queryParams) {

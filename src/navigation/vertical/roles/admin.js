@@ -140,8 +140,8 @@ export default [
       {
         title: 'Menejerlar',
         icon: mdiAccountTieVoice ,
-        to: 'places',
-        resource: 'Place',
+        to: 'managers',
+        resource: 'Manager',
         action: 'read',
       },
       {

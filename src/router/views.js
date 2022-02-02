@@ -185,6 +185,16 @@ const views = [
     },
   },
   {
+    path: '/managers',
+    name: 'managers',
+    component: () => import('@/views/lists/manager/ManagerList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'Manager',
+      action: 'read',
+    },
+  },
+  {
     path: '/center-profit',
     name: 'center-profit',
     component: () => import('@/views/report/CenterProfit.vue'),
