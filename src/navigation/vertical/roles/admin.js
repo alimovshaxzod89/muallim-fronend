@@ -80,7 +80,7 @@ export default [
       },
       {
         title: "Talabalar to'laganlar",
-        to: 'student-depts',
+        to: 'student-paids',
         resource: 'Teacher',
         action: 'read',
         icon: mdiCashCheck ,
@@ -140,8 +140,8 @@ export default [
       {
         title: 'Menejerlar',
         icon: mdiAccountTieVoice ,
-        to: 'places',
-        resource: 'Place',
+        to: 'managers',
+        resource: 'Manager',
         action: 'read',
       },
       {

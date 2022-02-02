@@ -60,6 +60,16 @@ const views = [
     },
   },
   {
+    path: '/student-paids',
+    name: 'student-paids',
+    component: () => import('@/views/lists/student-paid/StudentPaidList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'StudentPaid',
+      action: 'read',
+    },
+  },
+  {
     path: '/student-groups',
     name: 'student-groups',
     component: () => import('@/views/lists/student-group/StudentGroupList.vue'),
@@ -180,6 +190,16 @@ const views = [
     meta: {
       layout: 'content',
       resource: 'GroupTime',
+      action: 'read',
+    },
+  },
+  {
+    path: '/managers',
+    name: 'managers',
+    component: () => import('@/views/lists/manager/ManagerList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'Manager',
       action: 'read',
     },
   },

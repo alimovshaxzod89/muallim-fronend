@@ -72,8 +72,8 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <room-form
-      ref="roomForm"
+    <manager-form
+      ref="managerForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -95,25 +95,24 @@ import store from '@/store'
 import envParams from '@envParams'
 
 // store module
-import RoomStoreModule from './RoomStoreModule'
+import ManagerStoreModule from './ManagerStoreModule'
 
 // composition function
-import useRoomList from './useRoomList'
-import RoomForm from './RoomForm'
+import useManagerList from './useManagerList'
+import ManagerForm from './ManagerForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'room'
+const MODULE_NAME = 'manager'
 
 export default {
   components: {
-    RoomForm,
+    ManagerForm,
     DialogConfirm,
   },
   setup() {
-
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, RoomStoreModule)
+      store.registerModule(MODULE_NAME, ManagerStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -134,7 +133,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useRoomList(MODULE_NAME)
+    } = useManagerList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -146,9 +145,9 @@ export default {
     ]
 
     //Form
-    const roomForm = ref(null)
+    const managerForm = ref(null)
     const openForm = id => {
-      roomForm.value.open(id)
+      managerForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -183,7 +182,7 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      roomForm,
+      managerForm,
       openForm,
 
       MODULE_NAME,

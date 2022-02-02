@@ -37,12 +37,13 @@ export default {
     decrementTotal(state) {
       state.total--
     }
+
   },
   actions: {
     fetchDatas({ commit }, queryParams) {
       return new Promise((resolve, reject) => {
         axios
-          .get('/api/rooms', { params: queryParams })
+          .get('/api/student-paids', { params: queryParams })
           .then(response => {
             const { data, total } = response.data
             commit('setRows', data)
@@ -54,43 +55,59 @@ export default {
       })
     },
     addRow({ commit }, row) {
+
       return new Promise((resolve, reject) => {
+
         axios
-          .post('api/rooms', row)
+          .post('api/student-paids', row)
           .then(response => {
             if (response.data.success) {
+
               commit('addRow', response.data.data)
               commit('incrementTotal')
-              resolve(response.data.message)
+
+              resolve(response.data)
             }
           })
           .catch(error => reject(error))
+
       })
     },
     updateRow({ commit, getters }, row) {
+
       return new Promise((resolve, reject) => {
+
         axios
-          .put(`api/rooms/${row.id}`, row)
+          .put(`api/student-paids/${row.id}`, row)
           .then(response => {
             if (response.data.success) {
+
               const index = getters.indexIds.indexOf(parseInt(row.id))
               commit('updateRow', { row: response.data.data, index })
-              resolve(response.data.message)
+
+              resolve(response.data)
             }
           }).catch(error => reject(error))
+
       })
     },
     removeRow({ commit, getters }, id) {
+
       return new Promise((resolve, reject) => {
-        axios.delete(`api/rooms/${id}`).then(response => {
+
+        axios.delete(`api/student-paids/${id}`).then(response => {
           if (response.data.success) {
+
             const index = getters.indexIds.indexOf(id)
             commit('removeRow', index)
             commit('decrementTotal')
+
             resolve(response.data.message)
           }
         }).catch(error => reject(error))
+
       })
+
     },
   }
 }
