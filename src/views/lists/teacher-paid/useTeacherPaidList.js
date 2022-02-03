@@ -2,23 +2,22 @@ import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
 export default function useTeacherPaidList(MODULE_NAME) {
-
   const selectedTableData = ref([])
   const notify = ref({})
 
   const tableColumns = [
     { text: '#', sortable: false, value: 'index' },
     {
-        text: 'AMALLAR',
-        value: 'actions',
-        align: 'center',
-        sortable: false,
+      text: 'AMALLAR',
+      value: 'actions',
+      align: 'center',
+      sortable: false,
     },
-    { text: 'O\'QITUVCHI', value: 'teacher.full_name' },
+    { text: "O'QITUVCHI", value: 'teacher.full_name' },
     { text: 'SUMMA', value: 'amount' },
     { text: 'SANA', value: 'date' },
     { text: 'IZOH', value: 'note' },
-    ]
+  ]
 
   const filter = ref({
     query: '',
@@ -31,10 +30,9 @@ export default function useTeacherPaidList(MODULE_NAME) {
   })
   const loading = ref(false)
 
-  let lastQuery = '';
+  let lastQuery = ''
   const fetchDatas = (force = false) => {
-
-    options.value.skip = options.value.page -1
+    options.value.skip = options.value.page - 1
     options.value.limit = options.value.itemsPerPage
 
     const queryParams = {
@@ -42,11 +40,11 @@ export default function useTeacherPaidList(MODULE_NAME) {
     }
 
     for (let key in filter.value) {
-			let value = filter.value[key]
-			if (value !== null && value !== '') {
-				queryParams[key] = value
-			}
-		}
+      let value = filter.value[key]
+      if (value !== null && value !== '') {
+        queryParams[key] = value
+      }
+    }
 
     const newQuery = JSON.stringify(queryParams)
 
@@ -66,15 +64,18 @@ export default function useTeacherPaidList(MODULE_NAME) {
     }
 
     lastQuery = JSON.stringify(queryParams)
-
   }
 
-  watch(filter, () => {
-    if (options.value.page != 1) options.value.page = 1
-    loading.value = true
+  watch(
+    filter,
+    () => {
+      if (options.value.page != 1) options.value.page = 1
+      loading.value = true
 
-    setTimeout(() => fetchDatas(), 1000);
-  }, {deep: true})
+      setTimeout(() => fetchDatas(), 1000)
+    },
+    { deep: true },
+  )
 
   watch(options, () => {
     loading.value = true
@@ -83,20 +84,18 @@ export default function useTeacherPaidList(MODULE_NAME) {
   })
 
   //delete
-  const deleteRow = (id) => {
+  const deleteRow = id => {
+    store
+      .dispatch(`${MODULE_NAME}/removeRow`, id)
+      .then(message => {
+        notify.value = { type: 'success', text: message, time: Date.now() }
 
-    store.
-        dispatch(`${MODULE_NAME}/removeRow`, id)
-        .then((message) => {
-            notify.value = { type: 'success', text: message, time: Date.now() }
-
-            fetchDatas(true)
-
-    }).catch(error => {
-      console.log(error)
-      notify.value = { type: 'error', text: error.message, time: Date.now() }
-    })
-
+        fetchDatas(true)
+      })
+      .catch(error => {
+        console.log(error)
+        notify.value = { type: 'error', text: error.message, time: Date.now() }
+      })
   }
 
   return {
@@ -108,6 +107,6 @@ export default function useTeacherPaidList(MODULE_NAME) {
     options,
     loading,
     notify,
-    selectedTableData
+    selectedTableData,
   }
 }
