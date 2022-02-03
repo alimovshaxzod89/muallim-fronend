@@ -1,14 +1,14 @@
 const views = [
-	{
-		path: '/apps/calendar',
-		name: 'apps-calendar',
-		component: () => import('@/views/apps/calendar/Calendar.vue'),
-		meta: {
-			layout: 'content',
-			resource: 'Public',
-			action: 'read',
-		},
-	},
+  {
+    path: '/apps/calendar',
+    name: 'apps-calendar',
+    component: () => import('@/views/apps/calendar/Calendar.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'Public',
+      action: 'read',
+    },
+  },
   {
     path: '/main',
     name: 'dashboard-eCommerce',
@@ -183,7 +183,6 @@ const views = [
       action: 'read',
     },
   },
-
   {
     path: '/group-times',
     name: 'group-times',
@@ -195,20 +194,40 @@ const views = [
     },
   },
   {
-    path: '/center-profit',
-    name: 'center-profit',
-    component: () => import('@/views/report/CenterProfit.vue'),
+    path: '/managers',
+    name: 'managers',
+    component: () => import('@/views/lists/manager/ManagerList.vue'),
     meta: {
       layout: 'content',
-      // pageTitle: 'Markaz Ulushi',
-      // breadcrumb: [
-      //   {
-      //     text: 'Markaz Ulushi',
-      //     active: true,
-      //   },
-      // ],
+      resource: 'Manager',
+      action: 'read',
     },
   },
+  {
+    path: '/center-profit',
+    name: 'center-profit',
+    component: () => import('@/views/lists/center-profit/CenterProfitList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'CenterProfit',
+      action: 'read',
+    },
+  },
+  // {
+  //   path: '/center-profit',
+  //   name: 'center-profit',
+  //   component: () => import('@/views/lists/center-profit/CenterProfitList.vue'),
+  //   meta: {
+  //     layout: 'content',
+  //     // pageTitle: 'Markaz Ulushi',
+  //     // breadcrumb: [
+  //     //   {
+  //     //     text: 'Markaz Ulushi',
+  //     //     active: true,
+  //     //   },
+  //     // ],
+  //   },
+  // },
 ]
 
 export default views

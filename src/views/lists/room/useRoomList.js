@@ -68,7 +68,6 @@ export default function useRoomList(MODULE_NAME) {
     }
 
     lastQuery = JSON.stringify(queryParams)
-
   }
 
   watch(filter, () => {

@@ -131,136 +131,183 @@
 <script>
 import Multiselect from 'vue-multiselect'
 import { BFormSelect, BCard, BButton, BFormGroup, BFormInput, BModal, BTable } from 'bootstrap-vue'
-import moment from 'moment'
+// import moment from 'moment'
 import axios from 'axios'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 require('moment/locale/uz-latn')
 
 export default {
-	name: 'CenterProfit',
-	components: {
-		BFormSelect,
-		BTable,
-		BCard,
-		BButton,
-		BFormGroup,
-		BFormInput,
-		BModal,
-		Multiselect
-	},
-	data() {
-		return {
-			teacher_payments: [],
-			filters: {
-				year: null,
-				month: null
-			},
-			options: {
-				months: [
-					{
-						value: 'Yanvar',
-						text: 'Yanvar',
-						id: 1
-					},
-					{
-						value: 'Fevral',
-						text: 'Fevral',
-						id: 2
-					},
-					{
-						value: 'Mart',
-						text: 'Mart',
-						id: 3
-					},
-					{
-						value: 'Aprel',
-						text: 'Aprel',
-						id: 4
-					},
-					{
-						value: 'May',
-						text: 'May',
-						id: 5
-					},
-					{
-						value: 'Iyun',
-						text: 'Iyun',
-						id: 6
-					},
-					{
-						value: 'Iyul',
-						text: 'Iyul',
-						id: 7
-					},
-					{
-						value: 'Avgust',
-						text: 'Avgust',
-						id: 8
-					},
-					{
-						value: 'Sentabr',
-						text: 'Sentabr',
-						id: 9
-					},
-					{
-						value: 'Oktabr',
-						text: 'Oktabr',
-						id: 10
-					},
-					{
-						value: 'Noyabr',
-						text: 'Noyabr',
-						id: 11
-					},
-					{
-						value: 'Dekabr',
-						text: 'Dekabr',
-						id: 12
-					}
-				],
-				years: [
-					{
-						value: '2020',
-						text: '2020'
-					},
-					{
-						value: '2021',
-						text: '2021'
-					}
-				]
-			}
-		}
-	},
-	watch: {
-		'filters.month': function() {
-			this.loadPayments()
-		},
-		'filters.year': function() {
-			this.loadPayments()
-		}
-	},
-	created() {
-		this.loadPayments()
-		// this.init()
-	},
-	methods: {
-		clearDate(input) {
-			this.filters[input] = null
-			this.loadPayments()
-		},
-		loadPayments() {
-			if (this.filters.year) {
-				const url = this.filters.month
-					? `center-income/${this.filters.year.value}/${this.filters.month.id}`
-					: `center-income/${this.filters.year.value}`
-				axios.get(url).then(response => {
-					if (response.status === 200) {
-						this.teacher_payments = response.data
-						console.log('tet')
-					}
-				})
-			}
-		}
-	}
+  name: 'CenterProfit',
+  components: {
+    BFormSelect,
+    BTable,
+    BCard,
+    BButton,
+    BFormGroup,
+    BFormInput,
+    BModal,
+    Multiselect,
+  },
+  data() {
+    return {
+      teacher_payments: [],
+      filters: {
+        year: null,
+        month: null,
+      },
+      options: {
+        months: [
+          {
+            value: 'Yanvar',
+            text: 'Yanvar',
+            id: 1,
+          },
+          {
+            value: 'Fevral',
+            text: 'Fevral',
+            id: 2,
+          },
+          {
+            value: 'Mart',
+            text: 'Mart',
+            id: 3,
+          },
+          {
+            value: 'Aprel',
+            text: 'Aprel',
+            id: 4,
+          },
+          {
+            value: 'May',
+            text: 'May',
+            id: 5,
+          },
+          {
+            value: 'Iyun',
+            text: 'Iyun',
+            id: 6,
+          },
+          {
+            value: 'Iyul',
+            text: 'Iyul',
+            id: 7,
+          },
+          {
+            value: 'Avgust',
+            text: 'Avgust',
+            id: 8,
+          },
+          {
+            value: 'Sentabr',
+            text: 'Sentabr',
+            id: 9,
+          },
+          {
+            value: 'Oktabr',
+            text: 'Oktabr',
+            id: 10,
+          },
+          {
+            value: 'Noyabr',
+            text: 'Noyabr',
+            id: 11,
+          },
+          {
+            value: 'Dekabr',
+            text: 'Dekabr',
+            id: 12,
+          },
+        ],
+        years: [
+          {
+            value: '2020',
+            text: '2020',
+          },
+          {
+            value: '2021',
+            text: '2021',
+          },
+        ],
+      },
+    }
+  },
+  watch: {
+    'filters.month': function () {
+      this.loadPayments()
+    },
+    'filters.year': function () {
+      this.loadPayments()
+    },
+  },
+  created() {
+    this.loadPayments()
+    // this.init()
+  },
+  methods: {
+    clearDate(input) {
+      this.filters[input] = null
+      this.loadPayments()
+    },
+    loadPayments() {
+      if (this.filters.year) {
+        const url = this.filters.month
+          ? `http://mm.softwork.uz/api/center-income/${this.filters.year.value}/${this.filters.month.id}`
+          : `http://mm.softwork.uz/api/center-income/${this.filters.year.value}`
+        axios.get(url).then(response => {
+          if (response.status === 200) {
+            this.teacher_payments = response.data
+          }
+        })
+      }
+    },
+  },
 }
 </script>
+
+<style>
+.clear-date {
+  position: absolute;
+  top: 50%;
+  right: 3px;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border: none;
+  background-color: unset;
+}
+.clear-date svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 12px !important;
+  min-height: 12px !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.filter-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.filter-input {
+  flex: 1 1 auto;
+  max-width: 260px;
+  margin: 0 -10px 10px -10px;
+  padding: 0 15px 0 15px;
+}
+
+.filter-label {
+  position: relative;
+  padding-right: 30px;
+}
+
+.filter-label span {
+  font-size: 11px;
+  line-height: 15px;
+  text-transform: uppercase;
+}
+</style>
