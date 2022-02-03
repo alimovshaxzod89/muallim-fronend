@@ -285,9 +285,9 @@
     <v-data-table
       v-model="thirdSelectedTableData"
       :headers="thirdTableColumns"
-      :items="state.thirdRows"
+      :items="thirdState.thirdRows"
       :options.sync="thirdOptions"
-      :server-items-length="state.thirdTotal"
+      :server-items-length="thirdState.thirdTotal"
       :loading="thirdLoading"
       :items-per-page="thirdOptions.itemsPerPage"
       :footer-props="footerProps"
@@ -381,6 +381,7 @@ import DialogConfirm from '../components/DialogConfirm.vue'
 
 const MODULE_NAME = 'lead'
 const MODULE_NAME2 = 'request'
+const MODULE_NAME4 = 'leadThird'
 
 export default {
   components: {
@@ -403,6 +404,10 @@ export default {
       store.registerModule(MODULE_NAME, LeadStoreModule)
     }
 
+    if (!store.hasModule(MODULE_NAME4)) {
+      store.registerModule(MODULE_NAME4, LeadStoreModule)
+    }
+
     if (!store.hasModule(MODULE_NAME2)) {
       store.registerModule(MODULE_NAME2, RequestStoreModule)
     }
@@ -413,6 +418,7 @@ export default {
 
     //store state
     const state = ref(store.state[MODULE_NAME])
+    const thirdState = ref(store.state[MODULE_NAME4])
     const requestState = ref(store.state[MODULE_NAME2])
 
     //logics
@@ -439,7 +445,7 @@ export default {
 
     const { secondSelectedTableData, secondTableColumns, secondOptions, secondLoading } = useLeadSecondList(MODULE_NAME)
 
-    const { thirdSelectedTableData, thirdTableColumns, thirdOptions, thirdLoading } = useLeadThirdList(MODULE_NAME)
+    const { thirdSelectedTableData, thirdTableColumns, thirdOptions, thirdLoading } = useLeadThirdList(MODULE_NAME4)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -526,6 +532,7 @@ export default {
       BASE_URL,
       state,
       requestState,
+      thirdState,
 
       tableColumns,
       requestTableColumns,
@@ -586,6 +593,7 @@ export default {
 
       MODULE_NAME,
       MODULE_NAME2,
+      MODULE_NAME4,
 
       icons: {
         mdiTrendingUp,

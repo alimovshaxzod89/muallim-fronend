@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useThirdList(MODULE_NAME) {
+export default function useThirdList(MODULE_NAME4) {
 
   const selectedThirdTableData = ref([])
   const thirdNotify = ref({})
@@ -54,7 +54,7 @@ export default function useThirdList(MODULE_NAME) {
       lastQuery = newQuery
 
       store
-        .dispatch(`${MODULE_NAME}/fetchThirdDatas`, queryParams)
+        .dispatch(`${MODULE_NAME4}/fetchThirdDatas`, queryParams)
         .then(() => {
             thirdLoading.value = false
         })
@@ -84,9 +84,8 @@ export default function useThirdList(MODULE_NAME) {
 
   //delete
   const deleteThirdRow = (id) => {
-
     store.
-        dispatch(`${MODULE_NAME}/removeRow`, id)
+        dispatch(`${MODULE_NAME4}/removeThirdRow`, id)
         .then((message) => {
             thirdNotify.value = { type: 'success', text: message, time: Date.now() }
 

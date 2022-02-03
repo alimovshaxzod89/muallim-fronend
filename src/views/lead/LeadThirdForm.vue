@@ -109,7 +109,7 @@ import SubjectForm from '@/views/lists/subject/SubjectForm.vue'
 import TeacherForm from '@/views/lists/teacher/TeacherForm.vue'
 import Button from '../components/button/Button.vue'
 
-const MODULE_NAME = 'teacherPaid'
+const MODULE_NAME4 = 'leadThird'
 
 export default {
   components: { SubjectForm, TeacherForm, Button },
@@ -122,15 +122,15 @@ export default {
   },
   setup(props, { emit }) {
     // Register module
-    if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, LeadStoreModule)
+    if (!store.hasModule(MODULE_NAME4)) {
+      store.registerModule(MODULE_NAME4, LeadStoreModule)
     }
 
     // show, hide
     const show = ref(false)
     const open = (id = null) => {
       show.value = true
-      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME4}/getThirdById`](id)))
     }
     const close = () => {
       show.value = false
@@ -190,7 +190,7 @@ export default {
       if (formData.value.id) {
         if (formData.value.name && formData.value.subject_id && formData.value.teacher_id && formData.value.day_id) {
           store
-            .dispatch(`${MODULE_NAME}/updateThirdRow`, formData.value)
+            .dispatch(`${MODULE_NAME4}/updateThirdRow`, formData.value)
             .then(({ message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -207,12 +207,12 @@ export default {
         }
       } else {
         if (formData.value.name && formData.value.subject_id && formData.value.teacher_id && formData.value.day_id) {
-          const newValue = {
+          const newThirdValue = {
             ...formData.value,
-            position: 3,
+            position: 1,
           }
           store
-            .dispatch(`${MODULE_NAME}/addThirdRow`, newValue)
+            .dispatch(`${MODULE_NAME4}/addThirdRow`, newThirdValue)
             .then(({ message }) => {
               close()
               emit('notify', { type: 'success', text: message })
