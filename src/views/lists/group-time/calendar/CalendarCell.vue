@@ -13,19 +13,21 @@
 				</v-icon>
 				<span class="text-dots">
 					Guruh:
-					<b>{{ groupTime.group.number }}</b>
-					<!-- Xona:
-					<b>{{ groupTime.room.name }}</b>,
+					<b>{{ groupTime.group.number }}</b>,
 					Soat:
 					<b>{{ groupTime.time_begin }}</b>
 					-
-					<b>{{ groupTime.time_end }}</b> -->
+					<b>{{ groupTime.time_end }}</b>
 				</span>
 			</div>
 		</template>
 		<span>
 			Guruh:
-			<b>{{ groupTime.group.number }}</b>
+			<b>{{ groupTime.group.number }}</b>,
+			Soat:
+			<b>{{ groupTime.time_begin }}</b>
+			-
+			<b>{{ groupTime.time_end }}</b>
 		</span>
 	</v-tooltip>
 </template>

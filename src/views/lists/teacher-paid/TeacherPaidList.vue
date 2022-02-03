@@ -82,7 +82,7 @@
 <script>
 import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
 
-import { onUnmounted, ref } from '@vue/composition-api'
+import { ref } from '@vue/composition-api'
 import store from '@/store'
 
 import envParams from '@envParams'
