@@ -19,7 +19,7 @@
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.place_id"
-                  :items="selectsDatas.manager"
+                  :items="selectsDatas.place"
                   item-text="name"
                   item-value="id"
                   label="BINO"
@@ -133,7 +133,7 @@ export default {
         .get('/api/places', { params: { itemsPerPage: -1 } })
         .then(response => {
           if (response.data.success) {
-            selectsDatas.value.manager = response.data.data
+            selectsDatas.value.place = response.data.data
           }
         })
         .catch(error => console.log(error))
@@ -186,7 +186,7 @@ export default {
       managerForm.value.open(id)
     }
     const addPlaceToOptions = row => {
-      selectsDatas.value.manager = selectsDatas.value.manager.concat([row])
+      selectsDatas.value.place = selectsDatas.value.place.concat([row])
       formData.value.place_id = row.id
     }
 
