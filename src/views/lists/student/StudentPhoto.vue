@@ -196,7 +196,7 @@ export default {
         delete newInfo.photo
         delete newInfo.photo_link
         store
-          .dispatch(`${props.MODULE_NAME}/updateRow`, newInfo)
+          .dispatch(`${MODULE_NAME}/updateRow`, newInfo)
           .then(res => {
             stopWebCamera()
             emit('notify', { type: 'success', text: 'Muvaffaqiyatli' })
@@ -219,7 +219,7 @@ export default {
         photo: null,
       }
       store
-        .dispatch(`${props.MODULE_NAME}/updateRow`, newInfo)
+        .dispatch(`${MODULE_NAME}/updateRow`, newInfo)
         .then(res => {
           emit('notify', { type: 'success', text: 'Muvaffaqiyatli' })
           url.value = require(`@/assets/images/user-image.png`)

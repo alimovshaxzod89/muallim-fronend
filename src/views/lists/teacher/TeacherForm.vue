@@ -123,11 +123,11 @@
                 >
                     <v-radio
                       label="ERKAK"
-                      value="0"
+                      value="1"
                     ></v-radio>
                     <v-radio
                       label="AYOL"
-                      value="1"
+                      value="0"
                     ></v-radio>
                 </v-radio-group>
               </v-col>
@@ -224,7 +224,7 @@ export default {
       address: null,
       permanent_region_id: null,
       permanent_address: null,
-      gender: "1",
+      gender: "0",
       birth_date: null,  
     }
     const formData = ref({})
