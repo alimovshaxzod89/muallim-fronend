@@ -63,8 +63,8 @@ export default [
   {
     title: "Davomat",
     icon: mdiAccountPlus,
-    to: 'payments',
-    resource: 'payments',
+    to: 'davomat',
+    resource: 'davomat',
     action: 'read',
   },
   {
@@ -126,8 +126,8 @@ export default [
       },
       {
         title: "Ustozlarga daromadi",
-        to: 'teacher-paids',
-        resource: 'Public',
+        to: 'teachers-profit',
+        resource: 'Teachers-Profit',
         action: 'read',
         icon: mdiCurrencyUsd ,
       },

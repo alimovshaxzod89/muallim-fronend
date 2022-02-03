@@ -88,6 +88,14 @@ const views = [
     },
   },
   {
+    path: '/teachers-profit',
+    name: 'teachers-profit',
+    component: () => import('@/views/lists/teacher-profit/TeacherProfitList.vue'),
+    meta: {
+      layout: 'content',
+    },
+  },
+  {
     path: '/costs',
     name: 'costs',
     component: () => import('@/views/lists/cost/CostList.vue'),
@@ -160,6 +168,16 @@ const views = [
     meta: {
       layout: 'content',
       resource: 'Payment',
+      action: 'read',
+    },
+  },
+  {
+    path: '/davomat',
+    name: 'davomat',
+    component: () => import('@/views/lists/davomat/DavomatList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'Davomat',
       action: 'read',
     },
   },

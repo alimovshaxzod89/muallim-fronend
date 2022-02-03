@@ -46,7 +46,7 @@
                 </v-autocomplete>
               </v-col>
               <v-col cols="12">
-                <h4 class="text-required no-text"><span>*</span></h4>  
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
                   label="SUMMA"
                   v-model="formData.amount"
@@ -145,7 +145,13 @@ export default {
     const show = ref(false)
     const open = (id = null) => {
       show.value = true
-      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+      if (id) {
+        const newFormData = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+        formData.value = {
+          ...newFormData,
+          amount: String(newFormData.amount),
+        }
+      }
     }
     const close = () => {
       show.value = false
@@ -232,7 +238,7 @@ export default {
     const addTeacher = (id = null) => {
       teacherForm.value.open(id)
     }
-    const addTeacherToOptions = (row) => {
+    const addTeacherToOptions = row => {
       selectsDatas.value.teacher = selectsDatas.value.teacher.concat([row])
       formData.value.teacher_id = row.id
     }

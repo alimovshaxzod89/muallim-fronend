@@ -116,9 +116,9 @@
                 </v-col>
 
                 <v-col cols="3">
-                  <v-menu 
-                    v-model="isDateTwo" 
-                    :close-on-content-click="false" 
+                  <v-menu
+                    v-model="isDateTwo"
+                    :close-on-content-click="false"
                     offset-y min-width="auto"
                   >
                     <template v-slot:activator="{ on, attrs }">
@@ -149,7 +149,7 @@
 
               </v-expansion-panel-content>
               <v-expansion-panel-content>
-                
+
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -208,14 +208,14 @@
         </div>
       </template>
 
-      <template #[`item.group_id`]="{ item }"> 
+      <template #[`item.group_id`]="{ item }">
         {{ item.group_id | numeral('0,0') }}
       </template>
 
-      <template #[`item.begin_date`]="{ item }"> 
+      <template #[`item.begin_date`]="{ item }">
         {{ item.begin_date | date }}
       </template>
-      <template #[`item.end_date`]="{ item }"> 
+      <template #[`item.end_date`]="{ item }">
         {{ item.end_date | date }}
       </template>
 
@@ -234,17 +234,16 @@
 </template>
 
 <script>
-import { 
-  mdiFilterOutline, 
-  mdiCalendar, 
-  mdiTrendingUp, 
-  mdiPlus, 
-  mdiDeleteOutline, 
-  mdiDotsVertical, 
-  mdiEyeOutline, 
-  mdiPencilOutline 
+import {
+  mdiFilterOutline,
+  mdiCalendar,
+  mdiTrendingUp,
+  mdiPlus,
+  mdiDeleteOutline,
+  mdiDotsVertical,
+  mdiEyeOutline,
+  mdiPencilOutline,
 } from '@mdi/js'
-
 
 import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
@@ -273,10 +272,10 @@ export default {
     DialogConfirm,
   },
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		sum: value => numeral(value).format('0,0'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    date: value => moment(value).format('D MMMM YYYY'),
+    sum: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
@@ -332,35 +331,31 @@ export default {
         .catch(() => {})
     }
 
-    
     const BASE_URL = envParams.BASE_URL
 
     const teachers = ref([])
     const loadTeachers = () => {
       axios.get('/api/teachers').then(response => {
-        teachers.value = response.data.data 
+        teachers.value = response.data.data
       })
     }
 
     const groups = ref([])
     const loadGroups = () => {
       axios.get('/api/groups').then(response => {
-        groups.value = response.data.data 
+        groups.value = response.data.data
       })
     }
 
     const students = ref([])
     const loadStudents = () => {
       axios.get('/api/students').then(response => {
-        students.value = response.data.data 
+        students.value = response.data.data
       })
     }
 
-
     onMounted(() => {
-      loadTeachers(),
-      loadGroups(),
-      loadStudents()
+      loadTeachers(), loadGroups(), loadStudents()
     })
 
     // Return

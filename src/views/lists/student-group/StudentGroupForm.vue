@@ -132,8 +132,6 @@
                   v-model="formData.status"
                   hide-details
                   label="AKTIV"
-                  false-value="0"
-                  true-value="1"
                 ></v-checkbox>
               </v-col>
             </v-row>
@@ -154,7 +152,7 @@
   <group-form ref="groupForm" v-on:add-group-to-options="addGroupToOptions($event)" />
 
 
-  
+
   </v-dialog>
 </template>
 
@@ -182,11 +180,11 @@ export default {
   components: { StudentForm, GroupForm, Button },
 
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		// sum: value => numeral(value).format('0,0'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
-  
+    date: value => moment(value).format('D MMMM YYYY'),
+    // sum: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
+
   created() {
     this.loadStudent()
     this.loadGroup()
@@ -217,7 +215,7 @@ export default {
       group_id: null,
       begin_date: null,
       end_date: null,
-      status: "1",
+      status: '1',
     }
 
     const picker = new Date().toISOString().substr(0, 10)
@@ -301,7 +299,7 @@ export default {
     const addStudent = (id = null) => {
       studentForm.value.open(id)
     }
-    const addStudentToOptions = (row) => {
+    const addStudentToOptions = row => {
       selectsDatas.value.student = selectsDatas.value.student.concat([row])
       formData.value.student_id = row.id
     }
@@ -310,7 +308,7 @@ export default {
     const addGroup = (id = null) => {
       groupForm.value.open(id)
     }
-    const addGroupToOptions = (row) => {
+    const addGroupToOptions = row => {
       selectsDatas.value.group = selectsDatas.value.group.concat([row])
       formData.value.group_id = row.id
     }
