@@ -1,12 +1,12 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useStudentGroupList(MODULE_NAME) {
+export default function useSecondRequestList(MODULE_NAME) {
 
-  const selectedTableData = ref([])
+  const secondRequestSelectedTableData = ref([])
   const notify = ref({})
 
-  const tableColumns = [
+  const secondRequestTableColumns = [
     { text: '#', sortable: false, value: 'index' },
     {
         text: 'AMALLAR',
@@ -14,39 +14,30 @@ export default function useStudentGroupList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
-    { text: 'USTOZ', value: 'group.teacher.full_name' },
-    { text: 'GURUH', value: 'group.number' },
-    { text: 'TALABA', value: 'student.full_name' },
-    { text: 'BOSHLANGAN SANA', value: 'begin_date' },
-    { text: 'TUGAGAN SANA', value: 'end_date' },
-    { text: 'AKTIV', value: 'status' },
+    { text: 'FIO', value: 'full_name' },
+    { text: 'TELEFON', value: 'phone' },
+    { text: 'IZOH', value: 'note' },
     ]
 
   const filter = ref({
     query: '',
-    teacher_id: '',
-    group_id: '',
-    student_id: '',
-    status: '',
-    begin_date: '',
-    end_date: '',
   })
-  const options = ref({
+  const secondRequestOptions = ref({
     sortBy: ['id'],
     sortDesc: [true],
     limit: 10,
     skip: 0,
   })
-  const loading = ref(false)
+  const secondRequestLoading = ref(false)
 
   let lastQuery = '';
-  const fetchDatas = (force = false) => {
+  const secondRequestFetchDatas = (force = false) => {
 
-    options.value.skip = options.value.page -1
-    options.value.limit = options.value.itemsPerPage
+    secondRequestOptions.value.skip = secondRequestOptions.value.page -1
+    secondRequestOptions.value.limit = secondRequestOptions.value.itemsPerPage
 
     const queryParams = {
-      ...options.value,
+      ...secondRequestOptions.value,
     }
 
 		for (let key in filter.value) {
@@ -62,13 +53,13 @@ export default function useStudentGroupList(MODULE_NAME) {
       lastQuery = newQuery
 
       store
-        .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
+        .dispatch(`${MODULE_NAME}/secondRequestFetchDatas`, queryParams)
         .then(() => {
-          loading.value = false
+            secondRequestLoading.value = false
         })
         .catch(error => {
           console.log(error)
-          loading.value = false
+          secondRequestLoading.value = false
           notify.value = { type: 'error', text: error, time: Date.now() }
         })
     }
@@ -78,27 +69,27 @@ export default function useStudentGroupList(MODULE_NAME) {
   }
 
   watch(filter, () => {
-    if (options.value.page != 1) options.value.page = 1
-    loading.value = true
+    if (secondRequestOptions.value.page != 1) secondRequestOptions.value.page = 1
+    secondRequestLoading.value = true
 
-    setTimeout(() => fetchDatas(), 1000);
+    setTimeout(() => secondRequestFetchDatas(), 1000);
   }, {deep: true})
 
-  watch(options, () => {
-    loading.value = true
-    fetchDatas()
+  watch(secondRequestOptions, () => {
+    secondRequestLoading.value = true
+    secondRequestFetchDatas()
     // selectedTableData.value = []
   })
 
   //delete
-  const deleteRow = (id) => {
+  const secondRequestDeleteRow = (id) => {
 
     store.
-        dispatch(`${MODULE_NAME}/removeRow`, id)
+        dispatch(`${MODULE_NAME}/secondRequestRemoveRow`, id)
         .then((message) => {
             notify.value = { type: 'success', text: message, time: Date.now() }
 
-            fetchDatas(true)
+            secondRequestFetchDatas(true)
 
     }).catch(error => {
       console.log(error)
@@ -108,17 +99,14 @@ export default function useStudentGroupList(MODULE_NAME) {
   }
 
   return {
-    tableColumns,
+    secondRequestTableColumns,
     filter,
-    fetchDatas,
-    deleteRow,
+    secondRequestFetchDatas,
+    secondRequestDeleteRow,
 
-    options,
-    loading,
+    secondRequestOptions,
+    secondRequestLoading,
     notify,
-    selectedTableData
+    secondRequestSelectedTableData
   }
 }
-
-
-

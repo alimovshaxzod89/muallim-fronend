@@ -208,7 +208,7 @@
                 ></v-textarea>
               </v-col>
 
-							<v-col cols="12">
+							<v-col cols="6">
                 <v-checkbox
                   v-model="formData.status"
                   label="AKTIV"
@@ -280,6 +280,7 @@ export default {
     const open = (id = null) => {
       show.value = true
       setTimeout(() => {
+        formData.value.status
         form.value.$el[0].focus()
       }, 100)
       if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
@@ -315,7 +316,7 @@ export default {
             formData.value.subject_id &&
             formData.value.teacher_id && 
             formData.value.price && 
-            formData.value.begin_date 
+            formData.value.begin_date
           ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)

@@ -1,111 +1,112 @@
 <template>
 <div class="d-flex">
-<v-col cols="4">
-  <v-card id="data-list">
-    <h3 class="titleS">So'rovlar</h3>
-    <!-- buttons -->
-    <v-row
-      align="center"
-      justify="space-around"
-    > 
-      <v-col cols="6">
-        <v-btn 
-          v-if="$can('create', 'Lead')" 
-          x-small 
-          class="requestButton"
-          @click="openRequestForm()"
-        >
-            +So'rov qo'shing 
-        </v-btn>
-      </v-col>  
-    </v-row> 
+<draggable v-model="requestSelectedTableData"  group="my-group">
+  <v-col>
+    <v-card id="data-list" class="row1">
+      <h3 class="titleS">So'rovlar</h3>
+      <!-- buttons -->
+      <v-row
+        align="center"
+        justify="space-around"
+      > 
+        <v-col cols="6">
+          <v-btn 
+            v-if="$can('create', 'Lead')" 
+            x-small 
+            class="requestButton"
+            @click="openRequestForm()"
+          >
+              +So'rov qo'shing 
+          </v-btn>
+        </v-col>  
+      </v-row> 
 
-    <v-data-table
-      v-model="requestSelectedTableData"
-      :headers="requestTableColumns"
-      :items="requestState.requestRows"
-      :options.sync="requestOptions"
-      :server-items-length="requestState.requestTotal"
-      :loading="requestLoading"
-      :items-per-page="requestOptions.itemsPerPage"
-      :footer-props="requestFooterProps"
-      class="text-no-wrap"
-    >
-      <template slot="item.index" scope="props">
-        {{ props.index + 1 + (requestOptions.page - 1) * requestOptions.itemsPerPage }}
-      </template>
+      <v-data-table
+        v-model="requestSelectedTableData"
+        :headers="requestTableColumns"
+        :items="requestState.requestRows"
+        :options.sync="requestOptions"
+        :server-items-length="requestState.requestTotal"
+        :loading="requestLoading"
+        :items-per-page="requestOptions.itemsPerPage"
+        :footer-props="requestFooterProps"
+        class="text-no-wrap"
+      >
+        <template slot="item.index" scope="props">
+          {{ props.index + 1 + (requestOptions.page - 1) * requestOptions.itemsPerPage }}
+        </template>
 
-      <!-- total -->
-      <template #[`item.requestTotal`]="{ item }"> ${{ item.reuestTotal }}</template>
+        <!-- total -->
+        <template #[`item.requestTotal`]="{ item }"> ${{ item.reuestTotal }}</template>
 
-      <template late #[`item.actions`]="{ item }">
-        <div class="d-flex align-center justify-center">
-          <!-- delete -->
-          <v-tooltip bottom v-if="$can('delete', 'Lead')">
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="requestConfirmDelete(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiDeleteOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Delete</span>
-          </v-tooltip>
+        <template late #[`item.actions`]="{ item }">
+          <div class="d-flex align-center justify-center">
+            <!-- delete -->
+            <v-tooltip bottom v-if="$can('delete', 'Lead')">
+              <template #activator="{ on, attrs }">
+                <v-btn icon small v-bind="attrs" v-on="on" @click="requestConfirmDelete(item.id)">
+                  <v-icon size="18">
+                    {{ icons.mdiDeleteOutline }}
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>Delete</span>
+            </v-tooltip>
 
-          <!-- view  -->
-          <v-tooltip bottom v-if="$can('update', 'Lead')">
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openRequestForm(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiPencilOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Edit</span>
-          </v-tooltip>
-        </div>
-      </template>
+            <!-- view  -->
+            <v-tooltip bottom v-if="$can('update', 'Lead')">
+              <template #activator="{ on, attrs }">
+                <v-btn icon small v-bind="attrs" v-on="on" @click="openRequestForm(item.id)">
+                  <v-icon size="18">
+                    {{ icons.mdiPencilOutline }}
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>Edit</span>
+            </v-tooltip>
+          </div>
+        </template>
 
-      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+        <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
 
-      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
-    </v-data-table>  
+        <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+      </v-data-table>  
 
-    <!-- table -->
-    <v-row>
-      <v-col class="submit_btn">
-        <v-btn 
-          v-if="$can('create', 'Lead')" 
-          x-small 
-          class="btn primary" 
-          @click="openForm()"
-        >
-          Qo'shish
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-data-table
-      v-model="selectedTableData"
-      :headers="tableColumns"
-      :items="state.rows"
-      :options.sync="options"
-      :server-items-length="state.total"
-      :loading="loading"
-      :items-per-page="options.itemsPerPage"
-      :footer-props="footerProps"
-      class="text-no-wrap"
-    >
-      <template slot="item.index" scope="props">
-        {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
-      </template>
+      <!-- table -->
+      <v-row>
+        <v-col class="submit_btn">
+          <v-btn 
+            v-if="$can('create', 'Lead')" 
+            x-small 
+            class="btn primary" 
+            @click="openForm()"
+          >
+            Qo'shish
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-data-table
+        v-model="selectedTableData"
+        :headers="tableColumns"
+        :items="state.rows"
+        :options.sync="options"
+        :server-items-length="state.total"
+        :loading="loading"
+        :items-per-page="options.itemsPerPage"
+        :footer-props="footerProps"
+        class="text-no-wrap"
+      >
+        <template slot="item.index" scope="props">
+          {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
+        </template>
 
-      <!-- total -->
-      <template #[`item.total`]="{ item }"> ${{ item.total }}</template>
+        <!-- total -->
+        <template #[`item.total`]="{ item }"> ${{ item.total }}</template>
 
-      <template late #[`item.actions`]="{ item }">
-        <div class="d-flex align-center justify-center">
-          <!-- delete -->
-          <v-tooltip bottom v-if="$can('delete', 'Lead')">
+        <template late #[`item.actions`]="{ item }">
+          <div class="d-flex align-center justify-center">
+            <!-- delete -->
+            <v-tooltip bottom v-if="$can('delete', 'Lead')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
                 <v-icon size="18">
@@ -114,238 +115,291 @@
               </v-btn>
             </template>
             <span>Delete</span>
-          </v-tooltip>
+            </v-tooltip>
 
-          <!-- view  -->
-          <v-tooltip bottom v-if="$can('update', 'Lead')">
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiPencilOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Edit</span>
-          </v-tooltip>
-        </div>
-      </template>
+            <!-- view  -->
+            <v-tooltip bottom v-if="$can('update', 'Lead')">  
+              <template #activator="{ on, attrs }">
+                <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
+                  <v-icon size="18">
+                    {{ icons.mdiPencilOutline }}
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>Edit</span>
+            </v-tooltip>
+          </div>
+        </template>
 
-      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+        <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
 
-      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
-    </v-data-table>
+        <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+      </v-data-table>
 
-    <dialog-confirm ref="dialogConfirm" />
+      <dialog-confirm ref="dialogConfirm" />
 
-    <lead-form
+      <lead-form  
       ref="leadForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-    />
-    <request-form
+      />
+      <request-form 
       ref="requestForm"
       v-on:notify="notify= { type: $event.type, text: $event.text, time: Date.now() }"
-    />   
-  </v-card>
-</v-col>
+      />   
+    </v-card>
+  </v-col>
+</draggable>
 
 
+<draggable v-model="secondRequestSelectedTableData"  group="my-group">
+  <v-col>
+    <v-card id="data-list" class="row2">
+      <h3 class="titleS">Kutish</h3>
+      <!-- buttons -->
+      <v-row
+        align="center"
+        justify="space-around"
+      > 
+        <v-col cols="6">
+          <v-btn 
+            v-if="$can('create', 'Lead')" 
+            x-small 
+            class="requestButton"
+            @click="openSecondRequestForm()"
+          >
+              +So'rov qo'shing 
+          </v-btn>
+        </v-col>  
+      </v-row> 
 
-<v-col cols="4">
-  <v-card id="data-list-second">
-    <h3 class="titleK">Kutish</h3>
+      <v-data-table
+        v-model="secondRequestSelectedTableData"
+        :headers="secondRequestTableColumns"
+        :items="secondRequestState.secondRequestRows"
+        :options.sync="secondRequestOptions"
+        :server-items-length="secondRequestState.secondRequestTotal"
+        :loading="secondRequestLoading"
+        :items-per-page="secondRequestOptions.itemsPerPage"
+        :footer-props="footerProps"
+        class="text-no-wrap"
+      >
+        <template slot="item.index" scope="props">
+          {{ props.index + 1 + (secondRequestOptions.page - 1) * secondRequestOptions.itemsPerPage }}
+        </template>
 
-    <!-- button -->
-    <v-row
-      align="center"
-      justify="space-around"
-    > 
-      <v-col cols="6">
-        <v-btn 
-          v-if="$can('create', 'Lead')" 
-          x-small 
-          class="button"
-          @click="openSecondForm()"
-        >
-            +So'rov qo'shing 
-        </v-btn>
-      </v-col>  
-      <v-spacer></v-spacer>
-      <v-col cols="6">
-        <v-btn 
-          v-if="$can('create', 'Lead')" 
-          x-small 
-          class="btn primary" 
-          @click="openSecondForm()"
-        >
-          Qo'shish
-        </v-btn>
-      </v-col>
-    </v-row>  
+        <!-- total -->
+        <template #[`item.secondRequestTotal`]="{ item }"> ${{ item.secondReuestTotal }}</template>
 
-    <!-- table -->
-    <v-data-table
-      v-model="secondSelectedTableData"
-      :headers="secondTableColumns"
-      :items="state.secondRows"
-      :options.sync="secondOptions"
-      :server-items-length="state.secondTotal"
-      :loading="secondLoading"
-      :items-per-page="secondOptions.itemsPerPage"
-      :footer-props="footerProps"
-      class="text-no-wrap"
-    >
+        <template late #[`item.actions`]="{ item }">
+          <div class="d-flex align-center justify-center">
+            <!-- delete -->
+            <v-tooltip bottom v-if="$can('delete', 'Lead')">
+              <template #activator="{ on, attrs }">
+                <v-btn icon small v-bind="attrs" v-on="on" @click="secondRequestConfirmDelete(item.id)">
+                  <v-icon size="18">
+                    {{ icons.mdiDeleteOutline }}
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>Delete</span>
+            </v-tooltip>
 
-    <template slot="item.index" scope="props">
-        {{ props.index + 1 + (secondOptions.page - 1) * secondOptions.itemsPerPage }}
-      </template>
+            <!-- view  -->
+            <v-tooltip bottom v-if="$can('update', 'Lead')">
+              <template #activator="{ on, attrs }">
+                <v-btn icon small v-bind="attrs" v-on="on" @click="openSecondRequestForm(item.id)">
+                  <v-icon size="18">
+                    {{ icons.mdiPencilOutline }}
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>Edit</span>
+            </v-tooltip>
+          </div>
+        </template>
 
-    <!-- total -->
-      <template #[`item.secondTotal`]="{ item }"> ${{ item.secondTotal }}</template>
-    </v-data-table>
+        <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
 
-    <template late #[`item.secondActions`]="{ item }">
-        <div class="d-flex align-center justify-center">
-          <!-- delete -->
-          <v-tooltip bottom v-if="$can('delete', 'Lead')">
+        <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+      </v-data-table>  
+
+      <!-- table -->
+      <v-row>
+        <v-col class="submit_btn">
+          <v-btn 
+            v-if="$can('create', 'Lead')" 
+            x-small 
+            class="btn primary" 
+            @click="openSecondForm()"
+          >
+            Qo'shish
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-data-table
+        v-model="secondSelectedTableData"
+        :headers="secondTableColumns"
+        :items="state.secondRows"
+        :options.sync="secondOptions"
+        :server-items-length="state.secondTotal"
+        :loading="secondLoading"
+        :items-per-page="secondOptions.itemsPerPage"
+        :footer-props="footerProps"
+        class="text-no-wrap"
+      >
+        <template slot="item.index" scope="props">
+          {{ props.index + 1 + (secondOptions.page - 1) * secondOptions.itemsPerPage }}
+        </template>
+
+        <!-- total -->
+        <template #[`item.secondTotal`]="{ item }"> ${{ item.secondTotal }}</template>
+
+        <template late #[`item.actions`]="{ item }">
+          <div class="d-flex align-center justify-center">
+            <!-- delete -->
+            <v-tooltip bottom v-if="$can('delete', 'Lead')">
             <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmSecondDelete(item.id)">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
                 <v-icon size="18">
                   {{ icons.mdiDeleteOutline }}
                 </v-icon>
               </v-btn>
             </template>
             <span>Delete</span>
-          </v-tooltip>
+            </v-tooltip>
 
-          <!-- view  -->
-          <v-tooltip bottom v-if="$can('update', 'Lead')">
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openSecondForm(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiPencilOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Edit</span>
-          </v-tooltip>
-        </div>
-      </template>
+            <!-- view  -->
+            <v-tooltip bottom v-if="$can('update', 'Lead')">  
+              <template #activator="{ on, attrs }">
+                <v-btn icon small v-bind="attrs" v-on="on" @click="openSecondForm(item.id)">
+                  <v-icon size="18">
+                    {{ icons.mdiPencilOutline }}
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>Edit</span>
+            </v-tooltip>
+          </div>
+        </template>
 
-      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+        <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
 
-      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+        <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+      </v-data-table>
 
-    <dialog-confirm ref="dialogConfirm" />
+      <dialog-confirm ref="dialogConfirm" />
 
-    <lead-second-form
+      <lead-second-form  
       ref="leadSecondForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-    />
-    
-    <second-request-form
+      />
+      <second-request-form 
       ref="secondRequestForm"
       v-on:notify="notify= { type: $event.type, text: $event.text, time: Date.now() }"
-    />
-  </v-card>
-</v-col>
+      />   
+    </v-card>
+  </v-col>
+</draggable>  
 
-<v-col cols="4">
-  <v-card id="data-list-third">
-    <h3 class="titleK">To'plam</h3>
+<draggable v-model="requestSelectedTableData"  group="my-group">
+  <v-col>
+    <v-card id="data-list-third" class="row3">
+      <h3 class="titleK">To'plam</h3>
 
-    <!-- button -->
-    <v-row
-      align="center"
-      justify="space-around"
-    > 
-      <v-col cols="6">
-        <v-btn 
-          v-if="$can('create', 'Lead')" 
-          x-small 
-          class="button"
-          @click="openThirdRequestForm()"
-        >
-            +So'rov qo'shing 
-        </v-btn>
-      </v-col>  
-      <v-spacer></v-spacer>
-      <v-col cols="6">
-        <v-btn 
-          v-if="$can('create', 'Lead')" 
-          x-small 
-          class="btn primary" 
-          @click="openThirdForm()"
-        >
-          Qo'shish
-        </v-btn>
-      </v-col>
-    </v-row>
+      <!-- button -->
+      <v-row
+        align="center"
+        justify="space-around"
+      > 
+        <v-col cols="6">
+          <v-btn 
+            v-if="$can('create', 'Lead')" 
+            x-small 
+            class="button"
+            @click="openThirdRequestForm()"
+          >
+              +So'rov qo'shing 
+          </v-btn>
+        </v-col>  
+        <v-spacer></v-spacer>
+        <v-col cols="6">
+          <v-btn 
+            v-if="$can('create', 'Lead')" 
+            x-small 
+            class="btn primary" 
+            @click="openThirdForm()"
+          >
+            Qo'shish
+          </v-btn>
+        </v-col>
+      </v-row>
 
-    <!-- table -->
-    <v-data-table
-      v-model="thirdSelectedTableData"
-      :headers="thirdTableColumns"
-      :items="thirdState.thirdRows"
-      :options.sync="thirdOptions"
-      :server-items-length="thirdState.thirdTotal"
-      :loading="thirdLoading"
-      :items-per-page="thirdOptions.itemsPerPage"
-      :footer-props="footerProps"
-      class="text-no-wrap"
-    >
+      <!-- table -->
+      <v-data-table
+        v-model="thirdSelectedTableData"
+        :headers="thirdTableColumns"
+        :items="state.thirdRows"
+        :options.sync="thirdOptions"
+        :server-items-length="state.thirdTotal"
+        :loading="thirdLoading"
+        :items-per-page="thirdOptions.itemsPerPage"
+        :footer-props="footerProps"
+        class="text-no-wrap"
+      >
 
-    <template slot="item.index" scope="props">
-        {{ props.index + 1 + (thirdOptions.page - 1) * thirdOptions.itemsPerPage }}
-      </template>
+      <template slot="item.index" scope="props">
+          {{ props.index + 1 + (thirdOptions.page - 1) * thirdOptions.itemsPerPage }}
+        </template>
 
-    <!-- total -->
-      <template #[`item.thirdTotal`]="{ item }"> ${{ item.total }}</template>
-    </v-data-table>
+      <!-- total -->
+        <template #[`item.thirdTotal`]="{ item }"> ${{ item.total }}</template>
+      </v-data-table>
 
-    <template late #[`item.thirdActions`]="{ item }">
-        <div class="d-flex align-center justify-center">
-          <!-- delete -->
-          <v-tooltip bottom v-if="$can('delete', 'Lead')">
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmThirdDelete(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiDeleteOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Delete</span>
-          </v-tooltip>
+      <template late #[`item.thirdActions`]="{ item }">
+          <div class="d-flex align-center justify-center">
+            <!-- delete -->
+            <v-tooltip bottom v-if="$can('delete', 'Lead')">
+              <template #activator="{ on, attrs }">
+                <v-btn icon small v-bind="attrs" v-on="on" @click="confirmThirdDelete(item.id)">
+                  <v-icon size="18">
+                    {{ icons.mdiDeleteOutline }}
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>Delete</span>
+            </v-tooltip>
 
-          <!-- view  -->
-          <v-tooltip bottom v-if="$can('update', 'Lead')">
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openThirdForm(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiPencilOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Edit</span>
-          </v-tooltip>
-        </div>
-      </template>
+            <!-- view  -->
+            <v-tooltip bottom v-if="$can('update', 'Lead')">
+              <template #activator="{ on, attrs }">
+                <v-btn icon small v-bind="attrs" v-on="on" @click="openThirdForm(item.id)">
+                  <v-icon size="18">
+                    {{ icons.mdiPencilOutline }}
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>Edit</span>
+            </v-tooltip>
+          </div>
+        </template>
 
-      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+        <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
 
-      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+        <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
 
-    <dialog-confirm ref="dialogConfirm" />
+      <dialog-confirm ref="dialogConfirm" />
 
-    <lead-third-form
-      ref="leadThirdForm"
-      v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-    />
-    <third-request-form
-      ref="thirdRequestForm"
-      v-on:notify="notify= { type: $event.type, text: $event.text, time: Date.now() }"
-    />
-  </v-card>
-</v-col>
+      <lead-third-form
+        ref="leadThirdForm"
+        v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
+      />
+      <third-request-form
+        ref="thirdRequestForm"
+        v-on:notify="notify= { type: $event.type, text: $event.text, time: Date.now() }"
+      />
+    </v-card>
+  </v-col>
+</draggable>  
 </div>
 </template>
 
@@ -356,6 +410,8 @@ import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
 import moment from 'moment'
 moment.locale('uz-latn')
+
+import draggable from "vuedraggable"
 
 import numeral from 'numeral'
 numeral.locale('ru')
@@ -370,6 +426,7 @@ import RequestStoreModule from './storeModule/RequestStoreModule'
 import useLeadList from './useLeadList'
 import useRequestList from './request/useRequestList'
 import useLeadSecondList from './useLeadSecondList'
+import useSecondRequestList from './request/useSecondRequest'
 import useLeadThirdList from './useLeadThirdList'
 import LeadForm from './LeadForm'
 import LeadSecondForm from './LeadSecondForm.vue'
@@ -381,7 +438,6 @@ import DialogConfirm from '../components/DialogConfirm.vue'
 
 const MODULE_NAME = 'lead'
 const MODULE_NAME2 = 'request'
-const MODULE_NAME4 = 'leadThird'
 
 export default {
   components: {
@@ -392,6 +448,7 @@ export default {
     LeadSecondForm,
     LeadThirdForm,
     DialogConfirm,
+    draggable,
   },
   filters: {
     date: value => moment(value).format('D MMMM YYYY'),
@@ -404,10 +461,6 @@ export default {
       store.registerModule(MODULE_NAME, LeadStoreModule)
     }
 
-    if (!store.hasModule(MODULE_NAME4)) {
-      store.registerModule(MODULE_NAME4, LeadStoreModule)
-    }
-
     if (!store.hasModule(MODULE_NAME2)) {
       store.registerModule(MODULE_NAME2, RequestStoreModule)
     }
@@ -418,8 +471,8 @@ export default {
 
     //store state
     const state = ref(store.state[MODULE_NAME])
-    const thirdState = ref(store.state[MODULE_NAME4])
     const requestState = ref(store.state[MODULE_NAME2])
+    const secondRequestState = ref(store.state[MODULE_NAME2])
 
     //logics
     const {
@@ -443,9 +496,21 @@ export default {
       requestSelectedTableData,
     } = useRequestList(MODULE_NAME2)
 
-    const { secondSelectedTableData, secondTableColumns, secondOptions, secondLoading } = useLeadSecondList(MODULE_NAME)
+    const { 
+      secondSelectedTableData, 
+      secondTableColumns, 
+      secondOptions, 
+      secondLoading 
+    } = useLeadSecondList(MODULE_NAME)
 
-    const { thirdSelectedTableData, thirdTableColumns, thirdOptions, thirdLoading } = useLeadThirdList(MODULE_NAME4)
+    const { 
+      secondRequestSelectedTableData, 
+      secondRequestTableColumns,
+      secondRequestOptions, 
+      secondRequestLoading, 
+    } = useSecondRequestList(MODULE_NAME2)
+
+    const { thirdSelectedTableData, thirdTableColumns, thirdOptions, thirdLoading } = useLeadThirdList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -512,6 +577,12 @@ export default {
         .then(() => requestDeleteRow(id))
         .catch(() => {})
     }
+    const secondRequestConfirmDelete = id => {
+      dialogConfirm.value
+        .open("O'chirishga aminmisiz?")
+        .then(() => secondRequestDeleteRow(id))
+        .catch(() => {})
+    }
     const confirmSecondDelete = id => {
       dialogConfirm.value
         .open("O'chirishga aminmisiz?")
@@ -532,25 +603,30 @@ export default {
       BASE_URL,
       state,
       requestState,
-      thirdState,
+      secondRequestState,
+      draggable,
 
       tableColumns,
       requestTableColumns,
       secondTableColumns,
+      secondRequestTableColumns,
       thirdTableColumns,
       searchQuery,
       options,
       requestOptions,
+      secondRequestOptions,
       secondOptions,
       thirdOptions,
       loading,
       requestLoading,
+      secondRequestLoading,
       secondLoading,
       thirdLoading,
       notify,
       selectedTableData,
       requestSelectedTableData,
       secondSelectedTableData,
+      secondRequestSelectedTableData,
       thirdSelectedTableData,
       filter,
 
@@ -569,6 +645,7 @@ export default {
       dialogConfirm,
       confirmDelete,
       requestConfirmDelete,
+      secondRequestConfirmDelete,
       confirmSecondDelete,
       confirmThirdDelete,
 
@@ -593,7 +670,6 @@ export default {
 
       MODULE_NAME,
       MODULE_NAME2,
-      MODULE_NAME4,
 
       icons: {
         mdiTrendingUp,
@@ -654,5 +730,17 @@ export default {
 }
 .submit_btn {
   margin-left: 40%;
+}
+.row1 {
+  width: 75%;
+  margin-right: 10%;
+}
+.row2 {
+  width: 75%;
+  margin-left: -22%;
+}
+.row3 {
+  width: 75%;
+  margin-left: -45%;
 }
 </style>

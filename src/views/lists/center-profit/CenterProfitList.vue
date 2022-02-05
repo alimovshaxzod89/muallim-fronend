@@ -76,11 +76,11 @@
 						<th class="text-uppercase text-center">TALABALAR QARZLARINI BERGANDAN SO'NG</th>
 					</tr>
 				</thead>
-				<tbody>
+				<!-- <tbody>
 					<tr v-for="item in desserts" :key="item.dessert">
 						<td>{{ item.dessert }}</td>
 					</tr>
-				</tbody>
+				</tbody> -->
 			</template>
 		</v-simple-table>
   </v-card>
@@ -225,6 +225,8 @@ export default {
       notify,
       selectedTableData,
       filterOptions,
+
+      
 
       footerProps,
     }

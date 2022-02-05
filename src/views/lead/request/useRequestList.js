@@ -89,7 +89,7 @@ export default function useRequestList(MODULE_NAME2) {
         .then((message) => {
             notify.value = { type: 'success', text: message, time: Date.now() }
 
-            fetchDatas(true)
+            requestFetchDatas(true)
 
     }).catch(error => {
       console.log(error)

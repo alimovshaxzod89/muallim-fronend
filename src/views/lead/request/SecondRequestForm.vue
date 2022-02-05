@@ -71,7 +71,7 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import LeadStoreModule from '../storeModule/LeadStoreModule'
+import RequestStoreModule from '../storeModule/RequestStoreModule'
 
 import axios from '@axios'
 
@@ -79,7 +79,7 @@ import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import Button from '../../components/button/Button.vue'
 
-const MODULE_NAME = 'lead'
+const MODULE_NAME = 'request'
 
 export default {
   components: { Button },
@@ -89,14 +89,14 @@ export default {
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, LeadStoreModule)
+      store.registerModule(MODULE_NAME, RequestStoreModule)
     }
 
     // show, hide
     const show = ref(false)
     const open = (id = null) => {
       show.value = true
-      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/secondRequestGetById`](id)))
     }
     const close = () => {
       show.value = false
@@ -124,7 +124,7 @@ export default {
       if (formData.value.id) {
         if (formData.value.name && formData.value.phone) {
           store
-            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/secondRequestUpdateRow`, formData.value)
             .then(({ message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -147,7 +147,7 @@ export default {
             name: '1',
           }
           store
-            .dispatch(`${MODULE_NAME}/addRow`, newValue)
+            .dispatch(`${MODULE_NAME}/secondRequestAddRow`, newValue)
             .then(({ message }) => {
               close()
               emit('notify', { type: 'success', text: message })
