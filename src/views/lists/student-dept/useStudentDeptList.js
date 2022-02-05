@@ -14,7 +14,7 @@ export default function useStudentDeptList(MODULE_NAME) {
     { text: "TELEFON", value: 'student.phone' },
     { text: "OYLIK TO'LOV", value: 'group.price' },
     { text: "TO'lADI", value: 'paid' },
-    { text: "QARZ", value: 'depts' },
+    { text: "QARZ", value: 'amount' },
     { text: "OY", value: 'month' },
   ]
 
