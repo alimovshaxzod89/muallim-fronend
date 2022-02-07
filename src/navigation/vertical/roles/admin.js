@@ -19,6 +19,8 @@ import {
   mdiAccountTie,
   mdiCurrencyUsd,
   mdiAccountTieVoice,
+  mdiCreditCardMultiple,
+  mdiCurrencyEur,
 } from '@mdi/js'
 
 export default [
@@ -187,6 +189,20 @@ export default [
         icon: mdiMapMarkerRadiusOutline,
       },
     ],
+  },
+  {
+    title: 'Kassa nomlari',
+    to: 'cashbox',
+    resource: 'Cashbox',
+    action: 'read',
+    icon: mdiCreditCardMultiple,
+  },
+  {
+    title: 'Xarajat turlari',
+    to: 'expense-category',
+    resource: 'ExpenseCategory',
+    action: 'read',
+    icon: mdiCurrencyEur,
   },
 
   // {
