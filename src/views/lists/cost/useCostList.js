@@ -14,6 +14,7 @@ export default function useCostList(MODULE_NAME) {
       sortable: false,
     },
     { text: 'SANA', value: 'date' },
+    { text: 'USTOZ', value: 'teacher.full_name' },
     { text: 'SUMMA', value: 'amount' },
     { text: 'IZOH', value: 'note' },
   ]
