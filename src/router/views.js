@@ -231,6 +231,26 @@ const views = [
       action: 'read',
     },
   },
+  {
+    path: '/cashbox',
+    name: 'cashbox',
+    component: () => import('@/views/lists/cashbox/CashboxList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'Cashbox',
+      action: 'read',
+    },
+  },
+  {
+    path: '/expense-category',
+    name: 'expense-category',
+    component: () => import('@/views/lists/expense-category/ExpenseCategoryList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'CenterProfit',
+      action: 'read',
+    },
+  },
   // {
   //   path: '/center-profit',
   //   name: 'center-profit',

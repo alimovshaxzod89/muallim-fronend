@@ -73,8 +73,8 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <place-form
-      ref="placeForm"
+    <cashbox-form
+      ref="cashboxForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -89,24 +89,24 @@ import store from '@/store'
 import envParams from '@envParams'
 
 // store module
-import PlaceStoreModule from './PlaceStoreModule'
+import CashboxStoreModule from './CashboxStoreModule'
 
 // composition function
-import usePlaceList from './usePlaceList'
-import PlaceForm from './PlaceForm.vue'
+import useCashboxList from './useCashboxList'
+import CashboxForm from './CashboxForm.vue'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'place'
+const MODULE_NAME = 'cashbox'
 
 export default {
   components: {
-    PlaceForm,
+    CashboxForm,
     DialogConfirm,
   },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, PlaceStoreModule)
+      store.registerModule(MODULE_NAME, CashboxStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -127,7 +127,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = usePlaceList(MODULE_NAME)
+    } = useCashboxList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -139,9 +139,9 @@ export default {
     ]
 
     //Form
-    const placeForm = ref(null)
+    const cashboxForm = ref(null)
     const openForm = id => {
-      placeForm.value.open(id)
+      cashboxForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -175,7 +175,7 @@ export default {
 
       dialogConfirm,
       confirmDelete,
-      placeForm,
+      cashboxForm,
       openForm,
 
       MODULE_NAME,
