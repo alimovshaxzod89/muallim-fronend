@@ -16,7 +16,7 @@
         <v-card-text>
           <v-container>
             <v-row>
-                <v-col cols="6">
+                <v-col cols="6" class="inputForm">
                     <h4 class="text-required no-text"><span>*</span></h4>
                     <v-autocomplete
                         v-model="formData.subject_id"
@@ -32,7 +32,7 @@
                     >
                     </v-autocomplete>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="6" class="inputForm">
                     <h4 class="text-required no-text"><span>*</span></h4>
                     <v-text-field
                         label="FIO"
@@ -44,7 +44,7 @@
                         :rules="[required]"
                     ></v-text-field>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="6" class="inputForm">
                     <h4 class="text-required no-text"><span>*</span></h4>
                     <v-text-field
                         prefix="+998"
@@ -57,7 +57,7 @@
                         :rules="[required]"
                     ></v-text-field>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="6" class="inputForm">
                     <h4 class="text-required no-text"><span>*</span></h4>
                     <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                         <template v-slot:activator="{ on, attrs }">
@@ -84,7 +84,7 @@
                         ></v-date-picker>
                     </v-menu>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="6" class="inputForm">
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-radio-group
 					v-model="formData.gender"
@@ -302,5 +302,8 @@ export default {
   padding-right: 15px !important;
   padding-left: 15px !important;
   border-color: rgba(94, 86, 105, 0.15) !important;
+}
+.inputForm {
+    margin-top: -15px;
 }
 </style>
