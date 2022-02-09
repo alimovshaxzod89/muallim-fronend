@@ -45,6 +45,7 @@
                     ></v-text-field>
                 </v-col>
                 <v-col cols="6">
+                    <h4 class="text-required no-text"><span>*</span></h4>
                     <v-text-field
                         prefix="+998"
                         label="TELEFON RAQAM"
@@ -53,9 +54,11 @@
                         dense
                         outlined
                         hide-details
+                        :rules="[required]"
                     ></v-text-field>
                 </v-col>
                 <v-col cols="6">
+                    <h4 class="text-required no-text"><span>*</span></h4>
                     <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field
@@ -65,7 +68,9 @@
                                 v-bind="attrs"
                                 v-on="on"
                                 hide-details
+                                dense
                                 outlined
+                                :rules="[required]"
                                 :append-icon="icons.mdiCalendar"
                             ></v-text-field>
                         </template>
