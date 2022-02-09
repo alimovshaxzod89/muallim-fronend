@@ -7,8 +7,19 @@
 
 		<v-row>
 			<v-col cols="4">
-				<v-card>
-					<v-card-title>So'rovlar</v-card-title>
+				<v-card >
+					<div class="my-top d-flex align-center mb-5">
+						<v-card-title>So'rovlar</v-card-title>
+						<v-spacer></v-spacer>
+						<v-list class="mr-5">
+							<v-btn class="mr-5" color="primary" title="Yangi so'rov qo'shish" @click="openAppealForm()">
+								<v-icon size="25">{{ icons.mdiFileAccountOutline }} </v-icon>
+							</v-btn>
+							<v-btn text small fab title="Yangi bo'lim yaratish">
+								<v-icon>{{ icons.mdiPlus }}</v-icon>
+							</v-btn>
+						</v-list>
+					</div>
 
 					<draggable class="list-group" :list="list1" group="people" @change="log">
 						<div
@@ -47,6 +58,7 @@
       ref="leadForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
+		<appeal-form ref="appealForm" v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }" />
 		<dialog-confirm ref="dialogConfirm" />
 
 		<!-- DRAGGABLE -->
@@ -56,7 +68,7 @@
 </template>
 
 <script>
-import { mdiDeleteOutline, mdiPencilOutline } from '@mdi/js'
+import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline } from '@mdi/js'
 
 import { ref } from '@vue/composition-api'
 import store from '@/store'
@@ -69,6 +81,8 @@ import LeadStoreModule from './LeadStoreModule'
 // composition function
 import useLeadList from './useLeadList'
 import LeadForm from './LeadForm'
+
+import AppealForm from './appeal/AppealForm'
 import DialogConfirm from '@/views/components/DialogConfirm'
 
 const MODULE_NAME = 'lead'
@@ -78,6 +92,7 @@ export default {
   components: {
     draggable,
     LeadForm,
+    AppealForm,
     DialogConfirm,
   },
   setup() {
@@ -135,6 +150,12 @@ export default {
       leadForm.value.open(id)
     }
 
+    // Appeal form
+    const appealForm = ref(null)
+    const openAppealForm = id => {
+      appealForm.value.open(id)
+    }
+
     // Delete Confirm Dialog
     const dialogConfirm = ref(null)
     const confirmDelete = id => {
@@ -166,6 +187,8 @@ export default {
 
       leadForm,
       openForm,
+      appealForm,
+      openAppealForm,
 
       // Draggable data
       list1,
@@ -176,6 +199,8 @@ export default {
       icons: {
         mdiPencilOutline,
         mdiDeleteOutline,
+        mdiPlus,
+        mdiFileAccountOutline,
       },
     }
   },
@@ -184,22 +209,22 @@ export default {
       this.$toast[this.notify.type](this.notify.text)
     },
   },
-  // methods: {
-  //   add: function () {
-  //     this.list.push({ name: 'Juan' })
-  //   },
-  //   replace: function () {
-  //     this.list = [{ name: 'Edgard' }]
-  //   },
-  //   clone: function (el) {
-  //     return {
-  //       name: el.name + ' cloned',
-  //     }
-  //   },
-  //   log: function (evt) {
-  //     window.console.log(evt)
-  //   },
-  // },
+  methods: {
+    // add: function () {
+    //   this.list.push({ name: 'Juan' })
+    // },
+    // replace: function () {
+    //   this.list = [{ name: 'Edgard' }]
+    // },
+    // clone: function (el) {
+    //   return {
+    //     name: el.name + ' cloned',
+    //   }
+    // },
+    log: function (evt) {
+      // window.console.log(evt)
+    },
+  },
 }
 </script>
 
@@ -212,5 +237,9 @@ export default {
   .data-list-search {
     max-width: 10.625rem;
   }
+}
+
+.my-top {
+  border-bottom: 1px solid #dfdfdf;
 }
 </style>

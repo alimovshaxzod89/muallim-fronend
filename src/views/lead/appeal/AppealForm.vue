@@ -169,9 +169,9 @@ export default {
       birth_date: null,
       gender: true,
       note: null,
-      subject_id: null
+      subject_id: null,
     }
-    const formData = ref({})
+    const formData = ref({ ...emptyFormData })
 
     // birth date picker
     const picker = new Date().toISOString().substr(0, 10)
@@ -183,7 +183,7 @@ export default {
       form.value.validate()
     }
 
-    //form options for selects
+    // form options for selects
     const selectsDatas = ref({})
     // ! METHODS
     const loadSubject = () => {
@@ -199,15 +199,16 @@ export default {
 
     // on form submit
     const onSubmit = () => {
+      const newValue = {
+        ...formData.value,
+        days: '1997',
+        hours: '1600',
+      }
+
       if (formData.value.id) {
-        if (
-            formData.value.full_name && 
-            formData.value.phone && 
-            formData.value.birth_date && 
-            formData.value.gender
-        ){
+        if (formData.value.full_name && formData.value.phone && formData.value.birth_date && formData.value.gender) {
           store
-            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/updateRow`, newValue)
             .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -226,21 +227,15 @@ export default {
           })
         }
       } else {
-        if (
-            formData.value.full_name && 
-            formData.value.phone && 
-            formData.value.birth_date && 
-            formData.value.gender
-        ) {
+        if (formData.value.full_name && formData.value.phone && formData.value.birth_date && formData.value.gender) {
           store
-            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/addRow`, newValue)
             .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
               emit('add-teacher-to-options', data)
             })
             .catch(error => {
-              ;``
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
               return false
