@@ -7,13 +7,13 @@
 
 		<v-row>
 			<v-col cols="4">
-				<v-card >
+				<v-card>
 					<div class="my-top d-flex align-center mb-5">
 						<v-card-title>So'rovlar</v-card-title>
 						<v-spacer></v-spacer>
 						<v-list class="mr-5">
-							<v-btn class="mr-5" color="primary" title="Yangi so'rov qo'shish" @click="openAppealForm()">
-								<v-icon size="25">{{ icons.mdiFileAccountOutline }} </v-icon>
+							<v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" @click="openAppealForm()">
+								<v-icon size="24">{{ icons.mdiFileAccountOutline }} </v-icon>
 							</v-btn>
 							<v-btn text small fab title="Yangi bo'lim yaratish">
 								<v-icon>{{ icons.mdiPlus }}</v-icon>
@@ -21,35 +21,106 @@
 						</v-list>
 					</div>
 
-					<draggable class="list-group" :list="list1" group="people" @change="log">
-						<div
-							class="list-group-item"
-							v-for="(element, index) in list1"
-							:key="element.name"
-						>
-							{{ element.name }} {{ index }}
-						</div>
+					<draggable
+						class="list-group"
+						group="people"
+						tag="ul"
+						v-model="list1"
+						v-bind="dragOptions()"
+						@start="drag = true"
+						@end="drag = false"
+					>
+						<transition-group type="transition" :name="!drag ? 'flip-list' : null">
+							<li
+								class="list-group-item"
+								v-for="element in list1"
+								:key="element.name"
+							>
+								<i
+									:class="element.fixed ? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'"
+									@click="element.fixed = !element.fixed"
+									aria-hidden="true"
+								></i>
+								{{ element.name }}
+							</li>
+						</transition-group>
 					</draggable>
 				</v-card>
 			</v-col>
 			<v-col cols="4">
-				<v-card>
-					<v-card-title>Kutish</v-card-title>
+				<v-card >
+					<div class="my-top d-flex align-center mb-5">
+						<v-card-title>Kutish</v-card-title>
+						<v-spacer></v-spacer>
+						<v-list class="mr-5">
+							<v-btn text small fab title="Yangi bo'lim yaratish">
+								<v-icon>{{ icons.mdiPlus }}</v-icon>
+							</v-btn>
+						</v-list>
+					</div>
 
-					<draggable class="list-group" :list="list2" group="people" @change="log">
-						<div
-							class="list-group-item"
-							v-for="(element, index) in list2"
-							:key="element.name"
-						>
-							{{ element.name }} {{ index }}
-						</div>
-					</draggable>|
+					<draggable
+						class="list-group"
+						group="people"
+						tag="ul"
+						v-model="list2"
+						v-bind="dragOptions()"
+						@start="drag = true"
+						@end="drag = false"
+					>
+						<transition-group type="transition" :name="!drag ? 'flip-list' : null">
+							<li
+								class="list-group-item"
+								v-for="element in list2"
+								:key="element.name"
+							>
+								<i
+									:class="element.fixed ? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'"
+									@click="element.fixed = !element.fixed"
+									aria-hidden="true"
+								></i>
+								{{ element.name }}
+							</li>
+						</transition-group>
+					</draggable>
 				</v-card>
 			</v-col>
 			<v-col cols="4">
-				<v-card>
-					<v-card-title>Guruhlar</v-card-title>
+				<v-card >
+					<div class="my-top d-flex align-center mb-5">
+						<v-card-title>Guruhlar</v-card-title>
+						<v-spacer></v-spacer>
+						<v-list class="mr-5">
+							<v-btn text small fab title="Yangi bo'lim yaratish">
+								<v-icon>{{ icons.mdiPlus }}</v-icon>
+							</v-btn>
+						</v-list>
+					</div>
+
+					<draggable
+						class="list-group"
+						group="people"
+						tag="ul"
+						v-model="list3"
+						v-bind="dragOptions()"
+						@start="drag = true"
+						@end="drag = false"
+					>
+						<transition-group type="transition" :name="!drag ? 'flip-list' : null">
+							<li
+								class="list-group-item"
+								v-for="element in list3"
+								:key="element.name"
+							>
+								<i
+									:class="element.fixed ? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'"
+									@click="element.fixed = !element.fixed"
+									aria-hidden="true"
+								></i>
+								{{ element.name }}
+							</li>
+						</transition-group>
+					</draggable>
 				</v-card>
 			</v-col>
 		</v-row>
@@ -70,7 +141,7 @@
 <script>
 import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline } from '@mdi/js'
 
-import { ref } from '@vue/composition-api'
+import { computed, ref } from '@vue/composition-api'
 import store from '@/store'
 
 import draggable from 'vuedraggable'
@@ -113,7 +184,6 @@ export default {
     //logics
     const {
       searchQuery,
-      // tableColumns,
       deleteRow,
 
       options,
@@ -121,15 +191,6 @@ export default {
       notify,
       selectedTableData,
     } = useLeadList(MODULE_NAME)
-
-    //interface additional elements
-    // const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
-    // const actions = ['Delete', 'Edit']
-    // const selectedAction = ref('')
-    // const actionOptions = [
-    //   { title: 'Delete', icon: mdiDeleteOutline },
-    //   { title: 'Edit', icon: mdiPencilOutline },
-    // ]
 
     // Draggable data
     const list1 = ref([
@@ -143,6 +204,20 @@ export default {
       { name: 'Edgard', id: 6 },
       { name: 'Johnson', id: 7 },
     ])
+    const list3 = ref([
+      { name: 'Yodgor', id: 8 },
+      { name: 'Mirza', id: 9 },
+      { name: 'Salimboy', id: 10 },
+    ])
+    const drag = ref(false)
+    const dragOptions = () => {
+      return {
+        animation: 200,
+        group: 'people',
+        disabled: false,
+        ghostClass: 'ghost',
+      }
+    }
 
     // Form
     const leadForm = ref(null)
@@ -165,6 +240,11 @@ export default {
         .catch(() => {})
     }
 
+    // ! COMPUTED
+    computed(() => {
+      dragOptions()
+    })
+
     // Return
     return {
       BASE_URL,
@@ -177,11 +257,6 @@ export default {
       notify,
       selectedTableData,
 
-      // actions,
-      // actionOptions,
-      // selectedAction,
-      // footerProps,
-
       dialogConfirm,
       confirmDelete,
 
@@ -193,6 +268,9 @@ export default {
       // Draggable data
       list1,
       list2,
+      list3,
+      drag,
+      dragOptions,
 
       MODULE_NAME,
 
@@ -207,22 +285,6 @@ export default {
   watch: {
     ['notify']() {
       this.$toast[this.notify.type](this.notify.text)
-    },
-  },
-  methods: {
-    // add: function () {
-    //   this.list.push({ name: 'Juan' })
-    // },
-    // replace: function () {
-    //   this.list = [{ name: 'Edgard' }]
-    // },
-    // clone: function (el) {
-    //   return {
-    //     name: el.name + ' cloned',
-    //   }
-    // },
-    log: function (evt) {
-      // window.console.log(evt)
     },
   },
 }
@@ -241,5 +303,29 @@ export default {
 
 .my-top {
   border-bottom: 1px solid #dfdfdf;
+}
+
+// Draggabel
+.button {
+  margin-top: 35px;
+}
+.flip-list-move {
+  transition: transform 0.5s;
+}
+.no-move {
+  transition: transform 0s;
+}
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
+}
+.list-group {
+  min-height: 20px;
+}
+.list-group-item {
+  cursor: move;
+}
+.list-group-item i {
+  cursor: pointer;
 }
 </style>

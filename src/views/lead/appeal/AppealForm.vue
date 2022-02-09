@@ -63,7 +63,7 @@
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field
                                 v-model="formData.birth_date"
-                                label="TUG'ilGAN KUN"
+                                label="TUG'ILGAN KUN"
                                 readonly
                                 v-bind="attrs"
                                 v-on="on"
@@ -87,19 +87,19 @@
                 <v-col cols="6">
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-radio-group
-					v-model="formData.gender"
-					class="mt-0"
-					hide-details
-					:rules="[required]"
+									v-model="formData.gender"
+									class="mt-0"
+									hide-details
+									:rules="[required]"
                 >
-                    <v-radio
-                      label="ERKAK"
-                      value="1"
-                    ></v-radio>
-                    <v-radio
-                      label="AYOL"
-                      value="0"
-                    ></v-radio>
+									<v-radio
+										label="ERKAK"
+										value="1"
+									></v-radio>
+									<v-radio
+										label="AYOL"
+										value="0"
+									></v-radio>
                 </v-radio-group>
               </v-col>
                 <v-col cols="6">
