@@ -1,459 +1,84 @@
 <template>
-<div class="d-flex">
-<draggable v-model="requestSelectedTableData"  group="my-group">
-  <v-col>
-    <v-card id="data-list" class="row1">
-      <h3 class="titleS">So'rovlar</h3>
-      <!-- buttons -->
-      <v-row
-        align="center"
-        justify="space-around"
-      > 
-        <v-col cols="6">
-          <v-btn 
-            v-if="$can('create', 'Lead')" 
-            x-small 
-            class="requestButton"
-            @click="openRequestForm()"
-          >
-              +So'rov qo'shing 
-          </v-btn>
-        </v-col>  
-      </v-row> 
+  <div id="data-list">
+    <!-- <v-card-text class="d-flex align-center flex-wrap">
+      <v-spacer></v-spacer>
+      <v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
+    </v-card-text> -->
 
-      <v-data-table
-        v-model="requestSelectedTableData"
-        :headers="requestTableColumns"
-        :items="requestState.requestRows"
-        :options.sync="requestOptions"
-        :server-items-length="requestState.requestTotal"
-        :loading="requestLoading"
-        :items-per-page="requestOptions.itemsPerPage"
-        :footer-props="requestFooterProps"
-        class="text-no-wrap"
-      >
-        <template slot="item.index" scope="props">
-          {{ props.index + 1 + (requestOptions.page - 1) * requestOptions.itemsPerPage }}
-        </template>
+		<v-row>
+			<v-col cols="4">
+				<v-card>
+					<v-card-title>So'rovlar</v-card-title>
 
-        <!-- total -->
-        <template #[`item.requestTotal`]="{ item }"> ${{ item.reuestTotal }}</template>
+					<draggable class="list-group" :list="list1" group="people" @change="log">
+						<div
+							class="list-group-item"
+							v-for="(element, index) in list1"
+							:key="element.name"
+						>
+							{{ element.name }} {{ index }}
+						</div>
+					</draggable>
+				</v-card>
+			</v-col>
+			<v-col cols="4">
+				<v-card>
+					<v-card-title>Kutish</v-card-title>
 
-        <template late #[`item.actions`]="{ item }">
-          <div class="d-flex align-center justify-center">
-            <!-- delete -->
-            <v-tooltip bottom v-if="$can('delete', 'Lead')">
-              <template #activator="{ on, attrs }">
-                <v-btn icon small v-bind="attrs" v-on="on" @click="requestConfirmDelete(item.id)">
-                  <v-icon size="18">
-                    {{ icons.mdiDeleteOutline }}
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Delete</span>
-            </v-tooltip>
+					<draggable class="list-group" :list="list2" group="people" @change="log">
+						<div
+							class="list-group-item"
+							v-for="(element, index) in list2"
+							:key="element.name"
+						>
+							{{ element.name }} {{ index }}
+						</div>
+					</draggable>|
+				</v-card>
+			</v-col>
+			<v-col cols="4">
+				<v-card>
+					<v-card-title>Guruhlar</v-card-title>
+				</v-card>
+			</v-col>
+		</v-row>
 
-            <!-- view  -->
-            <v-tooltip bottom v-if="$can('update', 'Lead')">
-              <template #activator="{ on, attrs }">
-                <v-btn icon small v-bind="attrs" v-on="on" @click="openRequestForm(item.id)">
-                  <v-icon size="18">
-                    {{ icons.mdiPencilOutline }}
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Edit</span>
-            </v-tooltip>
-          </div>
-        </template>
-
-        <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
-
-        <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
-      </v-data-table>  
-
-      <!-- table -->
-      <v-row>
-        <v-col class="submit_btn">
-          <v-btn 
-            v-if="$can('create', 'Lead')" 
-            x-small 
-            class="btn primary" 
-            @click="openForm()"
-          >
-            Qo'shish
-          </v-btn>
-        </v-col>
-      </v-row>
-      <v-data-table
-        v-model="selectedTableData"
-        :headers="tableColumns"
-        :items="state.rows"
-        :options.sync="options"
-        :server-items-length="state.total"
-        :loading="loading"
-        :items-per-page="options.itemsPerPage"
-        :footer-props="footerProps"
-        class="text-no-wrap"
-      >
-        <template slot="item.index" scope="props">
-          {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
-        </template>
-
-        <!-- total -->
-        <template #[`item.total`]="{ item }"> ${{ item.total }}</template>
-
-        <template late #[`item.actions`]="{ item }">
-          <div class="d-flex align-center justify-center">
-            <!-- delete -->
-            <v-tooltip bottom v-if="$can('delete', 'Lead')">
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiDeleteOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Delete</span>
-            </v-tooltip>
-
-            <!-- view  -->
-            <v-tooltip bottom v-if="$can('update', 'Lead')">  
-              <template #activator="{ on, attrs }">
-                <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
-                  <v-icon size="18">
-                    {{ icons.mdiPencilOutline }}
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Edit</span>
-            </v-tooltip>
-          </div>
-        </template>
-
-        <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
-
-        <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
-      </v-data-table>
-
-      <dialog-confirm ref="dialogConfirm" />
-
-      <lead-form  
+    <lead-form
       ref="leadForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-      />
-      <request-form 
-      ref="requestForm"
-      v-on:notify="notify= { type: $event.type, text: $event.text, time: Date.now() }"
-      />   
-    </v-card>
-  </v-col>
-</draggable>
+    />
+		<dialog-confirm ref="dialogConfirm" />
 
-
-<draggable v-model="secondRequestSelectedTableData"  group="my-group">
-  <v-col>
-    <v-card id="data-list" class="row2">
-      <h3 class="titleS">Kutish</h3>
-      <!-- buttons -->
-      <v-row
-        align="center"
-        justify="space-around"
-      > 
-        <v-col cols="6">
-          <v-btn 
-            v-if="$can('create', 'Lead')" 
-            x-small 
-            class="requestButton"
-            @click="openSecondRequestForm()"
-          >
-              +So'rov qo'shing 
-          </v-btn>
-        </v-col>  
-      </v-row> 
-
-      <v-data-table
-        v-model="secondRequestSelectedTableData"
-        :headers="secondRequestTableColumns"
-        :items="secondRequestState.secondRequestRows"
-        :options.sync="secondRequestOptions"
-        :server-items-length="secondRequestState.secondRequestTotal"
-        :loading="secondRequestLoading"
-        :items-per-page="secondRequestOptions.itemsPerPage"
-        :footer-props="footerProps"
-        class="text-no-wrap"
-      >
-        <template slot="item.index" scope="props">
-          {{ props.index + 1 + (secondRequestOptions.page - 1) * secondRequestOptions.itemsPerPage }}
-        </template>
-
-        <!-- total -->
-        <template #[`item.secondRequestTotal`]="{ item }"> ${{ item.secondReuestTotal }}</template>
-
-        <template late #[`item.actions`]="{ item }">
-          <div class="d-flex align-center justify-center">
-            <!-- delete -->
-            <v-tooltip bottom v-if="$can('delete', 'Lead')">
-              <template #activator="{ on, attrs }">
-                <v-btn icon small v-bind="attrs" v-on="on" @click="secondRequestConfirmDelete(item.id)">
-                  <v-icon size="18">
-                    {{ icons.mdiDeleteOutline }}
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Delete</span>
-            </v-tooltip>
-
-            <!-- view  -->
-            <v-tooltip bottom v-if="$can('update', 'Lead')">
-              <template #activator="{ on, attrs }">
-                <v-btn icon small v-bind="attrs" v-on="on" @click="openSecondRequestForm(item.id)">
-                  <v-icon size="18">
-                    {{ icons.mdiPencilOutline }}
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Edit</span>
-            </v-tooltip>
-          </div>
-        </template>
-
-        <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
-
-        <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
-      </v-data-table>  
-
-      <!-- table -->
-      <v-row>
-        <v-col class="submit_btn">
-          <v-btn 
-            v-if="$can('create', 'Lead')" 
-            x-small 
-            class="btn primary" 
-            @click="openSecondForm()"
-          >
-            Qo'shish
-          </v-btn>
-        </v-col>
-      </v-row>
-      <v-data-table
-        v-model="secondSelectedTableData"
-        :headers="secondTableColumns"
-        :items="state.secondRows"
-        :options.sync="secondOptions"
-        :server-items-length="state.secondTotal"
-        :loading="secondLoading"
-        :items-per-page="secondOptions.itemsPerPage"
-        :footer-props="footerProps"
-        class="text-no-wrap"
-      >
-        <template slot="item.index" scope="props">
-          {{ props.index + 1 + (secondOptions.page - 1) * secondOptions.itemsPerPage }}
-        </template>
-
-        <!-- total -->
-        <template #[`item.secondTotal`]="{ item }"> ${{ item.secondTotal }}</template>
-
-        <template late #[`item.actions`]="{ item }">
-          <div class="d-flex align-center justify-center">
-            <!-- delete -->
-            <v-tooltip bottom v-if="$can('delete', 'Lead')">
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiDeleteOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Delete</span>
-            </v-tooltip>
-
-            <!-- view  -->
-            <v-tooltip bottom v-if="$can('update', 'Lead')">  
-              <template #activator="{ on, attrs }">
-                <v-btn icon small v-bind="attrs" v-on="on" @click="openSecondForm(item.id)">
-                  <v-icon size="18">
-                    {{ icons.mdiPencilOutline }}
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Edit</span>
-            </v-tooltip>
-          </div>
-        </template>
-
-        <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
-
-        <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
-      </v-data-table>
-
-      <dialog-confirm ref="dialogConfirm" />
-
-      <lead-second-form  
-      ref="leadSecondForm"
-      v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-      />
-      <second-request-form 
-      ref="secondRequestForm"
-      v-on:notify="notify= { type: $event.type, text: $event.text, time: Date.now() }"
-      />   
-    </v-card>
-  </v-col>
-</draggable>  
-
-<draggable v-model="requestSelectedTableData"  group="my-group">
-  <v-col>
-    <v-card id="data-list-third" class="row3">
-      <h3 class="titleK">To'plam</h3>
-
-      <!-- button -->
-      <v-row
-        align="center"
-        justify="space-around"
-      > 
-        <v-col cols="6">
-          <v-btn 
-            v-if="$can('create', 'Lead')" 
-            x-small 
-            class="button"
-            @click="openThirdRequestForm()"
-          >
-              +So'rov qo'shing 
-          </v-btn>
-        </v-col>  
-        <v-spacer></v-spacer>
-        <v-col cols="6">
-          <v-btn 
-            v-if="$can('create', 'Lead')" 
-            x-small 
-            class="btn primary" 
-            @click="openThirdForm()"
-          >
-            Qo'shish
-          </v-btn>
-        </v-col>
-      </v-row>
-
-      <!-- table -->
-      <v-data-table
-        v-model="thirdSelectedTableData"
-        :headers="thirdTableColumns"
-        :items="state.thirdRows"
-        :options.sync="thirdOptions"
-        :server-items-length="state.thirdTotal"
-        :loading="thirdLoading"
-        :items-per-page="thirdOptions.itemsPerPage"
-        :footer-props="footerProps"
-        class="text-no-wrap"
-      >
-
-      <template slot="item.index" scope="props">
-          {{ props.index + 1 + (thirdOptions.page - 1) * thirdOptions.itemsPerPage }}
-        </template>
-
-      <!-- total -->
-        <template #[`item.thirdTotal`]="{ item }"> ${{ item.total }}</template>
-      </v-data-table>
-
-      <template late #[`item.thirdActions`]="{ item }">
-          <div class="d-flex align-center justify-center">
-            <!-- delete -->
-            <v-tooltip bottom v-if="$can('delete', 'Lead')">
-              <template #activator="{ on, attrs }">
-                <v-btn icon small v-bind="attrs" v-on="on" @click="confirmThirdDelete(item.id)">
-                  <v-icon size="18">
-                    {{ icons.mdiDeleteOutline }}
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Delete</span>
-            </v-tooltip>
-
-            <!-- view  -->
-            <v-tooltip bottom v-if="$can('update', 'Lead')">
-              <template #activator="{ on, attrs }">
-                <v-btn icon small v-bind="attrs" v-on="on" @click="openThirdForm(item.id)">
-                  <v-icon size="18">
-                    {{ icons.mdiPencilOutline }}
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Edit</span>
-            </v-tooltip>
-          </div>
-        </template>
-
-        <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
-
-        <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
-
-      <dialog-confirm ref="dialogConfirm" />
-
-      <lead-third-form
-        ref="leadThirdForm"
-        v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-      />
-      <third-request-form
-        ref="thirdRequestForm"
-        v-on:notify="notify= { type: $event.type, text: $event.text, time: Date.now() }"
-      />
-    </v-card>
-  </v-col>
-</draggable>  
-</div>
+		<!-- DRAGGABLE -->
+		<!-- <rawDisplayer class="col-3" :value="list1" title="List 1" /> -->
+    <!-- <rawDisplayer class="col-3" :value="list2" title="List 2" /> -->
+  </div>
 </template>
 
 <script>
-import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
+import { mdiDeleteOutline, mdiPencilOutline } from '@mdi/js'
 
-import { onUnmounted, ref } from '@vue/composition-api'
+import { ref } from '@vue/composition-api'
 import store from '@/store'
-import moment from 'moment'
-moment.locale('uz-latn')
 
-import draggable from "vuedraggable"
-
-import numeral from 'numeral'
-numeral.locale('ru')
-
-import envParams from '@envParams'
+import draggable from 'vuedraggable'
 
 // store module
-import LeadStoreModule from './storeModule/LeadStoreModule'
-import RequestStoreModule from './storeModule/RequestStoreModule'
+import LeadStoreModule from './LeadStoreModule'
 
 // composition function
 import useLeadList from './useLeadList'
-import useRequestList from './request/useRequestList'
-import useLeadSecondList from './useLeadSecondList'
-import useSecondRequestList from './request/useSecondRequest'
-import useLeadThirdList from './useLeadThirdList'
 import LeadForm from './LeadForm'
-import LeadSecondForm from './LeadSecondForm.vue'
-import LeadThirdForm from './LeadThirdForm.vue'
-import RequestForm from './request/RequestForm.vue'
-import SecondRequestForm from './request/SecondRequestForm.vue'
-import ThirdRequestForm from './request/ThirdRequestForm.vue'
-import DialogConfirm from '../components/DialogConfirm.vue'
+import DialogConfirm from '@/views/components/DialogConfirm'
 
 const MODULE_NAME = 'lead'
-const MODULE_NAME2 = 'request'
+import envParams from '@envParams'
 
 export default {
   components: {
-    LeadForm,
-    RequestForm,
-    SecondRequestForm,
-    ThirdRequestForm,
-    LeadSecondForm,
-    LeadThirdForm,
-    DialogConfirm,
     draggable,
-  },
-  filters: {
-    date: value => moment(value).format('D MMMM YYYY'),
-    summa: value => numeral(value).format('0,0'),
-    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+    LeadForm,
+    DialogConfirm,
   },
   setup() {
     // Register module
@@ -461,9 +86,7 @@ export default {
       store.registerModule(MODULE_NAME, LeadStoreModule)
     }
 
-    if (!store.hasModule(MODULE_NAME2)) {
-      store.registerModule(MODULE_NAME2, RequestStoreModule)
-    }
+    const BASE_URL = envParams.BASE_URL
     // UnRegister on leave
     // onUnmounted(() => {
     //   if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
@@ -471,14 +94,11 @@ export default {
 
     //store state
     const state = ref(store.state[MODULE_NAME])
-    const requestState = ref(store.state[MODULE_NAME2])
-    const secondRequestState = ref(store.state[MODULE_NAME2])
 
     //logics
     const {
-      filter,
       searchQuery,
-      tableColumns,
+      // tableColumns,
       deleteRow,
 
       options,
@@ -487,197 +107,75 @@ export default {
       selectedTableData,
     } = useLeadList(MODULE_NAME)
 
-    const {
-      requestTableColumns,
-      requestDeleteRow,
-
-      requestOptions,
-      requestLoading,
-      requestSelectedTableData,
-    } = useRequestList(MODULE_NAME2)
-
-    const { 
-      secondSelectedTableData, 
-      secondTableColumns, 
-      secondOptions, 
-      secondLoading 
-    } = useLeadSecondList(MODULE_NAME)
-
-    const { 
-      secondRequestSelectedTableData, 
-      secondRequestTableColumns,
-      secondRequestOptions, 
-      secondRequestLoading, 
-    } = useSecondRequestList(MODULE_NAME2)
-
-    const { thirdSelectedTableData, thirdTableColumns, thirdOptions, thirdLoading } = useLeadThirdList(MODULE_NAME)
-
     //interface additional elements
-    const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
-    const requestFooterProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
-    const actions = ['Delete', 'Edit']
-    const secondActions = ['Delete', 'Edit']
-    const thirdActions = ['Delete', 'Edit']
-    const selectedAction = ref('')
-    const selectedSecondAction = ref('')
-    const selectedThirdAction = ref('')
-    const actionOptions = [
-      { title: 'Delete', icon: mdiDeleteOutline },
-      { title: 'Edit', icon: mdiPencilOutline },
-    ]
-    const actionSecondOptions = [
-      { title: 'Delete', icon: mdiDeleteOutline },
-      { title: 'Edit', icon: mdiPencilOutline },
-    ]
-    const actionThirdOptions = [
-      { title: 'Delete', icon: mdiDeleteOutline },
-      { title: 'Edit', icon: mdiPencilOutline },
-    ]
+    // const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
+    // const actions = ['Delete', 'Edit']
+    // const selectedAction = ref('')
+    // const actionOptions = [
+    //   { title: 'Delete', icon: mdiDeleteOutline },
+    //   { title: 'Edit', icon: mdiPencilOutline },
+    // ]
 
-    //Form
+    // Draggable data
+    const list1 = ref([
+      { name: 'John', id: 1 },
+      { name: 'Joao', id: 2 },
+      { name: 'Jean', id: 3 },
+      { name: 'Gerard', id: 4 },
+    ])
+    const list2 = ref([
+      { name: 'Juan', id: 5 },
+      { name: 'Edgard', id: 6 },
+      { name: 'Johnson', id: 7 },
+    ])
+
+    // Form
     const leadForm = ref(null)
     const openForm = id => {
       leadForm.value.open(id)
     }
-    const leadThirdForm = ref(null)
-    const openThirdForm = id => {
-      leadThirdForm.value.open(id)
-    }
-    const leadSecondForm = ref(null)
-    const openSecondForm = id => {
-      leadSecondForm.value.open(id)
-    }
 
-    //RequestForm
-    const requestForm = ref(null)
-    const openRequestForm = id => {
-      requestForm.value.open(id)
-    }
-    const secondRequestForm = ref(null)
-    const openSecondRequestForm = id => {
-      secondRequestForm.value.open(id)
-    }
-    const thirdRequestForm = ref(null)
-    const openThirdRequestForm = id => {
-      thirdRequestForm.value.open(id)
-    }
-
-    //Delete Confirm Dialog
+    // Delete Confirm Dialog
     const dialogConfirm = ref(null)
     const confirmDelete = id => {
       dialogConfirm.value
         .open("O'chirishga aminmisiz?")
         .then(() => deleteRow(id))
         .catch(() => {})
-      console.log(deleteRow())
     }
-    const requestConfirmDelete = id => {
-      dialogConfirm.value
-        .open("O'chirishga aminmisiz?")
-        .then(() => requestDeleteRow(id))
-        .catch(() => {})
-    }
-    const secondRequestConfirmDelete = id => {
-      dialogConfirm.value
-        .open("O'chirishga aminmisiz?")
-        .then(() => secondRequestDeleteRow(id))
-        .catch(() => {})
-    }
-    const confirmSecondDelete = id => {
-      dialogConfirm.value
-        .open("O'chirishga aminmisiz?")
-        .then(() => deleteSecondRow(id))
-        .catch(() => {})
-    }
-    const confirmThirdDelete = id => {
-      dialogConfirm.value
-        .open("O'chirishga aminmisiz?")
-        .then(() => deleteThirdRow(id))
-        .catch(() => {})
-    }
-
-    const BASE_URL = envParams.BASE_URL
 
     // Return
     return {
       BASE_URL,
       state,
-      requestState,
-      secondRequestState,
-      draggable,
 
-      tableColumns,
-      requestTableColumns,
-      secondTableColumns,
-      secondRequestTableColumns,
-      thirdTableColumns,
+      // tableColumns,
       searchQuery,
       options,
-      requestOptions,
-      secondRequestOptions,
-      secondOptions,
-      thirdOptions,
       loading,
-      requestLoading,
-      secondRequestLoading,
-      secondLoading,
-      thirdLoading,
       notify,
       selectedTableData,
-      requestSelectedTableData,
-      secondSelectedTableData,
-      secondRequestSelectedTableData,
-      thirdSelectedTableData,
-      filter,
 
-      actions,
-      secondActions,
-      thirdActions,
-      actionOptions,
-      actionSecondOptions,
-      actionThirdOptions,
-      selectedAction,
-      selectedSecondAction,
-      selectedThirdAction,
-      footerProps,
-      requestFooterProps,
+      // actions,
+      // actionOptions,
+      // selectedAction,
+      // footerProps,
 
       dialogConfirm,
       confirmDelete,
-      requestConfirmDelete,
-      secondRequestConfirmDelete,
-      confirmSecondDelete,
-      confirmThirdDelete,
 
       leadForm,
       openForm,
 
-      requestForm,
-      openRequestForm,
-
-      secondRequestForm,
-      openSecondRequestForm,
-
-      thirdRequestForm,
-      openThirdForm,
-
-      leadSecondForm,
-      openThirdRequestForm,
-      openSecondForm,
-
-      leadThirdForm,
-      openThirdForm,
+      // Draggable data
+      list1,
+      list2,
 
       MODULE_NAME,
-      MODULE_NAME2,
 
       icons: {
-        mdiTrendingUp,
-        mdiPlus,
         mdiPencilOutline,
         mdiDeleteOutline,
-        mdiDotsVertical,
-        mdiEyeOutline,
       },
     }
   },
@@ -686,6 +184,22 @@ export default {
       this.$toast[this.notify.type](this.notify.text)
     },
   },
+  // methods: {
+  //   add: function () {
+  //     this.list.push({ name: 'Juan' })
+  //   },
+  //   replace: function () {
+  //     this.list = [{ name: 'Edgard' }]
+  //   },
+  //   clone: function (el) {
+  //     return {
+  //       name: el.name + ' cloned',
+  //     }
+  //   },
+  //   log: function (evt) {
+  //     window.console.log(evt)
+  //   },
+  // },
 }
 </script>
 
@@ -694,53 +208,9 @@ export default {
   .data-list-actions {
     max-width: 7.81rem;
   }
+
   .data-list-search {
     max-width: 10.625rem;
   }
-}
-#data-list-second {
-  .data-list-actions {
-    max-width: 7.81rem;
-  }
-  .data-list-search {
-    max-width: 10.625rem;
-  }
-}
-#data-list-third {
-  .data-list-actions {
-    max-width: 7.81rem;
-  }
-  .data-list-search {
-    max-width: 10.625rem;
-  }
-}
-.btn {
-  margin-left: 58%;
-}
-.requestButton {
-  margin-left: 80%;
-}
-.titleS {
-  margin-left: 38%;
-  padding-top: 3%;
-}
-.titleK {
-  margin-left: 38%;
-  padding-top: 3%;
-}
-.submit_btn {
-  margin-left: 40%;
-}
-.row1 {
-  width: 75%;
-  margin-right: 10%;
-}
-.row2 {
-  width: 75%;
-  margin-left: -22%;
-}
-.row3 {
-  width: 75%;
-  margin-left: -45%;
 }
 </style>
