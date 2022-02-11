@@ -1,13 +1,9 @@
 <template>
   <div id="data-list">
-    <!-- <v-card-text class="d-flex align-center flex-wrap">
-      <v-spacer></v-spacer>
-      <v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
-    </v-card-text> -->
 
 		<v-row>
 			<v-col cols="4">
-				<v-card>
+				<v-card class="my-draggable-card-main">
 					<div class="my-top d-flex align-center mb-5">
 						<v-card-title>So'rovlar</v-card-title>
 						<v-spacer></v-spacer>
@@ -15,7 +11,7 @@
 							<v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" @click="openAppealForm()">
 								<v-icon size="24">{{ icons.mdiFileAccountOutline }} </v-icon>
 							</v-btn>
-							<v-btn text small fab title="Yangi bo'lim yaratish">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openSimpleForm(1)">
 								<v-icon>{{ icons.mdiPlus }}</v-icon>
 							</v-btn>
 						</v-list>
@@ -34,6 +30,34 @@
 							<li
 								class="list-group-item"
 								v-for="element in list1"
+								:key="element.name"
+							>
+								<i
+									:class="element.fixed ? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'"
+									@click="element.fixed = !element.fixed"
+									aria-hidden="true"
+								></i>
+								{{ element.name }}
+							</li>
+						</transition-group>
+					</draggable>
+				</v-card>
+
+				<v-card class="my-draggable-card" v-if="leadPositions" v-for="lead of leadPositions" :key="lead.id">
+					<v-card-title class="my-top">{{lead.name}}</v-card-title>
+					<draggable
+						class="list-group"
+						group="people"
+						tag="ul"
+						v-model="list4"
+						v-bind="dragOptions()"
+						@start="drag = true"
+						@end="drag = false"
+					>
+						<transition-group type="transition" :name="!drag ? 'flip-list' : null">
+							<li
+								class="list-group-item"
+								v-for="element in list4"
 								:key="element.name"
 							>
 								<i
@@ -125,24 +149,21 @@
 			</v-col>
 		</v-row>
 
-    <lead-form
-      ref="leadForm"
+    <lead-simple-form
+      ref="leadSimpleForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
 		<appeal-form ref="appealForm" v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }" />
 		<dialog-confirm ref="dialogConfirm" />
-
-		<!-- DRAGGABLE -->
-		<!-- <rawDisplayer class="col-3" :value="list1" title="List 1" /> -->
-    <!-- <rawDisplayer class="col-3" :value="list2" title="List 2" /> -->
   </div>
 </template>
 
 <script>
 import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline } from '@mdi/js'
 
-import { computed, ref } from '@vue/composition-api'
+import { ref, computed } from '@vue/composition-api'
 import store from '@/store'
+import axios from '@axios'
 
 import draggable from 'vuedraggable'
 
@@ -151,29 +172,29 @@ import LeadStoreModule from './LeadStoreModule'
 
 // composition function
 import useLeadList from './useLeadList'
-import LeadForm from './LeadForm'
+import LeadSimpleForm from './LeadSimpleForm'
 
 import AppealForm from './appeal/AppealForm'
 import DialogConfirm from '@/views/components/DialogConfirm'
 
-const MODULE_NAME = 'lead'
+const MODULE_NAME = 'leads'
 import envParams from '@envParams'
 
 export default {
   components: {
     draggable,
-    LeadForm,
+    LeadSimpleForm,
     AppealForm,
     DialogConfirm,
   },
   setup() {
+    const BASE_URL = envParams.BASE_URL
+
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, LeadStoreModule)
     }
-
-    const BASE_URL = envParams.BASE_URL
-    // UnRegister on leave
+    // // UnRegister on leave
     // onUnmounted(() => {
     //   if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
     // })
@@ -182,15 +203,7 @@ export default {
     const state = ref(store.state[MODULE_NAME])
 
     //logics
-    const {
-      searchQuery,
-      deleteRow,
-
-      options,
-      loading,
-      notify,
-      selectedTableData,
-    } = useLeadList(MODULE_NAME)
+    const { searchQuery, deleteRow, options, loading, notify, selectedTableData } = useLeadList(MODULE_NAME)
 
     // Draggable data
     const list1 = ref([
@@ -209,6 +222,7 @@ export default {
       { name: 'Mirza', id: 9 },
       { name: 'Salimboy', id: 10 },
     ])
+    const list4 = ref([])
     const drag = ref(false)
     const dragOptions = () => {
       return {
@@ -219,10 +233,11 @@ export default {
       }
     }
 
+    // ! METHODS
     // Form
-    const leadForm = ref(null)
-    const openForm = id => {
-      leadForm.value.open(id)
+    const leadSimpleForm = ref(null)
+    const openSimpleForm = id => {
+      leadSimpleForm.value.open(id)
     }
 
     // Appeal form
@@ -238,6 +253,22 @@ export default {
         .open("O'chirishga aminmisiz?")
         .then(() => deleteRow(id))
         .catch(() => {})
+    }
+
+    const selectDatas = ref({
+      leads: null,
+    })
+    let leadPositions = ref(null)
+    const loadLeads = () => {
+      axios
+        .get('/api/leads', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            selectDatas.value.leads = response.data.data
+            leadPositions.value = response.data.data.filter(el => el.position === true)
+          }
+        })
+        .catch(error => console.log(error))
     }
 
     // ! COMPUTED
@@ -260,8 +291,8 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      leadForm,
-      openForm,
+      leadSimpleForm,
+      openSimpleForm,
       appealForm,
       openAppealForm,
 
@@ -269,8 +300,13 @@ export default {
       list1,
       list2,
       list3,
+      list4,
       drag,
       dragOptions,
+
+      leadPositions,
+      selectDatas,
+      loadLeads,
 
       MODULE_NAME,
 
@@ -281,6 +317,9 @@ export default {
         mdiFileAccountOutline,
       },
     }
+  },
+  created() {
+    this.loadLeads()
   },
   watch: {
     ['notify']() {
@@ -327,5 +366,14 @@ export default {
 }
 .list-group-item i {
   cursor: pointer;
+}
+.my-draggable-card-main {
+  margin-bottom: 50px;
+}
+.my-draggable-card {
+  margin-top: 20px;
+  .v-card__title {
+    font-size: 16px;
+  }
 }
 </style>
