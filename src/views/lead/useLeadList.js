@@ -1,64 +1,31 @@
 import store from '@/store'
-import { ref, watch } from '@vue/composition-api'
+import { ref } from '@vue/composition-api'
 
 export default function useLeadList(MODULE_NAME) {
   const notify = ref({})
 
-  // const tableColumns = [
-  //   { text: '#', sortable: false, value: 'index' },
-  //   {
-  //     text: 'AMALLAR',
-  //     value: 'actions',
-  //     align: 'center',
-  //     sortable: false,
-  //   },
-  //   { text: 'ISMI', value: 'first_name' },
-  //   { text: 'FAMILIYASI', value: 'last_name' },
-  //   { text: 'SHARIFI', value: 'middle_name' },
-  //   { text: 'TELEFON', value: 'phone' },
-  //   { text: 'TUMAN', value: 'region_id' },
-  //   { text: 'MANZIL', value: 'address' },
-  //   { text: 'D.Y. TUMAN', value: 'permanent_region_id' },
-  //   { text: 'D.Y. Manzili', value: 'permanent_address' },
-  //   { text: 'JINSI', value: 'gender' },
-  //   { text: "TUG'ILGAN SANASI", value: 'birth_date' },
-  // ]
-
-  const options = ref({
-    sortBy: ['id'],
-    sortDesc: [true],
-    limit: 10,
-    skip: 0,
-  })
   const loading = ref(false)
 
   let lastQuery = ''
   const fetchDatas = (force = false) => {
-    options.value.skip = options.value.page - 1
-    options.value.limit = options.value.itemsPerPage
+    // const newQuery = JSON.stringify(queryParams)
 
-    const queryParams = {
-      ...options.value,
-    }
+    store
+      .dispatch(`${MODULE_NAME}/fetchDatas`)
+      .then(() => {
+        loading.value = false
+      })
+      .catch(error => {
+        console.log(error)
+        loading.value = false
+        notify.value = { type: 'error', text: error, time: Date.now() }
+      })
+    // if (force || lastQuery !== newQuery) {
+    //   lastQuery = newQuery
 
-    const newQuery = JSON.stringify(queryParams)
+    // }
 
-    if (force || lastQuery !== newQuery) {
-      lastQuery = newQuery
-
-      store
-        .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
-        .then(() => {
-          loading.value = false
-        })
-        .catch(error => {
-          console.log(error)
-          loading.value = false
-          notify.value = { type: 'error', text: error, time: Date.now() }
-        })
-    }
-
-    lastQuery = JSON.stringify(queryParams)
+    // lastQuery = JSON.stringify(queryParams)
   }
 
   // watch(
@@ -72,10 +39,10 @@ export default function useLeadList(MODULE_NAME) {
   //   { deep: true },
   // )
 
-  watch(options, () => {
-    loading.value = true
-    fetchDatas()
-  })
+  // watch(options, () => {
+  //   loading.value = true
+  //   fetchDatas()
+  // })
 
   //delete
   const deleteRow = id => {
@@ -92,11 +59,10 @@ export default function useLeadList(MODULE_NAME) {
   }
 
   return {
-    // tableColumns,
     fetchDatas,
     deleteRow,
 
-    options,
+    // options,
     loading,
     notify,
   }

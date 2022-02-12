@@ -18,14 +18,14 @@
 					</div>
 
 					<div>
-						<!-- <button type="button" @click="newGroup()" class="btn btn-sm btn-info">New Group</button> -->
-						<div v-for="(group, groupIdx) in groups" :key="group.id">
-							<h3>{{group.title}}</h3>
-							<button type="button" @click="newDraggableItem(groupIdx)">New Item</button>
+						<v-btn type="button" @click="newGroup()" color="info">New Group</v-btn>
+						<div v-for="(group, groupIdx) in leadPositions" :key="group.id">
+							<h3>{{group.name}}</h3>
+							<v-btn color="secondary" type="button" @click="newDraggableItem(groupIdx)">New Item</v-btn>
 							<draggable tag="ul" :list="group.items" class="list-group" handle=".handle" v-bind="dragOptions" @start="drag = true" @end="drag = false">
 								<transition-group type="transition" :name="!drag ? 'flip-list' + group.id : null">
 									<li class="list-group-item handle" v-for="(item, itemIdx) in group.items" :key="'p'+item.id">
-										{{item.description}}
+										<!-- {{item.description}} -->
 										<!-- <i class="fa fa-times close" @click="removeAt(item.id)"></i> -->
 									</li>
 								</transition-group>
@@ -178,7 +178,7 @@
 <script>
 import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline } from '@mdi/js'
 
-import { ref } from '@vue/composition-api'
+import { ref, onUnmounted, onMounted } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
 
@@ -211,16 +211,16 @@ export default {
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, LeadStoreModule)
     }
-    // // UnRegister on leave
-    // onUnmounted(() => {
-    //   if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
-    // })
+    // UnRegister on leave
+    onUnmounted(() => {
+      if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
+    })
 
     //store state
     const state = ref(store.state[MODULE_NAME])
 
     //logics
-    const { searchQuery, deleteRow, options, loading, notify, selectedTableData } = useLeadList(MODULE_NAME)
+    const { fetchDatas, deleteRow, loading, notify, selectedTableData } = useLeadList(MODULE_NAME)
 
     // Draggable data
     const list1 = ref([
@@ -244,7 +244,7 @@ export default {
     const groups = ref([
       {
         id: groupId,
-        title: 'Asosiy',
+        name: 'Asosiy',
         items: [],
       },
     ])
@@ -269,7 +269,7 @@ export default {
     const newGroup = () => {
       groups.value.push({
         id: ++groupId.value,
-        title: 'Yangi gurux',
+        name: 'Yangi gurux',
         items: [],
       })
     }
@@ -305,25 +305,21 @@ export default {
       leads: null,
     })
     let leadPositions = ref(null)
-    const loadLeads = () => {
-      axios
-        .get('/api/leads', { params: { itemsPerPage: -1 } })
-        .then(response => {
-          if (response.data.success) {
-            selectDatas.value.leads = response.data.data
-            leadPositions.value = response.data.data.filter(el => el.position === true)
-          }
-        })
-        .catch(error => console.log(error))
-    }
+
+    onMounted(() => {
+      fetchDatas(true)
+      setTimeout(() => {
+        leadPositions.value = state.value.rows.filter(el => el.position === true)
+        console.log(leadPositions)
+      }, 500)
+    })
 
     // Return
     return {
       BASE_URL,
       state,
 
-      searchQuery,
-      options,
+      fetchDatas,
       loading,
       notify,
       selectedTableData,
@@ -351,7 +347,6 @@ export default {
 
       leadPositions,
       selectDatas,
-      loadLeads,
 
       MODULE_NAME,
 
@@ -362,9 +357,6 @@ export default {
         mdiFileAccountOutline,
       },
     }
-  },
-  created() {
-    this.loadLeads()
   },
   computed: {
     dragOptions: () => {
