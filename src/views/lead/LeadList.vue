@@ -17,7 +17,24 @@
 						</v-list>
 					</div>
 
-					<draggable
+					<div>
+						<!-- <button type="button" @click="newGroup()" class="btn btn-sm btn-info">New Group</button> -->
+						<div v-for="(group, groupIdx) in groups" :key="group.id">
+							<h3>{{group.title}}</h3>
+							<button type="button" @click="newDraggableItem(groupIdx)">New Item</button>
+							<draggable tag="ul" :list="group.items" class="list-group" handle=".handle" v-bind="dragOptions" @start="drag = true" @end="drag = false">
+								<transition-group type="transition" :name="!drag ? 'flip-list' + group.id : null">
+									<li class="list-group-item handle" v-for="(item, itemIdx) in group.items" :key="'p'+item.id">
+										{{item.description}}
+										<!-- <i class="fa fa-times close" @click="removeAt(item.id)"></i> -->
+									</li>
+								</transition-group>
+							</draggable>
+						</div>
+					</div>
+
+
+					<!-- <draggable
 						class="list-group"
 						group="people"
 						tag="ul"
@@ -40,10 +57,10 @@
 								{{ element.name }}
 							</li>
 						</transition-group>
-					</draggable>
+					</draggable> -->
 				</v-card>
 
-				<v-card class="my-draggable-card" v-if="leadPositions" v-for="lead of leadPositions" :key="lead.id">
+				<!-- <v-card class="my-draggable-card" v-if="leadPositions" v-for="lead of leadPositions" :key="lead.id">
 					<v-card-title class="my-top">{{lead.name}}</v-card-title>
 					<draggable
 						class="list-group"
@@ -69,9 +86,9 @@
 							</li>
 						</transition-group>
 					</draggable>
-				</v-card>
+				</v-card> -->
 			</v-col>
-			<v-col cols="4">
+			<!-- <v-col cols="4">
 				<v-card >
 					<div class="my-top d-flex align-center mb-5">
 						<v-card-title>Kutish</v-card-title>
@@ -146,7 +163,7 @@
 						</transition-group>
 					</draggable>
 				</v-card>
-			</v-col>
+			</v-col> -->
 		</v-row>
 
     <lead-simple-form
@@ -161,7 +178,7 @@
 <script>
 import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline } from '@mdi/js'
 
-import { ref, computed } from '@vue/composition-api'
+import { ref } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
 
@@ -222,18 +239,47 @@ export default {
       { name: 'Mirza', id: 9 },
       { name: 'Salimboy', id: 10 },
     ])
-    const list4 = ref([])
+    const list4 = ref([{ name: 'Juan', id: 11 }])
     const drag = ref(false)
-    const dragOptions = () => {
-      return {
-        animation: 200,
-        group: 'people',
-        disabled: false,
-        ghostClass: 'ghost',
-      }
+    const groups = ref([
+      {
+        id: groupId,
+        title: 'Asosiy',
+        items: [],
+      },
+    ])
+    let groupId = ref(1)
+    let itemId = ref(0)
+    const removeAt = itemIdRemove => {
+      let canBreak = false
+      groups.value.forEach((value, groupIndex) => {
+        if (canBreak) {
+          return true
+        }
+
+        value.items.forEach((value, itemIndex) => {
+          if (value.id === itemIdRemove) {
+            canBreak = true
+            groups.value[groupIndex].items.splice(itemIndex, 1)
+            return true
+          }
+        })
+      })
+    }
+    const newGroup = () => {
+      groups.value.push({
+        id: ++groupId.value,
+        title: 'Yangi gurux',
+        items: [],
+      })
+    }
+    const newDraggableItem = groupIdx => {
+      groups.value[groupIdx].items.push({
+        id: ++itemId.value,
+        description: 'Yangi qiymat',
+      })
     }
 
-    // ! METHODS
     // Form
     const leadSimpleForm = ref(null)
     const openSimpleForm = id => {
@@ -271,17 +317,11 @@ export default {
         .catch(error => console.log(error))
     }
 
-    // ! COMPUTED
-    computed(() => {
-      dragOptions()
-    })
-
     // Return
     return {
       BASE_URL,
       state,
 
-      // tableColumns,
       searchQuery,
       options,
       loading,
@@ -297,12 +337,17 @@ export default {
       openAppealForm,
 
       // Draggable data
+      groups,
       list1,
       list2,
       list3,
       list4,
       drag,
-      dragOptions,
+      groupId,
+      itemId,
+      removeAt,
+      newGroup,
+      newDraggableItem,
 
       leadPositions,
       selectDatas,
@@ -320,6 +365,16 @@ export default {
   },
   created() {
     this.loadLeads()
+  },
+  computed: {
+    dragOptions: () => {
+      return {
+        animation: 200,
+        group: 'description',
+        disabled: false,
+        ghostClass: 'ghost',
+      }
+    },
   },
   watch: {
     ['notify']() {
