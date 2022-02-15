@@ -3,13 +3,9 @@ import { ref } from '@vue/composition-api'
 
 export default function useLeadList(MODULE_NAME) {
   const notify = ref({})
-
   const loading = ref(false)
 
-  let lastQuery = ''
-  const fetchDatas = (force = false) => {
-    // const newQuery = JSON.stringify(queryParams)
-
+  const fetchDatas = () => {
     store
       .dispatch(`${MODULE_NAME}/fetchDatas`)
       .then(() => {
@@ -20,37 +16,15 @@ export default function useLeadList(MODULE_NAME) {
         loading.value = false
         notify.value = { type: 'error', text: error, time: Date.now() }
       })
-    // if (force || lastQuery !== newQuery) {
-    //   lastQuery = newQuery
-
-    // }
-
-    // lastQuery = JSON.stringify(queryParams)
   }
 
-  // watch(
-  //   filter,
-  //   () => {
-  //     if (options.value.page != 1) options.value.page
-  //     loading.value = true
-
-  //     setTimeout(() => fetchDatas(), 1000)
-  //   },
-  //   { deep: true },
-  // )
-
-  // watch(options, () => {
-  //   loading.value = true
-  //   fetchDatas()
-  // })
-
-  //delete
+  // Delete
   const deleteRow = id => {
     store
       .dispatch(`${MODULE_NAME}/removeRow`, id)
       .then(message => {
         notify.value = { type: 'success', text: message, time: Date.now() }
-        fetchDatas(true)
+        fetchDatas()
       })
       .catch(error => {
         console.log(error)
@@ -59,11 +33,10 @@ export default function useLeadList(MODULE_NAME) {
   }
 
   return {
+    notify,
+    loading,
+
     fetchDatas,
     deleteRow,
-
-    // options,
-    loading,
-    notify,
   }
 }

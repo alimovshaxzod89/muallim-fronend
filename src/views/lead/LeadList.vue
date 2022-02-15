@@ -2,174 +2,40 @@
   <div id="data-list">
 
 		<v-row>
-			<v-col cols="4">
+			<v-col cols="4" v-for="column in columns" :key="column.title">
 				<v-card class="my-draggable-card-main">
 					<div class="my-top d-flex align-center mb-5">
-						<v-card-title>So'rovlar</v-card-title>
+						<v-card-title> {{column.title}} </v-card-title>
 						<v-spacer></v-spacer>
 						<v-list class="mr-5">
-							<v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" @click="openAppealForm()">
+							<v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" v-if="column.position === 1" @click="openAppealForm()">
 								<v-icon size="24">{{ icons.mdiFileAccountOutline }} </v-icon>
 							</v-btn>
-							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openSimpleForm(1)">
-								<v-icon>{{ icons.mdiPlus }}</v-icon>
-							</v-btn>
-						</v-list>
-					</div>
-
-					<div>
-						<v-btn type="button" @click="newGroup()" color="info">New Group</v-btn>
-						<div v-for="(group, groupIdx) in leadPositions" :key="group.id">
-							<h3>{{group.name}}</h3>
-							<v-btn color="secondary" type="button" @click="newDraggableItem(groupIdx)">New Item</v-btn>
-							<draggable tag="ul" :list="group.items" class="list-group" handle=".handle" v-bind="dragOptions" @start="drag = true" @end="drag = false">
-								<transition-group type="transition" :name="!drag ? 'flip-list' + group.id : null">
-									<li class="list-group-item handle" v-for="(item, itemIdx) in group.items" :key="'p'+item.id">
-										<!-- {{item.description}} -->
-										<!-- <i class="fa fa-times close" @click="removeAt(item.id)"></i> -->
-									</li>
-								</transition-group>
-							</draggable>
-						</div>
-					</div>
-
-
-					<!-- <draggable
-						class="list-group"
-						group="people"
-						tag="ul"
-						v-model="list1"
-						v-bind="dragOptions()"
-						@start="drag = true"
-						@end="drag = false"
-					>
-						<transition-group type="transition" :name="!drag ? 'flip-list' : null">
-							<li
-								class="list-group-item"
-								v-for="element in list1"
-								:key="element.name"
-							>
-								<i
-									:class="element.fixed ? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'"
-									@click="element.fixed = !element.fixed"
-									aria-hidden="true"
-								></i>
-								{{ element.name }}
-							</li>
-						</transition-group>
-					</draggable> -->
-				</v-card>
-
-				<!-- <v-card class="my-draggable-card" v-if="leadPositions" v-for="lead of leadPositions" :key="lead.id">
-					<v-card-title class="my-top">{{lead.name}}</v-card-title>
-					<draggable
-						class="list-group"
-						group="people"
-						tag="ul"
-						v-model="list4"
-						v-bind="dragOptions()"
-						@start="drag = true"
-						@end="drag = false"
-					>
-						<transition-group type="transition" :name="!drag ? 'flip-list' : null">
-							<li
-								class="list-group-item"
-								v-for="element in list4"
-								:key="element.name"
-							>
-								<i
-									:class="element.fixed ? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'"
-									@click="element.fixed = !element.fixed"
-									aria-hidden="true"
-								></i>
-								{{ element.name }}
-							</li>
-						</transition-group>
-					</draggable>
-				</v-card> -->
-			</v-col>
-			<!-- <v-col cols="4">
-				<v-card >
-					<div class="my-top d-flex align-center mb-5">
-						<v-card-title>Kutish</v-card-title>
-						<v-spacer></v-spacer>
-						<v-list class="mr-5">
-							<v-btn text small fab title="Yangi bo'lim yaratish">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(column.modal)">
 								<v-icon>{{ icons.mdiPlus }}</v-icon>
 							</v-btn>
 						</v-list>
 					</div>
 
 					<draggable
-						class="list-group"
-						group="people"
-						tag="ul"
-						v-model="list2"
-						v-bind="dragOptions()"
-						@start="drag = true"
-						@end="drag = false"
+						:list="column.tasks"
+						:animation="200"
+						ghost-class="ghost-card"
+						group="tasks"
 					>
-						<transition-group type="transition" :name="!drag ? 'flip-list' : null">
-							<li
-								class="list-group-item"
-								v-for="element in list2"
-								:key="element.name"
-							>
-								<i
-									:class="element.fixed ? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'"
-									@click="element.fixed = !element.fixed"
-									aria-hidden="true"
-								></i>
-								{{ element.name }}
-							</li>
-						</transition-group>
+						<lead-task-card
+							v-for="task in column.tasks"
+							:key="task.id"
+							:task="task"
+							class="mt-3 cursor-move"
+						></lead-task-card>
 					</draggable>
 				</v-card>
 			</v-col>
-			<v-col cols="4">
-				<v-card >
-					<div class="my-top d-flex align-center mb-5">
-						<v-card-title>Guruhlar</v-card-title>
-						<v-spacer></v-spacer>
-						<v-list class="mr-5">
-							<v-btn text small fab title="Yangi bo'lim yaratish">
-								<v-icon>{{ icons.mdiPlus }}</v-icon>
-							</v-btn>
-						</v-list>
-					</div>
-
-					<draggable
-						class="list-group"
-						group="people"
-						tag="ul"
-						v-model="list3"
-						v-bind="dragOptions()"
-						@start="drag = true"
-						@end="drag = false"
-					>
-						<transition-group type="transition" :name="!drag ? 'flip-list' : null">
-							<li
-								class="list-group-item"
-								v-for="element in list3"
-								:key="element.name"
-							>
-								<i
-									:class="element.fixed ? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'"
-									@click="element.fixed = !element.fixed"
-									aria-hidden="true"
-								></i>
-								{{ element.name }}
-							</li>
-						</transition-group>
-					</draggable>
-				</v-card>
-			</v-col> -->
 		</v-row>
 
-    <lead-simple-form
-      ref="leadSimpleForm"
-      v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-    />
+    <lead-simple-form ref="leadSimpleForm" v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }" />
+    <lead-group-form ref="leadGroupForm" v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }" />
 		<appeal-form ref="appealForm" v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }" />
 		<dialog-confirm ref="dialogConfirm" />
   </div>
@@ -180,7 +46,6 @@ import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline } fr
 
 import { ref, onUnmounted, onMounted } from '@vue/composition-api'
 import store from '@/store'
-import axios from '@axios'
 
 import draggable from 'vuedraggable'
 
@@ -189,8 +54,10 @@ import LeadStoreModule from './LeadStoreModule'
 
 // composition function
 import useLeadList from './useLeadList'
-import LeadSimpleForm from './LeadSimpleForm'
+import LeadTaskCard from './LeadTaskCard'
 
+import LeadSimpleForm from './LeadSimpleForm'
+import LeadGroupForm from './LeadGroupForm'
 import AppealForm from './appeal/AppealForm'
 import DialogConfirm from '@/views/components/DialogConfirm'
 
@@ -200,7 +67,9 @@ import envParams from '@envParams'
 export default {
   components: {
     draggable,
+    LeadTaskCard,
     LeadSimpleForm,
+    LeadGroupForm,
     AppealForm,
     DialogConfirm,
   },
@@ -216,74 +85,22 @@ export default {
       if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
     })
 
-    //store state
+    // Store state
     const state = ref(store.state[MODULE_NAME])
 
-    //logics
+    // Logics
     const { fetchDatas, deleteRow, loading, notify, selectedTableData } = useLeadList(MODULE_NAME)
-
-    // Draggable data
-    const list1 = ref([
-      { name: 'John', id: 1 },
-      { name: 'Joao', id: 2 },
-      { name: 'Jean', id: 3 },
-      { name: 'Gerard', id: 4 },
-    ])
-    const list2 = ref([
-      { name: 'Juan', id: 5 },
-      { name: 'Edgard', id: 6 },
-      { name: 'Johnson', id: 7 },
-    ])
-    const list3 = ref([
-      { name: 'Yodgor', id: 8 },
-      { name: 'Mirza', id: 9 },
-      { name: 'Salimboy', id: 10 },
-    ])
-    const list4 = ref([{ name: 'Juan', id: 11 }])
-    const drag = ref(false)
-    const groups = ref([
-      {
-        id: groupId,
-        name: 'Asosiy',
-        items: [],
-      },
-    ])
-    let groupId = ref(1)
-    let itemId = ref(0)
-    const removeAt = itemIdRemove => {
-      let canBreak = false
-      groups.value.forEach((value, groupIndex) => {
-        if (canBreak) {
-          return true
-        }
-
-        value.items.forEach((value, itemIndex) => {
-          if (value.id === itemIdRemove) {
-            canBreak = true
-            groups.value[groupIndex].items.splice(itemIndex, 1)
-            return true
-          }
-        })
-      })
-    }
-    const newGroup = () => {
-      groups.value.push({
-        id: ++groupId.value,
-        name: 'Yangi gurux',
-        items: [],
-      })
-    }
-    const newDraggableItem = groupIdx => {
-      groups.value[groupIdx].items.push({
-        id: ++itemId.value,
-        description: 'Yangi qiymat',
-      })
-    }
 
     // Form
     const leadSimpleForm = ref(null)
-    const openSimpleForm = id => {
-      leadSimpleForm.value.open(id)
+    const leadGroupForm = ref(null)
+    const openForm = modal => {
+      if (modal === 1) {
+        leadSimpleForm.value.open()
+      }
+      if (modal === 2) {
+        leadGroupForm.value.open()
+      }
     }
 
     // Appeal form
@@ -301,21 +118,91 @@ export default {
         .catch(() => {})
     }
 
-    const selectDatas = ref({
-      leads: null,
-    })
-    let leadPositions = ref(null)
+    // Draggable data
+    const columns = ref([
+      {
+        position: 1,
+        title: 'Sotuv',
+        modal: 1,
+        tasks: [
+          {
+            id: 1,
+            name: 'Add discount code to checkout page',
+          },
+          {
+            id: 2,
+            name: 'Provide documentation on integrations',
+          },
+          {
+            id: 3,
+            name: 'Design shopping cart dropdown',
+          },
+          {
+            id: 4,
+            name: 'Add discount code to checkout page',
+          },
+          {
+            id: 5,
+            name: 'Test checkout flow',
+          },
+        ],
+      },
+      {
+        position: 2,
+        title: 'Kutish',
+        modal: 1,
+        tasks: [
+          {
+            id: 6,
+            name: 'Design shopping cart dropdown',
+          },
+          {
+            id: 7,
+            name: 'Add discount code to checkout page',
+          },
+          {
+            id: 8,
+            name: 'Provide documentation on integrations',
+          },
+        ],
+      },
+      {
+        position: 3,
+        title: 'Guruhlar',
+        modal: 2,
+        tasks: [
+          {
+            id: 9,
+            name: 'Provide documentation on integrations',
+          },
+          {
+            id: 10,
+            name: 'Design shopping cart dropdown',
+          },
+          {
+            id: 11,
+            name: 'Add discount code to checkout page',
+          },
+          {
+            id: 12,
+            name: 'Design shopping cart dropdown',
+          },
+          {
+            id: 13,
+            name: 'Add discount code to checkout page',
+          },
+        ],
+      },
+    ])
 
-    onMounted(() => {
-      fetchDatas(true)
-      setTimeout(() => {
-        leadPositions.value = state.value.rows.filter(el => el.position === true)
-        console.log(leadPositions)
-      }, 500)
-    })
+    // onMounted(() => {
+    //   fetchDatas(true)
+    // 	leadPositions.value = state.value.rows.filter(el => el.position === true)
+    // })
 
     // Return
     return {
+      MODULE_NAME,
       BASE_URL,
       state,
 
@@ -328,27 +215,13 @@ export default {
       confirmDelete,
 
       leadSimpleForm,
-      openSimpleForm,
+      leadGroupForm,
+      openForm,
       appealForm,
       openAppealForm,
 
       // Draggable data
-      groups,
-      list1,
-      list2,
-      list3,
-      list4,
-      drag,
-      groupId,
-      itemId,
-      removeAt,
-      newGroup,
-      newDraggableItem,
-
-      leadPositions,
-      selectDatas,
-
-      MODULE_NAME,
+      columns,
 
       icons: {
         mdiPencilOutline,
@@ -357,16 +230,6 @@ export default {
         mdiFileAccountOutline,
       },
     }
-  },
-  computed: {
-    dragOptions: () => {
-      return {
-        animation: 200,
-        group: 'description',
-        disabled: false,
-        ghostClass: 'ghost',
-      }
-    },
   },
   watch: {
     ['notify']() {
@@ -392,9 +255,6 @@ export default {
 }
 
 // Draggabel
-.button {
-  margin-top: 35px;
-}
 .flip-list-move {
   transition: transform 0.5s;
 }
