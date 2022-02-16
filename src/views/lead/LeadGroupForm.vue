@@ -34,7 +34,7 @@
                   :items="selectDatas.subjects"
                   item-text="name"
                   item-value="id"
-                  label="KURSNI TANLANG"
+                  label="FAN"
                   dense
                   outlined
                   clearable
@@ -49,7 +49,7 @@
                   :items="selectDatas.teachers"
                   item-text="full_name"
                   item-value="id"
-                  label="O'QITUVCHINI TANLANG"
+                  label="USTOZ"
                   dense
                   outlined
                   clearable
@@ -90,7 +90,7 @@
                   :items="selectDatas.rooms"
                   item-text="name"
                   item-value="id"
-                  label="XONANI TANLANG"
+                  label="XONA"
                   dense
                   outlined
                   clearable

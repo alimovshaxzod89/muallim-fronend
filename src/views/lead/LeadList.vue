@@ -18,13 +18,16 @@
 					</div>
 
 					<draggable
+						v-for="(group, index) in column.groups"
+						:key="group + index"
 						:list="column.tasks"
 						:animation="200"
 						ghost-class="ghost-card"
 						group="tasks"
 					>
+					<strong>{{group.title}}</strong>
 						<lead-task-card
-							v-for="task in column.tasks"
+							v-for="task in group.tasks"
 							:key="task.id"
 							:task="task"
 							class="mt-3 cursor-move"
@@ -44,7 +47,7 @@
 <script>
 import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline } from '@mdi/js'
 
-import { ref, onUnmounted, onMounted } from '@vue/composition-api'
+import { ref, onUnmounted } from '@vue/composition-api'
 import store from '@/store'
 
 import draggable from 'vuedraggable'
@@ -122,30 +125,60 @@ export default {
     const columns = ref([
       {
         position: 1,
-        title: 'Sotuv',
+        title: 'Lidlar',
         modal: 1,
-        tasks: [
-          {
-            id: 1,
-            name: 'Add discount code to checkout page',
+        groups: {
+          0: {
+            title: 'Erkaklar',
+            tasks: [
+              {
+                id: 1,
+                name: 'Add discount code to checkout page',
+              },
+              {
+                id: 2,
+                name: 'Provide documentation on integrations',
+              },
+              {
+                id: 3,
+                name: 'Design shopping cart dropdown',
+              },
+              {
+                id: 4,
+                name: 'Add discount code to checkout page',
+              },
+              {
+                id: 5,
+                name: 'Test checkout flow',
+              },
+            ],
           },
-          {
-            id: 2,
-            name: 'Provide documentation on integrations',
+          1: {
+            title: 'Ayollar',
+            tasks: [
+              {
+                id: 14,
+                name: 'Olimlar',
+              },
+              {
+                id: 15,
+                name: 'Zakiylar',
+              },
+              {
+                id: 16,
+                name: 'Dizaynerlar top',
+              },
+              {
+                id: 17,
+                name: 'Qurtaboy',
+              },
+              {
+                id: 18,
+                name: 'Ilon Mask',
+              },
+            ],
           },
-          {
-            id: 3,
-            name: 'Design shopping cart dropdown',
-          },
-          {
-            id: 4,
-            name: 'Add discount code to checkout page',
-          },
-          {
-            id: 5,
-            name: 'Test checkout flow',
-          },
-        ],
+        },
       },
       {
         position: 2,
