@@ -71,46 +71,18 @@
                   class="align-start"
 									:rules="selectRule"
                 ></v-autocomplete>
-              </v-col>
-							<v-col cols="12" v-if="formData.days === 5">
-								<div class="d-flex demo-space-x flex-wrap">
+								<div class="d-flex flex-wrap check-container" v-if="formData.days === 5">
 									<v-checkbox
+										class="my-checkbox"
+										hide-details
+										v-for="(day, index) in days"
+										:key="index + '-' + day"
 										v-model="formData.days"
-										label="Dushanba"
-										value="1"
-									></v-checkbox>
-									<v-checkbox
-										v-model="formData.days"
-										label="Seshanba"
-										value="2"
-									></v-checkbox>
-									<v-checkbox
-										v-model="formData.days"
-										label="Chorshanba"
-										value="3"
-									></v-checkbox>
-									<v-checkbox
-										v-model="formData.days"
-										label="Payshanba"
-										value="4"
-									></v-checkbox>
-									<v-checkbox
-										v-model="formData.days"
-										label="Juma"
-										value="5"
-									></v-checkbox>
-									<v-checkbox
-										v-model="formData.days"
-										label="Shanba"
-										value="6"
-									></v-checkbox>
-									<v-checkbox
-										v-model="formData.days"
-										label="Yakshanba"
-										value="7"
+										:label="day.text"
+										:value="day.id"
 									></v-checkbox>
 								</div>
-							</v-col>
+              </v-col>
 							<v-col cols="6">
                 <h4 class="text-required no-text"><span>*</span></h4>
 								<v-autocomplete
@@ -237,12 +209,20 @@ export default {
     })
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     const time_begin = ref(null)
+    const days = ref([
+      { id: 1, text: 'Dushanba' },
+      { id: 2, text: 'Seshanba' },
+      { id: 3, text: 'Chorshanba' },
+      { id: 4, text: 'Payshanba' },
+      { id: 5, text: 'Juma' },
+      { id: 6, text: 'Shanba' },
+      { id: 7, text: 'Yakshanba' },
+    ])
 
-    // show, hide
+    // Show, Hide
     const show = ref(false)
-    const open = (id = null) => {
+    const open = () => {
       show.value = true
-      if (id) formData.value.position = id
     }
     const close = () => {
       show.value = false
@@ -349,6 +329,7 @@ export default {
       selectDatas,
       selectRule,
       time_begin,
+      days,
       show,
       onSubmit,
       open,
@@ -364,7 +345,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .v-input__append-outer {
   margin: 0 0 0 10px !important;
 }
@@ -373,5 +354,52 @@ export default {
   padding-right: 15px !important;
   padding-left: 15px !important;
   border-color: rgba(94, 86, 105, 0.15) !important;
+}
+
+.check-container {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 106px;
+  // margin-bottom: 20px;
+  padding: 5px 45px 5px 5px;
+  border: 1px solid #e7e6e9;
+  border-radius: 5px;
+
+  .v-input {
+    display: flex;
+    align-items: center;
+  }
+
+  .v-input--selection-controls {
+    margin-top: 0;
+  }
+
+  label {
+    margin: 5px;
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid var(--v-secondary-base);
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  .v-input--selection-controls__input {
+    position: absolute;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .v-input--is-label-active {
+    label {
+      border: 1px solid var(--v-primary-base);
+      background-color: var(--v-primary-base);
+      color: #fff !important;
+    }
+  }
 }
 </style>

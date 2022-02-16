@@ -120,6 +120,13 @@ export default {
   }
 }
 
+.my-checkbox {
+  width: 50%;
+  .v-label {
+    color: rgb(48 46 58 / 87%);
+  }
+}
+
 // .my-table-width table {
 //   // width: auto !important;
 //   border-left: 1px solid #dddddd;
