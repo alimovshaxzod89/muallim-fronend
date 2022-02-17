@@ -44,7 +44,6 @@
         >
           <v-avatar
             size="44"
-            :color="resolveStatisticsIconVariation (data.title)"
             rounded
             class="elevation-1"
           >
@@ -103,14 +102,14 @@ export default {
     ]
 
     const resolveStatisticsIconVariation = data => {
-      if (data === 'Talabalar to\'lashi zarur') return { icon: mdiTrendingUp, color: 'primary' }
-      if (data === 'Ustozlardan qarz') return { icon: mdiAccountOutline, color: 'success' }
-      if (data === 'Ustozlar mablag\'i') return { icon: mdiLabelOutline, color: 'warning' }
-			if (data === 'Talabalar qarzi') return { icon: mdiCashMultiple, color: 'info' }
-			if (data === 'Markaz ulushi') return { icon: mdiTicketPercentOutline, color: 'warning' }
-			if (data === 'Markaz ololmayotgan summa') return { icon: mdiCurrencyUsd, color: 'secondary' }
+      if (data === 'Talabalar to\'lashi zarur') return { icon: mdiTrendingUp,  }
+      if (data === 'Ustozlardan qarz') return { icon: mdiAccountOutline,  }
+      if (data === 'Ustozlar mablag\'i') return { icon: mdiLabelOutline,  }
+			if (data === 'Talabalar qarzi') return { icon: mdiCashMultiple,  }
+			if (data === 'Markaz ulushi') return { icon: mdiTicketPercentOutline,  }
+			if (data === 'Markaz ololmayotgan summa') return { icon: mdiCurrencyUsd,  }
 
-      return { icon: mdiAccountOutline, color: 'success' }
+      return { icon: mdiAccountOutline,  }
     }
 
     return {

@@ -43,14 +43,14 @@
                   ></v-date-picker>
                 </v-menu>
               </v-col>
-              <v-col cols="12" class="teacherInp">
+              <v-col cols="12" class="cashbox-inp">
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-autocomplete
-                  v-model="formData.teacher_id"
-                  :items="selectsDatas.teacher"
-                  item-text="full_name"
+                  v-model="formData.cashbox_id"
+                  :items="selectsDatas.cashbox"
+                  item-text="name"
                   item-value="id"
-                  label="O'qituvchi"
+                  label="KASSA NOMLARI"
                   dense
                   outlined
                   hide-details
@@ -59,11 +59,40 @@
                 >
                 </v-autocomplete>
               </v-col>
-              <v-col cols="12" class="amount">
+              <v-col cols="12" class="type-inp">
+                <h4 class="text-required no-text"><span>*</span></h4>
+                <v-autocomplete
+                  v-model="formData.type"
+                  :items="selectsDatas.type"
+                  item-text="name"
+                  item-value="id"
+                  label="XARAJAT turlari"
+                  dense
+                  outlined
+                  hide-details
+                  clearable
+                  :rules="selectRule"
+                >
+                </v-autocomplete>
+              </v-col>
+              <v-col cols="12" class="money">
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
                   label="SUMMA"
                   v-model="formData.money_id"
+                  type="number"
+                  dense
+                  outlined
+									required
+                  hide-details
+                  :rules="[required]"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" class="amount-inp">
+                <h4 class="text-required no-text"><span>*</span></h4>
+                <v-text-field
+                  label="MIQDORI"
+                  v-model="formData.amount"
                   type="number"
                   dense
                   outlined
@@ -118,7 +147,8 @@ export default {
   //
   // },
   created() {
-    this.loadTeacher()
+    this.loadCashbox()
+    this.loadType()
   },
   setup(props, { emit }) {
     // Register module
@@ -130,8 +160,10 @@ export default {
     const emptyFormData = {
       id: null,
       date: null,
-      teacher_id: null,
+      amount: null,
       money_id: null,
+      cashbox_id: null,
+      type: null,
       note: null,
     }
     const formData = ref({ ...emptyFormData })
@@ -160,7 +192,7 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.date && formData.value.teacher_id && formData.value.money_id) {
+        if (formData.value.date && formData.value.money_id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
@@ -178,7 +210,7 @@ export default {
           })
         }
       } else {
-        if (formData.value.date && formData.value.teacher_id && formData.value.money_id) {
+        if (formData.value.date  && formData.value.money_id) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ message }) => {
@@ -200,25 +232,46 @@ export default {
 
     const selectsDatas = ref({})
     // ! METHODS
-    const loadTeacher = () => {
+    const loadCashbox = () => {
       axios
-        .get('/api/teachers', { params: { itemsPerPage: -1 } })
+        .get('/api/cashboxes', { params: { itemsPerPage: -1 } })
         .then(response => {
           if (response.data.success) {
-            selectsDatas.value.teacher = response.data.data
+            selectsDatas.value.cashbox = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
+    const loadType = () => {
+      axios
+        .get('/api/expense-categories', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.type = response.data.data
           }
         })
         .catch(error => console.log(error))
     }
 
-    // TeacherForm
-    const teacherForm = ref(null)
-    const addTeacher = (id = null) => {
-      teacherForm.value.open(id)
+
+    // Cashbox
+    const cashboxForm = ref(null)
+    const addCashbox = (id = null) => {
+      cashboxForm.value.open(id)
     }
-    const addTeacherToOptions = row => {
-      selectsDatas.value.teacher = selectsDatas.value.teacher.concat([row])
-      formData.value.teacher_id = row.id
+    const addCashboxToOptions = row => {
+      selectsDatas.value.cashbox = selectsDatas.value.cashbox.concat([row])
+      formData.value.cashbox_id = row.id
+    }
+
+    // Type
+    const typeForm = ref(null)
+    const addType = (id = null) => {
+      typeForm.value.open(id)
+    }
+    const addTypeToOptions = row => {
+      selectsDatas.value.type = selectsDatas.value.type.concat([row])
+      formData.value.type = row.id
     }
 
     return {
@@ -234,10 +287,14 @@ export default {
       close,
 
       selectsDatas,
-      loadTeacher,
-      teacherForm,
-      addTeacher,
-      addTeacherToOptions,
+      loadCashbox,
+      loadType,
+      cashboxForm,
+      addCashbox,
+      addCashboxToOptions,
+      typeForm,
+      addType,
+      addTypeToOptions,
 
       icons: {
         mdiPlusCircleOutline,
@@ -258,11 +315,20 @@ export default {
   padding-left: 15px !important;
   border-color: rgba(94, 86, 105, 0.15) !important;
 }
-.amount {
-  margin-top: -45px;
+.money {
+  margin-top: -3%;
 }
 .teacherInp {
   margin-bottom: 6%;
   margin-top: -10%;
+}
+.cashbox-inp {
+  margin-top: -8%;
+}
+.type-inp {
+  margin-top: -3%;
+}
+.amount-inp {
+  margin-top: -3%;
 }
 </style>

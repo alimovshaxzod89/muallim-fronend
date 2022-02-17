@@ -67,6 +67,8 @@
 
       <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
 
+      <template #[`item.money_id`]="{ item }"> {{ item.money_id | summa }}</template>
+
       <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
     </v-data-table>
 

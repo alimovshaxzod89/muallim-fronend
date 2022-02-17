@@ -6,7 +6,7 @@
           Markaz Xarajatlari
         </p>
         <p class="text-no-wrap">
-          <span class="text-2xl font-weight-semibold me-1">$21,845</span>
+          <span class="text-2xl font-weight-semibold me-1">{{selectsDatas.cost}}</span>
           <small class="success--text text-xs ">
             <v-icon
               color="success"
@@ -42,15 +42,33 @@
 
 <script>
 // eslint-disable-next-line object-curly-newline
-import { mdiDotsVertical, mdiChevronUp } from '@mdi/js'
-
+import axios from '@axios'
 import { getVuetify } from '@core/utils'
+import { mdiChevronUp, mdiDotsVertical } from '@mdi/js'
+import { ref } from '@vue/composition-api'
 
 export default {
   components: {
     VueApexCharts: () => import('vue-apexcharts'),
   },
   setup() {
+    // //form options for selects
+    const selectsDatas = ref({
+      cost: null,
+    })
+    // ! METHODS
+    const loadCost = () => {
+      axios
+        .get('/api/cashes')
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.cost = response.data.data
+            console.log(selectsDatas.value.cost)
+          }
+        })
+        .catch(error => console.log(error))
+    }
+    loadCost()
     const $vuetify = getVuetify()
 
     const chartOptions = {
@@ -120,6 +138,7 @@ export default {
     return {
       chartOptions,
       chartData,
+      selectsDatas,
 
       icons: {
         mdiDotsVertical,

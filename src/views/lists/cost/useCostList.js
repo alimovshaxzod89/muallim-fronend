@@ -14,8 +14,10 @@ export default function useCostList(MODULE_NAME) {
       sortable: false,
     },
     { text: 'SANA', value: 'date' },
-    { text: 'USTOZ', value: 'teacher.full_name' },
-    { text: 'SUMMA', value: 'amount' },
+    { text: 'KASSA NOMLARI', value: 'cashbox.name' },
+    { text: 'XARAJAT TURLARI', value: 'type.name' },
+    { text: 'SUMMA', value: 'money_id' },
+    { text: 'MIQDORI', value: 'amount' },
     { text: 'IZOH', value: 'note' },
   ]
 

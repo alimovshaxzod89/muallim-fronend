@@ -3,17 +3,10 @@
     <v-card-title class="align-start flex-nowrap">
       <div>
         <p class="text-sm font-weight-semibold mb-2 ">
-          Markaz Daromadi
+          Markaz Ulushi
         </p>
         <p class="text-no-wrap">
-          <span class="text-2xl font-weight-semibold me-1">$21,845</span>
-          <small class="success--text text-xs ">
-            <v-icon
-              color="success"
-              size="22"
-            >{{ icons.mdiChevronUp }}</v-icon>
-            <span>25.8%</span>
-          </small>
+          {{ selectsDatas.center_profit }}
         </p>
       </div>
       <v-spacer></v-spacer>
@@ -43,6 +36,9 @@
 <script>
 // eslint-disable-next-line object-curly-newline
 import { mdiDotsVertical, mdiChevronUp } from '@mdi/js'
+import axios from '@axios'
+
+import { ref } from '@vue/composition-api'
 
 import { getVuetify } from '@core/utils'
 
@@ -117,6 +113,22 @@ export default {
       },
     ]
 
+    const selectsDatas = ref({
+      center_profit: null
+    })
+    const loadCenterProfit = () => {
+      axios
+        .get('/api/center-income', {params: {itemsPerPage: -1}})
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.center_profit = response.data.data.length
+            console.log(selectsDatas.value)
+          }
+        })
+        .catch(error => console.log(error))
+    }
+    loadCenterProfit()
+
     return {
       chartOptions,
       chartData,
@@ -125,6 +137,7 @@ export default {
         mdiDotsVertical,
         mdiChevronUp,
       },
+      selectsDatas,
     }
   },
 }

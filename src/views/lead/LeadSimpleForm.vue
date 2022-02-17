@@ -65,7 +65,7 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      position: null,
+      position: 1,
       name: null,
     }
     const formData = ref({ ...emptyFormData })

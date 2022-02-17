@@ -44,6 +44,7 @@ export default {
     change: { type: String, default: '' },
     chipText: { type: String, default: '' },
     chipColor: { type: String, default: '' },
+    color: { type: String, default: ''},
     avatar: { type: String, default: '' },
     avatarWidth: { type: String, default: '' },
   },
