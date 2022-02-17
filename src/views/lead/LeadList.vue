@@ -5,27 +5,36 @@
 			<v-col cols="4" v-for="column in columns" :key="column.title">
 				<v-card class="my-draggable-card-main">
 					<div class="my-top d-flex align-center mb-5">
-						<v-card-title> {{column.title}} </v-card-title>
+						<v-card-title>{{column.name}}</v-card-title>
 						<v-spacer></v-spacer>
 						<v-list class="mr-5">
 							<v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" v-if="column.position === 1" @click="openAppealForm()">
 								<v-icon size="24">{{ icons.mdiFileAccountOutline }} </v-icon>
 							</v-btn>
-							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(column.modal)">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(column.position)">
 								<v-icon>{{ icons.mdiPlus }}</v-icon>
 							</v-btn>
 						</v-list>
 					</div>
+				</v-card>
 
-					<draggable
-						v-for="(group, index) in column.groups"
-						:key="group + index"
+					<v-card class="my-cart-filter" v-for="(group, index) in column.groups" :key="group + index">
+						<v-card-text>
+							<h3 class="my-group-title">{{group.name}}
+								<div v-if="column.position === 3">
+									● {{group.subjects.name}}
+									● {{group.teachers.full_name}}
+									● {{group.rooms.name}}
+									● {{group.time_begin}}
+								</div>
+							</h3>
+						</v-card-text>
+						<draggable
 						:list="column.tasks"
 						:animation="200"
 						ghost-class="ghost-card"
 						group="tasks"
 					>
-					<strong>{{group.title}}</strong>
 						<lead-task-card
 							v-for="task in group.tasks"
 							:key="task.id"
@@ -33,7 +42,7 @@
 							class="mt-3 cursor-move"
 						></lead-task-card>
 					</draggable>
-				</v-card>
+					</v-card>
 			</v-col>
 		</v-row>
 
@@ -97,12 +106,11 @@ export default {
     // Form
     const leadSimpleForm = ref(null)
     const leadGroupForm = ref(null)
-    const openForm = modal => {
-      if (modal === 1) {
-        leadSimpleForm.value.open()
-      }
-      if (modal === 2) {
+    const openForm = position => {
+      if (position === 3) {
         leadGroupForm.value.open()
+      } else {
+        leadSimpleForm.value.open()
       }
     }
 
@@ -125,11 +133,10 @@ export default {
     const columns = ref([
       {
         position: 1,
-        title: 'Lidlar',
-        modal: 1,
+        name: 'Lidlar',
         groups: {
           0: {
-            title: 'Erkaklar',
+            name: 'Erkaklar',
             tasks: [
               {
                 id: 1,
@@ -154,7 +161,7 @@ export default {
             ],
           },
           1: {
-            title: 'Ayollar',
+            name: 'Ayollar',
             tasks: [
               {
                 id: 14,
@@ -182,49 +189,137 @@ export default {
       },
       {
         position: 2,
-        title: 'Kutish',
-        modal: 1,
-        tasks: [
-          {
-            id: 6,
-            name: 'Design shopping cart dropdown',
+        name: 'Kutuv',
+        groups: {
+          0: {
+            name: 'Rus tiliga',
+            tasks: [
+              {
+                id: 1,
+                name: 'Add discount code to checkout page',
+              },
+              {
+                id: 2,
+                name: 'Provide documentation on integrations',
+              },
+              {
+                id: 3,
+                name: 'Design shopping cart dropdown',
+              },
+              {
+                id: 4,
+                name: 'Add discount code to checkout page',
+              },
+              {
+                id: 5,
+                name: 'Test checkout flow',
+              },
+            ],
           },
-          {
-            id: 7,
-            name: 'Add discount code to checkout page',
+          1: {
+            name: 'Ingiliz tiliga',
+            tasks: [
+              {
+                id: 14,
+                name: 'Olimlar',
+              },
+              {
+                id: 15,
+                name: 'Zakiylar',
+              },
+              {
+                id: 16,
+                name: 'Dizaynerlar top',
+              },
+              {
+                id: 17,
+                name: 'Qurtaboy',
+              },
+              {
+                id: 18,
+                name: 'Ilon Mask',
+              },
+            ],
           },
-          {
-            id: 8,
-            name: 'Provide documentation on integrations',
-          },
-        ],
+        },
       },
       {
         position: 3,
-        title: 'Guruhlar',
-        modal: 2,
-        tasks: [
-          {
-            id: 9,
-            name: 'Provide documentation on integrations',
+        name: 'Guruh',
+        groups: {
+          0: {
+            name: "1-bo'lim",
+            subjects: {
+              name: 'Ingliz tili',
+            },
+            teachers: {
+              full_name: 'Olimov Qosim',
+            },
+            rooms: {
+              name: 'G-14',
+            },
+            week_days: 1,
+            time_begin: '16:00',
+            tasks: [
+              {
+                id: 1,
+                name: 'Add discount code to checkout page',
+              },
+              {
+                id: 2,
+                name: 'Provide documentation on integrations',
+              },
+              {
+                id: 3,
+                name: 'Design shopping cart dropdown',
+              },
+              {
+                id: 4,
+                name: 'Add discount code to checkout page',
+              },
+              {
+                id: 5,
+                name: 'Test checkout flow',
+              },
+            ],
           },
-          {
-            id: 10,
-            name: 'Design shopping cart dropdown',
+          1: {
+            name: "2-bo'lim",
+            subjects: {
+              name: 'Rus tili',
+            },
+            teachers: {
+              full_name: 'Yuldashov Bektosh',
+            },
+            rooms: {
+              name: 'G-5',
+            },
+            week_days: 1,
+            time_begin: '12:00',
+            tasks: [
+              {
+                id: 14,
+                name: 'Olimlar',
+              },
+              {
+                id: 15,
+                name: 'Zakiylar',
+              },
+              {
+                id: 16,
+                name: 'Dizaynerlar top',
+              },
+              {
+                id: 17,
+                name: 'Qurtaboy',
+              },
+              {
+                id: 18,
+                name: 'Ilon Mask',
+              },
+            ],
           },
-          {
-            id: 11,
-            name: 'Add discount code to checkout page',
-          },
-          {
-            id: 12,
-            name: 'Design shopping cart dropdown',
-          },
-          {
-            id: 13,
-            name: 'Add discount code to checkout page',
-          },
-        ],
+        },
       },
     ])
 
@@ -308,12 +403,21 @@ export default {
   cursor: pointer;
 }
 .my-draggable-card-main {
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 .my-draggable-card {
   margin-top: 20px;
   .v-card__title {
     font-size: 16px;
+  }
+}
+.my-cart-filter {
+  margin-bottom: 20px;
+}
+.my-group-title {
+  display: flex;
+  div {
+    margin-left: 5px;
   }
 }
 </style>
