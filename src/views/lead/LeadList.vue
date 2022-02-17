@@ -11,21 +11,20 @@
 							<v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" v-if="column.position === 1" @click="openAppealForm()">
 								<v-icon size="24">{{ icons.mdiFileAccountOutline }} </v-icon>
 							</v-btn>
-							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(column.modal)">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(column.position)">
 								<v-icon>{{ icons.mdiPlus }}</v-icon>
 							</v-btn>
 						</v-list>
 					</div>
 
-					<draggable
-						v-for="(group, index) in column.groups"
-						:key="group + index"
+					<div v-for="(group, index) in column.groups" :key="group + index">
+						<strong>{{group.title}}</strong>
+						<draggable
 						:list="column.tasks"
 						:animation="200"
 						ghost-class="ghost-card"
 						group="tasks"
 					>
-					<strong>{{group.title}}</strong>
 						<lead-task-card
 							v-for="task in group.tasks"
 							:key="task.id"
@@ -33,6 +32,7 @@
 							class="mt-3 cursor-move"
 						></lead-task-card>
 					</draggable>
+					</div>
 				</v-card>
 			</v-col>
 		</v-row>
@@ -97,12 +97,11 @@ export default {
     // Form
     const leadSimpleForm = ref(null)
     const leadGroupForm = ref(null)
-    const openForm = modal => {
-      if (modal === 1) {
-        leadSimpleForm.value.open()
-      }
-      if (modal === 2) {
+    const openForm = position => {
+      if (position === 3) {
         leadGroupForm.value.open()
+      } else {
+        leadSimpleForm.value.open()
       }
     }
 
@@ -126,7 +125,6 @@ export default {
       {
         position: 1,
         title: 'Lidlar',
-        modal: 1,
         groups: {
           0: {
             title: 'Erkaklar',
@@ -182,49 +180,115 @@ export default {
       },
       {
         position: 2,
-        title: 'Kutish',
-        modal: 1,
-        tasks: [
-          {
-            id: 6,
-            name: 'Design shopping cart dropdown',
+        title: 'Kutuv',
+        groups: {
+          0: {
+            title: 'Rus tiliga',
+            tasks: [
+              {
+                id: 1,
+                name: 'Add discount code to checkout page',
+              },
+              {
+                id: 2,
+                name: 'Provide documentation on integrations',
+              },
+              {
+                id: 3,
+                name: 'Design shopping cart dropdown',
+              },
+              {
+                id: 4,
+                name: 'Add discount code to checkout page',
+              },
+              {
+                id: 5,
+                name: 'Test checkout flow',
+              },
+            ],
           },
-          {
-            id: 7,
-            name: 'Add discount code to checkout page',
+          1: {
+            title: 'Ingiliz tiliga',
+            tasks: [
+              {
+                id: 14,
+                name: 'Olimlar',
+              },
+              {
+                id: 15,
+                name: 'Zakiylar',
+              },
+              {
+                id: 16,
+                name: 'Dizaynerlar top',
+              },
+              {
+                id: 17,
+                name: 'Qurtaboy',
+              },
+              {
+                id: 18,
+                name: 'Ilon Mask',
+              },
+            ],
           },
-          {
-            id: 8,
-            name: 'Provide documentation on integrations',
-          },
-        ],
+        },
       },
       {
         position: 3,
-        title: 'Guruhlar',
-        modal: 2,
-        tasks: [
-          {
-            id: 9,
-            name: 'Provide documentation on integrations',
+        title: 'Guruh',
+        groups: {
+          0: {
+            title: "1-bo'lim",
+            tasks: [
+              {
+                id: 1,
+                name: 'Add discount code to checkout page',
+              },
+              {
+                id: 2,
+                name: 'Provide documentation on integrations',
+              },
+              {
+                id: 3,
+                name: 'Design shopping cart dropdown',
+              },
+              {
+                id: 4,
+                name: 'Add discount code to checkout page',
+              },
+              {
+                id: 5,
+                name: 'Test checkout flow',
+              },
+            ],
           },
-          {
-            id: 10,
-            name: 'Design shopping cart dropdown',
+          1: {
+            title: "2-bo'lim",
+            tasks: [
+              {
+                id: 14,
+                name: 'Olimlar',
+              },
+              {
+                id: 15,
+                name: 'Zakiylar',
+              },
+              {
+                id: 16,
+                name: 'Dizaynerlar top',
+              },
+              {
+                id: 17,
+                name: 'Qurtaboy',
+              },
+              {
+                id: 18,
+                name: 'Ilon Mask',
+              },
+            ],
           },
-          {
-            id: 11,
-            name: 'Add discount code to checkout page',
-          },
-          {
-            id: 12,
-            name: 'Design shopping cart dropdown',
-          },
-          {
-            id: 13,
-            name: 'Add discount code to checkout page',
-          },
-        ],
+        },
       },
     ])
 
