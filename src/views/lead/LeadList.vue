@@ -5,7 +5,7 @@
 			<v-col cols="4" v-for="column in columns" :key="column.title">
 				<v-card class="my-draggable-card-main">
 					<div class="my-top d-flex align-center mb-5">
-						<v-card-title> {{column.title}} </v-card-title>
+						<v-card-title>{{column.name}}</v-card-title>
 						<v-spacer></v-spacer>
 						<v-list class="mr-5">
 							<v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" v-if="column.position === 1" @click="openAppealForm()">
@@ -16,9 +16,19 @@
 							</v-btn>
 						</v-list>
 					</div>
+				</v-card>
 
-					<div v-for="(group, index) in column.groups" :key="group + index">
-						<strong>{{group.title}}</strong>
+					<v-card class="my-cart-filter" v-for="(group, index) in column.groups" :key="group + index">
+						<v-card-text>
+							<h3 class="my-group-title">{{group.name}}
+								<div v-if="column.position === 3">
+									● {{group.subjects.name}}
+									● {{group.teachers.full_name}}
+									● {{group.rooms.name}}
+									● {{group.time_begin}}
+								</div>
+							</h3>
+						</v-card-text>
 						<draggable
 						:list="column.tasks"
 						:animation="200"
@@ -32,8 +42,7 @@
 							class="mt-3 cursor-move"
 						></lead-task-card>
 					</draggable>
-					</div>
-				</v-card>
+					</v-card>
 			</v-col>
 		</v-row>
 
@@ -124,10 +133,10 @@ export default {
     const columns = ref([
       {
         position: 1,
-        title: 'Lidlar',
+        name: 'Lidlar',
         groups: {
           0: {
-            title: 'Erkaklar',
+            name: 'Erkaklar',
             tasks: [
               {
                 id: 1,
@@ -152,7 +161,7 @@ export default {
             ],
           },
           1: {
-            title: 'Ayollar',
+            name: 'Ayollar',
             tasks: [
               {
                 id: 14,
@@ -180,10 +189,10 @@ export default {
       },
       {
         position: 2,
-        title: 'Kutuv',
+        name: 'Kutuv',
         groups: {
           0: {
-            title: 'Rus tiliga',
+            name: 'Rus tiliga',
             tasks: [
               {
                 id: 1,
@@ -208,7 +217,7 @@ export default {
             ],
           },
           1: {
-            title: 'Ingiliz tiliga',
+            name: 'Ingiliz tiliga',
             tasks: [
               {
                 id: 14,
@@ -236,10 +245,21 @@ export default {
       },
       {
         position: 3,
-        title: 'Guruh',
+        name: 'Guruh',
         groups: {
           0: {
-            title: "1-bo'lim",
+            name: "1-bo'lim",
+            subjects: {
+              name: 'Ingliz tili',
+            },
+            teachers: {
+              full_name: 'Olimov Qosim',
+            },
+            rooms: {
+              name: 'G-14',
+            },
+            week_days: 1,
+            time_begin: '16:00',
             tasks: [
               {
                 id: 1,
@@ -264,7 +284,18 @@ export default {
             ],
           },
           1: {
-            title: "2-bo'lim",
+            name: "2-bo'lim",
+            subjects: {
+              name: 'Rus tili',
+            },
+            teachers: {
+              full_name: 'Yuldashov Bektosh',
+            },
+            rooms: {
+              name: 'G-5',
+            },
+            week_days: 1,
+            time_begin: '12:00',
             tasks: [
               {
                 id: 14,
@@ -372,12 +403,21 @@ export default {
   cursor: pointer;
 }
 .my-draggable-card-main {
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 .my-draggable-card {
   margin-top: 20px;
   .v-card__title {
     font-size: 16px;
+  }
+}
+.my-cart-filter {
+  margin-bottom: 20px;
+}
+.my-group-title {
+  display: flex;
+  div {
+    margin-left: 5px;
   }
 }
 </style>
