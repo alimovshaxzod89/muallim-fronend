@@ -30,18 +30,17 @@
 							</h3>
 						</v-card-text>
 						<draggable
-						:list="column.tasks"
-						:animation="200"
-						ghost-class="ghost-card"
-						group="tasks"
-					>
-						<lead-task-card
-							v-for="task in group.tasks"
-							:key="task.id"
-							:task="task"
-							class="mt-3 cursor-move"
-						></lead-task-card>
-					</draggable>
+							:list="column.tasks"
+							:animation="200"
+							ghost-class="ghost-card"
+							group="tasks"
+						>
+							<lead-task-card
+								v-for="task in group.tasks"
+								:key="task.id"
+								:task="task"
+							></lead-task-card>
+						</draggable>
 					</v-card>
 			</v-col>
 		</v-row>
@@ -413,6 +412,7 @@ export default {
 }
 .my-cart-filter {
   margin-bottom: 20px;
+  padding-bottom: 5px;
 }
 .my-group-title {
   display: flex;
