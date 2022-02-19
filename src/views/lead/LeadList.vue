@@ -19,7 +19,7 @@
 				</v-card>
 
 					<v-card class="my-cart-filter" v-for="(group, index) in column.groups" :key="group + index">
-						<v-card-text>
+						<v-card-text class="d-flex align-center justify-space-between">
 							<h3 class="my-group-title">{{group.name}}
 								<div v-if="column.position === 3">
 									● {{group.subjects.name}}
@@ -28,8 +28,24 @@
 									● {{group.time_begin}}
 								</div>
 							</h3>
+							<v-menu bottom offset-y>
+								<template #activator="{ on, attrs }">
+									<v-btn class="task-btn" v-bind="attrs" v-on="on" text small fab>
+										<v-icon size="24">{{ icons.mdiMenu }}</v-icon>
+									</v-btn>
+								</template>
+								<v-list class="my-list">
+									<v-list-item class="pa-0">
+										<v-btn text><v-icon class="mr-3" size="18">{{ icons.mdiPencilOutline }}</v-icon> Tahrirlash</v-btn>
+									</v-list-item>
+									<v-list-item class="pa-0">
+										<v-btn text><v-icon class="mr-3" color="error" size="18">{{ icons.mdiDeleteOutline }}</v-icon> O'chirish</v-btn>
+									</v-list-item>
+								</v-list>
+							</v-menu>
 						</v-card-text>
 						<draggable
+							class="my-draggable"
 							:list="column.tasks"
 							:animation="200"
 							ghost-class="ghost-card"
@@ -53,7 +69,7 @@
 </template>
 
 <script>
-import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline } from '@mdi/js'
+import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline, mdiMenu } from '@mdi/js'
 
 import { ref, onUnmounted } from '@vue/composition-api'
 import store from '@/store'
@@ -355,6 +371,7 @@ export default {
         mdiDeleteOutline,
         mdiPlus,
         mdiFileAccountOutline,
+        mdiMenu,
       },
     }
   },
@@ -409,6 +426,9 @@ export default {
   .v-card__title {
     font-size: 16px;
   }
+}
+.my-draggable {
+  min-height: 80px;
 }
 .my-cart-filter {
   margin-bottom: 20px;

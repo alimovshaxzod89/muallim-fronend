@@ -1,42 +1,17 @@
 <template>
   <v-card-text class="my-task-card cursor-move">
-
-		<!-- <v-menu
-      v-for="menu in menusVariant"
-      :key="menu"
-      offset-y
-    >
-      <template #activator="{ on, attrs }">
-        <v-btn
-          :color="menu"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          {{ menu }}
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(item, index) in items"
-          :key="index"
-        >
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu> -->
 		<v-menu bottom offset-y>
 			<template #activator="{ on, attrs }">
 				<v-btn class="task-btn" v-bind="attrs" v-on="on" text small fab>
 					<v-icon size="18">{{ icons.mdiMenu }}</v-icon>
 				</v-btn>
 			</template>
-			<v-list>
-				<v-list-item>
-					<v-btn text>Tahrirlash</v-btn>
+			<v-list class="my-list">
+				<v-list-item class="pa-0">
+					<v-btn text><v-icon class="mr-3" size="18">{{ icons.mdiPencilOutline }}</v-icon> Tahrirlash</v-btn>
 				</v-list-item>
-				<v-list-item>
-					<v-btn text>O'chirish</v-btn>
+				<v-list-item class="pa-0">
+					<v-btn text><v-icon class="mr-3" color="error" size="18">{{ icons.mdiDeleteOutline }}</v-icon> O'chirish</v-btn>
 				</v-list-item>
 			</v-list>
 		</v-menu>
@@ -45,7 +20,7 @@
 </template>
 
 <script>
-import { mdiMenu } from '@mdi/js'
+import { mdiMenu, mdiDeleteOutline, mdiPencilOutline } from '@mdi/js'
 
 export default {
   props: {
@@ -62,6 +37,8 @@ export default {
 
       icons: {
         mdiMenu,
+        mdiDeleteOutline,
+        mdiPencilOutline,
       },
     }
   },
@@ -76,10 +53,17 @@ export default {
   margin: 20px auto 15px auto;
   border: 1px solid #ccc;
   border-radius: 5px;
+  background-color: #fbfbfb;
   .task-btn {
     position: absolute;
     top: 0;
     right: 0;
+  }
+}
+.my-list {
+  .v-btn {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
 </style>
