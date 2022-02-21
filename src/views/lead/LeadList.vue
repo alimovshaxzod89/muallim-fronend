@@ -1,24 +1,23 @@
 <template>
   <div id="data-list">
-
 		<v-row>
-			<v-col cols="4" v-for="column in columns" :key="column.title">
+			<v-col cols="4">
 				<v-card class="my-draggable-card-main">
 					<div class="my-top d-flex align-center mb-5">
-						<v-card-title>{{column.name}}</v-card-title>
+						<v-card-title>Lidlar</v-card-title>
 						<v-spacer></v-spacer>
 						<v-list class="mr-5">
-							<v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" v-if="column.position === 1" @click="openAppealForm()">
-								<v-icon size="24">{{ icons.mdiFileAccountOutline }} </v-icon>
+							<v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" @click="openAppealForm()">
+								<v-icon size="24">{{ icons.mdiFileAccountOutline }}</v-icon>
 							</v-btn>
-							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(column.position)">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(1)">
 								<v-icon>{{ icons.mdiPlus }}</v-icon>
 							</v-btn>
 						</v-list>
 					</div>
 				</v-card>
 
-					<v-card class="my-cart-filter" v-for="(group, index) in column.groups" :key="group + index">
+					<!-- <v-card class="my-cart-filter" v-for="(group, index) in column.groups" :key="group + index">
 						<v-card-text class="d-flex align-center justify-space-between">
 							<h3 class="my-group-title">{{group.name}}
 								<div v-if="column.position === 3">
@@ -57,7 +56,7 @@
 								:task="task"
 							></lead-task-card>
 						</draggable>
-					</v-card>
+					</v-card> -->
 			</v-col>
 		</v-row>
 

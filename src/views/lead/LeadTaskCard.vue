@@ -30,11 +30,7 @@ export default {
     },
   },
   setup() {
-    const items = [{ title: 'Option 1' }, { title: 'Option 2' }, { title: 'Option 3' }]
-
     return {
-      items,
-
       icons: {
         mdiMenu,
         mdiDeleteOutline,
