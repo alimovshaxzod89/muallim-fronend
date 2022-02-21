@@ -9,9 +9,6 @@
         small
         class="mt-n2 me-n3"
       >
-        <v-icon size="22">
-          {{ icons.mdiDotsVertical }}
-        </v-icon>
       </v-btn>
     </v-card-title>
 
@@ -51,7 +48,7 @@
               <p class="text--warning mb-0 text-base">
                 Umumiy fanlar soni
               </p>
-              <span class="text--primary font-weight-semibold text-xl">2</span>
+              <span class="text--primary font-weight-semibold text-xl">{{selectsDatas.subject}}</span>
             </div>
           </div>
 
@@ -87,8 +84,10 @@
 </template>
 
 <script>
-import { mdiDotsVertical, mdiCurrencyUsd, mdiFormatListNumberedRtl } from '@mdi/js'
+import { mdiCurrencyUsd, mdiFormatListNumberedRtl } from '@mdi/js'
 import { getVuetify, addAlpha } from '@core/utils'
+import { ref } from '@vue/composition-api'
+import axios from '@axios'
 
 export default {
   components: {
@@ -97,12 +96,38 @@ export default {
   setup() {
     const $vuetify = getVuetify()
 
+    // ! METHODS
+    const loadSubject = () => {
+      axios
+        .get('/api/subjects')
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.subject = response.data.data.length
+          }
+        })
+        .catch(error => console.log(error))
+    }
+    const loadStudent = () => {
+      axios
+        .get('/api/students')
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.student = response.data.data.length
+          }
+        })
+        .catch(error => console.log(error))
+    }
+    loadSubject()
+    loadStudent()
+
+    const selectsDatas = ref({
+      subject: null,
+      student: [],
+    })
+
     const chartOptions = {
-      labels: ['Tushum','Olinishi zarur' ],
-      colors: [
-        $vuetify.theme.currentTheme.warning,
-        addAlpha($vuetify.theme.currentTheme.warning, 0.1),
-      ],
+      labels: ['Tushum', 'Olinishi zarur'],
+      colors: [$vuetify.theme.currentTheme.warning, addAlpha($vuetify.theme.currentTheme.warning, 0.1)],
       chart: {
         type: 'donut',
         sparkline: {
@@ -119,22 +144,19 @@ export default {
                 fontSize: '14px',
                 offsetY: 25,
               },
-              value: {
-                fontSize: '2.125rem',
-                fontWeight: 600,
-
-                offsetY: -15,
-                formatter(value) {
-                  return `${value}k`
-                },
-              },
               total: {
                 show: true,
                 label: 'Talabalar',
                 color: 'rgba(94, 86, 105, 0.68)',
-                formatter(value) {
-                  return `${value.globals.seriesTotals.reduce((total, num) => total + num)}k`
+                formatter() {
+                  return selectsDatas.value.student
                 },
+              },
+              value: {
+                fontSize: '2.125rem',
+                fontWeight: 600,
+                offsetY: -15,
+                formatter() {},
               },
             },
           },
@@ -142,20 +164,24 @@ export default {
       },
     }
 
-    const chartData = [12, 50, ]
+    const chartData = [12, 50]
+
+    // mdiDotsVertical,
 
     return {
       chartOptions,
       chartData,
+      selectsDatas,
       icons: {
-        mdiDotsVertical,
         mdiCurrencyUsd,
-				mdiFormatListNumberedRtl
+        mdiFormatListNumberedRtl,
       },
     }
   },
 }
 </script>
+
+
 
 <style lang="scss">
 #chart-sales-overview {

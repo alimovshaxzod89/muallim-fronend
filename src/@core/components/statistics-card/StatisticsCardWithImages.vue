@@ -40,11 +40,11 @@
 export default {
   props: {
     statTitle: { type: String, default: '' },
-    statistics: { type: String, default: '' },
+    statistics: { type: Number, default: '' },
     change: { type: String, default: '' },
     chipText: { type: String, default: '' },
     chipColor: { type: String, default: '' },
-    color: { type: String, default: ''},
+    color: { type: String, default: '' },
     avatar: { type: String, default: '' },
     avatarWidth: { type: String, default: '' },
   },
