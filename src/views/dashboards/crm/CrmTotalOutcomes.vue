@@ -56,7 +56,6 @@ export default {
         .then(response => {
           if (response.data.success) {
             selectsDatas.value.cost = response.data.data.length
-            console.log(selectsDatas.value.cost)
           }
         })
         .catch(error => console.log(error))
