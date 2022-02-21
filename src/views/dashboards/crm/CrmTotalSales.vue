@@ -114,14 +114,14 @@ export default {
     ]
 
     const selectsDatas = ref({
-      center_profit: null
+      center_profit: null,
     })
     const loadCenterProfit = () => {
       axios
-        .get('/api/center-income', {params: {itemsPerPage: -1}})
+        .get('/api/center-income', { params: { itemsPerPage: -1 } })
         .then(response => {
           if (response.data.success) {
-            selectsDatas.value.center_profit = response.data.data.length
+            selectsDatas.value.center_profit = response.data.data
             console.log(selectsDatas.value)
           }
         })

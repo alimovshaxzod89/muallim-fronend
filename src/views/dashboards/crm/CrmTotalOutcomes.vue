@@ -7,13 +7,6 @@
         </p>
         <p class="text-no-wrap">
           <span class="text-2xl font-weight-semibold me-1">{{selectsDatas.cost}}</span>
-          <small class="success--text text-xs ">
-            <v-icon
-              color="success"
-              size="22"
-            >{{ icons.mdiChevronUp }}</v-icon>
-            <span>25.8%</span>
-          </small>
         </p>
       </div>
       <v-spacer></v-spacer>
@@ -62,7 +55,7 @@ export default {
         .get('/api/cashes')
         .then(response => {
           if (response.data.success) {
-            selectsDatas.value.cost = response.data.data
+            selectsDatas.value.cost = response.data.data.length
             console.log(selectsDatas.value.cost)
           }
         })

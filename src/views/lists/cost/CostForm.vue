@@ -192,7 +192,13 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.date && formData.value.money_id) {
+        if (
+          formData.value.date &&
+          formData.value.money_id &&
+          formData.value.amount &&
+          formData.value.cashbox_id &&
+          formData.value.type
+        ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
@@ -210,7 +216,13 @@ export default {
           })
         }
       } else {
-        if (formData.value.date  && formData.value.money_id) {
+        if (
+          formData.value.date &&
+          formData.value.money_id &&
+          formData.value.amount &&
+          formData.value.cashbox_id &&
+          formData.value.type
+        ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ message }) => {
@@ -252,7 +264,6 @@ export default {
         })
         .catch(error => console.log(error))
     }
-
 
     // Cashbox
     const cashboxForm = ref(null)
