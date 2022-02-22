@@ -54,7 +54,7 @@
               {{ data.title }}
             </p>
             <h2 class=" font-weight-bold bg-primary">
-              {{ data.total }}
+              {{ data.total }}   
             </h2>
           </div>
         </v-col>
@@ -65,18 +65,39 @@
 
 <script>
 // eslint-disable-next-line object-curly-newline
-import { mdiAccountOutline, mdiTrendingUp, mdiDotsVertical, mdiLabelOutline, mdiCashMultiple, mdiTicketPercentOutline, mdiCurrencyUsd } from '@mdi/js'
+import {
+  mdiAccountOutline,
+  mdiTrendingUp,
+  mdiDotsVertical,
+  mdiLabelOutline,
+  mdiCashMultiple,
+  mdiTicketPercentOutline,
+  mdiCurrencyUsd,
+} from '@mdi/js'
 
 export default {
   setup() {
-		const selectedYear = '2022'
-		const selectedMonth = 'Yanvar'
-		const years = ['2020', '2021', '2022']
-		const monthes = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr']
+    const selectedYear = '2022'
+    const selectedMonth = 'Yanvar'
+    const years = ['2020', '2021', '2022']
+    const monthes = [
+      'Yanvar',
+      'Fevral',
+      'Mart',
+      'Aprel',
+      'May',
+      'Iyun',
+      'Iyul',
+      'Avgust',
+      'Sentabr',
+      'Oktabr',
+      'Noyabr',
+      'Dekabr',
+    ]
 
     const statisticsData = [
       {
-        title: 'Talabalar to\'lashi zarur',
+        title: "Talabalar to'lashi zarur",
         total: '245k',
       },
       {
@@ -84,40 +105,40 @@ export default {
         total: '12.5k',
       },
       {
-        title: 'Ustozlar mablag\'i',
+        title: "Ustozlar mablag'i",
         total: '1.54k',
       },
-			{
-				title: 'Talabalar qarzi',
-				total: '245k',
-			},
-			{
-				title: 'Markaz ulushi',
-				total: '12.5k',
-			},
-			{
-				title: 'Markaz ololmayotgan summa',
-				total: '1.54k',
-			},
+      {
+        title: 'Talabalar qarzi',
+        total: '245k',
+      },
+      {
+        title: 'Markaz ulushi',
+        total: '12.5k',
+      },
+      {
+        title: 'Markaz ololmayotgan summa',
+        total: '1.54k',
+      },
     ]
 
     const resolveStatisticsIconVariation = data => {
-      if (data === 'Talabalar to\'lashi zarur') return { icon: mdiTrendingUp,  }
-      if (data === 'Ustozlardan qarz') return { icon: mdiAccountOutline,  }
-      if (data === 'Ustozlar mablag\'i') return { icon: mdiLabelOutline,  }
-			if (data === 'Talabalar qarzi') return { icon: mdiCashMultiple,  }
-			if (data === 'Markaz ulushi') return { icon: mdiTicketPercentOutline,  }
-			if (data === 'Markaz ololmayotgan summa') return { icon: mdiCurrencyUsd,  }
+      if (data === "Talabalar to'lashi zarur") return { icon: mdiTrendingUp }
+      if (data === 'Ustozlardan qarz') return { icon: mdiAccountOutline }
+      if (data === "Ustozlar mablag'i") return { icon: mdiLabelOutline }
+      if (data === 'Talabalar qarzi') return { icon: mdiCashMultiple }
+      if (data === 'Markaz ulushi') return { icon: mdiTicketPercentOutline }
+      if (data === 'Markaz ololmayotgan summa') return { icon: mdiCurrencyUsd }
 
-      return { icon: mdiAccountOutline,  }
+      return { icon: mdiAccountOutline }
     }
 
     return {
       statisticsData,
-			selectedYear,
-			selectedMonth,
-			years,
-			monthes,
+      selectedYear,
+      selectedMonth,
+      years,
+      monthes,
       resolveStatisticsIconVariation,
 
       // icons

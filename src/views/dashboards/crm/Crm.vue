@@ -269,7 +269,6 @@ export default {
         .then(response => {
           if (response.data.success) {
             selectsDatas.value.student = response.data.data.length
-            console.log(selectsDatas.value)
           }
         })
         .catch(error => console.log(error))
@@ -280,7 +279,6 @@ export default {
         .then(response => {
           if (response.data.success) {
             selectsDatas.value.group = response.data.data.length
-            console.log(selectsDatas.value)
           }
         })
         .catch(error => console.log(error))
@@ -291,18 +289,16 @@ export default {
         .then(response => {
           if (response.data.success) {
             selectsDatas.value.teacher = response.data.data.length
-            console.log(selectsDatas.value)
           }
         })
         .catch(error => console.log(error))
     }
     const loadLeads = () => {
       axios
-        .get('/api/leads', {params: {itemsPerPage: -1}})
+        .get('/api/leads', { params: { itemsPerPage: -1 } })
         .then(response => {
           if (response.data.success) {
             selectsDatas.value.lead = response.data.data.length
-            console.log(selectsDatas.value)
           }
         })
         .catch(error => console.log(error))
