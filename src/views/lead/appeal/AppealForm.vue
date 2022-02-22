@@ -168,7 +168,7 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      lead_id: null,
+      lead_id: 82,
       full_name: null,
       phone: null,
       birth_date: null,
@@ -184,13 +184,11 @@ export default {
 
     //validation
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
-    const validate = () => {
-      form.value.validate()
-    }
 
     // form options for selects
-    const selectsDatas = ref({})
-    // ! METHODS
+    const selectsDatas = ref({
+      subject: [],
+    })
     const loadSubject = () => {
       axios
         .get('/api/subjects', { params: { itemsPerPage: -1 } })
@@ -238,7 +236,7 @@ export default {
             .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
-              emit('add-teacher-to-options', data)
+              return data
             })
             .catch(error => {
               console.log(error)
@@ -274,7 +272,6 @@ export default {
       selectsDatas,
       selectRule,
       loadSubject,
-      validate,
       show,
       onSubmit,
       open,
@@ -304,6 +301,6 @@ export default {
   border-color: rgba(94, 86, 105, 0.15) !important;
 }
 .inputForm {
-    margin-top: -15px;
+  margin-top: -15px;
 }
 </style>

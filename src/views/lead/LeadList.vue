@@ -17,7 +17,7 @@
 					</div>
 				</v-card>
 
-				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 3)" :columns="column" :key="column.id" />
+				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 1)" :columns="column" :key="column.id" />
 			</v-col>
 
 			<v-col cols="4">
@@ -26,14 +26,14 @@
 						<v-card-title>Kutish</v-card-title>
 						<v-spacer></v-spacer>
 						<v-list class="mr-5">
-							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(1)">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(2)">
 								<v-icon>{{ icons.mdiPlus }}</v-icon>
 							</v-btn>
 						</v-list>
 					</div>
 				</v-card>
 
-				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 3)" :columns="column" :key="column.id" />
+				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 2)" :columns="column" :key="column.id" />
 			</v-col>
 
 			<v-col cols="4">
@@ -66,8 +66,6 @@ import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline, mdi
 import { ref, onUnmounted } from '@vue/composition-api'
 import store from '@/store'
 
-import draggable from 'vuedraggable'
-
 // store module
 import LeadStoreModule from './LeadStoreModule'
 
@@ -80,12 +78,11 @@ import LeadGroupForm from './LeadGroupForm'
 import AppealForm from './appeal/AppealForm'
 import DialogConfirm from '@/views/components/DialogConfirm'
 
-const MODULE_NAME = 'leads'
+const MODULE_NAME = 'lead'
 import envParams from '@envParams'
 
 export default {
   components: {
-    draggable,
     LeadFilterCard,
     LeadSimpleForm,
     LeadGroupForm,
@@ -114,9 +111,9 @@ export default {
     const leadGroupForm = ref(null)
     const openForm = position => {
       if (position === 3) {
-        leadGroupForm.value.open()
+        leadGroupForm.value.open(position)
       } else {
-        leadSimpleForm.value.open()
+        leadSimpleForm.value.open(position)
       }
     }
 

@@ -26,19 +26,19 @@
 					</v-list>
 				</v-menu>
 			</v-card-text>
-			<!-- <draggable
+			<draggable
 				class="my-draggable"
-				:list="columns.tasks"
+				:list="data"
 				:animation="200"
 				ghost-class="ghost-card"
 				group="tasks"
 			>
 				<lead-task-card
-					v-for="task in group.tasks"
+					v-for="task in data"
 					:key="task.id"
 					:task="task"
 				></lead-task-card>
-			</draggable> -->
+			</draggable>
 		</v-card>
 	</div>
 </template>
@@ -46,12 +46,14 @@
 <script>
 import { ref } from '@vue/composition-api'
 import axios from '@axios'
+import draggable from 'vuedraggable'
 import { mdiMenu, mdiDeleteOutline, mdiPencilOutline } from '@mdi/js'
 
 import LeadTaskCard from './LeadTaskCard'
 
 export default {
   components: {
+    draggable,
     LeadTaskCard,
   },
   props: {
@@ -59,11 +61,11 @@ export default {
       type: Object,
     },
   },
-  setup() {
+  setup(props) {
     // API Loads
     const data = ref(null)
     const loadAppeals = () => {
-      axios.get('api/appeals').then(response => {
+      axios.get(`api/appeals?lead_id=${props.columns.id}`).then(response => {
         if (response.data.success) {
           data.value = response.data.data
         }
@@ -72,7 +74,6 @@ export default {
 
     // Loads
     loadAppeals()
-    console.log(data)
 
     return {
       data,
