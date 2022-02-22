@@ -171,6 +171,7 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
+      lead_id: null,
       name: null,
       subject_id: null,
       teacher_id: null,

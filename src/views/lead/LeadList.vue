@@ -17,46 +17,39 @@
 					</div>
 				</v-card>
 
-					<!-- <v-card class="my-cart-filter" v-for="(group, index) in column.groups" :key="group + index">
-						<v-card-text class="d-flex align-center justify-space-between">
-							<h3 class="my-group-title">{{group.name}}
-								<div v-if="column.position === 3">
-									● {{group.subjects.name}}
-									● {{group.teachers.full_name}}
-									● {{group.rooms.name}}
-									● {{group.time_begin}}
-								</div>
-							</h3>
-							<v-menu bottom offset-y>
-								<template #activator="{ on, attrs }">
-									<v-btn class="task-btn" v-bind="attrs" v-on="on" text small fab>
-										<v-icon size="24">{{ icons.mdiMenu }}</v-icon>
-									</v-btn>
-								</template>
-								<v-list class="my-list">
-									<v-list-item class="pa-0">
-										<v-btn text><v-icon class="mr-3" size="18">{{ icons.mdiPencilOutline }}</v-icon> Tahrirlash</v-btn>
-									</v-list-item>
-									<v-list-item class="pa-0">
-										<v-btn text><v-icon class="mr-3" color="error" size="18">{{ icons.mdiDeleteOutline }}</v-icon> O'chirish</v-btn>
-									</v-list-item>
-								</v-list>
-							</v-menu>
-						</v-card-text>
-						<draggable
-							class="my-draggable"
-							:list="column.tasks"
-							:animation="200"
-							ghost-class="ghost-card"
-							group="tasks"
-						>
-							<lead-task-card
-								v-for="task in group.tasks"
-								:key="task.id"
-								:task="task"
-							></lead-task-card>
-						</draggable>
-					</v-card> -->
+				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 3)" :columns="column" :key="column.id" />
+			</v-col>
+
+			<v-col cols="4">
+				<v-card class="my-draggable-card-main">
+					<div class="my-top d-flex align-center mb-5">
+						<v-card-title>Kutish</v-card-title>
+						<v-spacer></v-spacer>
+						<v-list class="mr-5">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(1)">
+								<v-icon>{{ icons.mdiPlus }}</v-icon>
+							</v-btn>
+						</v-list>
+					</div>
+				</v-card>
+
+				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 3)" :columns="column" :key="column.id" />
+			</v-col>
+
+			<v-col cols="4">
+				<v-card class="my-draggable-card-main">
+					<div class="my-top d-flex align-center mb-5">
+						<v-card-title>Guruhlar</v-card-title>
+						<v-spacer></v-spacer>
+						<v-list class="mr-5">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(3)">
+								<v-icon>{{ icons.mdiPlus }}</v-icon>
+							</v-btn>
+						</v-list>
+					</div>
+				</v-card>
+
+				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 3)" :columns="column" :key="column.id" />
 			</v-col>
 		</v-row>
 
@@ -80,7 +73,7 @@ import LeadStoreModule from './LeadStoreModule'
 
 // composition function
 import useLeadList from './useLeadList'
-import LeadTaskCard from './LeadTaskCard'
+import LeadFilterCard from './LeadFilterCard'
 
 import LeadSimpleForm from './LeadSimpleForm'
 import LeadGroupForm from './LeadGroupForm'
@@ -93,7 +86,7 @@ import envParams from '@envParams'
 export default {
   components: {
     draggable,
-    LeadTaskCard,
+    LeadFilterCard,
     LeadSimpleForm,
     LeadGroupForm,
     AppealForm,
@@ -111,11 +104,10 @@ export default {
       if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
     })
 
+    const { fetchDatas, deleteRow, loading, notify, selectedTableData } = useLeadList(MODULE_NAME)
+
     // Store state
     const state = ref(store.state[MODULE_NAME])
-
-    // Logics
-    const { fetchDatas, deleteRow, loading, notify, selectedTableData } = useLeadList(MODULE_NAME)
 
     // Form
     const leadSimpleForm = ref(null)
