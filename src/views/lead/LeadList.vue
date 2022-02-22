@@ -121,7 +121,7 @@ export default {
 
     // Store state
     const state = ref(store.state[MODULE_NAME])
-    const appealState = ref(store.state)
+    const appealState = ref(store.state['appeal'])
     console.log(appealState)
 
     // Form
