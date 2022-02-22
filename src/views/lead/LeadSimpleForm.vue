@@ -65,16 +65,16 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      position: 3,
+      position: null,
       name: null,
     }
     const formData = ref({ ...emptyFormData })
 
     // show, hide
     const show = ref(false)
-    const open = (id = null) => {
+    const open = position => {
       show.value = true
-      if (id) formData.value.position = id
+      if (position) formData.value.position = position
     }
     const close = () => {
       show.value = false

@@ -17,6 +17,20 @@
 					</div>
 				</v-card>
 
+				<!-- <draggable
+					class="my-draggable"
+					:list="data"
+					:animation="200"
+					ghost-class="ghost-card"
+					group="tasks"
+				>
+					<lead-task-card
+						v-for="task in data"
+						:key="task.id"
+						:task="task"
+					></lead-task-card>
+				</draggable> -->
+
 				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 1)" :columns="column" :key="column.id" />
 			</v-col>
 
@@ -64,6 +78,7 @@
 import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline, mdiMenu } from '@mdi/js'
 
 import { ref, onUnmounted } from '@vue/composition-api'
+import draggable from 'vuedraggable'
 import store from '@/store'
 
 // store module
@@ -83,6 +98,7 @@ import envParams from '@envParams'
 
 export default {
   components: {
+    draggable,
     LeadFilterCard,
     LeadSimpleForm,
     LeadGroupForm,
@@ -105,6 +121,8 @@ export default {
 
     // Store state
     const state = ref(store.state[MODULE_NAME])
+    const appealState = ref(store.state)
+    console.log(appealState)
 
     // Form
     const leadSimpleForm = ref(null)

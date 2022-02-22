@@ -17,16 +17,18 @@
 		</v-menu>
 		<div class="my-task-content">
 			<strong>{{ task.full_name }}</strong>
-			<!-- <span>{{ task.subject.name }}</span> -->
-			<span>Fransuz tili</span>
+			<span>{{ task.subject.name }}</span>
 			<span class="my-task-phone">{{ task.phone }}</span>
-			<span class="my-task-date">{{ task.created_at }}</span>
+			<span class="my-task-date">{{ task.created_at | date }}</span>
 		</div>
 	</v-card-text>
 </template>
 
 <script>
+import moment from 'moment'
 import { mdiMenu, mdiDeleteOutline, mdiPencilOutline } from '@mdi/js'
+
+moment.locale('uz-latn')
 
 export default {
   props: {
@@ -34,6 +36,9 @@ export default {
       type: Object,
       default: () => ({}),
     },
+  },
+  filters: {
+    date: value => moment(value).format('D MMMM YYYY'),
   },
   setup() {
     return {
@@ -78,6 +83,7 @@ export default {
   }
 }
 .my-task-phone {
+  font-size: 13px;
   color: rgb(29, 117, 248);
 }
 .my-task-date {
