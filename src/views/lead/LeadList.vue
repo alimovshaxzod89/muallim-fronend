@@ -83,6 +83,7 @@ import store from '@/store'
 
 // store module
 import LeadStoreModule from './LeadStoreModule'
+import AppealStoreModule from './appeal/AppealStoreModule'
 
 // composition function
 import useLeadList from './useLeadList'
@@ -121,8 +122,6 @@ export default {
 
     // Store state
     const state = ref(store.state[MODULE_NAME])
-    const appealState = ref(store.state['appeal'])
-    console.log(appealState)
 
     // Form
     const leadSimpleForm = ref(null)
