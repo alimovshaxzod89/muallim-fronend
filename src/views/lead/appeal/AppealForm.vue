@@ -17,72 +17,72 @@
           <v-container>
             <v-row>
                 <v-col cols="6" class="inputForm">
-                    <h4 class="text-required no-text"><span>*</span></h4>
-                    <v-autocomplete
-                        v-model="formData.subject_id"
-                        :items="selectsDatas.subject"
-                        item-text="name"
-                        item-value="id"
-                        label="FAN"
-                        dense
-                        outlined
-                        hide-details
-                        clearable
-                        :rules="selectRule"
-                    >
-                    </v-autocomplete>
+									<h4 class="text-required no-text"><span>*</span></h4>
+									<v-autocomplete
+										v-model="formData.subject_id"
+										:items="selectsDatas.subject"
+										item-text="name"
+										item-value="id"
+										label="FAN"
+										dense
+										outlined
+										hide-details
+										clearable
+										:rules="selectRule"
+									>
+									</v-autocomplete>
                 </v-col>
                 <v-col cols="6" class="inputForm">
-                    <h4 class="text-required no-text"><span>*</span></h4>
-                    <v-text-field
-                        label="FIO"
-                        v-model="formData.full_name"
-                        type="text"
-                        dense
-                        outlined
-                        hide-details
-                        :rules="[required]"
-                    ></v-text-field>
+									<h4 class="text-required no-text"><span>*</span></h4>
+									<v-text-field
+										label="FIO"
+										v-model="formData.full_name"
+										type="text"
+										dense
+										outlined
+										hide-details
+										:rules="[required]"
+									></v-text-field>
                 </v-col>
                 <v-col cols="6" class="inputForm">
-                    <h4 class="text-required no-text"><span>*</span></h4>
-                    <v-text-field
-                        prefix="+998"
-                        label="TELEFON RAQAM"
-                        v-model="formData.phone"
-                        type="phone"
-                        dense
-                        outlined
-                        hide-details
-                        :rules="[required]"
-                    ></v-text-field>
+									<h4 class="text-required no-text"><span>*</span></h4>
+									<v-text-field
+										prefix="+998"
+										label="TELEFON RAQAM"
+										v-model="formData.phone"
+										type="phone"
+										dense
+										outlined
+										hide-details
+										:rules="[required]"
+									></v-text-field>
                 </v-col>
                 <v-col cols="6" class="inputForm">
-                    <h4 class="text-required no-text"><span>*</span></h4>
-                    <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                                v-model="formData.birth_date"
-                                label="TUG'ILGAN KUN"
-                                readonly
-                                v-bind="attrs"
-                                v-on="on"
-                                hide-details
-                                dense
-                                outlined
-                                :rules="[required]"
-                                :append-icon="icons.mdiCalendar"
-                            ></v-text-field>
-                        </template>
-                        <v-date-picker
-                                v-model="formData.birth_date"
-                                color="primary"
-                                @input="isDate = false"
-                                no-title
-                                :first-day-of-week="1"
-                                locale="ru-ru"
-                        ></v-date-picker>
-                    </v-menu>
+									<h4 class="text-required no-text"><span>*</span></h4>
+									<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+											<template v-slot:activator="{ on, attrs }">
+												<v-text-field
+													v-model="formData.birth_date"
+													label="TUG'ILGAN KUN"
+													readonly
+													v-bind="attrs"
+													v-on="on"
+													hide-details
+													dense
+													outlined
+													:rules="[required]"
+													:append-icon="icons.mdiCalendar"
+												></v-text-field>
+											</template>
+											<v-date-picker
+												v-model="formData.birth_date"
+												color="primary"
+												@input="isDate = false"
+												no-title
+												:first-day-of-week="1"
+												locale="ru-ru"
+											></v-date-picker>
+									</v-menu>
                 </v-col>
                 <v-col cols="6" class="inputForm">
                 <h4 class="text-required no-text"><span>*</span></h4>
@@ -155,9 +155,6 @@ export default {
     const show = ref(false)
     const open = (id = null) => {
       show.value = true
-      setTimeout(() => {
-        form.value.$el[0].focus()
-      }, 100)
       if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
     }
     const close = () => {
@@ -168,7 +165,7 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      lead_id: 82,
+      lead_id: null,
       full_name: null,
       phone: null,
       birth_date: null,

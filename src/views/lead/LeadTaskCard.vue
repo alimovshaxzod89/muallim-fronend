@@ -17,7 +17,7 @@
 		</v-menu>
 		<div class="my-task-content">
 			<strong>{{ task.full_name }}</strong>
-			<span>{{ task.subject.name }}</span>
+			<span>{{ task.subject ? task.subject.name : null }}</span>
 			<span class="my-task-phone">{{ task.phone }}</span>
 			<span class="my-task-date">{{ task.created_at | date }}</span>
 		</div>
@@ -53,20 +53,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.my-task-card {
-  position: relative;
-  width: 95%;
-  min-height: 80px;
-  margin: 20px auto 15px auto;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fbfbfb;
-  .task-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-}
 .my-list {
   .v-btn {
     width: 100%;

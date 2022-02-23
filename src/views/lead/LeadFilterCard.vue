@@ -28,13 +28,14 @@
 			</v-card-text>
 			<draggable
 				class="my-draggable"
-				:list="data"
+				:list="taskGroup"
 				:animation="200"
 				ghost-class="ghost-card"
 				group="tasks"
+				@change="taskChange()"
 			>
 				<lead-task-card
-					v-for="task in data"
+					v-for="task in appealReturn()"
 					:key="task.id"
 					:task="task"
 				></lead-task-card>
@@ -45,7 +46,7 @@
 
 <script>
 import { ref } from '@vue/composition-api'
-import axios from '@axios'
+import store from '@/store'
 import draggable from 'vuedraggable'
 import { mdiMenu, mdiDeleteOutline, mdiPencilOutline } from '@mdi/js'
 
@@ -62,21 +63,20 @@ export default {
     },
   },
   setup(props) {
-    // API Loads
-    const data = ref(null)
-    const loadAppeals = () => {
-      axios.get(`api/appeals?lead_id=${props.columns.id}`).then(response => {
-        if (response.data.success) {
-          data.value = response.data.data
-        }
-      })
+    const state = ref(store.state.appeal)
+    const taskGroup = ref(null)
+
+    const appealReturn = () => state.value.rows.filter(el => el.lead_id === props.columns.id)
+
+    const taskChange = evt => {
+      console.log(evt)
     }
 
-    // Loads
-    loadAppeals()
-
     return {
-      data,
+      state,
+      taskGroup,
+      appealReturn,
+      taskChange,
 
       icons: {
         mdiMenu,

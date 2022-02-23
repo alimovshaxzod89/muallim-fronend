@@ -17,21 +17,26 @@
 					</div>
 				</v-card>
 
-				<!-- <draggable
-					class="my-draggable"
-					:list="data"
+				<draggable
+					class="my-draggable my-task-defaults"
+					:list="taskGroup"
 					:animation="200"
 					ghost-class="ghost-card"
 					group="tasks"
+					@change="taskChange()"
 				>
 					<lead-task-card
-						v-for="task in data"
+						v-for="task in appealReturn()"
 						:key="task.id"
 						:task="task"
 					></lead-task-card>
-				</draggable> -->
+				</draggable>
 
-				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 1)" :columns="column" :key="column.id" />
+				<lead-filter-card
+					v-for="column in state.rows.filter(el => el.position === 1)"
+					:columns="column"
+					:key="column.id"
+				/>
 			</v-col>
 
 			<v-col cols="4">
@@ -77,7 +82,7 @@
 <script>
 import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline, mdiMenu } from '@mdi/js'
 
-import { ref, onUnmounted } from '@vue/composition-api'
+import { ref, onBeforeMount, onUnmounted } from '@vue/composition-api'
 import draggable from 'vuedraggable'
 import store from '@/store'
 
@@ -88,6 +93,7 @@ import AppealStoreModule from './appeal/AppealStoreModule'
 // composition function
 import useLeadList from './useLeadList'
 import LeadFilterCard from './LeadFilterCard'
+import LeadTaskCard from './LeadTaskCard'
 
 import LeadSimpleForm from './LeadSimpleForm'
 import LeadGroupForm from './LeadGroupForm'
@@ -101,6 +107,7 @@ export default {
   components: {
     draggable,
     LeadFilterCard,
+    LeadTaskCard,
     LeadSimpleForm,
     LeadGroupForm,
     AppealForm,
@@ -113,15 +120,39 @@ export default {
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, LeadStoreModule)
     }
+    if (!store.hasModule('appeal')) {
+      store.registerModule('appeal', AppealStoreModule)
+    }
     // UnRegister on leave
     onUnmounted(() => {
       if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
+      if (store.hasModule('appeal')) store.unregisterModule('appeal')
+    })
+
+    const appealFetchDatas = () => {
+      store
+        .dispatch(`appeal/fetchDatas`)
+        .then(() => {})
+        .catch(error => {
+          console.log(error)
+        })
+    }
+    onBeforeMount(() => {
+      appealFetchDatas()
     })
 
     const { fetchDatas, deleteRow, loading, notify, selectedTableData } = useLeadList(MODULE_NAME)
 
     // Store state
     const state = ref(store.state[MODULE_NAME])
+    const appealState = ref(store.state.appeal)
+    const taskGroup = ref(null)
+
+    const appealReturn = () => appealState.value.rows.filter(el => el.lead_id === null).reverse()
+
+    const taskChange = evt => {
+      console.log(evt)
+    }
 
     // Form
     const leadSimpleForm = ref(null)
@@ -149,328 +180,15 @@ export default {
         .catch(() => {})
     }
 
-    // Draggable data
-    const columns = ref([
-      {
-        position: 1,
-        name: 'Lidlar',
-        groups: {
-          0: {
-            name: 'Erkaklar',
-            tasks: [
-              {
-                id: 1,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 2,
-                name: 'Provide documentation on integrations',
-              },
-              {
-                id: 3,
-                name: 'Design shopping cart dropdown',
-              },
-              {
-                id: 4,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 5,
-                name: 'Test checkout flow',
-              },
-            ],
-          },
-          1: {
-            name: 'Ayollar',
-            tasks: [
-              {
-                id: 14,
-                name: 'Olimlar',
-              },
-              {
-                id: 15,
-                name: 'Zakiylar',
-              },
-              {
-                id: 16,
-                name: 'Dizaynerlar top',
-              },
-              {
-                id: 17,
-                name: 'Qurtaboy',
-              },
-              {
-                id: 18,
-                name: 'Ilon Mask',
-              },
-            ],
-          },
-        },
-      },
-      {
-        position: 2,
-        name: 'Kutuv',
-        groups: {
-          0: {
-            name: 'Rus tiliga',
-            tasks: [
-              {
-                id: 1,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 2,
-                name: 'Provide documentation on integrations',
-              },
-              {
-                id: 3,
-                name: 'Design shopping cart dropdown',
-              },
-              {
-                id: 4,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 5,
-                name: 'Test checkout flow',
-              },
-            ],
-          },
-          1: {
-            name: 'Ingiliz tiliga',
-            tasks: [
-              {
-                id: 14,
-                name: 'Olimlar',
-              },
-              {
-                id: 15,
-                name: 'Zakiylar',
-              },
-              {
-                id: 16,
-                name: 'Dizaynerlar top',
-              },
-              {
-                id: 17,
-                name: 'Qurtaboy',
-              },
-              {
-                id: 18,
-                name: 'Ilon Mask',
-              },
-            ],
-          },
-        },
-      },
-      {
-        position: 3,
-        name: 'Guruh',
-        groups: {
-          0: {
-            name: "1-bo'lim",
-            subjects: {
-              name: 'Ingliz tili',
-            },
-            teachers: {
-              full_name: 'Olimov Qosim',
-            },
-            rooms: {
-              name: 'G-14',
-            },
-            week_days: 1,
-            time_begin: '16:00',
-            tasks: [
-              {
-                id: 1,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 2,
-                name: 'Provide documentation on integrations',
-              },
-              {
-                id: 3,
-                name: 'Design shopping cart dropdown',
-              },
-              {
-                id: 4,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 5,
-                name: 'Test checkout flow',
-              },
-            ],
-          },
-          1: {
-            name: "2-bo'lim",
-            subjects: {
-              name: 'Rus tili',
-            },
-            teachers: {
-              full_name: 'Yuldashov Bektosh',
-            },
-            rooms: {
-              name: 'G-5',
-            },
-            week_days: 1,
-            time_begin: '12:00',
-            tasks: [
-              {
-                id: 14,
-                name: 'Olimlar',
-              },
-              {
-                id: 15,
-                name: 'Zakiylar',
-              },
-              {
-                id: 16,
-                name: 'Dizaynerlar top',
-              },
-              {
-                id: 17,
-                name: 'Qurtaboy',
-              },
-              {
-                id: 18,
-                name: 'Ilon Mask',
-              },
-            ],
-          },
-        },
-      },
-    ])
-
-    const appelas = ref([
-      {
-        id: 1,
-        lead_id: null,
-        full_name: 'Bektosh Yuldashev',
-        phone: '901002020',
-        birth_date: null,
-        gender: null,
-        note: 'test',
-        subject_id: null,
-        days: '1',
-        hours: '1',
-      },
-      {
-        id: 5,
-        lead_id: null,
-        full_name: 'Elbek yuldashev',
-        phone: '990336010',
-        birth_date: null,
-        gender: null,
-        note: 'test',
-        subject_id: null,
-        days: '1',
-        hours: '1',
-      },
-      {
-        id: 7,
-        lead_id: null,
-        full_name: 'tgtgtgt',
-        phone: '13123213',
-        birth_date: '2022-02-08T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 1,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 8,
-        lead_id: null,
-        full_name: '123123123',
-        phone: '9999999',
-        birth_date: '2022-02-08T19:00:00.000000Z',
-        gender: false,
-        note: null,
-        subject_id: 2,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 9,
-        lead_id: null,
-        full_name: 'test testov',
-        phone: '901888778',
-        birth_date: '2022-02-02T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 3,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 10,
-        lead_id: null,
-        full_name: 'test',
-        phone: '905005050',
-        birth_date: '2022-02-07T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 2,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 11,
-        lead_id: null,
-        full_name: 'test',
-        phone: '988005020',
-        birth_date: '2022-02-15T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 4,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 12,
-        lead_id: null,
-        full_name: 'bek yuldashev',
-        phone: '990366118',
-        birth_date: '2022-02-01T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 1,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 13,
-        lead_id: null,
-        full_name: 'test',
-        phone: '995566556',
-        birth_date: '2022-02-01T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 19,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 14,
-        lead_id: null,
-        full_name: 'Bek yuldashev',
-        phone: '901002030',
-        birth_date: '2022-01-31T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 2,
-        days: '1997',
-        hours: '1600',
-      },
-    ])
-
     // Return
     return {
       MODULE_NAME,
       BASE_URL,
       state,
+      appealState,
+      taskGroup,
+      appealReturn,
+      taskChange,
 
       fetchDatas,
       loading,
@@ -485,10 +203,6 @@ export default {
       openForm,
       appealForm,
       openAppealForm,
-
-      // Draggable data
-      columns,
-      appelas,
 
       icons: {
         mdiPencilOutline,
@@ -507,7 +221,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #data-list {
   .data-list-actions {
     max-width: 7.81rem;
@@ -562,6 +276,27 @@ export default {
   display: flex;
   div {
     margin-left: 5px;
+  }
+}
+.my-task-card {
+  position: relative;
+  width: 95%;
+  min-height: 80px;
+  margin: 20px auto 15px auto;
+  padding-top: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fbfbfb;
+  .task-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+.my-task-defaults {
+  margin-bottom: 30px;
+  .my-task-card {
+    background-color: #ededed !important;
   }
 }
 </style>
