@@ -22,6 +22,7 @@ Vue.use(Toast)
 
 Vue.filter('summa', value => numeral(String(value).replace('.', ',')).format('0,0'))
 Vue.filter('date', value => moment(value).format('D MMMM YYYY'))
+Vue.filter('year_month', value => moment(value).format('MMMM YYYY'))
 
 new Vue({
   router,

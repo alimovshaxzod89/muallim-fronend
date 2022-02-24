@@ -208,8 +208,8 @@
         </div>
       </template>
 
-      <template #[`item.group_id`]="{ item }">
-        {{ item.group_id | summa) }}
+      <template #[`item.month_year`]="{ item }">
+        {{ item.payment.date | year_month }}
       </template>
       <template #[`item.amount`]="{ item }">
         {{ item.amount | summa }}
