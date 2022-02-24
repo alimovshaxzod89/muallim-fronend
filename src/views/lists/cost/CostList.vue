@@ -67,7 +67,7 @@
 
       <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
 
-      <template #[`item.money_id`]="{ item }"> {{ item.money_id | summa }}</template>
+      <template #[`item.money_id`]="{ item }"> {{ item.money_id }}</template>
 
       <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
     </v-data-table>
@@ -110,8 +110,6 @@ export default {
     DialogConfirm,
   },
   filters: {
-    date: value => moment(value).format('D MMMM YYYY'),
-    summa: value => numeral(value).format('0,0'),
     feed: value => value[1] + '/' + value[2] + '/' + value[3],
   },
   setup() {

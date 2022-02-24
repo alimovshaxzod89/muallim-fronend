@@ -12,10 +12,15 @@ import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import numeral from 'numeral'
+import moment from 'moment'
 Vue.use(vueNumeralFilterInstaller, { locale: 'ru' });
 
 Vue.config.productionTip = false
 Vue.use(Toast)
+
+Vue.filter('summa', value => numeral(String(value).replace('.', ',')).format('0,0'))
+Vue.filter('date', value => moment(value).format('D MMMM YYYY'))
 
 new Vue({
   router,
