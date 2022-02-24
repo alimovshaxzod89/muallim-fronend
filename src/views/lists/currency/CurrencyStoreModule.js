@@ -43,7 +43,7 @@ export default {
     fetchDatas({ commit }, queryParams) {
       return new Promise((resolve, reject) => {
         axios
-          .get('/api/money', { params: queryParams })
+          .get('/api/currencies', { params: queryParams })
           .then(response => {
             const { data, total } = response.data
             commit('setRows', data)
@@ -59,7 +59,7 @@ export default {
       return new Promise((resolve, reject) => {
 
         axios
-          .post('api/money', row)
+          .post('api/currencies', row)
           .then(response => {
             if (response.data.success) {
 
@@ -78,7 +78,7 @@ export default {
       return new Promise((resolve, reject) => {
 
         axios
-          .put(`api/money/${row.id}`, row)
+          .put(`api/currencies/${row.id}`, row)
           .then(response => {
             if (response.data.success) {
 
@@ -95,7 +95,7 @@ export default {
 
       return new Promise((resolve, reject) => {
 
-        axios.delete(`api/money/${id}`).then(response => {
+        axios.delete(`api/currencies/${id}`).then(response => {
           if (response.data.success) {
 
             const index = getters.indexIds.indexOf(id)

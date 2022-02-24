@@ -97,6 +97,9 @@ import useExpenseList from './useExpenseList'
 import ExpenseForm from './ExpenseForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
+import moment from 'moment'
+moment.locale('uz-latn')
+
 const MODULE_NAME = 'expense'
 
 export default {
