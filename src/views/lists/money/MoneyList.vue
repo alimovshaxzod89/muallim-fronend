@@ -8,14 +8,14 @@
           dense
           outlined
           hide-details
-          label="Qidirish"
+          label="Qidiruv"
           class="data-list-search me-3"
         ></v-text-field>
       </div>
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="$can('create', 'Teacher')" class="primary" @click="openForm()">Qo'shish</v-btn>
+      <v-btn v-if="$can('create', 'Room')" class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
@@ -40,7 +40,7 @@
       <template late #[`item.actions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
-          <v-tooltip bottom v-if="$can('delete', 'Teacher')">
+          <v-tooltip bottom v-if="$can('delete', 'Group')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
                 <v-icon size="18">
@@ -52,7 +52,7 @@
           </v-tooltip>
 
           <!-- view  -->
-          <v-tooltip bottom v-if="$can('update', 'Teacher')">
+          <v-tooltip bottom v-if="$can('update', 'Group')">
             <template #activator="{ on, attrs }">
               <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
                 <v-icon size="18">
@@ -63,19 +63,14 @@
             <span>Edit</span>
           </v-tooltip>
         </div>
+
       </template>
-
-      <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
-
-      <template #[`item.money_id`]="{ item }"> {{ item.money_id }}</template>
-
-      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <cost-form
-      ref="costForm"
+    <money-form
+      ref="moneyForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -86,36 +81,28 @@ import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutlin
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
-import moment from 'moment'
-moment.locale('uz-latn')
-
-import numeral from 'numeral'
-numeral.locale('ru')
 
 import envParams from '@envParams'
 
 // store module
-import CostStoreModule from './CostStoreModule'
+import MoneyStoreModule from './MoneyStoreModule'
 
 // composition function
-import useCostList from './useCostList'
-import CostForm from './CostForm'
+import useMoneyList from './useMoneyList'
+import MoneyForm from './MoneyForm.vue'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'cost'
+const MODULE_NAME = 'money'
 
 export default {
   components: {
-    CostForm,
+    MoneyForm,
     DialogConfirm,
-  },
-  filters: {
-    feed: value => value[1] + '/' + value[2] + '/' + value[3],
   },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, CostStoreModule)
+      store.registerModule(MODULE_NAME, MoneyStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -136,7 +123,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useCostList(MODULE_NAME)
+    } = useMoneyList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -148,9 +135,9 @@ export default {
     ]
 
     //Form
-    const costForm = ref(null)
+    const moneyForm = ref(null)
     const openForm = id => {
-      costForm.value.open(id)
+      moneyForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -184,8 +171,7 @@ export default {
 
       dialogConfirm,
       confirmDelete,
-
-      costForm,
+      moneyForm,
       openForm,
 
       MODULE_NAME,

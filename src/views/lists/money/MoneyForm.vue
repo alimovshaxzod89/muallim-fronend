@@ -11,18 +11,16 @@
     <v-card>
       <v-form ref="form">
         <v-card-title>
-          <span class="headline">Kassa nomlari</span>
+          <span class="headline">VALYUTA</span>
         </v-card-title>
         <v-card-text>       
           <v-container>
             <v-row>
-
               <v-col cols="12">
                 <h4 class="text-required no-text"><span>*</span></h4>  
                 <v-text-field
                   label="NOMI"
                   v-model="formData.name"
-                  :items="selectsDatas.name"
                   type="text"
                   dense
                   outlined
@@ -31,7 +29,7 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="12">
+              <!-- <v-col cols="12">
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                     <template v-slot:activator="{ on, attrs }">
@@ -56,7 +54,7 @@
                       locale="ru-ru"
                     ></v-date-picker>
                 </v-menu>
-              </v-col>
+              </v-col> -->
 
             </v-row>
           </v-container>
@@ -69,7 +67,6 @@
         </v-card-actions>
       </v-form>
 
-      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
     </v-card>
 
   </v-dialog>
@@ -78,14 +75,8 @@
 <script>
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
-// formats
-import moment from 'moment'
-moment.locale('uz')
-
-import numeral from 'numeral'
-
 import store from '@/store'
-import CashboxStoreModule from './CashboxStoreModule'
+import MoneyStoreModule from './MoneyStoreModule'
 
 import axios from '@axios'
 
@@ -93,7 +84,7 @@ import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import Button from '../../components/button/Button.vue'
 
-const MODULE_NAME = 'cashbox'
+const MODULE_NAME = 'money'
 
 export default {
   components: {
@@ -101,17 +92,12 @@ export default {
   },
 
   filters: {
-    date: value => moment(value).format('D MMMM YYYY'),
-    sum: value => numeral(value).format('0,0'),
     feed: value => value[1] + '/' + value[2] + '/' + value[3],
-  },
-  created() {
-    this.loadName()
   },
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, CashboxStoreModule)
+      store.registerModule(MODULE_NAME, MoneyStoreModule)
     }
 
     // show, hide
@@ -133,28 +119,11 @@ export default {
       name: null,
     }
 
-    const picker = new Date().toISOString().substr(0, 10)
-    const isDate = ref(false)
-
     //validation
     const formData = ref({ ...emptyFormData })
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     const validate = () => {
       form.value.validate()
-    }
-
-    //form options for selects
-    const selectsDatas = ref({})
-    //! METHODS
-    const loadName = () => {
-      axios
-        .get('/api/cashboxes', { params: { itemsPerPage: -1 } })
-        .then(response => {
-          if (response.data.success) {
-            selectsDatas.value.name = response.data.data
-          }
-        })
-        .catch(error => console.log(error))
     }
 
     // on form submit
@@ -219,14 +188,10 @@ export default {
 
     return {
       form,
-      picker,
-      isDate,
       required,
       minLengthValidator,
       formData,
-      selectsDatas,
       selectRule,
-      loadName,
       validate,
       show,
       onSubmit,

@@ -43,14 +43,66 @@
                   ></v-date-picker>
                 </v-menu>
               </v-col>
-              <v-col cols="12" class="cashbox-inp">
-                <h4 class="text-required no-text"><span>*</span></h4>
+              <v-col cols="12" >
+                <v-text-field
+                  label="SUMMA"
+                  v-model="formData.amount"
+                  type="number"
+                  dense
+                  outlined
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" >
+                <v-autocomplete
+                  v-model="formData.money_id"
+                  :items="selectsDatas.money"
+                  @input="id = 1"
+                  item-text="name"
+                  item-value="id"
+                  label="VALYUTA"
+                  aria-selected="sum"
+                  dense
+                  outlined
+                  hide-details
+                  clearable
+                  :rules="selectRule"
+                >
+                </v-autocomplete>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="formData.note"
+                  label="IZOH"
+                  dense
+                  outlined
+                  hide-details
+                  required
+                  height="80px"
+                >
+                  </v-textarea>
+              </v-col>
+              <v-col cols="12" >
+                <v-autocomplete
+                  v-model="formData.expense_category_id"
+                  :items="selectsDatas.expense"
+                  item-text="name"
+                  item-value="id"
+                  label="XARAJAT TURLARI"
+                  dense
+                  outlined
+                  hide-details
+                  clearable
+                >
+                </v-autocomplete>
+              </v-col>
+              <v-col cols="12">
                 <v-autocomplete
                   v-model="formData.cashbox_id"
                   :items="selectsDatas.cashbox"
                   item-text="name"
                   item-value="id"
-                  label="KASSA NOMLARI"
+                  label="KASSA"
                   dense
                   outlined
                   hide-details
@@ -59,60 +111,7 @@
                 >
                 </v-autocomplete>
               </v-col>
-              <v-col cols="12" class="type-inp">
-                <h4 class="text-required no-text"><span>*</span></h4>
-                <v-autocomplete
-                  v-model="formData.type"
-                  :items="selectsDatas.type"
-                  item-text="name"
-                  item-value="id"
-                  label="XARAJAT turlari"
-                  dense
-                  outlined
-                  hide-details
-                  clearable
-                  :rules="selectRule"
-                >
-                </v-autocomplete>
-              </v-col>
-              <v-col cols="12" class="money">
-                <h4 class="text-required no-text"><span>*</span></h4>
-                <v-text-field
-                  label="SUMMA"
-                  v-model="formData.money_id"
-                  type="number"
-                  dense
-                  outlined
-									required
-                  hide-details
-                  :rules="[required]"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" class="amount-inp">
-                <h4 class="text-required no-text"><span>*</span></h4>
-                <v-text-field
-                  label="MIQDORI"
-                  v-model="formData.amount"
-                  type="number"
-                  dense
-                  outlined
-									required
-                  hide-details
-                  :rules="[required]"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                  <v-textarea
-                    v-model="formData.note"
-                    label="IZOH"
-                    dense
-                    outlined
-                    hide-details
-                    required
-                    height="80px"
-                  >
-                  </v-textarea>
-              </v-col>
+              
             </v-row>
           </v-container>
         </v-card-text>
@@ -132,14 +131,14 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import CostStoreModule from './CostStoreModule'
+import ExpenseStoreModule from './ExpenseStoreModule'
 import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
 import { required } from '@core/utils/validation'
 import Button from '../../components/button/Button'
 
-const MODULE_NAME = 'cost'
+const MODULE_NAME = 'expense'
 
 export default {
   components: { Button },
@@ -147,24 +146,25 @@ export default {
   //
   // },
   created() {
+    this.loadMoney()
     this.loadCashbox()
-    this.loadType()
+    this.loadExpense()
   },
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, CostStoreModule)
+      store.registerModule(MODULE_NAME, ExpenseStoreModule)
     }
 
     // show, hide
     const emptyFormData = {
       id: null,
-      date: null,
+      date: new Date().toISOString().substr(0, 10),
       amount: null,
-      money_id: null,
-      cashbox_id: null,
-      type: null,
+      money_id: ref({ name: "so'm", id: 1 }),
       note: null,
+      expense_category_id: null,
+      cashbox_id: ref({ name: 'Naxt', id: 1 }),
     }
     const formData = ref({ ...emptyFormData })
     const form = ref(null)
@@ -197,7 +197,7 @@ export default {
           formData.value.money_id &&
           formData.value.amount &&
           formData.value.cashbox_id &&
-          formData.value.type
+          formData.value.expense_category_id
         ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
@@ -221,7 +221,7 @@ export default {
           formData.value.money_id &&
           formData.value.amount &&
           formData.value.cashbox_id &&
-          formData.value.type
+          formData.value.expense_category_id
         ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
@@ -244,6 +244,16 @@ export default {
 
     const selectsDatas = ref({})
     // ! METHODS
+    const loadMoney = () => {
+      axios
+        .get('/api/money', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.money = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
     const loadCashbox = () => {
       axios
         .get('/api/cashboxes', { params: { itemsPerPage: -1 } })
@@ -254,15 +264,25 @@ export default {
         })
         .catch(error => console.log(error))
     }
-    const loadType = () => {
+    const loadExpense = () => {
       axios
         .get('/api/expense-categories', { params: { itemsPerPage: -1 } })
         .then(response => {
           if (response.data.success) {
-            selectsDatas.value.type = response.data.data
+            selectsDatas.value.expense = response.data.data
           }
         })
         .catch(error => console.log(error))
+    }
+
+    // Money
+    const moneyForm = ref(null)
+    const addMoney = (id = null) => {
+      moneyForm.value.open(id)
+    }
+    const addMoneyToOptions = row => {
+      selectsDatas.value.money = selectsDatas.value.money.concat([row])
+      formData.value.money_id = row.id
     }
 
     // Cashbox
@@ -276,13 +296,13 @@ export default {
     }
 
     // Type
-    const typeForm = ref(null)
-    const addType = (id = null) => {
-      typeForm.value.open(id)
+    const expenseForm = ref(null)
+    const addExpense = (id = null) => {
+      expenseForm.value.open(id)
     }
-    const addTypeToOptions = row => {
-      selectsDatas.value.type = selectsDatas.value.type.concat([row])
-      formData.value.type = row.id
+    const addExpenseToOptions = row => {
+      selectsDatas.value.expense = selectsDatas.value.expense.concat([row])
+      formData.value.expense_category_id = row.id
     }
 
     return {
@@ -298,14 +318,18 @@ export default {
       close,
 
       selectsDatas,
+      loadMoney,
       loadCashbox,
-      loadType,
+      loadExpense,
+      moneyForm,
+      addMoney,
+      addMoneyToOptions,
       cashboxForm,
       addCashbox,
       addCashboxToOptions,
-      typeForm,
-      addType,
-      addTypeToOptions,
+      expenseForm,
+      addExpense,
+      addExpenseToOptions,
 
       icons: {
         mdiPlusCircleOutline,
