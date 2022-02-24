@@ -57,11 +57,9 @@
                 <v-autocomplete
                   v-model="formData.money_id"
                   :items="selectsDatas.money"
-                  @input="id = 1"
                   item-text="name"
                   item-value="id"
                   label="VALYUTA"
-                  aria-selected="sum"
                   dense
                   outlined
                   hide-details
@@ -349,21 +347,5 @@ export default {
   padding-right: 15px !important;
   padding-left: 15px !important;
   border-color: rgba(94, 86, 105, 0.15) !important;
-}
-.money {
-  margin-top: -3%;
-}
-.teacherInp {
-  margin-bottom: 6%;
-  margin-top: -10%;
-}
-.cashbox-inp {
-  margin-top: -8%;
-}
-.type-inp {
-  margin-top: -3%;
-}
-.amount-inp {
-  margin-top: -3%;
 }
 </style>
