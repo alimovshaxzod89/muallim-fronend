@@ -209,10 +209,11 @@ export default {
           // ? Set access token in localStorage so axios interceptor can use it
           // Axios Interceptors: https://github.com/axios/axios#interceptors
 
-          const { success, token, user, msg } = response.data
+          const { success, token, user, msg, multi_currency } = response.data
 
           if (success) {
             localStorage.setItem('accessToken', token)
+            localStorage.setItem('multi_currency', multi_currency)
             localStorage.setItem('userData', JSON.stringify(user))
 
             const { ability: userAbility } = user
