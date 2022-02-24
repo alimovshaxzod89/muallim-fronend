@@ -96,9 +96,9 @@ const views = [
     },
   },
   {
-    path: '/costs',
-    name: 'costs',
-    component: () => import('@/views/lists/cost/CostList.vue'),
+    path: '/expenses',
+    name: 'expenses',
+    component: () => import('@/views/lists/expense/ExpenseList.vue'),
     meta: {
       layout: 'content',
     },
@@ -248,6 +248,16 @@ const views = [
     meta: {
       layout: 'content',
       resource: 'CenterProfit',
+      action: 'read',
+    },
+  },
+  {
+    path: '/money',
+    name: 'money',
+    component: () => import('@/views/lists/money/MoneyList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'money',
       action: 'read',
     },
   },

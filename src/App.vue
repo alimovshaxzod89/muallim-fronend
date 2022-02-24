@@ -62,7 +62,7 @@ export default {
 
 <style lang="scss">
 .my-date-picker {
-  height: 65px;
+  height: 45px;
 }
 .my-date-picker .v-input__slot {
   min-height: 40px !important;
