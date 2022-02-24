@@ -23,7 +23,7 @@
 					:animation="200"
 					ghost-class="ghost-card"
 					group="tasks"
-					@change="taskChange()"
+					@end="taskChange"
 				>
 					<lead-task-card
 						v-for="task in appealReturn()"
@@ -150,8 +150,11 @@ export default {
 
     const appealReturn = () => appealState.value.rows.filter(el => el.lead_id === null).reverse()
 
-    const taskChange = evt => {
-      console.log(evt)
+    const taskChange = e => {
+      console.log(e)
+      if (e.oldIndex !== e.newIndex || e.pullMode) {
+        console.log('yes')
+      }
     }
 
     // Form

@@ -32,7 +32,7 @@
 				:animation="200"
 				ghost-class="ghost-card"
 				group="tasks"
-				@change="taskChange()"
+				@end="taskChange"
 			>
 				<lead-task-card
 					v-for="task in appealReturn()"
@@ -68,8 +68,35 @@ export default {
 
     const appealReturn = () => state.value.rows.filter(el => el.lead_id === props.columns.id)
 
-    const taskChange = evt => {
-      console.log(evt)
+    const taskChange = e => {
+      const task = JSON.parse(JSON.stringify(e.item.__vue__.task))
+      const lead = JSON.parse(JSON.stringify(props.columns))
+
+      if (e.oldIndex !== e.newIndex || e.pullMode) {
+        console.log(task, lead)
+
+        const updatedTask = {
+          lead_id: lead.id,
+          id: task.id,
+          full_name: task.full_name,
+          phone: task.phone,
+          birth_date: task.birth_date,
+          gender: task.gender,
+          note: task.note,
+          subject_id: task.subject_id,
+          subject: task.subject,
+          days: task.days,
+          hours: task.hours,
+        }
+
+        store
+          .dispatch(`appeal/updateRow`, updatedTask)
+          .then(({ data }) => data)
+          .catch(error => {
+            console.log(error)
+            return false
+          })
+      }
     }
 
     return {
