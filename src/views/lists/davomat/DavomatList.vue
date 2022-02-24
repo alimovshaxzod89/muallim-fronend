@@ -252,6 +252,9 @@ import useDavomatList from './useDavomatList'
 import DavomatForm from './DavomatForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
+import moment from 'moment'
+moment.locale('uz-latn')
+
 const MODULE_NAME = 'davomat'
 
 export default {

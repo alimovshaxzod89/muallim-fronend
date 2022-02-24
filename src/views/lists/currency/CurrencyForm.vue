@@ -11,11 +11,12 @@
     <v-card>
       <v-form ref="form">
         <v-card-title>
-          <span class="headline">VALYUTA</span>
+          <span class="headline">Kassa nomlari</span>
         </v-card-title>
         <v-card-text>       
           <v-container>
             <v-row>
+
               <v-col cols="12">
                 <h4 class="text-required no-text"><span>*</span></h4>  
                 <v-text-field
@@ -67,6 +68,7 @@
         </v-card-actions>
       </v-form>
 
+      <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
     </v-card>
 
   </v-dialog>
@@ -75,8 +77,12 @@
 <script>
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
+// formats
+import moment from 'moment'
+moment.locale('uz')
+
 import store from '@/store'
-import MoneyStoreModule from './MoneyStoreModule'
+import CurrencyStoreModule from './CurrencyStoreModule'
 
 import axios from '@axios'
 
@@ -84,7 +90,7 @@ import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import Button from '../../components/button/Button.vue'
 
-const MODULE_NAME = 'money'
+const MODULE_NAME = 'currency'
 
 export default {
   components: {
@@ -97,7 +103,7 @@ export default {
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, MoneyStoreModule)
+      store.registerModule(MODULE_NAME, CurrencyStoreModule)
     }
 
     // show, hide
@@ -115,9 +121,11 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      date: null,
       name: null,
     }
+
+    const picker = new Date().toISOString().substr(0, 10)
+    const isDate = ref(false)
 
     //validation
     const formData = ref({ ...emptyFormData })
@@ -129,7 +137,7 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.name && formData.value.date) {
+        if (formData.value.name) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
@@ -147,7 +155,7 @@ export default {
           })
         }
       } else {
-        if (formData.value.name && formData.value.date) {
+        if (formData.value.name) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ message }) => {
@@ -188,6 +196,8 @@ export default {
 
     return {
       form,
+      picker,
+      isDate,
       required,
       minLengthValidator,
       formData,

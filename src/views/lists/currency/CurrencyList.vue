@@ -65,12 +65,20 @@
         </div>
 
       </template>
+
+      <template #[`item.status`]="{ item }">
+          {{item.status ? 'ha' : 'yo\'q'}}
+      </template>
+
+      <template #[`item.date`]="{ item }"> 
+        {{ item.date | date }}
+      </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <money-form
-      ref="moneyForm"
+    <currency-form
+      ref="currencyForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -83,26 +91,28 @@ import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
 
 import envParams from '@envParams'
+import moment from 'moment'
+moment.locale('uz-latn')
 
 // store module
-import MoneyStoreModule from './MoneyStoreModule'
+import CurrencyStoreModule from './CurrencyStoreModule'
 
 // composition function
-import useMoneyList from './useMoneyList'
-import MoneyForm from './MoneyForm.vue'
+import useCurrencyList from './useCurrencyList'
+import CurrencyForm from './CurrencyForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'money'
+const MODULE_NAME = 'currency'
 
 export default {
   components: {
-    MoneyForm,
+    CurrencyForm,
     DialogConfirm,
   },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, MoneyStoreModule)
+      store.registerModule(MODULE_NAME, CurrencyStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -123,7 +133,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useMoneyList(MODULE_NAME)
+    } = useCurrencyList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -135,9 +145,9 @@ export default {
     ]
 
     //Form
-    const moneyForm = ref(null)
+    const currencyForm = ref(null)
     const openForm = id => {
-      moneyForm.value.open(id)
+      currencyForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -171,7 +181,7 @@ export default {
 
       dialogConfirm,
       confirmDelete,
-      moneyForm,
+      currencyForm,
       openForm,
 
       MODULE_NAME,

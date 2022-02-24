@@ -252,9 +252,9 @@ const views = [
     },
   },
   {
-    path: '/money',
-    name: 'money',
-    component: () => import('@/views/lists/money/MoneyList.vue'),
+    path: '/currency',
+    name: 'currency',
+    component: () => import('@/views/lists/currency/CurrencyList.vue'),
     meta: {
       layout: 'content',
       resource: 'money',

@@ -205,8 +205,8 @@ export default [
   },
   {
     title: 'Valyuta',
-    to: 'money',
-    resource: 'money',
+    to: 'currency',
+    resource: 'currency',
     action: 'read',
     icon: mdiCurrencyEur,
   },
