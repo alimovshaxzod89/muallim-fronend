@@ -70,9 +70,6 @@
           {{item.status ? 'ha' : 'yo\'q'}}
       </template>
 
-      <template #[`item.date`]="{ item }"> 
-        {{ item.date | date }}
-      </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />

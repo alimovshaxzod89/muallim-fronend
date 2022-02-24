@@ -54,8 +54,8 @@
               </v-col>
               <v-col cols="12" >
                 <v-autocomplete
-                  v-model="formData.money_id"
-                  :items="selectsDatas.money"
+                  v-model="formData.currency_id"
+                  :items="selectsDatas.currency"
                   item-text="name"
                   item-value="id"
                   label="VALYUTA"
@@ -82,7 +82,7 @@
               <v-col cols="12" >
                 <v-autocomplete
                   v-model="formData.expense_category_id"
-                  :items="selectsDatas.expense"
+                  :items="selectsDatas.expense_category"
                   item-text="name"
                   item-value="id"
                   label="XARAJAT TURLARI"
@@ -143,7 +143,7 @@ export default {
   //
   // },
   created() {
-    this.loadMoney()
+    this.loadCurrency()
     this.loadCashbox()
     this.loadExpense()
   },
@@ -158,7 +158,7 @@ export default {
       id: null,
       date: new Date().toISOString().substr(0, 10),
       amount: null,
-      money_id: ref({ name: "so'm", id: 1 }),
+      currency_id: { id: 1 },
       note: null,
       expense_category_id: null,
       cashbox_id: ref({ name: 'Naxt', id: 1 }),
@@ -191,7 +191,7 @@ export default {
       if (formData.value.id) {
         if (
           formData.value.date &&
-          formData.value.money_id &&
+          formData.value.currency_id &&
           formData.value.amount &&
           formData.value.cashbox_id &&
           formData.value.expense_category_id
@@ -215,7 +215,7 @@ export default {
       } else {
         if (
           formData.value.date &&
-          formData.value.money_id &&
+          formData.value.currency_id &&
           formData.value.amount &&
           formData.value.cashbox_id &&
           formData.value.expense_category_id
@@ -241,12 +241,12 @@ export default {
 
     const selectsDatas = ref({})
     // ! METHODS
-    const loadMoney = () => {
+    const loadCurrency = () => {
       axios
-        .get('/api/money', { params: { itemsPerPage: -1 } })
+        .get('/api/currencies', { params: { itemsPerPage: -1 } })
         .then(response => {
           if (response.data.success) {
-            selectsDatas.value.money = response.data.data
+            selectsDatas.value.currency = response.data.data
           }
         })
         .catch(error => console.log(error))
@@ -266,20 +266,20 @@ export default {
         .get('/api/expense-categories', { params: { itemsPerPage: -1 } })
         .then(response => {
           if (response.data.success) {
-            selectsDatas.value.expense = response.data.data
+            selectsDatas.value.expense_category = response.data.data
           }
         })
         .catch(error => console.log(error))
     }
 
-    // Money
-    const moneyForm = ref(null)
-    const addMoney = (id = null) => {
-      moneyForm.value.open(id)
+    // Currency
+    const currencyForm = ref(null)
+    const addCurrency = (id = null) => {
+      currencyForm.value.open(id)
     }
-    const addMoneyToOptions = row => {
-      selectsDatas.value.money = selectsDatas.value.money.concat([row])
-      formData.value.money_id = row.id
+    const addCurrencyToOptions = row => {
+      selectsDatas.value.currency = selectsDatas.value.currency.concat([row])
+      formData.value.currency_id = row.id
     }
 
     // Cashbox
@@ -293,12 +293,12 @@ export default {
     }
 
     // Type
-    const expenseForm = ref(null)
-    const addExpense = (id = null) => {
-      expenseForm.value.open(id)
+    const expenseCategoryForm = ref(null)
+    const addExpenseCategory = (id = null) => {
+      expenseCategoryForm.value.open(id)
     }
-    const addExpenseToOptions = row => {
-      selectsDatas.value.expense = selectsDatas.value.expense.concat([row])
+    const addExpenseCategoryToOptions = row => {
+      selectsDatas.value.expense_category = selectsDatas.value.expense_category.concat([row])
       formData.value.expense_category_id = row.id
     }
 
@@ -315,18 +315,18 @@ export default {
       close,
 
       selectsDatas,
-      loadMoney,
+      loadCurrency,
       loadCashbox,
       loadExpense,
-      moneyForm,
-      addMoney,
-      addMoneyToOptions,
+      currencyForm,
+      addCurrency,
+      addCurrencyToOptions,
       cashboxForm,
       addCashbox,
       addCashboxToOptions,
-      expenseForm,
-      addExpense,
-      addExpenseToOptions,
+      expenseCategoryForm,
+      addExpenseCategory,
+      addExpenseCategoryToOptions,
 
       icons: {
         mdiPlusCircleOutline,

@@ -15,6 +15,7 @@ export default function useCurrencyList(MODULE_NAME) {
         sortable: false,
     },
     { text: 'Nomi', value: 'name' },
+    { text: 'Aktiv', value: 'status' },
     ]
 
   const filter = ref({

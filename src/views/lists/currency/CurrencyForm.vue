@@ -30,6 +30,16 @@
                 ></v-text-field>
               </v-col>
 
+              <v-col cols="12">
+                <v-checkbox
+                  v-model="formData.status"
+                  hide-details
+                  label="Aktiv"
+                  false-value='0'
+                  true-value='1'
+                ></v-checkbox>
+              </v-col>
+
               <!-- <v-col cols="12">
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
@@ -122,6 +132,7 @@ export default {
     const emptyFormData = {
       id: null,
       name: null,
+      status: '1',
     }
 
     const picker = new Date().toISOString().substr(0, 10)

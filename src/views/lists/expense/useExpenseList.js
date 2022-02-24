@@ -1,7 +1,7 @@
 import store from '@/store'
 import { ref, watch } from '@vue/composition-api'
 
-export default function useCostList(MODULE_NAME) {
+export default function useExpenseList(MODULE_NAME) {
   const selectedTableData = ref([])
   const notify = ref({})
 
@@ -20,12 +20,12 @@ export default function useCostList(MODULE_NAME) {
     { text: 'IZOH', value: 'note' },
 
     // !!!
-    { text: 'XARAJAT TURLARI', value: 'expense.name' },
+    { text: 'XARAJAT TURLARI', value: 'expense_category.name' },
 
     { text: 'SUMMA', value: 'amount' },
 
     //  dollar, so'm, yevro
-    { text: 'VALYUTA', value: 'money.name' },
+    { text: 'VALYUTA', value: 'currency.name' },
 
     // naxt, plastik ...
     { text: 'KASSA', value: 'cashbox.name' },
