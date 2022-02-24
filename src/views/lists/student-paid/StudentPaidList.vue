@@ -370,7 +370,6 @@ export default {
 
       isDate,
       isDateTwo,
-      picker,
 
       actions,
       actionOptions,
