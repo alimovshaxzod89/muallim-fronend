@@ -12,9 +12,9 @@ export default function useStudentDeptList(MODULE_NAME) {
     { text: 'USTOZ', value: 'group.teacher.full_name' },
     { text: "TALABA", value: 'student.full_name' },
     { text: "TELEFON", value: 'student.phone' },
-    { text: "OYLIK TO'LOV", value: 'group.price' },
+    { text: "OYLIK TO'LOV", value: 'amount' },
     { text: "TO'lADI", value: 'paid' },
-    { text: "QARZ", value: 'amount' },
+    { text: "QARZ", value: 'dept' },
     { text: "OY", value: 'month' },
   ]
 

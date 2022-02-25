@@ -6,7 +6,7 @@
           Markaz Xarajatlari
         </p>
         <p class="text-no-wrap">
-          <span class="text-2xl font-weight-semibold me-1">{{selectsDatas.cost}}</span>
+          <span class="text-2xl font-weight-semibold me-1">{{totalMoney_id()}}</span>
         </p>
       </div>
       <v-spacer></v-spacer>
@@ -55,12 +55,16 @@ export default {
         .get('/api/cashes')
         .then(response => {
           if (response.data.success) {
-            selectsDatas.value.cost = response.data.data.length
+            selectsDatas.value.cost = response.data.data
           }
         })
         .catch(error => console.log(error))
     }
     loadCost()
+
+    const totalMoney_id = () => {
+      return selectsDatas.value.cost.reduce((a, c) => a + c.money_id, 0)
+    }
     const $vuetify = getVuetify()
 
     const chartOptions = {
@@ -131,6 +135,7 @@ export default {
       chartOptions,
       chartData,
       selectsDatas,
+      totalMoney_id,
 
       icons: {
         mdiDotsVertical,

@@ -168,6 +168,11 @@
       </template>
 
       <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+      <template #[`item.paid`]="{ item }"> {{ item.paid | summa }}</template>
+
+      <template #[`item.dept`]="{ item }">
+				{{item.amount - item.paid | summa}}
+      </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
@@ -175,16 +180,16 @@
 </template>
 
 <script>
-import { 
+import {
   mdiTrendingUp,
-  mdiPlus, 
-  mdiDeleteOutline, 
-  mdiDotsVertical, 
-  mdiEyeOutline, 
+  mdiPlus,
+  mdiDeleteOutline,
+  mdiDotsVertical,
+  mdiEyeOutline,
   mdiPencilOutline,
   mdiFilterOutline,
-  mdiCalendar, 
-  } from '@mdi/js'
+  mdiCalendar,
+} from '@mdi/js'
 
 import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
@@ -207,12 +212,11 @@ export default {
     DialogConfirm,
   },
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		summa: value => numeral(value).format('0,0'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    date: value => moment(value).format('D MMMM YYYY'),
+    summa: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup() {
-
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, StudentDeptStoreModule)
@@ -262,30 +266,29 @@ export default {
 
     const BASE_URL = envParams.BASE_URL
 
-
     // LoadApis
     const months = ref([])
     const loadMonths = () => {
       axios.get('/api/months').then(response => {
-        months.value = response.data.data 
+        months.value = response.data.data
       })
     }
     const teachers = ref([])
     const loadTeachers = () => {
       axios.get('/api/teachers').then(response => {
-        teachers.value = response.data.data 
+        teachers.value = response.data.data
       })
     }
     const groups = ref([])
     const loadGroups = () => {
       axios.get('/api/groups').then(response => {
-        groups.value = response.data.data 
+        groups.value = response.data.data
       })
     }
     const students = ref([])
     const loadStudents = () => {
       axios.get('/api/students').then(response => {
-        students.value = response.data.data 
+        students.value = response.data.data
       })
     }
 
@@ -295,8 +298,6 @@ export default {
       loadGroups()
       loadStudents()
     })
-
-
 
     // Return
     return {

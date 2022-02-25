@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="align-start">
-      <span class="font-weight-semibold">Qarzdorlar</span>
+      <div class="">Qarzdorlar</div>
 
       <v-spacer></v-spacer>
 
@@ -16,7 +16,7 @@
       </v-btn>
     </v-card-title>
 
-    <v-card-subtitle class='mb-1'>
+    <!-- <v-card-subtitle class='mb-1'>
 
 			<div class='row justify-content-between'>
 				<div class='col'><v-select
@@ -31,12 +31,133 @@
 					outlined
 				></v-select></div>
 			</div>
-    </v-card-subtitle>
+    </v-card-subtitle> -->
 
     <v-card-text>
       <v-row>
         <v-col
-          v-for="data in statisticsData"
+          v-for="data in statisticsData1"
+          :key="data.title"
+          cols="6"
+          sm="4"
+          class="d-flex align-center"
+        >
+          <v-avatar
+            size="44"
+            rounded
+            class="elevation-1"
+          >
+          </v-avatar>
+
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ data.title }}
+            </p>
+            <h2 class=" font-weight-bold bg-primary">
+              {{ totalAmount() }}   
+            </h2>
+          </div>
+
+        </v-col>
+
+        <v-col
+          v-for="data in statisticsData2"
+          :key="data.title"
+          cols="6"
+          sm="4"
+          class="d-flex align-center"
+        >
+          <v-avatar
+            size="44"
+            rounded
+            class="elevation-1"
+          >
+          </v-avatar>
+
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ data.title }}
+            </p>
+            <h2 class=" font-weight-bold bg-primary">
+              {{data.total}}
+            </h2>
+          </div>
+        </v-col>
+
+        <v-col
+          v-for="data in statisticsData3"
+          :key="data.title"
+          cols="6"
+          sm="4"
+          class="d-flex align-center"
+        >
+          <v-avatar
+            size="44"
+            rounded
+            class="elevation-1"
+          >
+          </v-avatar>
+
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ data.title }}
+            </p>
+            <h2 class=" font-weight-bold bg-primary">
+              {{ data.total }}   
+            </h2>
+          </div>
+        </v-col>
+
+        <v-col
+          v-for="data in statisticsData4"
+          :key="data.title"
+          cols="6"
+          sm="4"
+          class="d-flex align-center"
+        >
+          <v-avatar
+            size="44"
+            rounded
+            class="elevation-1"
+          >
+          </v-avatar>
+
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ data.title }}
+            </p>
+            <h2 class=" font-weight-bold bg-primary">
+              {{ totalDept() }}   
+            </h2>
+          </div>
+        </v-col>
+
+        <v-col
+          v-for="data in statisticsData5"
+          :key="data.title"
+          cols="6"
+          sm="4"
+          class="d-flex align-center"
+        >
+          <v-avatar
+            size="44"
+            rounded
+            class="elevation-1"
+          >
+          </v-avatar>
+
+          <div class="ms-3">
+            <p class="text-xs mb-0">
+              {{ data.title }}
+            </p>
+            <h2 class=" font-weight-bold bg-primary">
+              {{ data.total }}   
+            </h2>
+          </div>
+        </v-col>
+
+        <v-col
+          v-for="data in statisticsData6"
           :key="data.title"
           cols="6"
           sm="4"
@@ -60,6 +181,8 @@
         </v-col>
       </v-row>
     </v-card-text>
+
+    
   </v-card>
 </template>
 
@@ -74,6 +197,8 @@ import {
   mdiTicketPercentOutline,
   mdiCurrencyUsd,
 } from '@mdi/js'
+import axios from '@axios'
+import { ref } from '@vue/composition-api'
 
 export default {
   setup() {
@@ -95,27 +220,37 @@ export default {
       'Dekabr',
     ]
 
-    const statisticsData = [
+    const statisticsData1 = [
       {
         title: "Talabalar to'lashi zarur",
         total: '245k',
       },
+    ]
+    const statisticsData2 = [
       {
         title: 'Ustozlardan qarz',
         total: '12.5k',
       },
+    ]
+    const statisticsData3 = [
       {
         title: "Ustozlar mablag'i",
         total: '1.54k',
       },
+    ]
+    const statisticsData4 = [
       {
         title: 'Talabalar qarzi',
         total: '245k',
       },
+    ]
+    const statisticsData5 = [
       {
         title: 'Markaz ulushi',
         total: '12.5k',
       },
+    ]
+    const statisticsData6 = [
       {
         title: 'Markaz ololmayotgan summa',
         total: '1.54k',
@@ -133,13 +268,52 @@ export default {
       return { icon: mdiAccountOutline }
     }
 
+    const selectsDatas = ref({
+      amount: null,
+      paid: null,
+      dept: null,
+    })
+    // methods
+    const loadPayment = () => {
+      axios
+        .get('/api/payments')
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.amount = response.data.data
+            selectsDatas.value.paid = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
+    loadPayment()
+
+    const totalAmount = () => {
+      return selectsDatas.value.amount.reduce((a, c) => a + c.amount, 0)
+    }
+    const totalPaid = () => {
+      return selectsDatas.value.paid.reduce((a, c) => a + c.paid, 0)
+    }
+    const totalDept = () => {
+      return totalAmount() - totalPaid()
+    }
+
     return {
-      statisticsData,
+      statisticsData1,
+      statisticsData2,
+      statisticsData3,
+      statisticsData4,
+      statisticsData5,
+      statisticsData6,
       selectedYear,
       selectedMonth,
       years,
       monthes,
       resolveStatisticsIconVariation,
+
+      selectsDatas,
+      totalAmount,
+      totalPaid,
+      totalDept,
 
       // icons
       icons: {

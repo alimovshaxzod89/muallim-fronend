@@ -70,6 +70,34 @@
       <template #[`item.money_id`]="{ item }"> {{ item.money_id | summa }}</template>
 
       <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
+
+
+      <template v-slot:footer>
+        <table class="my-table-footer">
+          <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+							<td></td>
+              <td
+                rowspan="5"
+              >
+                Jami: 
+              </td>
+              <td 
+                rowspan="1" 
+                class="money text-end d-flex"
+              >
+                <p>
+                  Summa:
+                </p>
+                {{totalMoney_id()}}
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
@@ -164,6 +192,13 @@ export default {
         .catch(() => {})
     }
 
+    const totalMoney_id = () => {
+      return state.value.rows.reduce((a, c) => a + c.money_id, 0)
+    }
+    const totalAmount = () => {
+      return state.value.rows.reduce((a, c) => a + c.amount, 0)
+    }
+
     const BASE_URL = envParams.BASE_URL
 
     // Return
@@ -189,6 +224,9 @@ export default {
 
       costForm,
       openForm,
+
+      totalMoney_id,
+      totalAmount,
 
       MODULE_NAME,
 
@@ -219,5 +257,19 @@ export default {
   .data-list-search {
     max-width: 10.625rem;
   }
+}
+
+.my-table-footer {
+  width: 100%;
+  background-color: #f3f2f7;
+  td {
+    padding: 0 5px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+}
+.money {
+  margin-left: 48%;
+  margin-top: 2%;
 }
 </style>
