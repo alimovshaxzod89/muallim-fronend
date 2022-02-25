@@ -39,7 +39,8 @@
                     label="USTOZ"
                     class="data-list-search me-3"
                     clearable
-                  ></v-autocomplete>
+                  >
+                  </v-autocomplete>
                 </v-col>
 
                 <v-col cols="3">
@@ -234,34 +235,31 @@
 </template>
 
 <script>
+import store from '@/store'
+import axios from '@axios'
+import envParams from '@envParams'
 import {
-  mdiFilterOutline,
   mdiCalendar,
-  mdiTrendingUp,
-  mdiPlus,
   mdiDeleteOutline,
   mdiDotsVertical,
   mdiEyeOutline,
+  mdiFilterOutline,
   mdiPencilOutline,
+  mdiPlus,
+  mdiTrendingUp,
 } from '@mdi/js'
-
-import { onMounted, onUnmounted, ref } from '@vue/composition-api'
-import store from '@/store'
-import axios from '@axios'
+import { onMounted, ref, watch } from '@vue/composition-api'
 import moment from 'moment'
-moment.locale('uz-latn')
-
-import envParams from '@envParams'
-
+import numeral from 'numeral'
+import DialogConfirm from '../../components/DialogConfirm.vue'
+import StudentGroupForm from './StudentGroupForm'
 // store module
 import StudentGroupStoreModule from './StudentGroupStoreModule'
-
 // composition function
 import useStudentGroupList from './useStudentGroupList'
-import StudentGroupForm from './StudentGroupForm'
-import DialogConfirm from '../../components/DialogConfirm.vue'
 
-import numeral from 'numeral'
+moment.locale('uz-latn')
+
 numeral.locale('ru')
 
 const MODULE_NAME = 'studentGroup'
@@ -333,7 +331,9 @@ export default {
 
     const BASE_URL = envParams.BASE_URL
 
-    const teachers = ref([])
+    const teachers = ref({
+      teacher_id: null,
+    })
     const loadTeachers = () => {
       axios.get('/api/teachers').then(response => {
         teachers.value = response.data.data
@@ -341,11 +341,31 @@ export default {
     }
 
     const groups = ref([])
+    const freshGroups = ref([])
+    const params = ref({})
+
     const loadGroups = () => {
-      axios.get('/api/groups').then(response => {
+      if (filter.value.teacher_id) {
+        params.value.teacher_id = filter.value.teacher_id
+      } else if (filter.value.teacher_id === null) {
+        return (groups.value = freshGroups.value) && (filter.value.group_id = groups.value)
+      }
+
+      axios.get(`/api/groups`, { params: params.value }).then(response => {
         groups.value = response.data.data
       })
+
+      axios.get('/api/groups').then(response => {
+        freshGroups.value = response.data.data
+      })
     }
+
+    watch(
+      () => filter.value.teacher_id,
+      () => {
+        loadGroups()
+      },
+    )
 
     const students = ref([])
     const loadStudents = () => {
@@ -375,6 +395,10 @@ export default {
       isDate,
       isDateTwo,
       picker,
+
+      freshGroups,
+
+      params,
 
       actions,
       actionOptions,

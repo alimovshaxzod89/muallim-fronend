@@ -251,8 +251,6 @@ import { onMounted, ref } from '@vue/composition-api'
 
 import store from '@/store'
 import axios from '@axios'
-import numeral from 'numeral'
-numeral.locale('ru')
 
 import envParams from '@envParams'
 
@@ -276,10 +274,8 @@ export default {
     DialogConfirm,
   },
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		summa: value => numeral(value).format('0,0'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
