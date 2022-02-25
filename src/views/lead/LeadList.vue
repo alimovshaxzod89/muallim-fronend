@@ -1,63 +1,74 @@
 <template>
   <div id="data-list">
-
 		<v-row>
-			<v-col cols="4" v-for="column in columns" :key="column.title">
+			<v-col cols="4">
 				<v-card class="my-draggable-card-main">
 					<div class="my-top d-flex align-center mb-5">
-						<v-card-title>{{column.name}}</v-card-title>
+						<v-card-title>Lidlar</v-card-title>
 						<v-spacer></v-spacer>
 						<v-list class="mr-5">
-							<v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" v-if="column.position === 1" @click="openAppealForm()">
-								<v-icon size="24">{{ icons.mdiFileAccountOutline }} </v-icon>
+							<v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" @click="openAppealForm()">
+								<v-icon size="24">{{ icons.mdiFileAccountOutline }}</v-icon>
 							</v-btn>
-							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(column.position)">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(1)">
 								<v-icon>{{ icons.mdiPlus }}</v-icon>
 							</v-btn>
 						</v-list>
 					</div>
 				</v-card>
 
-					<v-card class="my-cart-filter" v-for="(group, index) in column.groups" :key="group + index">
-						<v-card-text class="d-flex align-center justify-space-between">
-							<h3 class="my-group-title">{{group.name}}
-								<div v-if="column.position === 3">
-									● {{group.subjects.name}}
-									● {{group.teachers.full_name}}
-									● {{group.rooms.name}}
-									● {{group.time_begin}}
-								</div>
-							</h3>
-							<v-menu bottom offset-y>
-								<template #activator="{ on, attrs }">
-									<v-btn class="task-btn" v-bind="attrs" v-on="on" text small fab>
-										<v-icon size="24">{{ icons.mdiMenu }}</v-icon>
-									</v-btn>
-								</template>
-								<v-list class="my-list">
-									<v-list-item class="pa-0">
-										<v-btn text><v-icon class="mr-3" size="18">{{ icons.mdiPencilOutline }}</v-icon> Tahrirlash</v-btn>
-									</v-list-item>
-									<v-list-item class="pa-0">
-										<v-btn text><v-icon class="mr-3" color="error" size="18">{{ icons.mdiDeleteOutline }}</v-icon> O'chirish</v-btn>
-									</v-list-item>
-								</v-list>
-							</v-menu>
-						</v-card-text>
-						<draggable
-							class="my-draggable"
-							:list="column.tasks"
-							:animation="200"
-							ghost-class="ghost-card"
-							group="tasks"
-						>
-							<lead-task-card
-								v-for="task in group.tasks"
-								:key="task.id"
-								:task="task"
-							></lead-task-card>
-						</draggable>
-					</v-card>
+				<draggable
+					class="my-draggable my-task-defaults"
+					:list="taskGroup"
+					:animation="200"
+					ghost-class="ghost-card"
+					group="tasks"
+					@end="taskChange"
+				>
+					<lead-task-card
+						v-for="task in appealReturn()"
+						:key="task.id"
+						:task="task"
+					></lead-task-card>
+				</draggable>
+
+				<lead-filter-card
+					v-for="column in state.rows.filter(el => el.position === 1)"
+					:columns="column"
+					:key="column.id"
+				/>
+			</v-col>
+
+			<v-col cols="4">
+				<v-card class="my-draggable-card-main">
+					<div class="my-top d-flex align-center mb-5">
+						<v-card-title>Kutish</v-card-title>
+						<v-spacer></v-spacer>
+						<v-list class="mr-5">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(2)">
+								<v-icon>{{ icons.mdiPlus }}</v-icon>
+							</v-btn>
+						</v-list>
+					</div>
+				</v-card>
+
+				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 2)" :columns="column" :key="column.id" />
+			</v-col>
+
+			<v-col cols="4">
+				<v-card class="my-draggable-card-main">
+					<div class="my-top d-flex align-center mb-5">
+						<v-card-title>Guruhlar</v-card-title>
+						<v-spacer></v-spacer>
+						<v-list class="mr-5">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(3)">
+								<v-icon>{{ icons.mdiPlus }}</v-icon>
+							</v-btn>
+						</v-list>
+					</div>
+				</v-card>
+
+				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 3)" :columns="column" :key="column.id" />
 			</v-col>
 		</v-row>
 
@@ -71,16 +82,17 @@
 <script>
 import { mdiDeleteOutline, mdiPencilOutline, mdiPlus, mdiFileAccountOutline, mdiMenu } from '@mdi/js'
 
-import { ref, onUnmounted } from '@vue/composition-api'
-import store from '@/store'
-
+import { ref, onBeforeMount, onUnmounted } from '@vue/composition-api'
 import draggable from 'vuedraggable'
+import store from '@/store'
 
 // store module
 import LeadStoreModule from './LeadStoreModule'
+import AppealStoreModule from './appeal/AppealStoreModule'
 
 // composition function
 import useLeadList from './useLeadList'
+import LeadFilterCard from './LeadFilterCard'
 import LeadTaskCard from './LeadTaskCard'
 
 import LeadSimpleForm from './LeadSimpleForm'
@@ -88,12 +100,13 @@ import LeadGroupForm from './LeadGroupForm'
 import AppealForm from './appeal/AppealForm'
 import DialogConfirm from '@/views/components/DialogConfirm'
 
-const MODULE_NAME = 'leads'
+const MODULE_NAME = 'lead'
 import envParams from '@envParams'
 
 export default {
   components: {
     draggable,
+    LeadFilterCard,
     LeadTaskCard,
     LeadSimpleForm,
     LeadGroupForm,
@@ -107,25 +120,51 @@ export default {
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, LeadStoreModule)
     }
+    if (!store.hasModule('appeal')) {
+      store.registerModule('appeal', AppealStoreModule)
+    }
     // UnRegister on leave
     onUnmounted(() => {
       if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
+      if (store.hasModule('appeal')) store.unregisterModule('appeal')
     })
+
+    const appealFetchDatas = () => {
+      store
+        .dispatch(`appeal/fetchDatas`)
+        .then(() => {})
+        .catch(error => {
+          console.log(error)
+        })
+    }
+    onBeforeMount(() => {
+      appealFetchDatas()
+    })
+
+    const { fetchDatas, deleteRow, loading, notify, selectedTableData } = useLeadList(MODULE_NAME)
 
     // Store state
     const state = ref(store.state[MODULE_NAME])
+    const appealState = ref(store.state.appeal)
+    const taskGroup = ref(null)
 
-    // Logics
-    const { fetchDatas, deleteRow, loading, notify, selectedTableData } = useLeadList(MODULE_NAME)
+    const appealReturn = () => appealState.value.rows.filter(el => el.lead_id === null).reverse()
+
+    const taskChange = e => {
+      console.log(e)
+      if (e.oldIndex !== e.newIndex || e.pullMode) {
+        console.log('yes')
+      }
+    }
 
     // Form
     const leadSimpleForm = ref(null)
     const leadGroupForm = ref(null)
     const openForm = position => {
       if (position === 3) {
-        leadGroupForm.value.open()
+        leadGroupForm.value.open(position)
       } else {
-        leadSimpleForm.value.open()
+        leadSimpleForm.value.open(position)
       }
     }
 
@@ -144,328 +183,15 @@ export default {
         .catch(() => {})
     }
 
-    // Draggable data
-    const columns = ref([
-      {
-        position: 1,
-        name: 'Lidlar',
-        groups: {
-          0: {
-            name: 'Erkaklar',
-            tasks: [
-              {
-                id: 1,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 2,
-                name: 'Provide documentation on integrations',
-              },
-              {
-                id: 3,
-                name: 'Design shopping cart dropdown',
-              },
-              {
-                id: 4,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 5,
-                name: 'Test checkout flow',
-              },
-            ],
-          },
-          1: {
-            name: 'Ayollar',
-            tasks: [
-              {
-                id: 14,
-                name: 'Olimlar',
-              },
-              {
-                id: 15,
-                name: 'Zakiylar',
-              },
-              {
-                id: 16,
-                name: 'Dizaynerlar top',
-              },
-              {
-                id: 17,
-                name: 'Qurtaboy',
-              },
-              {
-                id: 18,
-                name: 'Ilon Mask',
-              },
-            ],
-          },
-        },
-      },
-      {
-        position: 2,
-        name: 'Kutuv',
-        groups: {
-          0: {
-            name: 'Rus tiliga',
-            tasks: [
-              {
-                id: 1,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 2,
-                name: 'Provide documentation on integrations',
-              },
-              {
-                id: 3,
-                name: 'Design shopping cart dropdown',
-              },
-              {
-                id: 4,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 5,
-                name: 'Test checkout flow',
-              },
-            ],
-          },
-          1: {
-            name: 'Ingiliz tiliga',
-            tasks: [
-              {
-                id: 14,
-                name: 'Olimlar',
-              },
-              {
-                id: 15,
-                name: 'Zakiylar',
-              },
-              {
-                id: 16,
-                name: 'Dizaynerlar top',
-              },
-              {
-                id: 17,
-                name: 'Qurtaboy',
-              },
-              {
-                id: 18,
-                name: 'Ilon Mask',
-              },
-            ],
-          },
-        },
-      },
-      {
-        position: 3,
-        name: 'Guruh',
-        groups: {
-          0: {
-            name: "1-bo'lim",
-            subjects: {
-              name: 'Ingliz tili',
-            },
-            teachers: {
-              full_name: 'Olimov Qosim',
-            },
-            rooms: {
-              name: 'G-14',
-            },
-            week_days: 1,
-            time_begin: '16:00',
-            tasks: [
-              {
-                id: 1,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 2,
-                name: 'Provide documentation on integrations',
-              },
-              {
-                id: 3,
-                name: 'Design shopping cart dropdown',
-              },
-              {
-                id: 4,
-                name: 'Add discount code to checkout page',
-              },
-              {
-                id: 5,
-                name: 'Test checkout flow',
-              },
-            ],
-          },
-          1: {
-            name: "2-bo'lim",
-            subjects: {
-              name: 'Rus tili',
-            },
-            teachers: {
-              full_name: 'Yuldashov Bektosh',
-            },
-            rooms: {
-              name: 'G-5',
-            },
-            week_days: 1,
-            time_begin: '12:00',
-            tasks: [
-              {
-                id: 14,
-                name: 'Olimlar',
-              },
-              {
-                id: 15,
-                name: 'Zakiylar',
-              },
-              {
-                id: 16,
-                name: 'Dizaynerlar top',
-              },
-              {
-                id: 17,
-                name: 'Qurtaboy',
-              },
-              {
-                id: 18,
-                name: 'Ilon Mask',
-              },
-            ],
-          },
-        },
-      },
-    ])
-
-    const appelas = ref([
-      {
-        id: 1,
-        lead_id: null,
-        full_name: 'Bektosh Yuldashev',
-        phone: '901002020',
-        birth_date: null,
-        gender: null,
-        note: 'test',
-        subject_id: null,
-        days: '1',
-        hours: '1',
-      },
-      {
-        id: 5,
-        lead_id: null,
-        full_name: 'Elbek yuldashev',
-        phone: '990336010',
-        birth_date: null,
-        gender: null,
-        note: 'test',
-        subject_id: null,
-        days: '1',
-        hours: '1',
-      },
-      {
-        id: 7,
-        lead_id: null,
-        full_name: 'tgtgtgt',
-        phone: '13123213',
-        birth_date: '2022-02-08T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 1,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 8,
-        lead_id: null,
-        full_name: '123123123',
-        phone: '9999999',
-        birth_date: '2022-02-08T19:00:00.000000Z',
-        gender: false,
-        note: null,
-        subject_id: 2,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 9,
-        lead_id: null,
-        full_name: 'test testov',
-        phone: '901888778',
-        birth_date: '2022-02-02T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 3,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 10,
-        lead_id: null,
-        full_name: 'test',
-        phone: '905005050',
-        birth_date: '2022-02-07T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 2,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 11,
-        lead_id: null,
-        full_name: 'test',
-        phone: '988005020',
-        birth_date: '2022-02-15T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 4,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 12,
-        lead_id: null,
-        full_name: 'bek yuldashev',
-        phone: '990366118',
-        birth_date: '2022-02-01T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 1,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 13,
-        lead_id: null,
-        full_name: 'test',
-        phone: '995566556',
-        birth_date: '2022-02-01T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 19,
-        days: '1997',
-        hours: '1600',
-      },
-      {
-        id: 14,
-        lead_id: null,
-        full_name: 'Bek yuldashev',
-        phone: '901002030',
-        birth_date: '2022-01-31T19:00:00.000000Z',
-        gender: true,
-        note: null,
-        subject_id: 2,
-        days: '1997',
-        hours: '1600',
-      },
-    ])
-
     // Return
     return {
       MODULE_NAME,
       BASE_URL,
       state,
+      appealState,
+      taskGroup,
+      appealReturn,
+      taskChange,
 
       fetchDatas,
       loading,
@@ -480,10 +206,6 @@ export default {
       openForm,
       appealForm,
       openAppealForm,
-
-      // Draggable data
-      columns,
-      appelas,
 
       icons: {
         mdiPencilOutline,
@@ -502,7 +224,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #data-list {
   .data-list-actions {
     max-width: 7.81rem;
@@ -557,6 +279,27 @@ export default {
   display: flex;
   div {
     margin-left: 5px;
+  }
+}
+.my-task-card {
+  position: relative;
+  width: 95%;
+  min-height: 80px;
+  margin: 20px auto 15px auto;
+  padding-top: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fbfbfb;
+  .task-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+.my-task-defaults {
+  margin-bottom: 30px;
+  .my-task-card {
+    background-color: #ededed !important;
   }
 }
 </style>

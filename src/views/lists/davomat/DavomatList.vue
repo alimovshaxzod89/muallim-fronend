@@ -209,7 +209,7 @@
       </template>
 
       <template #[`item.date`]="{ item }"> 
-        {{ item.date | date }}
+        {{item.date | date}}
       </template>
 
       <template #[`item.came`]="{ item }">
@@ -227,23 +227,20 @@
 </template>
 
 <script>
-import { 
-  mdiFilterOutline, 
-  mdiCalendar, 
-  mdiTrendingUp, 
-  mdiPlus, 
-  mdiDeleteOutline, 
-  mdiDotsVertical, 
-  mdiEyeOutline, 
-  mdiPencilOutline 
+import {
+  mdiFilterOutline,
+  mdiCalendar,
+  mdiTrendingUp,
+  mdiPlus,
+  mdiDeleteOutline,
+  mdiDotsVertical,
+  mdiEyeOutline,
+  mdiPencilOutline,
 } from '@mdi/js'
-
 
 import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
-import moment from 'moment'
-moment.locale('uz-latn')
 
 import envParams from '@envParams'
 
@@ -255,6 +252,8 @@ import useDavomatList from './useDavomatList'
 import DavomatForm from './DavomatForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
+import moment from 'moment'
+moment.locale('uz-latn')
 
 const MODULE_NAME = 'davomat'
 
@@ -264,9 +263,8 @@ export default {
     DialogConfirm,
   },
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
@@ -321,28 +319,24 @@ export default {
         .catch(() => {})
     }
 
-    
     const BASE_URL = envParams.BASE_URL
-
 
     const groups = ref([])
     const loadGroups = () => {
       axios.get('/api/groups').then(response => {
-        groups.value = response.data.data 
+        groups.value = response.data.data
       })
     }
 
     const students = ref([])
     const loadStudents = () => {
       axios.get('/api/students').then(response => {
-        students.value = response.data.data 
+        students.value = response.data.data
       })
     }
 
-
     onMounted(() => {
-      loadGroups(),
-      loadStudents()
+      loadGroups(), loadStudents()
     })
 
     // Return

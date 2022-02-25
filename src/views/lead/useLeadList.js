@@ -1,5 +1,5 @@
 import store from '@/store'
-import { ref } from '@vue/composition-api'
+import { ref, onBeforeMount } from '@vue/composition-api'
 
 export default function useLeadList(MODULE_NAME) {
   const notify = ref({})
@@ -17,6 +17,9 @@ export default function useLeadList(MODULE_NAME) {
         notify.value = { type: 'error', text: error, time: Date.now() }
       })
   }
+  onBeforeMount(() => {
+    fetchDatas()
+  })
 
   // Delete
   const deleteRow = id => {

@@ -22,7 +22,6 @@
                 <v-text-field
                   label="NOMI"
                   v-model="formData.name"
-                  :items="selectsDatas.name"
                   type="text"
                   dense
                   outlined
@@ -32,6 +31,16 @@
               </v-col>
 
               <v-col cols="12">
+                <v-checkbox
+                  v-model="formData.status"
+                  hide-details
+                  label="Aktiv"
+                  false-value='0'
+                  true-value='1'
+                ></v-checkbox>
+              </v-col>
+
+              <!-- <v-col cols="12">
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                     <template v-slot:activator="{ on, attrs }">
@@ -56,7 +65,7 @@
                       locale="ru-ru"
                     ></v-date-picker>
                 </v-menu>
-              </v-col>
+              </v-col> -->
 
             </v-row>
           </v-container>
@@ -82,10 +91,8 @@ import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 import moment from 'moment'
 moment.locale('uz')
 
-import numeral from 'numeral'
-
 import store from '@/store'
-import CashboxStoreModule from './CashboxStoreModule'
+import CurrencyStoreModule from './CurrencyStoreModule'
 
 import axios from '@axios'
 
@@ -93,7 +100,7 @@ import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import Button from '../../components/button/Button.vue'
 
-const MODULE_NAME = 'cashbox'
+const MODULE_NAME = 'currency'
 
 export default {
   components: {
@@ -101,17 +108,12 @@ export default {
   },
 
   filters: {
-    date: value => moment(value).format('D MMMM YYYY'),
-    sum: value => numeral(value).format('0,0'),
     feed: value => value[1] + '/' + value[2] + '/' + value[3],
-  },
-  created() {
-    this.loadName()
   },
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, CashboxStoreModule)
+      store.registerModule(MODULE_NAME, CurrencyStoreModule)
     }
 
     // show, hide
@@ -129,8 +131,8 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      date: null,
       name: null,
+      status: '1',
     }
 
     const picker = new Date().toISOString().substr(0, 10)
@@ -143,24 +145,10 @@ export default {
       form.value.validate()
     }
 
-    //form options for selects
-    const selectsDatas = ref({})
-    //! METHODS
-    const loadName = () => {
-      axios
-        .get('/api/cashboxes', { params: { itemsPerPage: -1 } })
-        .then(response => {
-          if (response.data.success) {
-            selectsDatas.value.name = response.data.data
-          }
-        })
-        .catch(error => console.log(error))
-    }
-
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.name && formData.value.date) {
+        if (formData.value.name) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
@@ -178,7 +166,7 @@ export default {
           })
         }
       } else {
-        if (formData.value.name && formData.value.date) {
+        if (formData.value.name) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ message }) => {
@@ -224,9 +212,7 @@ export default {
       required,
       minLengthValidator,
       formData,
-      selectsDatas,
       selectRule,
-      loadName,
       validate,
       show,
       onSubmit,

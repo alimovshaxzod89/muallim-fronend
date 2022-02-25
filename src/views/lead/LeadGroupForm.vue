@@ -101,10 +101,11 @@
 							<v-col cols="6">
 								<h4 class="text-required"></h4>
 								<v-menu
+									ref="menu"
 									v-model="time_begin"
 									:close-on-content-click="false"
 									:nudge-right="40"
-									:return-value.sync="time_begin"
+									:return-value.sync="formData.time_begin"
 									transition="scale-transition"
 									offset-y
 									max-width="290px"
@@ -112,7 +113,7 @@
 								>
 									<template v-slot:activator="{ on, attrs }">
 										<v-text-field
-										class="my-date-picker"
+											class="my-date-picker"
 											outlined
 											v-model="formData.time_begin"
 											label="DARS BOSHLANISH VAQTI"
@@ -170,7 +171,9 @@ export default {
 
     const form = ref(null)
     const emptyFormData = {
+      position: null,
       id: null,
+      lead_id: null,
       name: null,
       subject_id: null,
       teacher_id: null,
@@ -209,6 +212,7 @@ export default {
     })
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     const time_begin = ref(null)
+    const time_begin2 = ref(null)
     const days = ref([
       { id: 1, text: 'Dushanba' },
       { id: 2, text: 'Seshanba' },
@@ -221,8 +225,9 @@ export default {
 
     // Show, Hide
     const show = ref(false)
-    const open = () => {
+    const open = position => {
       show.value = true
+      if (position) formData.value.position = position
     }
     const close = () => {
       show.value = false
@@ -329,6 +334,7 @@ export default {
       selectDatas,
       selectRule,
       time_begin,
+      time_begin2,
       days,
       show,
       onSubmit,

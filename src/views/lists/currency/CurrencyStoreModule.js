@@ -4,45 +4,46 @@ export default {
   namespaced: true,
   state: {
     rows: [],
-    total: 0,
+    total: 0
   },
   getters: {
     indexIds(state) {
       return state.rows.map(el => parseInt(el.id))
     },
-    getById: (state, getters) => id => {
+    getById: (state, getters) => (id) => {
       const index = getters.indexIds.indexOf(parseInt(id))
       return state.rows[index]
-    },
+    }
   },
   mutations: {
     setRows(state, payload) {
-      state.rows = payload
+      state.rows = payload;
     },
     addRow(state, payload) {
-      state.rows.push(payload)
+      state.rows.push(payload);
     },
     updateRow(state, { row, index }) {
-      state.rows.splice(index, 1, row)
+      state.rows.splice(index, 1, row);
     },
     removeRow(state, index) {
-      state.rows.splice(index, 1)
+      state.rows.splice(index, 1);
     },
     setTotal(state, payload) {
-      state.total = payload
+      state.total = payload;
     },
     incrementTotal(state) {
       state.total++
     },
     decrementTotal(state) {
       state.total--
-    },
+    }
+
   },
   actions: {
     fetchDatas({ commit }, queryParams) {
       return new Promise((resolve, reject) => {
         axios
-          .get('/api/cashes', { params: queryParams })
+          .get('/api/currencies', { params: queryParams })
           .then(response => {
             const { data, total } = response.data
             commit('setRows', data)
@@ -54,11 +55,14 @@ export default {
       })
     },
     addRow({ commit }, row) {
+
       return new Promise((resolve, reject) => {
+
         axios
-          .post('api/cashes', row)
+          .post('api/currencies', row)
           .then(response => {
             if (response.data.success) {
+
               commit('addRow', response.data.data)
               commit('incrementTotal')
 
@@ -66,38 +70,44 @@ export default {
             }
           })
           .catch(error => reject(error))
+
       })
     },
     updateRow({ commit, getters }, row) {
+
       return new Promise((resolve, reject) => {
+
         axios
-          .put(`api/cashes/${row.id}`, row)
+          .put(`api/currencies/${row.id}`, row)
           .then(response => {
             if (response.data.success) {
+
               const index = getters.indexIds.indexOf(parseInt(row.id))
               commit('updateRow', { row: response.data.data, index })
 
               resolve(response.data)
             }
-          })
-          .catch(error => reject(error))
+          }).catch(error => reject(error))
+
       })
     },
     removeRow({ commit, getters }, id) {
-      return new Promise((resolve, reject) => {
-        axios
-          .delete(`api/cashes/${id}`)
-          .then(response => {
-            if (response.data.success) {
-              const index = getters.indexIds.indexOf(id)
-              commit('removeRow', index)
-              commit('decrementTotal')
 
-              resolve(response.data.message)
-            }
-          })
-          .catch(error => reject(error))
+      return new Promise((resolve, reject) => {
+
+        axios.delete(`api/currencies/${id}`).then(response => {
+          if (response.data.success) {
+
+            const index = getters.indexIds.indexOf(id)
+            commit('removeRow', index)
+            commit('decrementTotal')
+
+            resolve(response.data.message)
+          }
+        }).catch(error => reject(error))
+
       })
+
     },
-  },
+  }
 }

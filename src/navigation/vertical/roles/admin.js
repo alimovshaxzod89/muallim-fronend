@@ -50,7 +50,7 @@ export default [
   },
   {
     title: 'Markaz Xarajatlari',
-    to: 'costs',
+    to: 'expenses',
     resource: 'Teacher',
     action: 'read',
     icon: mdiCashMultiple,
@@ -201,6 +201,12 @@ export default [
     title: 'Xarajat turlari',
     to: 'expense-category',
     resource: 'ExpenseCategory',
+    action: 'read',
+  },
+  {
+    title: 'Valyuta',
+    to: 'currency',
+    resource: 'currency',
     action: 'read',
     icon: mdiCurrencyEur,
   },

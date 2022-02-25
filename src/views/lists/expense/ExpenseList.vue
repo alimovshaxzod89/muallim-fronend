@@ -67,7 +67,7 @@
 
       <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
 
-      <template #[`item.money_id`]="{ item }"> {{ item.money_id | summa }}</template>
+      <template #[`item.money_id`]="{ item }"> {{ item.money_id }}</template>
 
       <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
 
@@ -102,8 +102,8 @@
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <cost-form
-      ref="costForm"
+    <expense-form
+      ref="expenseForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -114,38 +114,34 @@ import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutlin
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
-import moment from 'moment'
-moment.locale('uz-latn')
-
-import numeral from 'numeral'
-numeral.locale('ru')
 
 import envParams from '@envParams'
 
 // store module
-import CostStoreModule from './CostStoreModule'
+import ExpenseStoreModule from './ExpenseStoreModule'
 
 // composition function
-import useCostList from './useCostList'
-import CostForm from './CostForm'
+import useExpenseList from './useExpenseList'
+import ExpenseForm from './ExpenseForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'cost'
+import moment from 'moment'
+moment.locale('uz-latn')
+
+const MODULE_NAME = 'expense'
 
 export default {
   components: {
-    CostForm,
+    ExpenseForm,
     DialogConfirm,
   },
   filters: {
-    date: value => moment(value).format('D MMMM YYYY'),
-    summa: value => numeral(value).format('0,0'),
     feed: value => value[1] + '/' + value[2] + '/' + value[3],
   },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, CostStoreModule)
+      store.registerModule(MODULE_NAME, ExpenseStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -166,7 +162,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useCostList(MODULE_NAME)
+    } = useExpenseList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -178,9 +174,9 @@ export default {
     ]
 
     //Form
-    const costForm = ref(null)
+    const expenseForm = ref(null)
     const openForm = id => {
-      costForm.value.open(id)
+      expenseForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -222,7 +218,7 @@ export default {
       dialogConfirm,
       confirmDelete,
 
-      costForm,
+      expenseForm,
       openForm,
 
       totalMoney_id,

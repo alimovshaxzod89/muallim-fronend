@@ -17,7 +17,6 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -43,14 +42,64 @@
                   ></v-date-picker>
                 </v-menu>
               </v-col>
-              <v-col cols="12" class="cashbox-inp">
-                <h4 class="text-required no-text"><span>*</span></h4>
+              <v-col cols="12" >
+                <v-text-field
+                  label="SUMMA"
+                  v-model="formData.amount"
+                  type="number"
+                  dense
+                  outlined
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" >
+                <v-autocomplete
+                  v-model="formData.currency_id"
+                  :items="selectsDatas.currency"
+                  item-text="name"
+                  item-value="id"
+                  label="VALYUTA"
+                  dense
+                  outlined
+                  hide-details
+                  clearable
+                  :rules="selectRule"
+                >
+                </v-autocomplete>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="formData.note"
+                  label="IZOH"
+                  dense
+                  outlined
+                  hide-details
+                  required
+                  height="80px"
+                >
+                  </v-textarea>
+              </v-col>
+              <v-col cols="12" >
+                <v-autocomplete
+                  v-model="formData.expense_category_id"
+                  :items="selectsDatas.expense_category"
+                  item-text="name"
+                  item-value="id"
+                  label="XARAJAT TURLARI"
+                  dense
+                  outlined
+                  hide-details
+                  clearable
+                >
+                </v-autocomplete>
+              </v-col>
+              <v-col cols="12">
                 <v-autocomplete
                   v-model="formData.cashbox_id"
                   :items="selectsDatas.cashbox"
                   item-text="name"
                   item-value="id"
-                  label="KASSA NOMLARI"
+                  label="KASSA"
                   dense
                   outlined
                   hide-details
@@ -59,60 +108,7 @@
                 >
                 </v-autocomplete>
               </v-col>
-              <v-col cols="12" class="type-inp">
-                <h4 class="text-required no-text"><span>*</span></h4>
-                <v-autocomplete
-                  v-model="formData.type"
-                  :items="selectsDatas.type"
-                  item-text="name"
-                  item-value="id"
-                  label="XARAJAT turlari"
-                  dense
-                  outlined
-                  hide-details
-                  clearable
-                  :rules="selectRule"
-                >
-                </v-autocomplete>
-              </v-col>
-              <v-col cols="12" class="money">
-                <h4 class="text-required no-text"><span>*</span></h4>
-                <v-text-field
-                  label="SUMMA"
-                  v-model="formData.money_id"
-                  type="number"
-                  dense
-                  outlined
-									required
-                  hide-details
-                  :rules="[required]"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" class="amount-inp">
-                <h4 class="text-required no-text"><span>*</span></h4>
-                <v-text-field
-                  label="MIQDORI"
-                  v-model="formData.amount"
-                  type="number"
-                  dense
-                  outlined
-									required
-                  hide-details
-                  :rules="[required]"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                  <v-textarea
-                    v-model="formData.note"
-                    label="IZOH"
-                    dense
-                    outlined
-                    hide-details
-                    required
-                    height="80px"
-                  >
-                  </v-textarea>
-              </v-col>
+              
             </v-row>
           </v-container>
         </v-card-text>
@@ -132,14 +128,14 @@
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 import store from '@/store'
-import CostStoreModule from './CostStoreModule'
+import ExpenseStoreModule from './ExpenseStoreModule'
 import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
 import { required } from '@core/utils/validation'
 import Button from '../../components/button/Button'
 
-const MODULE_NAME = 'cost'
+const MODULE_NAME = 'expense'
 
 export default {
   components: { Button },
@@ -147,24 +143,25 @@ export default {
   //
   // },
   created() {
+    this.loadCurrency()
     this.loadCashbox()
-    this.loadType()
+    this.loadExpense()
   },
   setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, CostStoreModule)
+      store.registerModule(MODULE_NAME, ExpenseStoreModule)
     }
 
     // show, hide
     const emptyFormData = {
       id: null,
-      date: null,
+      date: new Date().toISOString().substr(0, 10),
       amount: null,
-      money_id: null,
-      cashbox_id: null,
-      type: null,
+      currency_id: { id: 1 },
       note: null,
+      expense_category_id: null,
+      cashbox_id: ref({ name: 'Naxt', id: 1 }),
     }
     const formData = ref({ ...emptyFormData })
     const form = ref(null)
@@ -194,10 +191,10 @@ export default {
       if (formData.value.id) {
         if (
           formData.value.date &&
-          formData.value.money_id &&
+          formData.value.currency_id &&
           formData.value.amount &&
           formData.value.cashbox_id &&
-          formData.value.type
+          formData.value.expense_category_id
         ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
@@ -218,10 +215,10 @@ export default {
       } else {
         if (
           formData.value.date &&
-          formData.value.money_id &&
+          formData.value.currency_id &&
           formData.value.amount &&
           formData.value.cashbox_id &&
-          formData.value.type
+          formData.value.expense_category_id
         ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
@@ -244,6 +241,16 @@ export default {
 
     const selectsDatas = ref({})
     // ! METHODS
+    const loadCurrency = () => {
+      axios
+        .get('/api/currencies', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.currency = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
     const loadCashbox = () => {
       axios
         .get('/api/cashboxes', { params: { itemsPerPage: -1 } })
@@ -254,15 +261,25 @@ export default {
         })
         .catch(error => console.log(error))
     }
-    const loadType = () => {
+    const loadExpense = () => {
       axios
         .get('/api/expense-categories', { params: { itemsPerPage: -1 } })
         .then(response => {
           if (response.data.success) {
-            selectsDatas.value.type = response.data.data
+            selectsDatas.value.expense_category = response.data.data
           }
         })
         .catch(error => console.log(error))
+    }
+
+    // Currency
+    const currencyForm = ref(null)
+    const addCurrency = (id = null) => {
+      currencyForm.value.open(id)
+    }
+    const addCurrencyToOptions = row => {
+      selectsDatas.value.currency = selectsDatas.value.currency.concat([row])
+      formData.value.currency_id = row.id
     }
 
     // Cashbox
@@ -276,13 +293,13 @@ export default {
     }
 
     // Type
-    const typeForm = ref(null)
-    const addType = (id = null) => {
-      typeForm.value.open(id)
+    const expenseCategoryForm = ref(null)
+    const addExpenseCategory = (id = null) => {
+      expenseCategoryForm.value.open(id)
     }
-    const addTypeToOptions = row => {
-      selectsDatas.value.type = selectsDatas.value.type.concat([row])
-      formData.value.type = row.id
+    const addExpenseCategoryToOptions = row => {
+      selectsDatas.value.expense_category = selectsDatas.value.expense_category.concat([row])
+      formData.value.expense_category_id = row.id
     }
 
     return {
@@ -298,14 +315,18 @@ export default {
       close,
 
       selectsDatas,
+      loadCurrency,
       loadCashbox,
-      loadType,
+      loadExpense,
+      currencyForm,
+      addCurrency,
+      addCurrencyToOptions,
       cashboxForm,
       addCashbox,
       addCashboxToOptions,
-      typeForm,
-      addType,
-      addTypeToOptions,
+      expenseCategoryForm,
+      addExpenseCategory,
+      addExpenseCategoryToOptions,
 
       icons: {
         mdiPlusCircleOutline,
@@ -325,21 +346,5 @@ export default {
   padding-right: 15px !important;
   padding-left: 15px !important;
   border-color: rgba(94, 86, 105, 0.15) !important;
-}
-.money {
-  margin-top: -3%;
-}
-.teacherInp {
-  margin-bottom: 6%;
-  margin-top: -10%;
-}
-.cashbox-inp {
-  margin-top: -8%;
-}
-.type-inp {
-  margin-top: -3%;
-}
-.amount-inp {
-  margin-top: -3%;
 }
 </style>

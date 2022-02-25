@@ -116,9 +116,9 @@
                 </v-col>
 
                 <v-col cols="3">
-                  <v-menu 
-                    v-model="isDateTwo" 
-                    :close-on-content-click="false" 
+                  <v-menu
+                    v-model="isDateTwo"
+                    :close-on-content-click="false"
                     offset-y min-width="auto"
                   >
                     <template v-slot:activator="{ on, attrs }">
@@ -149,7 +149,7 @@
 
               </v-expansion-panel-content>
               <v-expansion-panel-content>
-                
+
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -208,14 +208,14 @@
         </div>
       </template>
 
-      <template #[`item.group_id`]="{ item }"> 
-        {{ item.group_id | sum) }}
+      <template #[`item.month_year`]="{ item }">
+        {{ item.payment.date | year_month }}
       </template>
-      <template #[`item.amount`]="{ item }"> 
-        {{ item.amount | sum }}
+      <template #[`item.amount`]="{ item }">
+        {{ item.amount | summa }}
       </template>
 
-      <template #[`item.date`]="{ item }"> 
+      <template #[`item.date`]="{ item }">
         {{ item.date | date }}
       </template>
     </v-data-table>
@@ -230,15 +230,15 @@
 </template>
 
 <script>
-import { 
-  mdiFilterOutline, 
-  mdiCalendar, 
-  mdiTrendingUp, 
-  mdiPlus, 
-  mdiDeleteOutline, 
-  mdiDotsVertical, 
-  mdiEyeOutline, 
-  mdiPencilOutline 
+import {
+  mdiFilterOutline,
+  mdiCalendar,
+  mdiTrendingUp,
+  mdiPlus,
+  mdiDeleteOutline,
+  mdiDotsVertical,
+  mdiEyeOutline,
+  mdiPencilOutline
 } from '@mdi/js'
 
 
@@ -258,9 +258,6 @@ import useStudentPaidList from './useStudentPaidList'
 import StudentPaidForm from './StudentPaidForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-import numeral from 'numeral'
-numeral.locale('ru')
-
 const MODULE_NAME = 'studentPaid'
 
 export default {
@@ -269,8 +266,6 @@ export default {
     DialogConfirm,
   },
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		sum: value => numeral(value).format('0,0'),
 		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
 	},
   setup() {
@@ -328,27 +323,27 @@ export default {
         .catch(() => {})
     }
 
-    
+
     const BASE_URL = envParams.BASE_URL
 
     const teachers = ref([])
     const loadTeachers = () => {
       axios.get('/api/teachers').then(response => {
-        teachers.value = response.data.data 
+        teachers.value = response.data.data
       })
     }
 
     const groups = ref([])
     const loadGroups = () => {
       axios.get('/api/groups').then(response => {
-        groups.value = response.data.data 
+        groups.value = response.data.data
       })
     }
 
     const students = ref([])
     const loadStudents = () => {
       axios.get('/api/students').then(response => {
-        students.value = response.data.data 
+        students.value = response.data.data
       })
     }
 
@@ -375,7 +370,6 @@ export default {
 
       isDate,
       isDateTwo,
-      picker,
 
       actions,
       actionOptions,

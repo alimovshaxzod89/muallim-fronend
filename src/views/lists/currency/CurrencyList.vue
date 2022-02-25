@@ -70,15 +70,12 @@
           {{item.status ? 'ha' : 'yo\'q'}}
       </template>
 
-      <template #[`item.date`]="{ item }"> 
-        {{ item.date | date }}
-      </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
 
-    <cashbox-form
-      ref="cashboxForm"
+    <currency-form
+      ref="currencyForm"
       v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
     />
   </v-card>
@@ -95,24 +92,24 @@ import moment from 'moment'
 moment.locale('uz-latn')
 
 // store module
-import CashboxStoreModule from './CashboxStoreModule'
+import CurrencyStoreModule from './CurrencyStoreModule'
 
 // composition function
-import useCashboxList from './useCashboxList'
-import CashboxForm from './CashboxForm.vue'
+import useCurrencyList from './useCurrencyList'
+import CurrencyForm from './CurrencyForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
-const MODULE_NAME = 'cashbox'
+const MODULE_NAME = 'currency'
 
 export default {
   components: {
-    CashboxForm,
+    CurrencyForm,
     DialogConfirm,
   },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, CashboxStoreModule)
+      store.registerModule(MODULE_NAME, CurrencyStoreModule)
     }
     // UnRegister on leave
     // onUnmounted(() => {
@@ -133,7 +130,7 @@ export default {
       loading,
       notify,
       selectedTableData,
-    } = useCashboxList(MODULE_NAME)
+    } = useCurrencyList(MODULE_NAME)
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -145,9 +142,9 @@ export default {
     ]
 
     //Form
-    const cashboxForm = ref(null)
+    const currencyForm = ref(null)
     const openForm = id => {
-      cashboxForm.value.open(id)
+      currencyForm.value.open(id)
     }
 
     //Delete Confirm Dialog
@@ -181,7 +178,7 @@ export default {
 
       dialogConfirm,
       confirmDelete,
-      cashboxForm,
+      currencyForm,
       openForm,
 
       MODULE_NAME,
