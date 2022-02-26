@@ -14,146 +14,162 @@
           ></v-text-field>
         </v-col>
 
-        <!-- <v-col cols="9">
+        <v-col cols="9">
           <v-expansion-panels class="my-accordion" accordion>
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                Ko'proq
-                <template #actions>
-                <v-icon color="secondary">
-                  {{ icons.mdiFilterOutline  }}
-                </v-icon>
-              </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
+					<v-expansion-panel>
+						<v-expansion-panel-header disable-icon-rotate>
+							Ko'proq
+							<template #actions>
+							<v-icon color="secondary">
+								{{ icons.mdiFilterOutline  }}
+							</v-icon>
+						</template>
+						</v-expansion-panel-header>
+						  <v-expansion-panel-content>
+              
+              <v-col cols="3">
+							  <v-autocomplete
+							  	v-model="filter.year"
+                  :items="years"
+                  item-text="number"
+							  	item-value="id"
+							  	dense
+							  	outlined
+							  	hide-details
+							  	label="YIL"
+							  	class="data-list-search me-3"
+                  clearable
+							  ></v-autocomplete>
+              </v-col> 
 
-                <v-col cols="3">
-                  <v-autocomplete
-                    v-model="filter.teacher_id"
-                    :items="teachers"
-                    item-text="full_name"
-                    item-value="id"
-                    dense
-                    outlined
-                    hide-details
-                    label="USTOZ"
-                    class="data-list-search me-3"
-                    clearable
-                  ></v-autocomplete>
-                </v-col>
+              <v-col cols="3">
+							  <v-autocomplete
+							  	v-model="filter.month"
+                  :items="months"
+                  item-text="name"
+							  	item-value="id"
+							  	dense
+							  	outlined
+							  	hide-details
+							  	label="OY"
+							  	class="data-list-search me-3"
+                  clearable
+							  ></v-autocomplete>
+              </v-col> 
 
-                <v-col cols="3">
-                  <v-autocomplete
-                    v-model="filter.group_id"
-                    :items="groups"
-                    item-text="number"
-                    item-value="id"
-                    dense
-                    outlined
-                    hide-details
-                    label="GURUH"
-                    class="data-list-search me-3"
-                    clearable
-                  ></v-autocomplete>
-                </v-col>
-
-                <v-col cols="3">
-                  <v-autocomplete
-                    v-model="filter.student_id"
-                    :items="students"
-                    item-text="full_name"
-                    item-value="id"
-                    dense
-                    outlined
-                    hide-details
-                    label="TALABA"
-                    class="data-list-search me-3"
-                    clearable
-                  ></v-autocomplete>
-                </v-col>
-
-                <v-col cols="3">
-                  <v-autocomplete
-                    v-model="filter.status"
-                    :items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
-                    item-text="name"
-                    item-value="value"
-                    dense
-                    outlined
-                    hide-details
-                    label="Aktiv"
-                    class="data-list-search me-3"
-                    clearable
-                  ></v-autocomplete>
-                </v-col>
-
-                <v-col cols="3">
-                  <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+              <v-col cols="3">  
+                <v-menu
+                  ref="menuref"
+                  v-model="menu1"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="auto"
+                >
+                  
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        class="my-date-picker"
-                        v-model="filter.begin_date"
-                        label="Boshlangan sana"
-                        readonly
+                        v-model="filter.date"
+                        label="Xozirgi san'a"
+                        persistent-hint
+                        :prepend-icon="icons.mdiCalendar"
                         v-bind="attrs"
-                        hide-details
+                        @blur="date = parseDate(dateFormatted)"
                         v-on="on"
-                        style="height: 40px !important; width: 170px !important"
                         outlined
+                        dense
                         clearable
-                        :append-icon="icons.mdiCalendar"
                       ></v-text-field>
                     </template>
-                    <v-date-picker
-                      v-model="filter.begin_date"
-                      color="primary"
-                      @input="isDate = false"
-                      no-title
-                      :first-day-of-week="1"
-                      locale="ru-ru"
-                    ></v-date-picker>
-                  </v-menu>
-                </v-col>
+                  
 
-                <v-col cols="3">
-                  <v-menu
-                    v-model="isDateTwo"
-                    :close-on-content-click="false"
-                    offset-y min-width="auto"
-                  >
+                    <v-date-picker
+                      v-model="filter.date"
+                      no-title
+                      color="primary"
+                      @input="menu1 = false"
+                    ></v-date-picker>
+                  
+                </v-menu>
+              </v-col>                
+
+              <v-col cols="3">
+                <v-menu
+                  v-model="menu2"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="auto"
+                >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        class="my-date-picker"
-                        v-model="filter.end_date"
-                        label="Tugagan sana"
+                        v-model="filter.date2"
+                        label="san'ani tanlash"
+                        persistent-hint
+                        :prepend-icon="icons.mdiCalendar"
                         readonly
                         v-bind="attrs"
-                        hide-details
                         v-on="on"
-                        style="height: 40px !important; width: 170px !important"
                         outlined
+                        dense
                         clearable
-                        :append-icon="icons.mdiCalendar"
                       ></v-text-field>
                     </template>
-                    <v-date-picker
-                      v-model="filter.end_date"
-                      color="primary"
-                      @input="isDateTwo = false"
-                      no-title
-                      :first-day-of-week="1"
-                      locale="ru-ru"
-                    ></v-date-picker>
-                  </v-menu>
-                </v-col>
 
-              </v-expansion-panel-content>
-              <v-expansion-panel-content>
+                  <v-date-picker
+                    v-model="filter.date2"
+                    no-title
+                    color="primary"
+                    @input="menu2 = false"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
 
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-col> -->
+							  <!-- <v-autocomplete
+							  	v-model="filter.full_name"
+							  	:items="teachers"
+							  	item-text="full_name"
+							  	item-value="id"
+							  	dense
+							  	outlined
+							  	hide-details
+							  	label="Ustozlar"
+							  	class="data-list-search me-3"
+							  	clearable
+							  ></v-autocomplete> -->
+
+							  <v-autocomplete
+							  	v-model="filter.group_id"
+							  	:items="groups"
+							  	item-text="number"
+							  	item-value="id"
+							  	dense
+							  	outlined
+							  	hide-details
+							  	label="Guruhlar"
+							  	class="data-list-search me-3"
+							  	clearable
+							  ></v-autocomplete>
+
+							  <v-autocomplete
+							  	v-model="filter.student_id"
+							  	:items="students"
+							  	item-text="full_name"
+							  	item-value="id"
+							  	dense
+							  	outlined
+							  	hide-details
+							  	label="Studentlar"
+							  	class="data-list-search me-3"
+							  	clearable
+							  ></v-autocomplete>
+                
+						  </v-expansion-panel-content>
+					</v-expansion-panel>
+				</v-expansion-panels>
+        </v-col>
       <v-spacer></v-spacer>
 
     <div class="btnAdd ml-auto">
@@ -238,11 +254,10 @@ import {
   mdiDeleteOutline,
   mdiDotsVertical,
   mdiEyeOutline,
-  mdiPencilOutline
+  mdiPencilOutline,
 } from '@mdi/js'
 
-
-import { onMounted, onUnmounted, ref } from '@vue/composition-api'
+import { onMounted, onUnmounted, ref, computed, watch } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
 import moment from 'moment'
@@ -266,8 +281,8 @@ export default {
     DialogConfirm,
   },
   filters: {
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
@@ -303,6 +318,33 @@ export default {
       { title: 'Edit', icon: mdiPencilOutline },
     ]
 
+    // Filter date picker
+    const date = ref(new Date().toISOString().substr(0, 10))
+    const menu1 = ref(false)
+    const menu2 = ref(false)
+
+    const formatDate = dates => {
+      if (!dates) return null
+      const [year, month, day] = dates.split('-')
+
+      return `${month}/${day}/${year}`
+    }
+
+    let dateFormatted = formatDate(new Date().toISOString().substr(0, 10))
+
+    const parseDate = dates => {
+      if (!dates) return null
+      const [month, day, year] = dates.split('/')
+
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    }
+
+    const computedDateFormatted = computed(() => formatDate(date.value))
+
+    watch(date, () => {
+      dateFormatted = formatDate(date.value)
+    })
+
     // Datepicker
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
@@ -323,8 +365,27 @@ export default {
         .catch(() => {})
     }
 
-
     const BASE_URL = envParams.BASE_URL
+
+    const years = ref([
+      { id: 1, number: '2020' },
+      { id: 2, number: '2021' },
+      { id: 3, number: '2022' },
+    ])
+    const months = ref([
+      { id: 1, name: 'Yanvar' },
+      { id: 2, name: 'Fevral' },
+      { id: 3, name: 'Mart' },
+      { id: 4, name: 'Aprel' },
+      { id: 5, name: 'May' },
+      { id: 6, name: 'Iyun' },
+      { id: 7, name: 'Iyul' },
+      { id: 8, name: 'Avgust' },
+      { id: 9, name: 'Sentabr' },
+      { id: 10, name: 'Oktabr' },
+      { id: 11, name: 'Noyabr' },
+      { id: 12, name: 'Dekabr' },
+    ])
 
     const teachers = ref([])
     const loadTeachers = () => {
@@ -347,11 +408,8 @@ export default {
       })
     }
 
-
     onMounted(() => {
-      loadTeachers(),
-      loadGroups(),
-      loadStudents()
+      loadTeachers(), loadGroups(), loadStudents()
     })
 
     // Return
@@ -379,15 +437,27 @@ export default {
       dialogConfirm,
       confirmDelete,
 
+      years,
+      months,
+      teachers,
+      loadTeachers,
+      groups,
+      loadGroups,
+      students,
+      loadStudents,
+
+      date,
+      dateFormatted,
+      menu1,
+      menu2,
+      computedDateFormatted,
+      parseDate,
+      formatDate,
+
       studentPaidForm,
       openForm,
 
       MODULE_NAME,
-
-      // LoadApis
-      teachers,
-      groups,
-      students,
 
       icons: {
         mdiTrendingUp,

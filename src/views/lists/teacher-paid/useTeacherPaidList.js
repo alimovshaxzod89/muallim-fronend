@@ -21,6 +21,12 @@ export default function useTeacherPaidList(MODULE_NAME) {
 
   const filter = ref({
     query: '',
+    year: '',
+    date: '',
+    date2: '',
+    teacher_id: '',
+    group_id: '',
+    student_id: '',
   })
   const options = ref({
     sortBy: ['id'],

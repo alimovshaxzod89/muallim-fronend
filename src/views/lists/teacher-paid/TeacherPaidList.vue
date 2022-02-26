@@ -2,7 +2,7 @@
   <v-card id="data-list">
     <!-- search -->
     <v-card-text class="d-flex align-center flex-wrap pb-0">
-      <div class="d-flex align-center pb-5">
+      <div class="d-flex pb-5" style="width: 100%">
         <v-text-field
           v-model="filter.query"
           dense
@@ -11,6 +11,142 @@
           label="Qidirish"
           class="data-list-search me-3"
         ></v-text-field>
+
+        <!-- <v-expansion-panels class="my-accordion" accordion>
+					<v-expansion-panel>
+						<v-expansion-panel-header disable-icon-rotate>
+							Ko'proq
+							<template #actions>
+							<v-icon color="secondary">
+								{{ icons.mdiFilterOutline  }}
+							</v-icon>
+						</template>
+						</v-expansion-panel-header>
+						<v-expansion-panel-content>
+							<v-text-field
+								v-model="filter.year"
+                :items="years"
+                item-text="number"
+								item-value="id"
+								dense
+								outlined
+								hide-details
+								label="YIL"
+								class="data-list-search me-3"
+							></v-text-field>
+
+							<v-text-field
+								v-model="filter.month"
+                :items="months"
+                item-text="name"
+								item-value="id"
+								dense
+								outlined
+								hide-details
+								label="YIL"
+								class="data-list-search me-3"
+							></v-text-field>
+
+              <v-menu
+                ref="menuref"
+                v-model="menu1"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="filter.date"
+                    label="Date"
+                    hint="MM/DD/YYYY format"
+                    persistent-hint
+                    :prepend-icon="icons.mdiCalendar"
+                    v-bind="attrs"
+                    @blur="date = parseDate(dateFormatted)"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+
+                <v-date-picker
+                  v-model="filter.date"
+                  no-title
+                  color="primary"
+                  @input="menu1 = false"
+                ></v-date-picker>
+              </v-menu>
+
+              <v-menu
+                v-model="menu2"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="filter.date2"
+                    label="Date (read only text field)"
+                    hint="MM/DD/YYYY format"
+                    persistent-hint
+                    :prepend-icon="icons.mdiCalendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+
+                <v-date-picker
+                  v-model="filter.date2"
+                  no-title
+                  color="primary"
+                  @input="menu2 = false"
+                ></v-date-picker>
+              </v-menu>
+
+							<v-autocomplete
+								v-model="filter.teacher_id"
+								:items="teachers"
+								item-text="name"
+								item-value="id"
+								dense
+								outlined
+								hide-details
+								label="Ustozlar"
+								class="data-list-search me-3"
+								clearable
+							></v-autocomplete>
+
+							<v-autocomplete
+								v-model="filter.group_id"
+								:items="groups"
+								item-text="number"
+								item-value="id"
+								dense
+								outlined
+								hide-details
+								label="Guruhlar"
+								class="data-list-search me-3"
+								clearable
+							></v-autocomplete>
+
+							<v-autocomplete
+								v-model="filter.student_id"
+								:items="students"
+								item-text="full_name"
+								item-value="id"
+								dense
+								outlined
+								hide-details
+								label="Studentlar"
+								class="data-list-search me-3"
+								clearable
+							></v-autocomplete>
+						</v-expansion-panel-content>
+					</v-expansion-panel>
+				</v-expansion-panels> -->
       </div>
 
       <v-spacer></v-spacer>
@@ -80,9 +216,17 @@
 </template>
 
 <script>
-import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
+import {
+  // mdiCalendar,
+  mdiTrendingUp,
+  mdiPlus,
+  mdiDeleteOutline,
+  mdiDotsVertical,
+  mdiEyeOutline,
+  mdiPencilOutline,
+} from '@mdi/js'
 
-import { ref } from '@vue/composition-api'
+import { onMounted, ref } from '@vue/composition-api'
 import store from '@/store'
 
 import envParams from '@envParams'
@@ -148,6 +292,33 @@ export default {
       { title: 'Edit', icon: mdiPencilOutline },
     ]
 
+    // Filter date picker
+    // const date = ref(new Date().toISOString().substr(0, 10))
+    // const menu1 = ref(false)
+    // const menu2 = ref(false)
+
+    // const formatDate = dates => {
+    //   if (!dates) return null
+    //   const [year, month, day] = dates.split('-')
+
+    //   return `${month}/${day}/${year}`
+    // }
+
+    // let dateFormatted = formatDate(new Date().toISOString().substr(0, 10))
+
+    // const parseDate = dates => {
+    //   if (!dates) return null
+    //   const [month, day, year] = dates.split('/')
+
+    //   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    // }
+
+    // const computedDateFormatted = computed(() => formatDate(date.value))
+
+    // watch(date, () => {
+    //   dateFormatted = formatDate(date.value)
+    // })
+
     //Form
     const teacherPaidForm = ref(null)
     const openForm = id => {
@@ -162,6 +333,51 @@ export default {
         .then(() => deleteRow(id))
         .catch(() => {})
     }
+
+    // const years = ref([
+    //   { id: 1, number: '2020' },
+    //   { id: 2, number: '2021' },
+    //   { id: 3, number: '2022' },
+    // ])
+    // const months = ref([
+    //   { id: 1, name: 'Yanvar' },
+    //   { id: 1, name: 'Fevral' },
+    //   { id: 1, name: 'Mart' },
+    //   { id: 1, name: 'Aprel' },
+    //   { id: 1, name: 'May' },
+    //   { id: 1, name: 'Iyun' },
+    //   { id: 1, name: 'Iyul' },
+    //   { id: 1, name: 'Avgust' },
+    //   { id: 1, name: 'Sentabr' },
+    //   { id: 1, name: 'Oktabr' },
+    //   { id: 1, name: 'Noyabr' },
+    //   { id: 1, name: 'Dekabr' },
+    // ])
+
+    // LoadApis
+    // const teachers = ref([])
+    // const groups = ref([])
+    // const students = ref([])
+    // const loadTeachers = () => {
+    //   axios.get('/api/teachers').then(response => {
+    //     teachers.value = response.data.data
+    //   })
+    // }
+    // const loadGroups = () => {
+    //   axios.get('/api/groups').then(response => {
+    //     groups.value = response.data.data
+    //   })
+    // }
+    // const loadStudents = () => {
+    //   axios.get('/api/students').then(response => {
+    //     students.value = response.data.data
+    //   })
+    // }
+    // onMounted(() => {
+    //   loadTeachers()
+    //   loadGroups()
+    //   loadStudents()
+    // })
 
     const BASE_URL = envParams.BASE_URL
 
@@ -189,6 +405,23 @@ export default {
       teacherPaidForm,
       openForm,
 
+      // years,
+      // months,
+      // teachers,
+      // loadTeachers,
+      // groups,
+      // loadGroups,
+      // students,
+      // loadStudents,
+
+      // date,
+      // dateFormatted,
+      // menu1,
+      // menu2,
+      // computedDateFormatted,
+      // parseDate,
+      // formatDate,
+
       MODULE_NAME,
 
       icons: {
@@ -198,6 +431,7 @@ export default {
         mdiDeleteOutline,
         mdiDotsVertical,
         mdiEyeOutline,
+        // mdiCalendar,
       },
     }
   },
