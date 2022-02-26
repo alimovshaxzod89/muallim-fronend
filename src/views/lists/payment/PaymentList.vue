@@ -305,7 +305,7 @@ export default {
     } = usePaymentList(MODULE_NAME)
 
     //interface additional elements
-    const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
+    const footerProps = ref({ 'items-per-page-options': [5, 10, 20, 50, 100, -1] })
     const actions = ['Delete', 'Edit']
     const selectedAction = ref('')
     const actionOptions = [
@@ -425,11 +425,22 @@ export default {
       return result[0].text
     }
 
+    const selectsDatas = ref({
+      amount: null,
+      paid: null,
+    })
+    axios.get('/api/payments').then(response => {
+      if (response.data.success) {
+        selectsDatas.value.amount = response.data.data
+        selectsDatas.value.paid = response.data.data
+      }
+    })
+
     const totalAmount = () => {
-      return state.value.rows.reduce((a, c) => a + c.amount, 0)
+      return selectsDatas.value.amount.reduce((a, c) => a + c.amount, 0)
     }
     const totalPaid = () => {
-      return state.value.rows.reduce((a, c) => a + c.paid, 0)
+      return selectsDatas.value.paid.reduce((a, c) => a + c.paid, 0)
     }
     const totalDebt = () => {
       return totalAmount() - totalPaid()
@@ -479,6 +490,7 @@ export default {
       paymentPaidsList,
       openPaymentPaidsList,
       fetchDatas,
+      selectsDatas,
 
       picker,
       isDate,

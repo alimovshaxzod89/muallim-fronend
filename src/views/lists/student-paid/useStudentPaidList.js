@@ -1,5 +1,5 @@
 import store from '@/store'
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch, } from '@vue/composition-api'
 
 export default function useStudentPaidList(MODULE_NAME) {
 
@@ -24,12 +24,11 @@ export default function useStudentPaidList(MODULE_NAME) {
 
   const filter = ref({
     query: '',
-    teacher_id: '',
+    year: '',
+    date: '',
+    date2: '',
     group_id: '',
     student_id: '',
-    status: '',
-    begin_date: '',
-    end_date: '',
   })
   const options = ref({
     sortBy: ['id'],
