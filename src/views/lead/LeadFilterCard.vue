@@ -18,10 +18,16 @@
 					</template>
 					<v-list class="my-list">
 						<v-list-item class="pa-0">
-							<v-btn text><v-icon class="mr-3" size="18">{{ icons.mdiPencilOutline }}</v-icon> Tahrirlash</v-btn>
+							<v-btn text @click="openForm(columns.position, columns.id)">
+								<v-icon class="mr-3" size="18">{{ icons.mdiPencilOutline }}</v-icon>
+								Tahrirlash
+							</v-btn>
 						</v-list-item>
 						<v-list-item class="pa-0">
-							<v-btn text><v-icon class="mr-3" color="error" size="18">{{ icons.mdiDeleteOutline }}</v-icon> O'chirish</v-btn>
+							<v-btn text @click="removeCard('lead', columns.id)">
+								<v-icon class="mr-3" color="error" size="18">{{ icons.mdiDeleteOutline }}</v-icon>
+								O'chirish
+							</v-btn>
 						</v-list-item>
 					</v-list>
 				</v-menu>
@@ -32,12 +38,15 @@
 				:animation="200"
 				ghost-class="ghost-card"
 				group="tasks"
+				:id="columns.id"
 				@end="taskChange"
 			>
 				<lead-task-card
 					v-for="task in appealReturn()"
 					:key="task.id"
 					:task="task"
+					:removeCard="removeCard"
+					:openAppealForm="openAppealForm"
 				></lead-task-card>
 			</draggable>
 		</v-card>
@@ -61,6 +70,15 @@ export default {
     columns: {
       type: Object,
     },
+    openForm: {
+      type: Function,
+    },
+    removeCard: {
+      type: Function,
+    },
+    openAppealForm: {
+      type: Function,
+    },
   },
   setup(props) {
     const state = ref(store.state.appeal)
@@ -70,13 +88,10 @@ export default {
 
     const taskChange = e => {
       const task = JSON.parse(JSON.stringify(e.item.__vue__.task))
-      const lead = JSON.parse(JSON.stringify(props.columns))
 
-      if (e.oldIndex !== e.newIndex || e.pullMode) {
-        console.log(task, lead)
-
+      if (e.oldIndex !== e.newIndex || (e.from.id !== e.to.id && e.pullMode)) {
         const updatedTask = {
-          lead_id: lead.id,
+          lead_id: e.to.id,
           id: task.id,
           full_name: task.full_name,
           phone: task.phone,

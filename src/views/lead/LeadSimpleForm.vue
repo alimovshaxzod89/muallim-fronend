@@ -11,7 +11,7 @@
     <v-card>
       <v-form ref="form">
         <v-card-title>
-          <span class="headline">Yangi bo'lim yaratish</span>
+          <span class="headline">{{ formTitle }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -35,7 +35,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-          <v-btn color="success" type="submit" @click.prevent="onSubmit"> Saqlash</v-btn>
+          <v-btn color="success" type="submit" @click.prevent="onSubmit">Saqlash</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -63,7 +63,9 @@ export default {
     }
 
     const form = ref(null)
+    const formTitle = ref("Yangi bo'lim yaratish")
     const emptyFormData = {
+      group_id: null,
       id: null,
       position: null,
       name: null,
@@ -72,12 +74,17 @@ export default {
 
     // show, hide
     const show = ref(false)
-    const open = position => {
+    const open = (position, id) => {
       show.value = true
       if (position) formData.value.position = position
+      if (id) {
+        formTitle.value = "Bo'limni tahrirlash"
+        formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+      }
     }
     const close = () => {
       show.value = false
+      formTitle.value = "Yangi bo'lim yaratish"
       form.value.resetValidation()
       formData.value = { ...emptyFormData }
     }
@@ -127,6 +134,7 @@ export default {
 
     return {
       form,
+      formTitle,
       required,
       minLengthValidator,
       formData,

@@ -90,15 +90,14 @@
 									v-model="formData.gender"
 									class="mt-0"
 									hide-details
-									:rules="[required]"
                 >
 									<v-radio
 										label="ERKAK"
-										value="1"
+										:value="true"
 									></v-radio>
 									<v-radio
 										label="AYOL"
-										value="0"
+										:value="false"
 									></v-radio>
                 </v-radio-group>
               </v-col>
@@ -206,7 +205,7 @@ export default {
       }
 
       if (formData.value.id) {
-        if (formData.value.full_name && formData.value.phone && formData.value.birth_date && formData.value.gender) {
+        if (formData.value.full_name && formData.value.phone && formData.value.birth_date) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, newValue)
             .then(({ data, message }) => {
@@ -227,7 +226,7 @@ export default {
           })
         }
       } else {
-        if (formData.value.full_name && formData.value.phone && formData.value.birth_date && formData.value.gender) {
+        if (formData.value.full_name && formData.value.phone && formData.value.birth_date) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, newValue)
             .then(({ data, message }) => {

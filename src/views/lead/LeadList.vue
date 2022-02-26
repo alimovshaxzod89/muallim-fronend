@@ -23,12 +23,15 @@
 					:animation="200"
 					ghost-class="ghost-card"
 					group="tasks"
+					:id="null"
 					@end="taskChange"
 				>
 					<lead-task-card
 						v-for="task in appealReturn()"
 						:key="task.id"
 						:task="task"
+						:removeCard="confirmDelete"
+						:openAppealForm="openAppealForm"
 					></lead-task-card>
 				</draggable>
 
@@ -36,6 +39,9 @@
 					v-for="column in state.rows.filter(el => el.position === 1)"
 					:columns="column"
 					:key="column.id"
+					:openForm="openForm"
+					:removeCard="confirmDelete"
+					:openAppealForm="openAppealForm"
 				/>
 			</v-col>
 
@@ -52,7 +58,14 @@
 					</div>
 				</v-card>
 
-				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 2)" :columns="column" :key="column.id" />
+				<lead-filter-card
+					v-for="column in state.rows.filter(el => el.position === 2)"
+					:columns="column"
+					:key="column.id"
+					:openForm="openForm"
+					:removeCard="confirmDelete"
+					:openAppealForm="openAppealForm"
+				/>
 			</v-col>
 
 			<v-col cols="4">
@@ -68,7 +81,14 @@
 					</div>
 				</v-card>
 
-				<lead-filter-card  v-for="column in state.rows.filter(el => el.position === 3)" :columns="column" :key="column.id" />
+				<lead-filter-card
+					v-for="column in state.rows.filter(el => el.position === 3)"
+					:columns="column"
+					:key="column.id"
+					:openForm="openForm"
+					:removeCard="confirmDelete"
+					:openAppealForm="openAppealForm"
+				/>
 			</v-col>
 		</v-row>
 
@@ -148,23 +168,44 @@ export default {
     const appealState = ref(store.state.appeal)
     const taskGroup = ref(null)
 
-    const appealReturn = () => appealState.value.rows.filter(el => el.lead_id === null).reverse()
+    const appealReturn = () => appealState.value.rows.filter(el => el.lead_id === null || el.lead_id === '').reverse()
 
     const taskChange = e => {
-      console.log(e)
-      if (e.oldIndex !== e.newIndex || e.pullMode) {
-        console.log('yes')
+      const task = JSON.parse(JSON.stringify(e.item.__vue__.task))
+
+      if (e.oldIndex !== e.newIndex || (e.from.id !== e.to.id && e.pullMode)) {
+        const updatedTask = {
+          lead_id: e.to.id,
+          id: task.id,
+          full_name: task.full_name,
+          phone: task.phone,
+          birth_date: task.birth_date,
+          gender: task.gender,
+          note: task.note,
+          subject_id: task.subject_id,
+          subject: task.subject,
+          days: task.days,
+          hours: task.hours,
+        }
+
+        store
+          .dispatch(`appeal/updateRow`, updatedTask)
+          .then(({ data }) => data)
+          .catch(error => {
+            console.log(error)
+            return false
+          })
       }
     }
 
     // Form
     const leadSimpleForm = ref(null)
     const leadGroupForm = ref(null)
-    const openForm = position => {
+    const openForm = (position = null, id = null) => {
       if (position === 3) {
-        leadGroupForm.value.open(position)
-      } else {
-        leadSimpleForm.value.open(position)
+        leadGroupForm.value.open(position, id)
+      } else if (position === 1 || position === 2) {
+        leadSimpleForm.value.open(position, id)
       }
     }
 
@@ -176,10 +217,10 @@ export default {
 
     // Delete Confirm Dialog
     const dialogConfirm = ref(null)
-    const confirmDelete = id => {
+    const confirmDelete = (store_name, id) => {
       dialogConfirm.value
         .open("O'chirishga aminmisiz?")
-        .then(() => deleteRow(id))
+        .then(() => deleteRow(store_name, id))
         .catch(() => {})
     }
 
@@ -287,7 +328,7 @@ export default {
   min-height: 80px;
   margin: 20px auto 15px auto;
   padding-top: 0;
-  border: 1px solid #ccc;
+  border: 1px solid #919191;
   border-radius: 5px;
   background-color: #fbfbfb;
   .task-btn {

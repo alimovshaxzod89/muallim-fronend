@@ -8,10 +8,16 @@
 			</template>
 			<v-list class="my-list">
 				<v-list-item class="pa-0">
-					<v-btn text><v-icon class="mr-3" size="18">{{ icons.mdiPencilOutline }}</v-icon> Tahrirlash</v-btn>
+					<v-btn text @click="openAppealForm(task.id)">
+						<v-icon class="mr-3" size="18">{{ icons.mdiPencilOutline }}</v-icon>
+						Tahrirlash
+					</v-btn>
 				</v-list-item>
 				<v-list-item class="pa-0">
-					<v-btn text><v-icon class="mr-3" color="error" size="18">{{ icons.mdiDeleteOutline }}</v-icon> O'chirish</v-btn>
+					<v-btn text @click="removeCard('appeal', task.id)">
+						<v-icon class="mr-3" color="error" size="18">{{ icons.mdiDeleteOutline }}</v-icon>
+						O'chirish
+					</v-btn>
 				</v-list-item>
 			</v-list>
 		</v-menu>
@@ -36,9 +42,12 @@ export default {
       type: Object,
       default: () => ({}),
     },
-  },
-  filters: {
-    date: value => moment(value).format('D MMMM YYYY'),
+    removeCard: {
+      type: Function,
+    },
+    openAppealForm: {
+      type: Function,
+    },
   },
   setup() {
     return {
@@ -48,6 +57,9 @@ export default {
         mdiPencilOutline,
       },
     }
+  },
+  filters: {
+    date: value => moment(value).format('D MMMM YYYY'),
   },
 }
 </script>

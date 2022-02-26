@@ -1,5 +1,5 @@
 import store from '@/store'
-import { ref, onBeforeMount } from '@vue/composition-api'
+import { onBeforeMount, ref } from '@vue/composition-api'
 
 export default function useLeadList(MODULE_NAME) {
   const notify = ref({})
@@ -22,10 +22,10 @@ export default function useLeadList(MODULE_NAME) {
   })
 
   // Delete
-  const deleteRow = id => {
+  const deleteRow = (store_name, id) => {
     store
-      .dispatch(`${MODULE_NAME}/removeRow`, id)
-      .then(message => {
+      .dispatch(`${store_name}/removeRow`, id)
+      .then(({ message }) => {
         notify.value = { type: 'success', text: message, time: Date.now() }
         fetchDatas()
       })

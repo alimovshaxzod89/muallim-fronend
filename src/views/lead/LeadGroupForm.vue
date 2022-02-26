@@ -225,12 +225,18 @@ export default {
 
     // Show, Hide
     const show = ref(false)
-    const open = position => {
+    const formTitle = ref("Yangi guruh qo'shish")
+    const open = (position, id) => {
       show.value = true
       if (position) formData.value.position = position
+      if (id) {
+        formTitle.value = 'Guruhni tahrirlash'
+        formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+      }
     }
     const close = () => {
       show.value = false
+      formTitle.value = "Yangi guruh qo'shish"
       form.value.resetValidation()
       formData.value = { ...emptyFormData }
     }
@@ -328,6 +334,7 @@ export default {
 
     return {
       form,
+      formTitle,
       required,
       minLengthValidator,
       formData,

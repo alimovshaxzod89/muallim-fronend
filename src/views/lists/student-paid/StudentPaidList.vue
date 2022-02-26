@@ -173,7 +173,7 @@
       :footer-props="footerProps"
       class="text-no-wrap"
     >
-      <template slot="item.index" scope="props">
+      <template slot="item.index" slot-scope="props">
         {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
       </template>
 
@@ -238,9 +238,8 @@ import {
   mdiDeleteOutline,
   mdiDotsVertical,
   mdiEyeOutline,
-  mdiPencilOutline
+  mdiPencilOutline,
 } from '@mdi/js'
-
 
 import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
@@ -266,8 +265,8 @@ export default {
     DialogConfirm,
   },
   filters: {
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
@@ -323,7 +322,6 @@ export default {
         .catch(() => {})
     }
 
-
     const BASE_URL = envParams.BASE_URL
 
     const teachers = ref([])
@@ -347,10 +345,9 @@ export default {
       })
     }
 
-
     onMounted(() => {
-      loadTeachers(),
-      loadGroups(),
+      loadTeachers()
+      loadGroups()
       loadStudents()
     })
 

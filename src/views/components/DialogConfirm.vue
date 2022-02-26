@@ -26,7 +26,6 @@ export default {
     resolve: null,
     reject: null,
   }),
-
   methods: {
     open(text) {
       this.text = text
