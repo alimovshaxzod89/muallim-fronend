@@ -11,7 +11,7 @@
     <v-card>
       <v-form ref="form">
         <v-card-title>
-          <span class="headline">Yangi guruh qo'shish</span>
+          <span class="headline">{{formTitle}}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -60,8 +60,8 @@
 							<v-col cols="6">
                 <h4 class="text-required no-text"><span>*</span></h4>
 								<v-autocomplete
-                  v-model="formData.days"
-                  :items="selectDatas.days"
+                  v-model="formData.week_day"
+                  :items="selectDatas.week_day"
                   item-text="text"
                   item-value="id"
                   label="KUNLAR"
@@ -71,13 +71,13 @@
                   class="align-start"
 									:rules="selectRule"
                 ></v-autocomplete>
-								<div class="d-flex flex-wrap check-container" v-if="formData.days === 5">
+								<div class="d-flex flex-wrap check-container" v-if="formData.week_day === 5">
 									<v-checkbox
 										class="my-checkbox"
 										hide-details
 										v-for="(day, index) in days"
 										:key="index + '-' + day"
-										v-model="formData.days"
+										v-model="formData.week_day"
 										:label="day.text"
 										:value="day.id"
 									></v-checkbox>
@@ -150,15 +150,13 @@
 </template>
 
 <script>
-import { mdiPlusCircleOutline, mdiCalendar, mdiClockTimeFourOutline } from '@mdi/js'
-
 import { ref } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
+import { required, minLengthValidator } from '@core/utils/validation'
+import { mdiPlusCircleOutline, mdiCalendar, mdiClockTimeFourOutline } from '@mdi/js'
 
 import LeadStoreModule from './LeadStoreModule'
-
-import { required, minLengthValidator } from '@core/utils/validation'
 
 const MODULE_NAME = 'lead'
 
@@ -177,7 +175,7 @@ export default {
       name: null,
       subject_id: null,
       teacher_id: null,
-      days: [],
+      week_day: [],
       room_id: null,
       time_begin: null,
     }
@@ -185,7 +183,9 @@ export default {
     const selectDatas = ref({
       subjects: [],
       teachers: [],
-      days: [
+      rooms: [],
+      time_begin: null,
+      week_day: [
         {
           id: 1,
           text: 'Toq kunlar',
@@ -207,21 +207,19 @@ export default {
           text: 'Boshqa',
         },
       ],
-      rooms: [],
-      time_begin: null,
     })
+    const days = ref([
+      { id: 8, text: 'Dushanba' },
+      { id: 9, text: 'Seshanba' },
+      { id: 10, text: 'Chorshanba' },
+      { id: 11, text: 'Payshanba' },
+      { id: 12, text: 'Juma' },
+      { id: 13, text: 'Shanba' },
+      { id: 14, text: 'Yakshanba' },
+    ])
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     const time_begin = ref(null)
     const time_begin2 = ref(null)
-    const days = ref([
-      { id: 1, text: 'Dushanba' },
-      { id: 2, text: 'Seshanba' },
-      { id: 3, text: 'Chorshanba' },
-      { id: 4, text: 'Payshanba' },
-      { id: 5, text: 'Juma' },
-      { id: 6, text: 'Shanba' },
-      { id: 7, text: 'Yakshanba' },
-    ])
 
     // Show, Hide
     const show = ref(false)
@@ -249,7 +247,7 @@ export default {
           formData.value.subject_id &&
           formData.value.teacher_id &&
           formData.value.room_id &&
-          formData.value.days
+          formData.value.week_day
         ) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
@@ -274,7 +272,7 @@ export default {
           formData.value.subject_id &&
           formData.value.teacher_id &&
           formData.value.room_id &&
-          formData.value.days
+          formData.value.week_day
         ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
@@ -376,7 +374,6 @@ export default {
   align-items: flex-start;
   justify-content: flex-start;
   min-height: 106px;
-  // margin-bottom: 20px;
   padding: 5px 45px 5px 5px;
   border: 1px solid #e7e6e9;
   border-radius: 5px;
