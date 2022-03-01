@@ -60,8 +60,8 @@
 							<v-col cols="6">
                 <h4 class="text-required no-text"><span>*</span></h4>
 								<v-autocomplete
-                  v-model="formData.week_day"
-                  :items="selectDatas.week_day"
+                  v-model="dynamicDay"
+                  :items="selectDatas.day_types"
                   item-text="text"
                   item-value="id"
                   label="KUNLAR"
@@ -71,11 +71,12 @@
                   class="align-start"
 									:rules="selectRule"
                 ></v-autocomplete>
-								<div class="d-flex flex-wrap check-container" v-if="formData.week_day === 5">
+								<div class="d-flex flex-wrap check-container" v-if="dynamicDay === 5">
 									<v-checkbox
 										class="my-checkbox"
 										hide-details
-										v-for="(day, index) in days"
+										multiple
+										v-for="(day, index) in selectDatas.week_day"
 										:key="index + '-' + day"
 										v-model="formData.week_day"
 										:label="day.text"
@@ -185,7 +186,7 @@ export default {
       teachers: [],
       rooms: [],
       time_begin: null,
-      week_day: [
+      day_types: [
         {
           id: 1,
           text: 'Toq kunlar',
@@ -207,16 +208,17 @@ export default {
           text: 'Boshqa',
         },
       ],
+      week_day: [
+        { id: 8, text: 'Dushanba' },
+        { id: 9, text: 'Seshanba' },
+        { id: 10, text: 'Chorshanba' },
+        { id: 11, text: 'Payshanba' },
+        { id: 12, text: 'Juma' },
+        { id: 13, text: 'Shanba' },
+        { id: 14, text: 'Yakshanba' },
+      ],
     })
-    const days = ref([
-      { id: 8, text: 'Dushanba' },
-      { id: 9, text: 'Seshanba' },
-      { id: 10, text: 'Chorshanba' },
-      { id: 11, text: 'Payshanba' },
-      { id: 12, text: 'Juma' },
-      { id: 13, text: 'Shanba' },
-      { id: 14, text: 'Yakshanba' },
-    ])
+    const dynamicDay = ref(null)
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     const time_begin = ref(null)
     const time_begin2 = ref(null)
@@ -237,20 +239,20 @@ export default {
       formTitle.value = "Yangi guruh qo'shish"
       form.value.resetValidation()
       formData.value = { ...emptyFormData }
+      dynamicDay.value = null
     }
 
     // Form submit
     const onSubmit = () => {
+      const newValue = {
+        ...formData.value,
+        week_day: dynamicDay.value !== 5 && dynamicDay.value !== '' ? dynamicDay.value : formData.value.week_day,
+      }
+
       if (formData.value.id) {
-        if (
-          formData.value.name &&
-          formData.value.subject_id &&
-          formData.value.teacher_id &&
-          formData.value.room_id &&
-          formData.value.week_day
-        ) {
+        if (formData.value.name && formData.value.subject_id && formData.value.teacher_id && formData.value.room_id) {
           store
-            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/updateRow`, newValue)
             .then(({ data, message }) => {
               close()
               return data
@@ -267,15 +269,9 @@ export default {
           })
         }
       } else {
-        if (
-          formData.value.name &&
-          formData.value.subject_id &&
-          formData.value.teacher_id &&
-          formData.value.room_id &&
-          formData.value.week_day
-        ) {
+        if (formData.value.name && formData.value.subject_id && formData.value.teacher_id && formData.value.room_id) {
           store
-            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
+            .dispatch(`${MODULE_NAME}/addRow`, newValue)
             .then(({ data, message }) => {
               close()
               return data
@@ -340,7 +336,7 @@ export default {
       selectRule,
       time_begin,
       time_begin2,
-      days,
+      dynamicDay,
       show,
       onSubmit,
       open,
