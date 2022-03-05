@@ -158,10 +158,10 @@ export default {
       id: null,
       date: new Date().toISOString().substr(0, 10),
       amount: null,
-      currency_id: { id: 1 },
+      currency_id: 1,
       note: null,
       expense_category_id: null,
-      cashbox_id: ref({ name: 'Naxt', id: 1 }),
+      cashbox_id: 1,
     }
     const formData = ref({ ...emptyFormData })
     const form = ref(null)

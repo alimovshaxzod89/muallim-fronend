@@ -91,12 +91,16 @@
                 <p>
                   Summa:
                 </p>
-                {{totalMoney_id()}}
+                {{totalAmount()}}
               </td>
               <td></td>
             </tr>
           </tbody>
         </table>
+      </template>
+
+      <template #[`item.amount`]="{ item }">
+        {{ item.amount | summa }}
       </template>
     </v-data-table>
 
@@ -188,9 +192,6 @@ export default {
         .catch(() => {})
     }
 
-    const totalMoney_id = () => {
-      return state.value.rows.reduce((a, c) => a + c.money_id, 0)
-    }
     const totalAmount = () => {
       return state.value.rows.reduce((a, c) => a + c.amount, 0)
     }
@@ -221,7 +222,6 @@ export default {
       expenseForm,
       openForm,
 
-      totalMoney_id,
       totalAmount,
 
       MODULE_NAME,
