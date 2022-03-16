@@ -24,6 +24,12 @@
 							</v-btn>
 						</v-list-item>
 						<v-list-item class="pa-0">
+							<v-btn text @click="getLink(columns.id)">
+								<v-icon class="mr-3" color="info" size="18">{{ icons.mdiLinkVariant }}</v-icon>
+								Linkni olish
+							</v-btn>
+						</v-list-item>
+						<v-list-item class="pa-0">
 							<v-btn text @click="removeCard('lead', columns.id)">
 								<v-icon class="mr-3" color="error" size="18">{{ icons.mdiDeleteOutline }}</v-icon>
 								O'chirish
@@ -57,7 +63,7 @@
 import { ref } from '@vue/composition-api'
 import store from '@/store'
 import draggable from 'vuedraggable'
-import { mdiMenu, mdiDeleteOutline, mdiPencilOutline } from '@mdi/js'
+import { mdiMenu, mdiDeleteOutline, mdiPencilOutline, mdiLinkVariant } from '@mdi/js'
 
 import LeadTaskCard from './LeadTaskCard'
 
@@ -114,16 +120,41 @@ export default {
       }
     }
 
+		const getLink = id => {
+
+			const url = `${window.location.origin}/lead-form/${id}`
+
+			const el = document.createElement('textarea');  // Create a <textarea> element
+			el.value = url;                                 // Set its value to the string that you want copied
+			el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
+			el.style.position = 'absolute';
+			el.style.left = '-9999px';                      // Move outside the screen to make it invisible
+			document.body.appendChild(el);                  // Append the <textarea> element to the HTML document
+			const selected =
+				document.getSelection().rangeCount > 0        // Check if there is any content selected previously
+					? document.getSelection().getRangeAt(0)     // Store selection if found
+					: false;                                    // Mark as false to know no selection existed before
+			el.select();                                    // Select the <textarea> content
+			document.execCommand('copy');                   // Copy - only works as a result of a user action (e.g. click events)
+			document.body.removeChild(el);                  // Remove the <textarea> element
+			if (selected) {                                 // If a selection existed before copying
+				document.getSelection().removeAllRanges();    // Unselect everything on the HTML document
+				document.getSelection().addRange(selected);   // Restore the original selection
+			}
+		}
+
     return {
       state,
       taskGroup,
       appealReturn,
       taskChange,
+			getLink,
 
       icons: {
         mdiMenu,
         mdiDeleteOutline,
         mdiPencilOutline,
+				mdiLinkVariant
       },
     }
   },
