@@ -11,6 +11,7 @@
           label="YIL"
           class="data-list-search me-3"
           dense
+          solo
           outlined
           hide-details
           clearable
@@ -24,6 +25,7 @@
           label="OY"
           class="data-list-search me-3"
           dense
+          solo
           outlined
           hide-details
           clearable
@@ -225,8 +227,6 @@ export default {
       notify,
       selectedTableData,
       filterOptions,
-
-      
 
       footerProps,
     }

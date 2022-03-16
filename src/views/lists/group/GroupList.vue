@@ -19,6 +19,7 @@
           label="BINO"
           class="data-list-search me-3"
           dense
+          solo
           outlined
           hide-details
           clearable
@@ -316,10 +317,10 @@ export default {
     DialogConfirm,
   },
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		summa: value => numeral(value).format('0,0'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    date: value => moment(value).format('D MMMM YYYY'),
+    summa: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
@@ -403,15 +404,13 @@ export default {
       return result[0].name
     }
 
-
     // ! METHODS
     const places = ref([])
-		const loadPlace = () => {
-			axios.get('/api/places')
-				.then(response => {
-					places.value = response.data.data
-				})
-		}
+    const loadPlace = () => {
+      axios.get('/api/places').then(response => {
+        places.value = response.data.data
+      })
+    }
 
     // LoadApis
     const regions = ref([])
@@ -426,7 +425,7 @@ export default {
       loadPlace()
     })
 
-     // PlaceForm
+    // PlaceForm
     const placeForm = ref(null)
     const addPlace = (id = null) => {
       placeForm.value.open(id)
@@ -453,7 +452,7 @@ export default {
       addPlace,
 
       // LoadApis
-			places,
+      places,
 
       actions,
       actionOptions,

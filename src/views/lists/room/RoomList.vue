@@ -80,14 +80,7 @@
 </template>
 
 <script>
-import { 
-  mdiTrendingUp,
-  mdiPlus, 
-  mdiDeleteOutline, 
-  mdiDotsVertical, 
-  mdiEyeOutline, 
-  mdiPencilOutline 
-} from '@mdi/js'
+import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
@@ -110,7 +103,6 @@ export default {
     DialogConfirm,
   },
   setup() {
-
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, RoomStoreModule)

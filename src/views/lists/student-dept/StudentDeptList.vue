@@ -13,11 +13,11 @@
         ></v-text-field>
       </div> -->
 
-      <v-col cols="3" class="">
+      <v-col cols="3" class="flexDate">
         <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-            class="my-date-picker"
+              class="my-date-picker"
               v-model="filter.date"
               label="SANA"
               readonly
