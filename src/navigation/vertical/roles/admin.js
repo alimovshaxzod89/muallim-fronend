@@ -21,6 +21,7 @@ import {
   mdiAccountTieVoice,
   mdiCreditCardMultiple,
   mdiCurrencyEur,
+  mdiCashRegister ,
 } from '@mdi/js'
 
 export default [
@@ -202,6 +203,7 @@ export default [
     to: 'expense-category',
     resource: 'ExpenseCategory',
     action: 'read',
+    icon: mdiCashRegister, 
   },
   {
     title: 'Valyuta',

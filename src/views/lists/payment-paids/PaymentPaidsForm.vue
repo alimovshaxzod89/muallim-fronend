@@ -87,7 +87,7 @@
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                    class="my-date-picker"
+                      class="my-date-picker"
                       v-model="formData.date"
                       label="SA'NA"
                       readonly
@@ -155,9 +155,10 @@ export default {
       payment_id: null,
       group_id: null,
       amount: null,
-      date: null,
+      date: new Date().toISOString().substr(0, 10),
     }
-    const formData = ref({ ...emptyFormData })
+
+    const formData = ref({ date: new Date().toISOString().substr(0, 10) })
     const open = (item = null, data = null) => {
       show.value = true
       if (item) {
@@ -166,6 +167,7 @@ export default {
           subject_id: item.payment.group.subject_id,
           group_id: item.payment.group.id,
           student_id: item.payment.student_id,
+          date: new Date().toISOString().substr(0, 10),
         }
       }
 
@@ -183,7 +185,7 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.subject_id && formData.value.group_id) {
+        if (formData.value.subject_id && formData.value.group_id && formData.value.date) {
           store
             .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
@@ -203,7 +205,7 @@ export default {
         }
       } else {
         //create
-        if (formData.value.subject_id && formData.value.group_id) {
+        if (formData.value.subject_id && formData.value.group_id && formData.value.date) {
           store
             .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
             .then(message => {

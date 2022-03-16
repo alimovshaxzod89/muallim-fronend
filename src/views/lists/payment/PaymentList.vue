@@ -247,7 +247,7 @@ import {
   mdiFilterOutline,
 } from '@mdi/js'
 
-import { onMounted, ref } from '@vue/composition-api'
+import { onMounted, ref, reduce } from '@vue/composition-api'
 
 import store from '@/store'
 import axios from '@axios'

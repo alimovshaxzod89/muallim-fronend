@@ -66,7 +66,8 @@ export default {
 }
 .my-date-picker .v-input__slot {
   min-height: 40px !important;
-  margin-bottom: 4px;
+  margin-bottom: -38px;
+  margin-top: -2px;
 }
 .my-date-picker .v-input__control {
   display: grid !important;
@@ -77,7 +78,7 @@ export default {
   margin: auto;
 }
 .my-date-picker .v-label {
-  top: 10px;
+  margin-top: 10px;
 }
 .my-date-picker .v-label--active {
   transform: translateY(-17px) scale(0.75);
