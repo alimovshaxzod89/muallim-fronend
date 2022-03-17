@@ -20,7 +20,7 @@ export default function useStudentPaidList(MODULE_NAME) {
     { text: 'OY/YIL', value: 'month_year' },
     { text: 'SUMMA', value: 'amount' },
     { text: 'SA\'NA', value: 'date' },
-    ]
+	]
 
   const filter = ref({
     query: '',
