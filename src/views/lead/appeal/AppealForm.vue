@@ -204,8 +204,8 @@ export default {
         hours: '1600',
       }
 
-      if (formData.value.id) {
-        if (formData.value.full_name && formData.value.phone && formData.value.birth_date) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, newValue)
             .then(({ data, message }) => {
@@ -220,13 +220,6 @@ export default {
               return false
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
-        }
-      } else {
-        if (formData.value.full_name && formData.value.phone && formData.value.birth_date) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, newValue)
             .then(({ data, message }) => {
@@ -239,11 +232,6 @@ export default {
               emit('notify', { type: 'error', text: error.message })
               return false
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }

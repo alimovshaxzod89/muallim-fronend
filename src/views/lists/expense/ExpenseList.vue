@@ -72,7 +72,7 @@
       <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
 
 
-      <template v-slot:footer>
+      <!-- <template v-slot:footer>
         <table class="my-table-footer">
           <tbody>
             <tr>
@@ -97,11 +97,8 @@
             </tr>
           </tbody>
         </table>
-      </template>
+      </template> -->
 
-      <template #[`item.amount`]="{ item }">
-        {{ item.amount | summa }}
-      </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
@@ -116,7 +113,7 @@
 <script>
 import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
 
-import { onUnmounted, ref } from '@vue/composition-api'
+import { onUnmounted, onMounted, ref } from '@vue/composition-api'
 import store from '@/store'
 
 import envParams from '@envParams'
@@ -131,6 +128,9 @@ import DialogConfirm from '../../components/DialogConfirm.vue'
 
 import moment from 'moment'
 moment.locale('uz-latn')
+
+import axios from '@axios'
+import { nullFormat } from 'numeral'
 
 const MODULE_NAME = 'expense'
 
@@ -192,8 +192,16 @@ export default {
         .catch(() => {})
     }
 
+    axios.get('/api/expense').then(response => {
+      if (response.data.success) {
+        selectsDatas.value.amount = response.data.data
+      }
+    })
+    const selectsDatas = ref({
+      amount: [],
+    })
     const totalAmount = () => {
-      return state.value.rows.reduce((a, c) => a + c.amount, 0)
+      return selectsDatas.value.amount.reduce((a, c) => a + c.amount, 0)
     }
 
     const BASE_URL = envParams.BASE_URL
@@ -202,6 +210,8 @@ export default {
     return {
       BASE_URL,
       state,
+
+      selectsDatas,
 
       tableColumns,
       searchQuery,

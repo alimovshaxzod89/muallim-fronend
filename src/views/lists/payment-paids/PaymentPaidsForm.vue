@@ -184,8 +184,8 @@ export default {
     }
     // on form submit
     const onSubmit = () => {
-      if (formData.value.id) {
-        if (formData.value.subject_id && formData.value.group_id && formData.value.date) {
+      if (form.value.validate())  {
+        if (formData.value.id) {
           store
             .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
             .then(message => {
@@ -198,14 +198,6 @@ export default {
               emit('notify', { type: 'error', text: error.message })
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! Bo'limlarni to'g'ri to'ldiring!",
-          })
-        }
-      } else {
-        //create
-        if (formData.value.subject_id && formData.value.group_id && formData.value.date) {
           store
             .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
             .then(message => {
@@ -217,13 +209,8 @@ export default {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! Bo'limlarni to'gri to'ldiring!",
-          })
         }
-      }
+      } 
     }
 
     const days = ref([
