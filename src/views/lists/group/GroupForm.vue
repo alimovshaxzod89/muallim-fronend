@@ -306,17 +306,8 @@ export default {
 
     // on form submit
     const onSubmit = () => {
-      if (formData.value.id) {
-        // update
-        if (
-          formData.value.number &&
-          formData.value.place_id &&
-          formData.value.status &&
-          formData.value.subject_id &&
-          formData.value.teacher_id &&
-          formData.value.price &&
-          formData.value.begin_date
-        ) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ data, message }) => {
@@ -331,22 +322,6 @@ export default {
               return false
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! Bo'limlarni to'g'ri to'ldiring!",
-          })
-        }
-      } else {
-        // create
-        if (
-          formData.value.number &&
-          formData.value.status &&
-          formData.value.place_id &&
-          formData.value.subject_id &&
-          formData.value.teacher_id &&
-          formData.value.price &&
-          formData.value.begin_date
-        ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ data, message }) => {
@@ -360,11 +335,6 @@ export default {
 
               return false
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! Bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }

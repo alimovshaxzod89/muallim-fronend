@@ -49,8 +49,8 @@
                   v-model="formData.status"
                   hide-details
                   label="AKTIV"
-                  false-value="0"
                   true-value="1"
+                  false-value="0"
                 ></v-checkbox>
               </v-col>
             </v-row>
@@ -118,7 +118,7 @@ export default {
       id: null,
       subject_id: null,
       name: null,
-      status: "1",
+      status: '1',
     }
 
     //validation
@@ -144,8 +144,8 @@ export default {
 
     // on form submit
     const onSubmit = () => {
-      if (formData.value.id) {
-        if (formData.value.subject_id) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ data, message }) => {
@@ -158,13 +158,6 @@ export default {
               emit('notify', { type: 'error', text: error.message })
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
-        }
-      } else {
-        if (formData.value.subject_id) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ message }) => {
@@ -175,11 +168,6 @@ export default {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }

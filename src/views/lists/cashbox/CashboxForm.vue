@@ -8,7 +8,7 @@
     max-width="1000px"
     width="1000px"
   >
-    <v-card>
+    <v-card width="500" class="cashboxCard">
       <v-form ref="form">
         <v-card-title>
           <span class="headline">Kassa nomlari</span>
@@ -57,16 +57,18 @@
                     ></v-date-picker>
                 </v-menu>
               </v-col>
-
-            </v-row>
-          </v-container>
-        </v-card-text>
-
-        <v-card-actions>
+              <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
           <v-btn color="success" type="submit" @click.prevent="onSubmit"> Saqlash</v-btn>
         </v-card-actions>
+
+            </v-row>
+            
+          </v-container>
+        </v-card-text>
+
+        
       </v-form>
 
       <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
@@ -159,8 +161,8 @@ export default {
 
     // on form submit
     const onSubmit = () => {
-      if (formData.value.id) {
-        if (formData.value.name && formData.value.date) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
@@ -172,13 +174,6 @@ export default {
               emit('notify', { type: 'error', text: error.message })
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
-        }
-      } else {
-        if (formData.value.name && formData.value.date) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ message }) => {
@@ -189,11 +184,6 @@ export default {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }
@@ -258,5 +248,8 @@ export default {
   padding-right: 15px !important;
   padding-left: 15px !important;
   border-color: rgba(94, 86, 105, 0.15) !important;
+}
+.cashboxCard {
+  margin-left: 35%;
 }
 </style>
