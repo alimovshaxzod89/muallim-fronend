@@ -171,6 +171,8 @@ export default {
       gender: true,
       note: null,
       subject_id: null,
+      days: null,
+      hours: null,
     }
     const formData = ref({ ...emptyFormData })
 
@@ -198,6 +200,11 @@ export default {
 
     // on form submit
     const onSubmit = () => {
+      const newValue = {
+        ...formData.value,
+        days: '1',
+        hours: '1',
+      }
       if (form.value.validate()) {
         if (formData.value.id) {
           store

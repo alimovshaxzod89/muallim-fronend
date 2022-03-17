@@ -94,7 +94,7 @@ export default {
       if (form.value.validate()) {
         if (formData.value.id) {
           store
-            .dispatch(`${MODULE_NAME}/updateRow`, newValue)
+            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
@@ -108,7 +108,7 @@ export default {
             })
         } else {
           store
-            .dispatch(`${MODULE_NAME}/addRow`, newValue)
+            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
