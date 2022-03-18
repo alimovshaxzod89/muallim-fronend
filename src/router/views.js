@@ -267,6 +267,7 @@ const views = [
 		component: () => import('@/views/lead-form/LeadForm'),
 		meta: {
 			layout: 'blank',
+			resource: 'Public',
 		},
 	},
   // {
