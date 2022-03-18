@@ -8,6 +8,7 @@
           :items="filterOptions.years"
           item-text="text"
           item-value="value"
+          solo
           label="YIL"
           class="data-list-search me-3"
           dense
@@ -24,6 +25,7 @@
           label="OY"
           class="data-list-search me-3"
           dense
+          solo
           outlined
           hide-details
           clearable
@@ -32,32 +34,12 @@
       </div>
     </v-card-text>
 
-    <!-- Table -->
-    <!-- <v-data-table
-      v-model="selectedTableData"
-      :headers="tableColumns"
-      :items="state.rows"
-      :options.sync="options"
-      :server-items-length="state.total"
-      :loading="loading"
-      :items-per-page="options.itemsPerPage"
-      :footer-props="footerProps"
-      class="text-no-wrap"
-			:headers-length="2"
-    >
-
-      <template slot="item.index" scope="props">
-        {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
-      </template>
-
-    </v-data-table> -->
-
 		<v-simple-table class="my-table-bordered">
 			<template v-slot:default>
 				<thead>
 					<tr>
 						<th class="text-uppercase text-center">#</th>
-						<th class="text-uppercase text-center">OY</th>
+						<th colspan="1" class="text-uppercase text-center">O'qituvchi</th>
 						<th colspan="2" class="text-uppercase text-center">TALABALAR TO'LAYDIGAN SUMMA</th>
 						<th colspan="2" class="text-uppercase text-center">TALABALAR TO'LADI</th>
 						<th colspan="2" class="text-uppercase text-center">TALABALAR TO'LAMAGAN QOLDIQ</th>
@@ -75,13 +57,35 @@
 						<th class="text-uppercase text-center">SUMMA</th>
 						<th class="text-uppercase text-center">OLISHI MUMKIN</th>
 						<th class="text-uppercase text-center">TALABALAR QARZLARINI BERGANDAN SO'NG</th>
+            <th class="text-uppercase text-center"></th>
 					</tr>
 				</thead>
-				<!-- <tbody>
-					<tr v-for="item in desserts" :key="item.dessert">
-						<td>{{ item.dessert }}</td>
+				<tbody v-if="teacher_payments.length > 0">
+					<tr v-for="(item, k) in teacher_payments" :key="item + '-' + k">
+						<td>{{ k + 1 }}</td>
+						<td>{{ fullName(item) }}</td>
+						<td>{{ JSON.parse(item.summalar).cnta }}</td>
+						<td style="white-space: nowrap;">{{ JSON.parse(item.summalar).bks }}</td>
+						<td>{{ JSON.parse(item.summalar).cntb }}</td>
+						<td style="white-space: nowrap;">{{ JSON.parse(item.summalar).bs }}</td>
+						<td>{{ JSON.parse(item.summalar).cnta - JSON.parse(item.summalar).cntb }}</td>
+						<td style="white-space: nowrap;">
+							{{ (JSON.parse(item.summalar).bks - JSON.parse(item.summalar).bs) }}
+						</td>
+						<td style="white-space: nowrap;">{{ JSON.parse(item.summalar).ustoz_ulushi_fakt }}</td>
+						<td style="white-space: nowrap;">
+							{{ (JSON.parse(item.summalar).ustoz_ulushi - JSON.parse(item.summalar).ustoz_ulushi_fakt) }}
+						</td>
+						<td
+							data-toggle="tooltip"
+							title="To'lov amalga oshirish uchun bosing"
+							style="cursor: pointer;"
+							@click.prevent="openPaids(item)"
+						>
+							<span style="border-bottom: 1px dashed #e3e3e3; white-space: nowrap;">{{ item.oldi }}</span>
+						</td>
 					</tr>
-				</tbody> -->
+				</tbody>
 			</template>
 		</v-simple-table>
   </v-card>
@@ -89,7 +93,6 @@
 
 <script>
 import { ref, onUnmounted } from '@vue/composition-api'
-import store from '@/store'
 import moment from 'moment'
 moment.locale('uz-latn')
 
@@ -100,38 +103,27 @@ import envParams from '@envParams'
 
 // composition function
 import useTeacherProfitList from './useTeacherProfitList'
-import TeacherProfitStoreModule from '@/views/lists/teacher-profit/TeacherProfitStoreModule'
 
-const MODULE_NAME = 'center-profit'
+const MODULE_NAME = 'teacher-profit'
 
 export default {
   setup() {
-    // Register module
-    if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, TeacherProfitStoreModule)
-    }
-    // UnRegister on leave
-    onUnmounted(() => {
-      if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
-    })
-
-    //store state
-    const state = ref(store.state[MODULE_NAME])
-
     const BASE_URL = envParams.BASE_URL
 
     //logics
     const {
       filter,
       searchQuery,
-      tableColumns,
       fetchDatas,
+      teacher_payments,
 
       options,
       loading,
       notify,
       selectedTableData,
     } = useTeacherProfitList(MODULE_NAME)
+
+    fetchDatas()
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -208,17 +200,46 @@ export default {
           value: '2021',
           text: '2021',
         },
+        {
+          value: '2022',
+          text: '2022',
+        },
+        {
+          value: '2023',
+          text: '2023',
+        },
       ],
+    }
+
+    const fullName = item => {
+      function nn(str) {
+        if (str === null) {
+          return ''
+        } else {
+          return str
+        }
+      }
+
+      return `${nn(item.first_name)} ${nn(item.last_name)} ${nn(item.middle_name)}`
+    }
+
+    const openPaids = item => {
+      const month = filter.value.month
+      const year = filter.value.year
+      const query = { month, year, teacher_id: item.id }
+      this.$router.push({ name: 'teacher-paids', query })
     }
 
     // Return
     return {
       MODULE_NAME,
       BASE_URL,
-      state,
       filter,
+      teacher_payments,
 
-      tableColumns,
+      fullName,
+      openPaids,
+
       searchQuery,
       fetchDatas,
       options,

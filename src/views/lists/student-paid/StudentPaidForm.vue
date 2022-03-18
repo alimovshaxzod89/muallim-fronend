@@ -74,6 +74,7 @@
                     ></v-text-field>
               </v-col>
               <v-col cols="6">
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
                     type="text"
                     label="SUMMA"
@@ -83,6 +84,7 @@
 				></v-text-field>
               </v-col>
               <v-col cols="6">
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -155,21 +157,21 @@ import Button from '../../components/button/Button'
 const MODULE_NAME = 'studentPaid'
 
 export default {
-  components: { 
-      SubjectForm,
-      StudentForm,
-      GroupForm, 
-      Button 
-    },
+  components: {
+    SubjectForm,
+    StudentForm,
+    GroupForm,
+    Button,
+  },
 
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		sum: value => numeral(value).format('0,0'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
-  
+    date: value => moment(value).format('D MMMM YYYY'),
+    sum: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
+
   created() {
-    this.loadSubject()  
+    this.loadSubject()
     this.loadStudent()
     this.loadGroup()
   },
@@ -249,8 +251,8 @@ export default {
 
     // on form submit
     const onSubmit = () => {
-      if (formData.value.id) {
-        if (formData.value.subject_id && formData.value.group_id) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
@@ -262,13 +264,6 @@ export default {
               emit('notify', { type: 'error', text: error.message })
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
-        }
-      } else {
-        if (formData.value.subject_id && formData.value.group_id) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ message }) => {
@@ -279,11 +274,6 @@ export default {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }
@@ -293,7 +283,7 @@ export default {
     const addSubject = (id = null) => {
       subjectForm.value.open(id)
     }
-    const addSubjectToOptions = (row) => {
+    const addSubjectToOptions = row => {
       selectsDatas.value.subject = selectsDatas.value.subject.concat([row])
       formData.value.subject_id = row.id
     }
@@ -302,7 +292,7 @@ export default {
     const addGroup = (id = null) => {
       groupForm.value.open(id)
     }
-    const addGroupToOptions = (row) => {
+    const addGroupToOptions = row => {
       selectsDatas.value.group = selectsDatas.value.group.concat([row])
       formData.value.group_id = row.id
     }

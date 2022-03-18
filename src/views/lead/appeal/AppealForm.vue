@@ -141,154 +141,153 @@ import { required, minLengthValidator } from '@core/utils/validation'
 const MODULE_NAME = 'appeal'
 
 export default {
-	created() {
-		this.loadSubject()
-	},
-	setup(props, { emit }) {
-		// Register module
-		if (!store.hasModule(MODULE_NAME)) {
-			store.registerModule(MODULE_NAME, AppealStoreModule)
-		}
+  created() {
+    this.loadSubject()
+  },
+  setup(props, { emit }) {
+    // Register module
+    if (!store.hasModule(MODULE_NAME)) {
+      store.registerModule(MODULE_NAME, AppealStoreModule)
+    }
 
-		// show, hide
-		const show = ref(false)
-		const open = (id = null) => {
-			show.value = true
-			if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
-		}
-		const close = () => {
-			show.value = false
-			form.value.resetValidation()
-			formData.value = { ...emptyFormData }
-		}
-		const form = ref(null)
-		const emptyFormData = {
-			id: null,
-			lead_id: null,
-			full_name: null,
-			phone: null,
-			birth_date: null,
-			gender: true,
-			note: null,
-			subject_id: null,
-		}
-		const formData = ref({ ...emptyFormData })
+    // show, hide
+    const show = ref(false)
+    const open = (id = null) => {
+      show.value = true
+      if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+    }
+    const close = () => {
+      show.value = false
+      form.value.resetValidation()
+      formData.value = { ...emptyFormData }
+    }
+    const form = ref(null)
+    const emptyFormData = {
+      id: null,
+      lead_id: null,
+      full_name: null,
+      phone: null,
+      birth_date: null,
+      gender: true,
+      note: null,
+      subject_id: null,
+      days: null,
+      hours: null,
+    }
+    const formData = ref({ ...emptyFormData })
 
-		// birth date picker
-		const picker = new Date().toISOString().substr(0, 10)
-		const isDate = ref(false)
+    // birth date picker
+    const picker = new Date().toISOString().substr(0, 10)
+    const isDate = ref(false)
 
-		//validation
-		const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
+    //validation
+    const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
 
-		// form options for selects
-		const selectsDatas = ref({
-			subject: [],
-		})
-		const loadSubject = () => {
-			axios
-				.get('/api/subjects', { params: { itemsPerPage: -1 } })
-				.then(response => {
-					if (response.data.success) {
-						selectsDatas.value.subject = response.data.data
-					}
-				})
-				.catch(error => console.log(error))
-		}
+    // form options for selects
+    const selectsDatas = ref({
+      subject: [],
+    })
+    const loadSubject = () => {
+      axios
+        .get('/api/subjects', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            selectsDatas.value.subject = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
 
-		// on form submit
-		const onSubmit = () => {
+    // on form submit
+    const onSubmit = () => {
+      const newValue = {
+        ...formData.value,
+        days: '1',
+        hours: '1',
+      }
+      if (form.value.validate()) {
+        if (formData.value.id) {
+          store
+            .dispatch(`${MODULE_NAME}/updateRow`, newValue)
+            .then(({ data, message }) => {
+              close()
+              // emit('notify', { type: 'success', text: message })
+              return data
+            })
+            .catch(error => {
+              console.log(error)
+              emit('notify', { type: 'error', text: error.message })
 
-			if (form.value.validate()) {
+              return false
+            })
+        } else {
+          store
+            .dispatch(`${MODULE_NAME}/addRow`, newValue)
+            .then(({ data, message }) => {
+              close()
+              // emit('notify', { type: 'success', text: message })
+              return data
+            })
+            .catch(error => {
+              console.log(error)
+              emit('notify', { type: 'error', text: error.message })
+              return false
+            })
+        }
+      }
+    }
 
-				const newValue = {
-					...formData.value,
-					days: '1997',
-					hours: '1600',
-				}
+    // SubjectForm
+    const subjectForm = ref(null)
+    const addSubject = (id = null) => {
+      subjectForm.value.open(id)
+    }
+    const addSubjectToOptions = row => {
+      selectsDatas.value.subject = selectsDatas.value.subject.concat([row])
+      formData.value.subject_id = row.id
+    }
 
-				if (formData.value.id) {
-					store
-						.dispatch(`${MODULE_NAME}/updateRow`, newValue)
-						.then(({ data, message }) => {
-							close()
-							// emit('notify', { type: 'success', text: message })
-							return data
-						})
-						.catch(error => {
-							console.log(error)
-							emit('notify', { type: 'error', text: error.message })
+    return {
+      form,
+      picker,
+      isDate,
+      required,
+      minLengthValidator,
+      formData,
+      selectsDatas,
+      selectRule,
+      loadSubject,
+      show,
+      onSubmit,
+      open,
+      close,
 
-							return false
-						})
-				} else {
-					store
-						.dispatch(`${MODULE_NAME}/addRow`, newValue)
-						.then(({ data, message }) => {
-							close()
-							// emit('notify', { type: 'success', text: message })
-							return data
-						})
-						.catch(error => {
-							console.log(error)
-							emit('notify', { type: 'error', text: error.message })
-							return false
-						})
-				}
-			}
-		}
+      subjectForm,
+      addSubject,
+      addSubjectToOptions,
 
-		// SubjectForm
-		const subjectForm = ref(null)
-		const addSubject = (id = null) => {
-			subjectForm.value.open(id)
-		}
-		const addSubjectToOptions = row => {
-			selectsDatas.value.subject = selectsDatas.value.subject.concat([row])
-			formData.value.subject_id = row.id
-		}
-
-		return {
-			form,
-			picker,
-			isDate,
-			required,
-			minLengthValidator,
-			formData,
-			selectsDatas,
-			selectRule,
-			loadSubject,
-			show,
-			onSubmit,
-			open,
-			close,
-
-			subjectForm,
-			addSubject,
-			addSubjectToOptions,
-
-			icons: {
-				mdiPlusCircleOutline,
-				mdiCalendar,
-			},
-		}
-	},
+      icons: {
+        mdiPlusCircleOutline,
+        mdiCalendar,
+      },
+    }
+  },
 }
 </script>
 
 <style>
 .v-input__append-outer {
-	margin: 0 0 0 10px !important;
+  margin: 0 0 0 10px !important;
 }
 
 .btn-dialog-add-item {
-	min-width: 60px !important;
-	padding-right: 15px !important;
-	padding-left: 15px !important;
-	border-color: rgba(94, 86, 105, 0.15) !important;
+  min-width: 60px !important;
+  padding-right: 15px !important;
+  padding-left: 15px !important;
+  border-color: rgba(94, 86, 105, 0.15) !important;
 }
 
 .inputForm {
-	margin-top: -15px;
+  margin-top: -15px;
 }
 </style>

@@ -59,6 +59,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -194,8 +195,8 @@ export default {
 
     // on form submit
     const onSubmit = () => {
-      if (formData.value.id) {
-        if (formData.value.teacher_id && formData.value.amount) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
@@ -207,13 +208,6 @@ export default {
               emit('notify', { type: 'error', text: error.message })
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
-        }
-      } else {
-        if (formData.value.teacher_id && formData.value.amount) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ message }) => {
@@ -224,11 +218,6 @@ export default {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }

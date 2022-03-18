@@ -79,9 +79,9 @@ export default {
   //
   // },
   created() {
-      this.loadProvince()
+    this.loadProvince()
   },
-  setup (props, {emit})  {
+  setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, RegionStoreModule)
@@ -106,7 +106,7 @@ export default {
     const emptyFormData = {
       id: null,
       province_id: null,
-      name: null,  
+      name: null,
     }
     const formData = ref({})
 
@@ -132,14 +132,11 @@ export default {
 
     // on form submit
     const onSubmit = () => {
-      if (formData.value.id) {
-        if (
-            formData.value.province_id &&
-            formData.value.name 
-        ) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(({ data, message}) => {
+            .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
               return data
@@ -151,33 +148,19 @@ export default {
               return false
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
-        }
-      } else {
-        if (
-            formData.value.province_id &&
-            formData.value.name 
-           ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(({data, message}) => {
+            .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
               emit('add-province-to-options', data)
             })
-            .catch(error => {``
+            .catch(error => {
+              ;``
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
               return false
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }
@@ -185,13 +168,12 @@ export default {
     // ProvinceForm
     const regionForm = ref(null)
     const addProvince = (id = null) => {
-        provinceForm.value.open(id)
+      provinceForm.value.open(id)
     }
     const addProvinceToOptions = row => {
-        selectsDatas.value.region = selectsDatas.value.region.concat([row])
-        formData.value.province_id = row.id
+      selectsDatas.value.region = selectsDatas.value.region.concat([row])
+      formData.value.province_id = row.id
     }
-   
 
     return {
       form,
@@ -213,7 +195,7 @@ export default {
 
       icons: {
         mdiPlusCircleOutline,
-        mdiCalendar
+        mdiCalendar,
       },
     }
   },

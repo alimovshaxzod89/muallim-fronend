@@ -249,51 +249,35 @@ export default {
     }
     // on form submit
     const onSubmit = () => {
-      if (formData.value.id) {
-        //update
-        if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
-            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(({ data, message }) => {
+            .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
+            .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
-              return data
+              emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
-
-              return false
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! Bo'limlarni to'g'ri to'ldiring!",
-          })
-        }
-      } else {
-        //create
-        if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
-            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(({ data, message }) => {
+            .dispatch(`${props.MODULE_NAME}/addRow`, formData.value)
+            .then(message => {
               close()
               // emit('notify', { type: 'success', text: message })
-              emit('add-student-to-options', data)
+              emit('refresh-list')
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
-              return false
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! Bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }
+
     // Load regions
     const regions = ref()
     const loadRegions = () => {

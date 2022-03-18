@@ -62,7 +62,7 @@ export default {
   // props: {
   //
   // },
-  setup (props, {emit})  {
+  setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, ProvinceStoreModule)
@@ -86,7 +86,7 @@ export default {
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      name: null,  
+      name: null,
     }
     const formData = ref({})
 
@@ -96,14 +96,13 @@ export default {
       form.value.validate()
     }
 
-
     // on form submit
     const onSubmit = () => {
-      if (formData.value.id) {
-        if (formData.value.name) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(({ data, message}) => {
+            .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
               return data
@@ -115,36 +114,21 @@ export default {
               return false
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
-        }
-      } else {
-        if (formData.value.name) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(({data, message}) => {
+            .then(({ data, message }) => {
               close()
               emit('notify', { type: 'success', text: message })
-             
             })
-            .catch(error => {``
+            .catch(error => {
+              ;``
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
               return false
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }
-
-   
-   
 
     return {
       form,
@@ -160,7 +144,7 @@ export default {
 
       icons: {
         mdiPlusCircleOutline,
-        mdiCalendar
+        mdiCalendar,
       },
     }
   },

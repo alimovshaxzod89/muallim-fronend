@@ -147,8 +147,8 @@ export default {
 
     // on form submit
     const onSubmit = () => {
-      if (formData.value.id) {
-        if (formData.value.name) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
@@ -160,13 +160,6 @@ export default {
               emit('notify', { type: 'error', text: error.message })
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
-        }
-      } else {
-        if (formData.value.name) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ message }) => {
@@ -177,11 +170,6 @@ export default {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }

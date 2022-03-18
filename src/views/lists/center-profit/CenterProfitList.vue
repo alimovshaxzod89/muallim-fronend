@@ -8,6 +8,7 @@
           :items="filterOptions.years"
           item-text="text"
           item-value="value"
+          :disabled="filterOptions.years.value"
           label="YIL"
           class="data-list-search me-3"
           dense
@@ -32,27 +33,7 @@
         >
         </v-autocomplete>
       </div>
-    </v-card-text>
-
-    <!-- Table -->
-    <!-- <v-data-table
-      v-model="selectedTableData"
-      :headers="tableColumns"
-      :items="state.rows"
-      :options.sync="options"
-      :server-items-length="state.total"
-      :loading="loading"
-      :items-per-page="options.itemsPerPage"
-      :footer-props="footerProps"
-      class="text-no-wrap"
-			:headers-length="2"
-    >
-
-      <template slot="item.index" scope="props">
-        {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
-      </template>
-
-    </v-data-table> -->
+    </v-card-text>  
 
 		<v-simple-table class="my-table-bordered">
 			<template v-slot:default>
@@ -78,11 +59,27 @@
 						<th class="text-uppercase text-center">TALABALAR QARZLARINI BERGANDAN SO'NG</th>
 					</tr>
 				</thead>
-				<!-- <tbody>
-					<tr v-for="item in desserts" :key="item.dessert">
-						<td>{{ item.dessert }}</td>
+				<tbody v-if="(teacher_payments.length > 0)">
+					<tr v-for="(item, k) in teacher_payments" :key="item + '-' + k">
+						<td>{{ k + 1 }}</td>
+						<td style="white-space: nowrap;">{{ item.oy }}</td>
+						<td>{{ JSON.parse(item.summalar).cnta }}</td>
+						<td style="white-space: nowrap;">{{ JSON.parse(item.summalar).bks }}</td>
+						<td>{{ JSON.parse(item.summalar).cntb }}</td>
+						<td style="white-space: nowrap;">{{ JSON.parse(item.summalar).bs  }}</td>
+						<td>{{ JSON.parse(item.summalar).cnta - JSON.parse(item.summalar).cntb }}</td>
+						<td style="white-space: nowrap;">
+							{{ (JSON.parse(item.summalar).bks - JSON.parse(item.summalar).bs)  }}
+						</td>
+
+						<td style="white-space: nowrap;">
+							{{ JSON.parse(item.summalar).markaz_ulushi_fakt  }}
+						</td>
+						<td style="white-space: nowrap;">
+							{{ (JSON.parse(item.summalar).markaz_ulushi - JSON.parse(item.summalar).markaz_ulushi_fakt) }}
+						</td>
 					</tr>
-				</tbody> -->
+				</tbody>
 			</template>
 		</v-simple-table>
   </v-card>
@@ -101,23 +98,15 @@ import envParams from '@envParams'
 
 // composition function
 import useCenterProfitList from './useCenterProfitList'
-import CenterProfitStoreModule from '@/views/lists/center-profit/CenterProfitStoreModule'
 
 const MODULE_NAME = 'center-profit'
 
 export default {
   setup() {
     // Register module
-    if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, CenterProfitStoreModule)
-    }
     // UnRegister on leave
-    onUnmounted(() => {
-      if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
-    })
 
     //store state
-    const state = ref(store.state[MODULE_NAME])
 
     const BASE_URL = envParams.BASE_URL
 
@@ -125,14 +114,16 @@ export default {
     const {
       filter,
       searchQuery,
-      tableColumns,
       fetchDatas,
+      teacher_payments,
 
       options,
       loading,
       notify,
       selectedTableData,
     } = useCenterProfitList(MODULE_NAME)
+
+    fetchDatas()
 
     //interface additional elements
     const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -209,6 +200,14 @@ export default {
           value: '2021',
           text: '2021',
         },
+        {
+          value: '2022',
+          text: '2022',
+        },
+        {
+          value: '2023',
+          text: '2023',
+        },
       ],
     }
 
@@ -216,10 +215,9 @@ export default {
     return {
       MODULE_NAME,
       BASE_URL,
-      state,
       filter,
+      teacher_payments,
 
-      tableColumns,
       searchQuery,
       fetchDatas,
       options,

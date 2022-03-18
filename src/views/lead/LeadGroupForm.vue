@@ -249,31 +249,27 @@ export default {
         week_day: dynamicDay.value !== 5 && dynamicDay.value !== '' ? dynamicDay.value : formData.value.week_day,
       }
 
-      if (formData.value.id) {
-        if (formData.value.name && formData.value.subject_id && formData.value.teacher_id && formData.value.room_id) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, newValue)
             .then(({ data, message }) => {
               close()
+              // emit('notify', { type: 'success', text: message })
               return data
             })
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+
               return false
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
-        }
-      } else {
-        if (formData.value.name && formData.value.subject_id && formData.value.teacher_id && formData.value.room_id) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, newValue)
             .then(({ data, message }) => {
               close()
+              // emit('notify', { type: 'success', text: message })
               return data
             })
             .catch(error => {
@@ -281,11 +277,6 @@ export default {
               emit('notify', { type: 'error', text: error.message })
               return false
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }

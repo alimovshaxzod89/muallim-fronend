@@ -149,17 +149,17 @@ import Button from '../../components/button/Button.vue'
 const MODULE_NAME = 'davomat'
 
 export default {
-  components: { 
-      StudentForm,
-      GroupForm, 
-      Button 
-    },
+  components: {
+    StudentForm,
+    GroupForm,
+    Button,
+  },
 
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		sum: value => numeral(value).format('0,0'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    date: value => moment(value).format('D MMMM YYYY'),
+    sum: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   created() {
     this.loadStudent()
     this.loadGroup()
@@ -188,7 +188,7 @@ export default {
       date: null,
       group_id: null,
       student_id: null,
-      came: "0",
+      came: '0',
       note: null,
       note_to_admin: null,
     }
@@ -230,7 +230,7 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-        if (formData.value.student_id && formData.value.group_id) {
+        if (formData.value.date && formData.value.group_id && formData.value.student_id && formData.value.came) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
@@ -248,7 +248,7 @@ export default {
           })
         }
       } else {
-        if (formData.value.student_id && formData.value.group_id) {
+        if (formData.value.date && formData.value.group_id && formData.value.student_id && formData.value.came) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
             .then(({ message }) => {
@@ -273,7 +273,7 @@ export default {
     const addStudent = (id = null) => {
       studentForm.value.open(id)
     }
-    const addStudentToOptions = (row) => {
+    const addStudentToOptions = row => {
       selectsDatas.value.student = selectsDatas.value.student.concat([row])
       formData.value.student_id = row.id
     }
@@ -282,7 +282,7 @@ export default {
     const addGroup = (id = null) => {
       groupForm.value.open(id)
     }
-    const addGroupToOptions = (row) => {
+    const addGroupToOptions = row => {
       selectsDatas.value.group = selectsDatas.value.group.concat([row])
       formData.value.group_id = row.id
     }

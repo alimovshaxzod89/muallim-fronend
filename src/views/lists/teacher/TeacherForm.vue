@@ -28,8 +28,7 @@
                   :rules="[required, minLengthValidator(formData.first_name, 3)]"
                 ></v-text-field>
               </v-col>
-              <v-col cols="6">
-                <h4 class="text-required no-text"><span>*</span></h4>  
+              <v-col cols="6">  
                 <v-text-field
                   label="FAMILIYA"
                   v-model="formData.last_name"
@@ -190,9 +189,9 @@ export default {
   //
   // },
   created() {
-      this.loadRegion()
+    this.loadRegion()
   },
-  setup (props, {emit})  {
+  setup(props, { emit }) {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, TeacherStoreModule)
@@ -224,8 +223,8 @@ export default {
       address: null,
       permanent_region_id: null,
       permanent_address: null,
-      gender: "0",
-      birth_date: null,  
+      gender: '0',
+      birth_date: null,
     }
     const formData = ref({})
 
@@ -255,14 +254,11 @@ export default {
 
     // on form submit
     const onSubmit = () => {
-      if (formData.value.id) {
-        if (
-            formData.value.first_name &&
-            formData.value.last_name 
-        ) {
+      if (form.value.validate()) {
+        if (formData.value.id) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(({ data, message}) => {
+            .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
               return data
@@ -274,33 +270,19 @@ export default {
               return false
             })
         } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
-        }
-      } else {
-        if (
-            formData.value.first_name &&
-            formData.value.last_name 
-           ) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(({data, message}) => {
+            .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
               emit('add-teacher-to-options', data)
             })
-            .catch(error => {``
+            .catch(error => {
+              ;``
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
               return false
             })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
         }
       }
     }
@@ -308,13 +290,12 @@ export default {
     // TeacherForm
     const teacherForm = ref(null)
     const addRegion = (id = null) => {
-        roomForm.value.open(id)
+      roomForm.value.open(id)
     }
     const addRegionToOptions = row => {
-        selectsDatas.value.region = selectsDatas.value.region.concat([row])
-        formData.value.region_id = row.id
+      selectsDatas.value.region = selectsDatas.value.region.concat([row])
+      formData.value.region_id = row.id
     }
-   
 
     return {
       form,
@@ -338,7 +319,7 @@ export default {
 
       icons: {
         mdiPlusCircleOutline,
-        mdiCalendar
+        mdiCalendar,
       },
     }
   },
