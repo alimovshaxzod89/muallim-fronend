@@ -14,7 +14,7 @@
 							cols='12'
 							md='3'
 						>
-							<label for='firstnameHorizontalIcons'>Ismi</label>
+							<label for='firstnameHorizontalIcons'>IFSh</label>
 						</v-col>
 
 						<v-col
@@ -26,10 +26,12 @@
 								id='firstnameHorizontalIcons'
 								v-model='firstname'
 								:prepend-inner-icon='icons.mdiAccountOutline'
+								:rules="nameRules"
 								outlined
 								dense
-								placeholder='Ismi'
+								placeholder='IFSh'
 								hide-details
+								required
 							></v-text-field>
 						</v-col>
 
@@ -37,7 +39,7 @@
 							cols='12'
 							md='3'
 						>
-							<label for='firstnameHorizontalIcons'>Familiya</label>
+							<label for='subjectsHorizontalIcons'>Fan</label>
 						</v-col>
 
 						<v-col
@@ -46,35 +48,53 @@
 						>
 
 							<v-text-field
-								id='secondnameHorizontalIcons'
-								v-model='secondname'
-								:prepend-inner-icon='icons.mdiAccountOutline'
+								id='subjectsHorizontalIcons'
+								v-model='subjects'
+								:prepend-inner-icon='icons.mdiBookOutline'
 								outlined
 								dense
-								placeholder='Familyasi'
+								placeholder='Fan'
 								hide-details
+								:rules="subjectsRules"
+								required
 							></v-text-field>
 						</v-col>
+
+
 						<v-col
 							cols='12'
 							md='3'
 						>
-							<label for='emailHorizontalIcons'>Email</label>
+							<label for='emailHorizontalIcons'>Tug'ilgan sa'nasi</label>
 						</v-col>
 
-						<v-col
-							cols='12'
-							md='9'
-						>
-							<v-text-field
-								id='emailHorizontalIcons'
-								v-model='email'
-								:prepend-inner-icon='icons.mdiEmailOutline'
-								outlined
-								dense
-								placeholder='Email'
-								hide-details
-							></v-text-field>
+						<v-col cols="12" md='9'>
+							<v-menu
+								v-model="menu2"
+								:close-on-content-click="false"
+								:nudge-right="40"
+								transition="scale-transition"
+								offset-y
+								min-width="auto"
+							>
+								<template v-slot:activator="{ on, attrs }">
+									<v-text-field
+										v-model="date"
+										:prepend-inner-icon="icons.mdiCalendar"
+										outlined
+										dense
+										v-bind="attrs"
+										v-on="on"
+										:rules="dateRules"
+										required
+									></v-text-field>
+								</template>
+								<v-date-picker
+									v-model="date"
+									color="primary"
+									@input="menu2 = false"
+								></v-date-picker>
+							</v-menu>
 						</v-col>
 
 						<v-col
@@ -97,6 +117,8 @@
 								dense
 								placeholder='Telefon raqami'
 								hide-details
+								:rules="phoneRules"
+								required
 							></v-text-field>
 						</v-col>
 
@@ -104,18 +126,29 @@
 							cols='12'
 							md='3'
 						>
-							<label for='passwordHorizontalIcons'>Bizni qanday topdingiz</label>
+							<label for='radioHorizontalIcons'>Jins</label>
 						</v-col>
 
 						<v-col
 							cols='12'
 							md='9'
 						>
-							<v-select
-								:items="items"
-								label="Tanlash"
-								outlined
-							></v-select>
+							<v-radio-group
+								v-model="radioGroup"
+								class="mt-0"
+								hide-details
+							>
+								<v-radio
+									:key="Ayol"
+									:label="'Ayol'"
+									:value="Ayol"
+								></v-radio>
+								<v-radio
+									:key="Erkak"
+									:label="'Erkak'"
+									:value="Erkak"
+								></v-radio>
+							</v-radio-group>
 						</v-col>
 
 
@@ -146,28 +179,58 @@
 
 <script>
 // eslint-disable-next-line object-curly-newline
-import { mdiAccountOutline, mdiEmailOutline, mdiCellphone, mdiLockOutline } from '@mdi/js'
+import { mdiAccountOutline, mdiEmailOutline, mdiCellphone, mdiLockOutline, mdiCalendar, mdiBookOutline } from '@mdi/js'
 import { ref } from '@vue/composition-api'
 
 export default {
 	data: () => ({
 		items: ['Instagram', 'Telegram', 'Ota-onamdan', 'Tanishlarimdan', 'Boshqa'],
+		valid: false,
+		nameRules: [
+			v => !!v || 'Kiritilishi shart',
+			v => v.length <= 10 || 'Name must be less than 10 characters',
+		],
+		subjectsRules: [
+			v => !!v || 'Kiritilishi shart',
+			v => v.length <= 10 || 'Name must be less than 10 characters',
+		],
+		dateRules: [
+			v => !!v || 'Kiritilishi shart',
+			v => v.length <= 10 || 'Name must be less than 10 characters',
+		],
+		phoneRules: [
+			v => !!v || 'Kiritilishi shart',
+			v => v.length <= 10 || 'Name must be less than 10 characters',
+		],
 	}),
 	setup() {
+		const date = new Date().toISOString().substr(0, 10)
 		const firstname = ref('')
-		const secondname = ref('')
+		const subjects = ref('')
 		const email = ref('')
 		const mobile = ref()
 		const password = ref()
 		const checkbox = ref(false)
+		const menu = ref(false)
+		const modal = ref(false)
+		const menu2 = ref(false)
+		const menuref = ref(null)
+		const radioGroup = ref(1)
 
 		return {
 			firstname,
-			secondname,
+			subjects,
 			email,
 			mobile,
 			password,
 			checkbox,
+			date,
+			menu,
+			modal,
+			menu2,
+			menuref,
+			radioGroup,
+
 
 			// icons
 			icons: {
@@ -175,6 +238,8 @@ export default {
 				mdiEmailOutline,
 				mdiCellphone,
 				mdiLockOutline,
+				mdiCalendar,
+				mdiBookOutline
 			},
 		}
 	},

@@ -34,6 +34,7 @@
 		"vue-numeral-filter": "^2.2.0",
 		"vue-prism-component": "1",
 		"vue-router": "^3.5.2",
+		"vue-tel-input-vuetify": "^1.5.0",
 		"vue-toastification": "^1.7.14",
 		"vue2-leaflet": "^2.7.1",
 		"vue2-perfect-scrollbar": "^1.5.0",
