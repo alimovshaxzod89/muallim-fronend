@@ -14,7 +14,7 @@
 							cols='12'
 							md='3'
 						>
-							<label for='firstnameHorizontalIcons'>IFSh</label>
+							<label for='firstnameHorizontalIcons'>Ism</label>
 						</v-col>
 
 						<v-col
@@ -29,8 +29,33 @@
 								:rules="nameRules"
 								outlined
 								dense
-								placeholder='IFSh'
+								label='Ism Familiya Sharifingiz'
 								hide-details
+								required
+							></v-text-field>
+						</v-col>
+
+						<v-col
+							cols='12'
+							md='3'
+						>
+							<label for='mobileHorizontalIcons'>Telefon raqam</label>
+						</v-col>
+
+						<v-col
+							cols='12'
+							md='9'
+						>
+							<v-text-field
+								id='mobileHorizontalIcons'
+								v-model='mobile'
+								type='number'
+								outlined
+								:prepend-inner-icon='icons.mdiCellphone'
+								dense
+								label='Telefon raqami'
+								hide-details
+								:rules="phoneRules"
 								required
 							></v-text-field>
 						</v-col>
@@ -47,17 +72,19 @@
 							md='9'
 						>
 
-							<v-text-field
-								id='subjectsHorizontalIcons'
-								v-model='subjects'
+							<v-autocomplete
+								v-model="formData.subject_id"
+								:items="selectsDatas.subject"
 								:prepend-inner-icon='icons.mdiBookOutline'
-								outlined
+								item-text="name"
+								item-value="id"
+								label="Fan"
 								dense
-								placeholder='Fan'
+								outlined
 								hide-details
-								:rules="subjectsRules"
-								required
-							></v-text-field>
+								clearable
+							>
+							</v-autocomplete>
 						</v-col>
 
 
@@ -97,30 +124,6 @@
 							</v-menu>
 						</v-col>
 
-						<v-col
-							cols='12'
-							md='3'
-						>
-							<label for='mobileHorizontalIcons'>Telefon raqam</label>
-						</v-col>
-
-						<v-col
-							cols='12'
-							md='9'
-						>
-							<v-text-field
-								id='mobileHorizontalIcons'
-								v-model='mobile'
-								type='number'
-								outlined
-								:prepend-inner-icon='icons.mdiCellphone'
-								dense
-								placeholder='Telefon raqami'
-								hide-details
-								:rules="phoneRules"
-								required
-							></v-text-field>
-						</v-col>
 
 						<v-col
 							cols='12'
@@ -151,6 +154,32 @@
 							</v-radio-group>
 						</v-col>
 
+						<v-col
+							cols='12'
+							md='3'
+						>
+							<label for='IzohnameHorizontalIcons'>Izoh</label>
+						</v-col>
+
+						<v-col
+							cols='12'
+							md='9'
+						>
+
+							<v-textarea
+								autocomplete="summary"
+								label="Izoh"
+								id='izohtNameHorizontalIcons'
+								v-model='summary'
+								:prepend-inner-icon='icons.mdiPencilOutline'
+								:rules="summaryRules"
+								outlined
+								dense
+								hide-details
+								required
+							></v-textarea>
+						</v-col>
+
 
 
 						<v-col
@@ -179,10 +208,17 @@
 
 <script>
 // eslint-disable-next-line object-curly-newline
-import { mdiAccountOutline, mdiEmailOutline, mdiCellphone, mdiLockOutline, mdiCalendar, mdiBookOutline } from '@mdi/js'
+import { mdiAccountOutline, mdiEmailOutline, mdiCellphone, mdiLockOutline, mdiCalendar, mdiBookOutline, mdiPencilOutline } from '@mdi/js'
+
 import { ref } from '@vue/composition-api'
+import SubjectForm from '@/views/lists/subject/SubjectForm.vue'
+import axios from '@axios'
 
 export default {
+	components: { SubjectForm },
+	created() {
+		this.loadSubject()
+	},
 	data: () => ({
 		items: ['Instagram', 'Telegram', 'Ota-onamdan', 'Tanishlarimdan', 'Boshqa'],
 		valid: false,
@@ -202,6 +238,10 @@ export default {
 			v => !!v || 'Kiritilishi shart',
 			v => v.length <= 10 || 'Name must be less than 10 characters',
 		],
+		summaryRules: [
+			v => !!v || 'Kiritilishi shart',
+			v => v.length <= 100 || 'Name must be less than 10 characters',
+		],
 	}),
 	setup() {
 		const date = new Date().toISOString().substr(0, 10)
@@ -216,9 +256,36 @@ export default {
 		const menu2 = ref(false)
 		const menuref = ref(null)
 		const radioGroup = ref(1)
+		const summary = ref(null)
+		const emptyFormData =  {
+			subject_id: null,
+		}
+		const formData = ref({ ...emptyFormData })
+		const selectsDatas = ref({})
+
+		const loadSubject = () => {
+			axios
+				.get('/api/subjects', { params: { itemsPerPage: -1 } })
+				.then(response => {
+					if (response.data.success) {
+						selectsDatas.value.subject = response.data.data
+					}
+				})
+				.catch(error => console.log(error))
+		}
+
+		const subjectForm = ref(null)
+		const addSubject = (id = null) => {
+			subjectForm.value.open(id)
+		}
+		const addSubjectToOptions = (row) => {
+			selectsDatas.value.subject = selectsDatas.value.subject.concat([row])
+			formData.value.subject_id = row.id
+		}
 
 		return {
 			firstname,
+			selectsDatas,
 			subjects,
 			email,
 			mobile,
@@ -230,6 +297,11 @@ export default {
 			menu2,
 			menuref,
 			radioGroup,
+			summary,
+			addSubject,
+			addSubjectToOptions,
+			loadSubject,
+			formData,
 
 
 			// icons
@@ -239,7 +311,8 @@ export default {
 				mdiCellphone,
 				mdiLockOutline,
 				mdiCalendar,
-				mdiBookOutline
+				mdiBookOutline,
+				mdiPencilOutline
 			},
 		}
 	},
