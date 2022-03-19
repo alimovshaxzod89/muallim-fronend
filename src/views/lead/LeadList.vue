@@ -53,8 +53,8 @@
               <!-- <v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" @click="openAppealForm()">
 								<v-icon size="24">{{ icons.mdiFileAccountOutline }}</v-icon>
 							</v-btn> -->
-              
-							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm()">
+
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(2)">
 								<v-icon>{{ icons.mdiPlus }}</v-icon>
 							</v-btn>
 						</v-list>
