@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <template>
 
 	<v-row class='d-flex justify-center'>
@@ -73,6 +74,7 @@
 						>
 
 							<v-autocomplete
+								id='subjectsHorizontalIcons'
 								v-model="formData.subject_id"
 								:items="selectsDatas.subject"
 								:prepend-inner-icon='icons.mdiBookOutline'
@@ -92,7 +94,7 @@
 							cols='12'
 							md='3'
 						>
-							<label for='emailHorizontalIcons'>Tug'ilgan sa'nasi</label>
+							<label for='birthdayHorizontalIcons'>Tug'ilgan sa'nasi</label>
 						</v-col>
 
 						<v-col cols="12" md='9'>
@@ -106,6 +108,7 @@
 							>
 								<template v-slot:activator="{ on, attrs }">
 									<v-text-field
+										id='birthdayHorizontalIcons'
 										v-model="date"
 										:prepend-inner-icon="icons.mdiCalendar"
 										outlined
@@ -142,14 +145,10 @@
 								hide-details
 							>
 								<v-radio
-									:key="Erkak"
 									:label="'Erkak'"
-									:value="Erkak"
 								></v-radio>
 								<v-radio
-									:key="Ayol"
 									:label="'Ayol'"
-									:value="Ayol"
 								></v-radio>
 							</v-radio-group>
 						</v-col>
@@ -158,7 +157,7 @@
 							cols='12'
 							md='3'
 						>
-							<label for='IzohnameHorizontalIcons'>Izoh</label>
+							<label for='summaryHorizontalIcons'>Izoh</label>
 						</v-col>
 
 						<v-col
@@ -167,9 +166,9 @@
 						>
 
 							<v-textarea
+								id='summarynameHorizontalIcons'
 								autocomplete="summary"
 								label="Izoh"
-								id='izohtNameHorizontalIcons'
 								v-model='summary'
 								:prepend-inner-icon='icons.mdiPencilOutline'
 								:rules="summaryRules"
@@ -213,6 +212,7 @@ import { mdiAccountOutline, mdiEmailOutline, mdiCellphone, mdiLockOutline, mdiCa
 import { ref } from '@vue/composition-api'
 import SubjectForm from '@/views/lists/subject/SubjectForm.vue'
 import axios from '@axios'
+import store from '@/store'
 
 export default {
 	components: { SubjectForm },
@@ -228,19 +228,15 @@ export default {
 		],
 		subjectsRules: [
 			v => !!v || 'Kiritilishi shart',
-			v => v.length <= 10 || 'Name must be less than 10 characters',
 		],
 		dateRules: [
 			v => !!v || 'Kiritilishi shart',
-			v => v.length <= 10 || 'Name must be less than 10 characters',
 		],
 		phoneRules: [
 			v => !!v || 'Kiritilishi shart',
-			v => v.length <= 10 || 'Name must be less than 10 characters',
 		],
 		summaryRules: [
 			v => !!v || 'Kiritilishi shart',
-			v => v.length <= 100 || 'Name must be less than 10 characters',
 		],
 	}),
 	setup() {
@@ -255,13 +251,24 @@ export default {
 		const modal = ref(false)
 		const menu2 = ref(false)
 		const menuref = ref(null)
-		const radioGroup = ref(1)
 		const summary = ref(null)
 		const emptyFormData =  {
 			subject_id: null,
 		}
 		const formData = ref({ ...emptyFormData })
 		const selectsDatas = ref({})
+
+		// show, hide
+		const show = ref(false)
+		const open = (id = null) => {
+			show.value = true
+			if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME4}/getThirdById`](id)))
+		}
+		const close = () => {
+			show.value = false
+			form.value.resetValidation()
+			formData.value = { ...emptyFormData }
+		}
 
 		const loadSubject = () => {
 			axios
@@ -297,12 +304,13 @@ export default {
 			modal,
 			menu2,
 			menuref,
-			radioGroup,
+			radioGroup: null,
 			summary,
 			addSubject,
 			addSubjectToOptions,
 			loadSubject,
 			formData,
+			length: 0,
 
 
 			// icons

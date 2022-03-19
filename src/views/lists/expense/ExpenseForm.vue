@@ -27,7 +27,6 @@
                     <v-text-field
                       v-model="formData.date"
                       class="my-date-picker"
-                      label="SANA"
                       readonly
                       v-bind="attrs"
                       hide-details
