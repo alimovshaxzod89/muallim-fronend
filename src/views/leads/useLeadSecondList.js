@@ -31,7 +31,7 @@ export default function useLeadSecondList(MODULE_NAME) {
   let lastQuery = '';
   const fetchDatas = (force = false) => {
 
-    secondOptions.value.skip = secondOptions.value.page -1
+		secondOptions.value.skip = (secondOptions.value.page -1) * (secondOptions.value.itemsPerPage == -1 ? 0:  secondOptions.value.itemsPerPage)
     secondOptions.value.limit = secondOptions.value.itemsPerPage
 
     const queryParams = {
