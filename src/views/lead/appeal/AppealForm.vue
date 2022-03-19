@@ -202,8 +202,6 @@ export default {
     const onSubmit = () => {
       const newValue = {
         ...formData.value,
-        days: '1',
-        hours: '1',
       }
       if (form.value.validate()) {
         if (formData.value.id) {

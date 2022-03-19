@@ -142,14 +142,14 @@
 								hide-details
 							>
 								<v-radio
-									:key="Ayol"
-									:label="'Ayol'"
-									:value="Ayol"
-								></v-radio>
-								<v-radio
 									:key="Erkak"
 									:label="'Erkak'"
 									:value="Erkak"
+								></v-radio>
+								<v-radio
+									:key="Ayol"
+									:label="'Ayol'"
+									:value="Ayol"
 								></v-radio>
 							</v-radio-group>
 						</v-col>
@@ -269,6 +269,7 @@ export default {
 				.then(response => {
 					if (response.data.success) {
 						selectsDatas.value.subject = response.data.data
+						console.log(selectsDatas.value.subject)
 					}
 				})
 				.catch(error => console.log(error))
