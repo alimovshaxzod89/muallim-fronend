@@ -59,6 +59,7 @@
                   item-text="name"
                   item-value="id"
                   label="VALYUTA"
+                  solo
                   dense
                   outlined
                   hide-details
@@ -86,6 +87,7 @@
                   item-text="name"
                   item-value="id"
                   label="XARAJAT TURLARI"
+                  solo
                   dense
                   outlined
                   hide-details
@@ -100,6 +102,7 @@
                   item-text="name"
                   item-value="id"
                   label="KASSA"
+                  solo
                   dense
                   outlined
                   hide-details

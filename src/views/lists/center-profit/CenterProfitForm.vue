@@ -37,6 +37,7 @@
                   item-text="name"
                   item-value="id"
                   label="BINO"
+                  solo
                   dense
                   outlined
                   hide-details
@@ -55,6 +56,7 @@
                   item-value="id"
                   label="FAN"
 									:rules="selectRule"
+                  solo
                   dense
                   outlined
                   clearable
@@ -69,6 +71,7 @@
                   item-text="name"
                   item-value="id"
                   label="BOSQICH"
+                  solo
                   dense
                   outlined
                   clearable
@@ -85,6 +88,7 @@
                   item-value="id"
                   label="USTOZ"
                   :rules="selectRule"
+                  solo
                   dense
                   outlined
                   clearable
@@ -99,6 +103,7 @@
                   item-text="name"
                   item-value="id"
                   label="XONA"
+                  solo
                   dense
                   outlined
                   clearable

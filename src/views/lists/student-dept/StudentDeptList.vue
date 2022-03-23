@@ -14,7 +14,7 @@
       </div> -->
 
       <v-col cols="3" class="flexDate">
-        <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+        <!-- <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
               class="my-date-picker"
@@ -38,6 +38,33 @@
             :first-day-of-week="1"
             locale="ru-ru"
           ></v-date-picker>
+        </v-menu> -->
+
+        <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              class="mt-8"
+              v-model="filter.date"
+              label="SANA"
+              readonly
+              :now="today"
+              :value="today"
+              v-bind="attrs"
+              v-on="on"
+              solo
+              outlined
+              clearable
+              :append-icon="icons.mdiCalendar"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            v-model="filter.date"
+            color="primary"
+            @input="isDate = false"
+            no-title
+            :first-day-of-week="1"
+            locale="ru-ru"
+          ></v-date-picker> 
         </v-menu>
       </v-col>
 

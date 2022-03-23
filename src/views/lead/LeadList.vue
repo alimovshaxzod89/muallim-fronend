@@ -50,18 +50,18 @@
 						<v-card-title>Kutish</v-card-title>
 						<v-spacer></v-spacer>
 						<v-list class="mr-5">
-              <!-- <v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" @click="openAppealForm()">
+              <v-btn class="mr-5" color="secondary" outlined title="Yangi so'rov qo'shish" @click="openAppealForm()">
 								<v-icon size="24">{{ icons.mdiFileAccountOutline }}</v-icon>
-							</v-btn> -->
+							</v-btn>
               
-							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm()">
+							<v-btn text small fab title="Yangi bo'lim yaratish" @click="openForm(2)">
 								<v-icon>{{ icons.mdiPlus }}</v-icon>
 							</v-btn>
 						</v-list>
 					</div>
 				</v-card>
 
-        <!-- <draggable
+        <draggable
 					class="my-draggable my-task-defaults"
 					:animation="200"
 					ghost-class="ghost-card"
@@ -76,7 +76,7 @@
 						:removeCard="confirmDelete"
 						:openAppealForm="openAppealForm"
 					></lead-task-card>
-				</draggable> -->
+				</draggable>
 
         <!-- <draggable
 					class="my-draggable my-task-defaults"

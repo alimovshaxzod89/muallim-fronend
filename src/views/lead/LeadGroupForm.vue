@@ -35,6 +35,7 @@
                   item-text="name"
                   item-value="id"
                   label="FAN"
+                  solo
                   dense
                   outlined
                   clearable
@@ -50,6 +51,7 @@
                   item-text="full_name"
                   item-value="id"
                   label="USTOZ"
+                  solo
                   dense
                   outlined
                   clearable
@@ -65,6 +67,7 @@
                   item-text="text"
                   item-value="id"
                   label="KUNLAR"
+                  solo
                   dense
                   outlined
                   clearable
@@ -92,6 +95,7 @@
                   item-text="name"
                   item-value="id"
                   label="XONA"
+                  solo
                   dense
                   outlined
                   clearable

@@ -50,6 +50,7 @@
                   item-text="number"
                   item-value="id"
                   label="GURUH"
+                  solo
                   dense
                   outlined
                   hide-details
@@ -65,6 +66,7 @@
                   item-text="full_name"
                   item-value="id"
                   label="TALABA"
+                  solo
                   dense
                   outlined
                   hide-details

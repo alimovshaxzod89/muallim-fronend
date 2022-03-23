@@ -24,6 +24,7 @@
 									item-text='name'
 									item-value='id'
 									label='FAN'
+                  solo
 									dense
 									outlined
 									hide-details
