@@ -261,6 +261,15 @@ const views = [
       action: 'read',
     },
   },
+	{
+		path: '/lead-form/*',
+		name: 'lead-form',
+		component: () => import('@/views/lead-form/LeadForm'),
+		meta: {
+			layout: 'blank',
+			resource: 'Public',
+		},
+	},
   // {
   //   path: '/center-profit',
   //   name: 'center-profit',

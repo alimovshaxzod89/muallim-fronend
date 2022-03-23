@@ -34,7 +34,7 @@ export default function useThirdList(MODULE_NAME4) {
   let lastQuery = '';
   const fetchThirdDatas = (force = false) => {
 
-    thirdOptions.value.skip = thirdOptions.value.page -1
+		thirdOptions.value.skip = (thirdOptions.value.page -1) * (thirdOptions.value.itemsPerPage == -1 ? 0:  thirdOptions.value.itemsPerPage)
     thirdOptions.value.limit = thirdOptions.value.itemsPerPage
 
     const queryParams = {

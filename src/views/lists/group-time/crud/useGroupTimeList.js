@@ -36,7 +36,7 @@ export default function useGroupList(MODULE_NAME) {
   let lastQuery = ''
   const fetchDatas = (force = false) => {
     if (options.value.page) {
-      options.value.skip = options.value.page - 1
+      options.value.skip = (options.value.page - 1) * options.value.itemsPerPage
     }
     if (options.value.itemsPerPage) {
       options.value.limit = options.value.itemsPerPage

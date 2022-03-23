@@ -2,11 +2,11 @@
   <!-- form dialog -->
   <v-dialog
     v-model="show"
+    max-width="500px"
+    width="500px"
     @keydown.enter="onSubmit()"
     @keydown.esc="close()"
     @click:outside="close()"
-    max-width="500px"
-    width="500px"
   >
     <v-card>
       <v-form ref="form">
@@ -17,42 +17,46 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+                <v-menu
+                  v-model="isDate"
+                  :close-on-content-click="false"
+                  offset-y
+                  min-width="auto"
+                >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      class="my-date-picker"
                       v-model="formData.date"
-                      label="SANA"
+                      class="my-date-picker"
                       readonly
                       v-bind="attrs"
-                      v-on="on"
                       hide-details
                       outlined
                       :append-icon="icons.mdiCalendar"
                       :rules="[required]"
+                      v-on="on"
                     ></v-text-field>
                   </template>
                   <v-date-picker
                     v-model="formData.date"
                     color="primary"
-                    @input="isDate = false"
                     no-title
                     :first-day-of-week="1"
                     locale="ru-ru"
+                    @input="isDate = false"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
-              <v-col cols="12" >
+              <v-col cols="12">
                 <v-text-field
-                  label="SUMMA"
                   v-model="formData.amount"
+                  label="SUMMA"
                   type="number"
                   dense
                   outlined
                   hide-details
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" >
+              <v-col cols="12">
                 <v-autocomplete
                   v-model="formData.currency_id"
                   :items="selectsDatas.currency"
@@ -78,9 +82,9 @@
                   required
                   height="80px"
                 >
-                  </v-textarea>
+                </v-textarea>
               </v-col>
-              <v-col cols="12" >
+              <v-col cols="12">
                 <v-autocomplete
                   v-model="formData.expense_category_id"
                   :items="selectsDatas.expense_category"
@@ -111,37 +115,48 @@
                 >
                 </v-autocomplete>
               </v-col>
-              
             </v-row>
           </v-container>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-          <v-btn color="success" type="submit" @click.prevent="onSubmit"> Saqlash</v-btn>
+          <v-btn
+            color="gray"
+            outlined
+            @click="close()"
+          >
+            Bekor qilish
+          </v-btn>
+          <v-btn
+            color="success"
+            type="submit"
+            @click.prevent="onSubmit"
+          >
+            Saqlash
+          </v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
-
   </v-dialog>
 </template>
 
 <script>
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
-import store from '@/store'
-import ExpenseStoreModule from './ExpenseStoreModule'
 import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
 import { required } from '@core/utils/validation'
+import ExpenseStoreModule from './ExpenseStoreModule'
+import store from '@/store'
 import Button from '../../components/button/Button'
 
 const MODULE_NAME = 'expense'
 
 export default {
   components: { Button },
+
   // props: {
   //
   // },
@@ -187,8 +202,9 @@ export default {
       formData.value = { ...emptyFormData }
     }
 
-    //validation
+    // validation
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
+
     // on form submit
     const onSubmit = () => {
       if (form.value.validate()) {
@@ -197,6 +213,7 @@ export default {
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
               close()
+
               // emit('notify', { type: 'success', text: message })
             })
             .catch(error => {
@@ -219,6 +236,7 @@ export default {
     }
 
     const selectsDatas = ref({})
+
     // ! METHODS
     const loadCurrency = () => {
       axios

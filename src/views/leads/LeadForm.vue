@@ -2,11 +2,11 @@
   <!-- form dialog -->
   <v-dialog
     v-model="show"
+    max-width="500px"
+    width="500px"
     @keydown.enter="onSubmit()"
     @keydown.esc="close()"
     @click:outside="close()"
-    max-width="500px"
-    width="500px"
   >
     <v-card>
       <v-form ref="form">
@@ -17,10 +17,12 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <h4 class="text-required no-text"><span>*</span></h4>
+                <h4 class="text-required no-text">
+                  <span>*</span>
+                </h4>
                 <v-text-field
-                  label="NOMI"
                   v-model="formData.name"
+                  label="NOMI"
                   type="text"
                   dense
                   outlined
@@ -35,31 +37,42 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-          <v-btn color="success" type="submit" @click.prevent="onSubmit"> Saqlash</v-btn>
+          <v-btn
+            color="gray"
+            outlined
+            @click="close()"
+          >
+            Bekor qilish
+          </v-btn>
+          <v-btn
+            color="success"
+            type="submit"
+            @click.prevent="onSubmit"
+          >
+            Saqlash
+          </v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
-
   </v-dialog>
 </template>
 
 <script>
 import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
-import store from '@/store'
-import LeadStoreModule from './storeModule/LeadStoreModule'
-
 import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
+import LeadStoreModule from './storeModule/LeadStoreModule'
+import store from '@/store'
 import Button from '../components/button/Button.vue'
 
 const MODULE_NAME = 'lead'
 
 export default {
   components: { Button },
+
   // props: {
   //
   // },
@@ -90,7 +103,7 @@ export default {
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
 
-    //validation
+    // validation
     const formData = ref({ ...emptyFormData })
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     const validate = () => {
@@ -105,6 +118,7 @@ export default {
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
             .then(({ message }) => {
               close()
+
               // emit('notify', { type: 'success', text: message })
             })
             .catch(error => {
@@ -117,29 +131,27 @@ export default {
             text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
           })
         }
-      } else {
-        if (formData.value.name) {
-          const newValue = {
-            ...formData.value,
-            position: 0,
-          }
-
-          store
-            .dispatch(`${MODULE_NAME}/addRow`, newValue)
-            .then(({ message }) => {
-              close()
-              emit('notify', { type: 'success', text: message })
-            })
-            .catch(error => {
-              console.log(error)
-              emit('notify', { type: 'error', text: error.message })
-            })
-        } else {
-          emit('notify', {
-            type: 'warning',
-            text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
-          })
+      } else if (formData.value.name) {
+        const newValue = {
+          ...formData.value,
+          position: 0,
         }
+
+        store
+          .dispatch(`${MODULE_NAME}/addRow`, newValue)
+          .then(({ message }) => {
+            close()
+            emit('notify', { type: 'success', text: message })
+          })
+          .catch(error => {
+            console.log(error)
+            emit('notify', { type: 'error', text: error.message })
+          })
+      } else {
+        emit('notify', {
+          type: 'warning',
+          text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
+        })
       }
     }
 

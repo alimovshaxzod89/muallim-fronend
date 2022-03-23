@@ -33,10 +33,10 @@ export default function useManagerList(MODULE_NAME){
     let lastQuery = '';
 
     const fetchDatas = (force = false) => {
-        
-        options.value.skip = options.value.page -1
+
+        options.value.skip = (options.value.page - 1) * options.value.itemsPerPage
         options.value.limit = options.value.itemsPerPage
-        
+
         const queryParams = {
             ...options.value,
         }
@@ -51,7 +51,7 @@ export default function useManagerList(MODULE_NAME){
 
         if (force || lastQuery !== newQuery) {
             lastQuery = newQuery
-      
+
             store
               .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
               .then(() => {
@@ -70,7 +70,7 @@ export default function useManagerList(MODULE_NAME){
     watch(filter, () => {
         if (options.value.page != 1) options.value.page
           options.value.page = 1
-    
+
           setTimeout(() => fetchDatas(), 1000);
     }, {deep: true})
 
@@ -99,7 +99,7 @@ export default function useManagerList(MODULE_NAME){
         filter,
         fetchDatas,
         deleteRow,
-    
+
         options,
         loading,
         notify,

@@ -30,7 +30,7 @@
               <v-col cols="6">
                 <h4 class="text-required no-text"><span>*</span></h4>
 								<v-autocomplete
-                  v-model="formData.subject_id"
+                  v-model="formData.group.subject_id"
                   :items="selectDatas.subjects"
                   item-text="name"
                   item-value="id"
@@ -46,7 +46,7 @@
 							<v-col cols="6">
                 <h4 class="text-required no-text"><span>*</span></h4>
 								<v-autocomplete
-                  v-model="formData.teacher_id"
+                  v-model="formData.group.teacher_id"
                   :items="selectDatas.teachers"
                   item-text="full_name"
                   item-value="id"
@@ -79,9 +79,9 @@
 										class="my-checkbox"
 										hide-details
 										multiple
-										v-for="(day, index) in selectDatas.week_day"
+										v-for="(day, index) in selectDatas.days"
 										:key="index + '-' + day"
-										v-model="formData.week_day"
+										v-model="formData.group.days"
 										:label="day.text"
 										:value="day.id"
 									></v-checkbox>
@@ -90,7 +90,7 @@
 							<v-col cols="6">
                 <h4 class="text-required no-text"><span>*</span></h4>
 								<v-autocomplete
-                  v-model="formData.room_id"
+                  v-model="formData.group.room_id"
                   :items="selectDatas.rooms"
                   item-text="name"
                   item-value="id"
@@ -110,7 +110,7 @@
 									v-model="time_begin"
 									:close-on-content-click="false"
 									:nudge-right="40"
-									:return-value.sync="formData.time_begin"
+									:return-value.sync="formData.group.time_begin"
 									transition="scale-transition"
 									offset-y
 									max-width="290px"
@@ -120,7 +120,7 @@
 										<v-text-field
 											class="my-date-picker"
 											outlined
-											v-model="formData.time_begin"
+											v-model="formData.group.time_begin"
 											label="DARS BOSHLANISH VAQTI"
 											:append-icon="icons.mdiClockTimeFourOutline"
 											readonly
@@ -132,10 +132,10 @@
 									<v-time-picker
 										format="24hr"
 										v-if="time_begin"
-										v-model="formData.time_begin"
+										v-model="formData.group.time_begin"
 										color="primary"
 										full-width
-										@click:minute="$refs.menu.save(formData.time_begin)"
+										@click:minute="$refs.menu.save(formData.group.time_begin)"
 									></v-time-picker>
 								</v-menu>
               </v-col>
@@ -176,13 +176,15 @@ export default {
     const emptyFormData = {
       position: null,
       id: null,
-      lead_id: null,
+      group_id: null,
       name: null,
-      subject_id: null,
-      teacher_id: null,
-      week_day: [],
-      room_id: null,
-      time_begin: null,
+			group: {
+				subject_id: null,
+				teacher_id: null,
+				days: [],
+				time_begin: null,
+				room_id: null,
+			}
     }
     const formData = ref({ ...emptyFormData })
     const selectDatas = ref({
@@ -212,7 +214,7 @@ export default {
           text: 'Boshqa',
         },
       ],
-      week_day: [
+      days: [
         { id: 8, text: 'Dushanba' },
         { id: 9, text: 'Seshanba' },
         { id: 10, text: 'Chorshanba' },
@@ -250,7 +252,7 @@ export default {
     const onSubmit = () => {
       const newValue = {
         ...formData.value,
-        week_day: dynamicDay.value !== 5 && dynamicDay.value !== '' ? dynamicDay.value : formData.value.week_day,
+        days: dynamicDay.value !== 5 && dynamicDay.value !== '' ? dynamicDay.value : formData.value.group.days,
       }
 
       if (form.value.validate()) {

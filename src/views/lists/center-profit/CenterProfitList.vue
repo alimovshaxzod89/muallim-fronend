@@ -33,7 +33,7 @@
         >
         </v-autocomplete>
       </div>
-    </v-card-text>  
+    </v-card-text>
 
 		<v-simple-table class="my-table-bordered">
 			<template v-slot:default>
@@ -64,16 +64,16 @@
 						<td>{{ k + 1 }}</td>
 						<td style="white-space: nowrap;">{{ item.oy }}</td>
 						<td>{{ JSON.parse(item.summalar).cnta }}</td>
-						<td style="white-space: nowrap;">{{ JSON.parse(item.summalar).bks }}</td>
+						<td style="white-space: nowrap;">{{ JSON.parse(item.summalar).bks | formatNumber }}</td>
 						<td>{{ JSON.parse(item.summalar).cntb }}</td>
-						<td style="white-space: nowrap;">{{ JSON.parse(item.summalar).bs  }}</td>
+						<td style="white-space: nowrap;">{{ JSON.parse(item.summalar).bs | formatNumber  }}</td>
 						<td>{{ JSON.parse(item.summalar).cnta - JSON.parse(item.summalar).cntb }}</td>
 						<td style="white-space: nowrap;">
 							{{ (JSON.parse(item.summalar).bks - JSON.parse(item.summalar).bs)  }}
 						</td>
 
 						<td style="white-space: nowrap;">
-							{{ JSON.parse(item.summalar).markaz_ulushi_fakt  }}
+							{{ JSON.parse(item.summalar).markaz_ulushi_fakt | formatNumber  }}
 						</td>
 						<td style="white-space: nowrap;">
 							{{ (JSON.parse(item.summalar).markaz_ulushi - JSON.parse(item.summalar).markaz_ulushi_fakt) }}

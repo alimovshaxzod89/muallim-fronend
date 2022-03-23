@@ -41,9 +41,9 @@ export default function useTeacherList(MODULE_NAME) {
   let lastQuery = '';
   const fetchDatas = (force = false) => {
 
-    options.value.skip = options.value.page - 1
+    options.value.skip = (options.value.page - 1) * options.value.itemsPerPage
     options.value.limit = options.value.itemsPerPage
-    
+
 
     const queryParams = {
       ...options.value,
