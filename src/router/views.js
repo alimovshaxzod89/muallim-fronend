@@ -262,7 +262,7 @@ const views = [
     },
   },
 	{
-		path: '/lead-form/*',
+		path: '/lead-form/:lead_id',
 		name: 'lead-form',
 		component: () => import('@/views/lead-form/LeadForm'),
 		meta: {
