@@ -79,11 +79,11 @@ export default {
     //store state
     // const stateBron = ref(store.state[MODULE_NAME])
 
+		const { router, route } = useRouter()
+
     onMounted(() => {
       filter.value.place_id = route.value.query.place_id ? parseInt(route.value.query.place_id) : null
     })
-
-    const { router, route } = useRouter()
 
     const places = ref({})
     const loadPlaces = () => {
