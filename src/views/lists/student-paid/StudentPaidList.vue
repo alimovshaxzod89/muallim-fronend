@@ -234,6 +234,23 @@
       <template #[`item.date`]="{ item }">
         {{ item.date | date }}
       </template>
+
+
+      <template v-slot:footer>
+				<table class="totalAmount">
+					<tbody>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td rowspan="10" class="text-end">Jami summa:</td>
+							<td rowspan="1" class="text-end">{{totalAmount()}}</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+      </template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
@@ -408,6 +425,19 @@ export default {
       })
     }
 
+    const selectsDatas = ref({
+      amount: null,
+    })
+
+    const totalAmount = () => {
+      return selectsDatas.value.amount.reduce((a, c) => a + c.amount, 0)
+    }
+    axios.get('/api/payment-paids').then(response => {
+      if (response.data.success) {
+        selectsDatas.value.amount = response.data.data
+      }
+    })
+
     onMounted(() => {
       loadTeachers()
       loadGroups()
@@ -418,6 +448,9 @@ export default {
     return {
       BASE_URL,
       state,
+
+      totalAmount,
+      selectsDatas,
 
       tableColumns,
       searchQuery,
@@ -490,5 +523,8 @@ export default {
   .data-list-search {
     max-width: 10.625rem;
   }
+}
+.totalAmount {
+  margin-left: 70%;
 }
 </style>
