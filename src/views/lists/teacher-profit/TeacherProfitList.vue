@@ -87,6 +87,22 @@
 					</tr>
 				</tbody>
 			</template>
+
+      <template v-slot:footer>
+				<table class="totalAmount">
+					<tbody>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td rowspan="10" class="text-end">Jami summa:</td>
+							<td rowspan="1" class="text-end">{{totalSumma()}}</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+      </template>
 		</v-simple-table>
   </v-card>
 </template>
@@ -230,6 +246,14 @@ export default {
       this.$router.push({ name: 'teacher-paids', query })
     }
 
+    const selectsDatas = ref({
+      summalar: null,
+    })
+
+    const totalSumma = () => {
+      return selectsDatas.value.summalar.reduce((a, c) => a + c.summalar, 0)
+    }
+
     // Return
     return {
       MODULE_NAME,
@@ -239,6 +263,9 @@ export default {
 
       fullName,
       openPaids,
+
+      selectsDatas,
+      totalSumma,
 
       searchQuery,
       fetchDatas,
