@@ -88,8 +88,12 @@
 				</tbody>
 			</template>
 
+      
+		</v-simple-table>
+
+    <v-data-table>
       <template v-slot:footer>
-				<table class="totalAmount">
+				<table class="totalOldi">
 					<tbody>
 						<tr>
 							<td></td>
@@ -97,19 +101,20 @@
 							<td></td>
 							<td></td>
 							<td rowspan="10" class="text-end">Jami summa:</td>
-							<td rowspan="1" class="text-end">{{totalSumma()}}</td>
+							<td rowspan="1" class="text-end">{{totalOldi()}}</td>
 							<td></td>
 						</tr>
 					</tbody>
 				</table>
       </template>
-		</v-simple-table>
+    </v-data-table>
   </v-card>
 </template>
 
 <script>
 import { ref, onUnmounted } from '@vue/composition-api'
 import moment from 'moment'
+import axios from '@axios'
 moment.locale('uz-latn')
 
 import numeral from 'numeral'
@@ -247,12 +252,17 @@ export default {
     }
 
     const selectsDatas = ref({
-      summalar: null,
+      oldi: null,
     })
 
     const totalSumma = () => {
-      return selectsDatas.value.summalar.reduce((a, c) => a + c.summalar, 0)
+      return selectsDatas.value.oldi.reduce((a, c) => a + c.oldi, 0)
     }
+    axios.get('/api/teachers-income').then(response => {
+      if (response.data.success) {
+        selectsDatas.value.oldi = response.data.data
+      }
+    })
 
     // Return
     return {

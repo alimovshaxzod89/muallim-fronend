@@ -83,10 +83,11 @@
               <v-col cols="3">
 							  <v-autocomplete
 							  	v-model="filter.month"
-							  	:items="months"
-							  	item-text="name"
+							  	:items="filterOptions.month"
+							  	item-text="text"
 							  	item-value="id"
 							  	dense
+                  solo
 							  	outlined
 							  	hide-details
 							  	label="OY"
@@ -101,6 +102,7 @@
 							  	:items="teachers"
 							  	item-text="full_name"
 							  	item-value="id"
+                  solo
 							  	dense
 							  	outlined
 							  	hide-details
@@ -116,6 +118,7 @@
 							  	:items="groups"
 							  	item-text="number"
 							  	item-value="id"
+                  solo
 							  	dense
 							  	outlined
 							  	hide-details
@@ -131,6 +134,7 @@
 							  	:items="students"
 							  	item-text="full_name"
 							  	item-value="id"
+                  solo
 							  	dense
 							  	outlined
 							  	hide-details
@@ -294,12 +298,71 @@ export default {
     const BASE_URL = envParams.BASE_URL
 
     // LoadApis
-    const months = ref([])
-    const loadMonths = () => {
-      axios.get('/api/months').then(response => {
-        months.value = response.data.data
-      })
+    const filterOptions = {
+      month: [
+        {
+          value: 'Yanvar',
+          text: 'Yanvar',
+          id: 1,
+        },
+        {
+          value: 'Fevral',
+          text: 'Fevral',
+          id: 2,
+        },
+        {
+          value: 'Mart',
+          text: 'Mart',
+          id: 3,
+        },
+        {
+          value: 'Aprel',
+          text: 'Aprel',
+          id: 4,
+        },
+        {
+          value: 'May',
+          text: 'May',
+          id: 5,
+        },
+        {
+          value: 'Iyun',
+          text: 'Iyun',
+          id: 6,
+        },
+        {
+          value: 'Iyul',
+          text: 'Iyul',
+          id: 7,
+        },
+        {
+          value: 'Avgust',
+          text: 'Avgust',
+          id: 8,
+        },
+        {
+          value: 'Sentabr',
+          text: 'Sentabr',
+          id: 9,
+        },
+        {
+          value: 'Oktabr',
+          text: 'Oktabr',
+          id: 10,
+        },
+        {
+          value: 'Noyabr',
+          text: 'Noyabr',
+          id: 11,
+        },
+        {
+          value: 'Dekabr',
+          text: 'Dekabr',
+          id: 12,
+        },
+      ],
     }
+
     const teachers = ref([])
     const loadTeachers = () => {
       axios.get('/api/teachers').then(response => {
@@ -320,7 +383,6 @@ export default {
     }
 
     onMounted(() => {
-      loadMonths()
       loadTeachers()
       loadGroups()
       loadStudents()
@@ -352,7 +414,7 @@ export default {
       MODULE_NAME,
 
       // LoadApis
-      months,
+      filterOptions,
       teachers,
       groups,
       students,

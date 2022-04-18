@@ -61,6 +61,7 @@
 								item-text="name"
 								item-value="id"
 								dense
+                solo
 								outlined
 								hide-details
 								label="Tuman"
@@ -83,6 +84,7 @@
 								item-text="name"
 								item-value="id"
 								dense
+                solo
 								outlined
 								hide-details
 								label="D.Y. Tuman"
@@ -105,6 +107,7 @@
 								item-text="name"
 								item-value="value"
 								dense
+                solo
 								outlined
 								hide-details
 								label="Jinsi"
@@ -144,6 +147,7 @@
 								item-text="name"
 								item-value="value"
 								dense
+                solo
 								outlined
 								hide-details
 								label="Chegirma"
