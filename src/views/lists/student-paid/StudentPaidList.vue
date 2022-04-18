@@ -33,6 +33,7 @@
                   :items="years"
                   item-text="number"
 							  	item-value="id"
+                  solo
 							  	dense
 							  	outlined
 							  	hide-details
@@ -48,6 +49,7 @@
                   :items="months"
                   item-text="name"
 							  	item-value="id"
+                  solo
 							  	dense
 							  	outlined
 							  	hide-details
@@ -145,6 +147,7 @@
 							  	:items="groups"
 							  	item-text="number"
 							  	item-value="id"
+                  solo
 							  	dense
 							  	outlined
 							  	hide-details
@@ -158,6 +161,7 @@
 							  	:items="students"
 							  	item-text="full_name"
 							  	item-value="id"
+                  solo
 							  	dense
 							  	outlined
 							  	hide-details

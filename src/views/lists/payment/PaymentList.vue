@@ -23,14 +23,33 @@
 						</template>
 						</v-expansion-panel-header>
 						<v-expansion-panel-content>
-							<v-text-field
-								v-model="filter.full_name"
+              <v-autocomplete
+								v-model="filter.group_id"
+								:items="groups"
+								item-text="number"
+								item-value="id"
 								dense
+                solo
 								outlined
 								hide-details
-								label="Fish"
+								label="Gruppa"
 								class="data-list-search me-3"
-							></v-text-field>
+								clearable
+							></v-autocomplete>
+
+              <v-autocomplete
+								v-model="filter.teacher_id"
+								:items="teachers"
+								item-text="full_name"
+								item-value="id"
+								dense
+                solo
+								outlined
+								hide-details
+								label="O'qituvchi"
+								class="data-list-search me-3"
+								clearable
+							></v-autocomplete>
 
 							<v-text-field
 								v-model="filter.phone"
@@ -40,63 +59,6 @@
 								label="Telefon"
 								class="data-list-search me-3"
 							></v-text-field>
-
-							<v-autocomplete
-								v-model="filter.region_id"
-								:items="regions"
-								item-text="name"
-								item-value="id"
-								dense
-								outlined
-								hide-details
-								label="Tuman"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
-							<v-text-field
-								v-model="filter.address"
-								dense
-								outlined
-								hide-details
-								label="Manzil"
-								class="data-list-search me-3"
-							></v-text-field>
-
-							<v-autocomplete
-								v-model="filter.permanent_region_id"
-								:items="regions"
-								item-text="name"
-								item-value="id"
-								dense
-								outlined
-								hide-details
-								label="D.Y. Tuman"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
-							<v-text-field
-								v-model="filter.permanent_address"
-								dense
-								outlined
-								hide-details
-								label="D.Y. Manzil"
-								class="data-list-search me-3"
-							></v-text-field>
-
-							<v-autocomplete
-								v-model="filter.gender"
-								:items="[{value: 1, name: 'Erkak'}, {value: 2, name: 'Ayol'}]"
-								item-text="name"
-								item-value="value"
-								dense
-								outlined
-								hide-details
-								label="Jinsi"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
 
 							<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
 								<template v-slot:activator="{ on, attrs }">
@@ -130,6 +92,7 @@
 								item-text="name"
 								item-value="value"
 								dense
+                solo
 								outlined
 								hide-details
 								label="Chegirma"
@@ -461,15 +424,23 @@ export default {
     }
 
     // LoadApis
-    const regions = ref([])
-    const loadRegions = () => {
-      axios.get('/api/regions').then(response => {
-        regions.value = response.data.data
+    const groups = ref([])
+    const loadGroups = () => {
+      axios.get('/api/groups').then(response => {
+        groups.value = response.data.data
+      })
+    }
+
+    const teachers = ref([])
+    const loadTeachers = () => {
+      axios.get('/api/teachers').then(response => {
+        teachers.value = response.data.data
       })
     }
 
     onMounted(() => {
-      loadRegions()
+      loadGroups()
+      loadTeachers()
     })
 
     // Paids
@@ -516,7 +487,8 @@ export default {
       getMonth,
 
       // LoadApis
-      regions,
+      groups,
+      teachers,
       updateAmount,
 
       icons: {
