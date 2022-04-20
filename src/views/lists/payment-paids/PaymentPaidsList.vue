@@ -25,6 +25,7 @@
 											item-text="number"
 											item-value="id"
 											dense
+                      solo
 											outlined
 											hide-details
 											label="Guruh"
@@ -38,6 +39,7 @@
 											item-text="full_name"
 											item-value="id"
 											dense
+                      solo
 											outlined
 											hide-details
 											label="Talaba"
@@ -51,6 +53,7 @@
 											item-text="text"
 											item-value="value"
 											dense
+                      solo
 											outlined
 											hide-details
 											label="Yil"
@@ -64,6 +67,7 @@
 											item-text="text"
 											item-value="value"
 											dense
+                      solo
 											outlined
 											hide-details
 											label="Oy"

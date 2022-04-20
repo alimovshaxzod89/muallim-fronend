@@ -20,7 +20,7 @@ export default function usePaymentList(MODULE_NAME) {
   const filter = ref({
     query: '',
      group_id: '',
-     teacher_id: '',
+     teacher_id : '',
     // region_id: '',
     // address: '',
     // permanent_region_id: '',

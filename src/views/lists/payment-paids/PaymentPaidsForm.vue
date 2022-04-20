@@ -24,6 +24,7 @@
                   item-value="id"
                   label="FAN"
                   dense
+                  solo
                   outlined
                   clearable
                   class="align-start"
@@ -38,6 +39,7 @@
                   item-value="id"
                   label="GURUH"
                   dense
+                  solo
                   outlined
                   clearable
                   class="align-start"
@@ -52,6 +54,7 @@
                   item-value="id"
                   label="TALABA"
                   dense
+                  solo
                   outlined
                   clearable
                   class="align-start"
@@ -66,6 +69,7 @@
                   item-value="id"
                   label="OY/YIL"
                   dense
+                  solo
                   outlined
                   clearable
                   class="align-start"
@@ -91,6 +95,8 @@
                       v-model="formData.date"
                       label="SA'NA"
                       readonly
+                      solo
+                      dense
                       v-bind="attrs"
                       v-on="on"
                       outlined
@@ -184,7 +190,7 @@ export default {
     }
     // on form submit
     const onSubmit = () => {
-      if (form.value.validate())  {
+      if (form.value.validate()) {
         if (formData.value.id) {
           store
             .dispatch(`${props.MODULE_NAME}/updateRow`, formData.value)
@@ -210,7 +216,7 @@ export default {
               emit('notify', { type: 'error', text: error.message })
             })
         }
-      } 
+      }
     }
 
     const days = ref([
