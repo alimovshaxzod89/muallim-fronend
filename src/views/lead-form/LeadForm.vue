@@ -8,7 +8,7 @@
 		>
 
 			<v-card elevation='2' class='pa-md-6 ma-9 mx-lg-auto'>
-				<h2 class='mb-8 text-center'>HILOL TA'LIM</h2>
+				<h2 class='mb-8 text-center'>{{appName}}</h2>
 				<div class='form-container'>
 
 					<v-form ref='form'>
@@ -227,6 +227,7 @@ import SubjectForm from '@/views/lists/subject/SubjectForm.vue'
 import axios from '@axios'
 import store from '@/store'
 import { useRouter } from '@core/utils'
+import themeConfig from '@themeConfig'
 
 export default {
 	components: { SubjectForm },
@@ -276,6 +277,9 @@ export default {
 			lead_id: null,
 		}
 
+		// themeConfig
+		const appName = themeConfig.app.name
+
 		const { router, route } = useRouter()
 		emptyFormData.lead_id = route.value.params.lead_id
 
@@ -315,6 +319,7 @@ export default {
 		}
 
 		return {
+			appName,
 			full_name,
 			selectsDatas,
 			subjects,
