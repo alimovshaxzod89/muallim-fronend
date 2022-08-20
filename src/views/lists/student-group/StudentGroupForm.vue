@@ -81,7 +81,6 @@
                 <v-menu v-model="isDateFirst" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      class="my-date-picker"
                       v-model="formData.begin_date"
                       label="BOSHLANGAN SANA"
                       readonly
@@ -106,7 +105,6 @@
                 <v-menu v-model="isDateSecond" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      class="my-date-picker"
                       v-model="formData.end_date"
                       label="TUGAGAN SANA"
                       readonly

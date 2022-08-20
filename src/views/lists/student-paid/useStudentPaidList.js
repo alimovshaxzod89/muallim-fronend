@@ -25,7 +25,7 @@ export default function useStudentPaidList(MODULE_NAME) {
   const filter = ref({
     query: '',
     year: '',
-    date: new Date().toISOString().substr(0, 10),
+    // date: new Date().toISOString().substr(0, 10),
     date2: '',
     group_id: '',
     student_id: '',

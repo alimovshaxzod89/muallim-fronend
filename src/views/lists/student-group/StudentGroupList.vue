@@ -92,14 +92,12 @@
                   <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        class="my-date-picker"
                         v-model="filter.begin_date"
                         label="Boshlangan sana"
                         readonly
                         v-bind="attrs"
                         hide-details
                         v-on="on"
-                        style="height: 40px !important; width: 170px !important"
                         outlined
                         clearable
                         :append-icon="icons.mdiCalendar"
@@ -124,14 +122,12 @@
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        class="my-date-picker"
                         v-model="filter.end_date"
                         label="Tugagan sana"
                         readonly
                         v-bind="attrs"
                         hide-details
                         v-on="on"
-                        style="height: 40px !important; width: 170px !important"
                         outlined
                         clearable
                         :append-icon="icons.mdiCalendar"
