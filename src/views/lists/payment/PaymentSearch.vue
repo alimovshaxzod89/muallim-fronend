@@ -106,7 +106,7 @@ import {
 	mdiCalendar,
 	mdiFilterOutline,
 } from '@mdi/js'
-import { onMounted, ref, watch } from '@vue/composition-api'
+import { ref, watch } from '@vue/composition-api'
 import axios from '@axios'
 
 export default {
@@ -130,6 +130,7 @@ export default {
 				groups.value = response.data.data
 			})
 		}
+		loadGroups()
 
 		const teachers = ref([])
 		const loadTeachers = () => {
@@ -137,11 +138,7 @@ export default {
 				teachers.value = response.data.data
 			})
 		}
-
-		onMounted(() => {
-			loadGroups()
-			loadTeachers()
-		})
+		loadTeachers()
 
 		return {
 			filter,
