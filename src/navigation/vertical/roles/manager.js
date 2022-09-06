@@ -1,5 +1,5 @@
 import {
-	mdiAccountDetailsOutline, mdiFilterVariant, mdiHumanCapacityDecrease, mdiPercent,
+	mdiAccountDetailsOutline, mdiCashCheck, mdiFilterVariant, mdiHumanCapacityDecrease, mdiPercent,
 } from '@mdi/js'
 
 export default [
@@ -53,10 +53,10 @@ export default [
     action: 'read',
   },
   {
-    title: "To'lovlar",
-    icon: mdiAccountDetailsOutline,
-    to: 'payments',
-    resource: 'Public',
+    title: "Talabadan to\'lovlar",
+    icon: mdiCashCheck,
+    to: 'student-paids',
+    resource: 'StudentPaid',
     action: 'read',
   },
   {
@@ -66,6 +66,13 @@ export default [
     resource: 'Public',
     action: 'read',
   },
+	{
+		title: "Oylik to'lovlar",
+		icon: mdiAccountDetailsOutline,
+		to: 'payments',
+		resource: 'Public',
+		action: 'read',
+	},
   {
     title: "Ustozlarga to'lovlar",
     icon: mdiAccountDetailsOutline,

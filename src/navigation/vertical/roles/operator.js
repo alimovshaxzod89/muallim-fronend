@@ -1,4 +1,4 @@
-import { mdiAccountDetailsOutline, mdiPercent } from '@mdi/js'
+import { mdiAccountDetailsOutline, mdiCashCheck, mdiPercent } from '@mdi/js'
 
 export default [
   {
@@ -44,13 +44,13 @@ export default [
     resource: 'Public',
     action: 'read',
   },
-  {
-    title: "To'lovlar",
-    icon: mdiAccountDetailsOutline,
-    to: 'payments',
-    resource: 'Public',
-    action: 'read',
-  },
+	{
+		title: "Talabadan to\'lovlar",
+		icon: mdiCashCheck,
+		to: 'student-paids',
+		resource: 'StudentPaid',
+		action: 'read',
+	},
   {
     title: 'Qarzdor talabalar',
     icon: mdiAccountDetailsOutline,
@@ -58,4 +58,11 @@ export default [
     resource: 'Public',
     action: 'read',
   },
+	{
+		title: "To'lovlar",
+		icon: mdiAccountDetailsOutline,
+		to: 'payments',
+		resource: 'Public',
+		action: 'read',
+	},
 ]
