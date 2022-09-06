@@ -88,7 +88,6 @@
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      class="my-date-picker"
                       v-model="formData.date"
                       label="SA'NA"
                       readonly

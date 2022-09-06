@@ -73,7 +73,7 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         v-model="filter.date"
-                        label="Xozirgi san'a"
+                        label="Hozirgi san'a"
                         persistent-hint
                         :prepend-icon="icons.mdiCalendar"
                         v-bind="attrs"

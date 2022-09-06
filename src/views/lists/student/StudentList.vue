@@ -101,7 +101,6 @@
 							<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
 								<template v-slot:activator="{ on, attrs }">
 									<v-text-field
-										class="my-date-picker"
 										v-model="filter.birth_date"
 										label="Tug'ilgan sana"
 										readonly
