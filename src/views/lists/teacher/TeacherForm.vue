@@ -71,7 +71,6 @@
                   outlined
                   hide-details
                   clearable
-                  :rules="selectRule"
                 >
                 </v-autocomplete>
               </v-col>
@@ -97,7 +96,6 @@
                   outlined
                   hide-details
                   clearable
-                  :rules="selectRule"
                 >
                 </v-autocomplete>
               </v-col>
@@ -170,15 +168,15 @@
 </template>
 
 <script>
-import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
+import { mdiCalendar, mdiPlusCircleOutline } from '@mdi/js'
 
 import store from '@/store'
 import TeacherStoreModule from './TeacherStoreModule'
 
 import axios from '@axios'
 
+import { minLengthValidator, required } from '@core/utils/validation'
 import { ref } from '@vue/composition-api'
-import { required, minLengthValidator } from '@core/utils/validation'
 import Button from '../../components/button/Button'
 
 const MODULE_NAME = 'teacher'
