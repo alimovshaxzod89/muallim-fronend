@@ -1,9 +1,5 @@
 import {
-	mdiAccountDetailsOutline, mdiCash,
-	mdiDoor,
-	mdiFilterVariant, mdiHumanCapacityDecrease,
-	mdiHumanMaleFemale,
-	mdiPercent,
+  mdiAccountDetailsOutline, mdiFilterVariant, mdiPercent
 } from '@mdi/js'
 
 export default [
@@ -92,21 +88,21 @@ export default [
 				title: 'Fanlar',
 				icon: mdiAccountDetailsOutline,
 				to: 'subjects',
-				resource: 'Public',
+				resource: 'Subject',
 				action: 'read',
 			},
 			{
 				title: 'Xonalar',
 				icon: mdiAccountDetailsOutline,
 				to: 'rooms',
-				resource: 'Public',
+				resource: 'Room',
 				action: 'read',
 			},
 			{
 				title: 'Ustozlar',
 				icon: mdiAccountDetailsOutline,
 				to: 'teachers',
-				resource: 'Public',
+				resource: 'Teacher',
 				action: 'read',
 			},
 		],

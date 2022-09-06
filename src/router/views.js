@@ -109,6 +109,8 @@ const views = [
     component: () => import('@/views/lists/subject/SubjectList.vue'),
     meta: {
       layout: 'content',
+      resource: 'Subject',
+      action: 'read',
     },
   },
   {
