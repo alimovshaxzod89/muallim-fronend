@@ -244,20 +244,20 @@
 
 <script>
 import {
-  mdiTrendingUp,
-  mdiPlus,
+  mdiCalendar,
   mdiDeleteOutline,
   mdiDotsVertical,
   mdiEyeOutline,
-  mdiPencilOutline,
-  mdiCalendar,
-  mdiImageEditOutline,
   mdiFilterOutline,
+  mdiImageEditOutline,
+  mdiPencilOutline,
+  mdiPlus,
+  mdiTrendingUp,
 } from '@mdi/js'
 
-import { onMounted, onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
+import { onMounted, ref } from '@vue/composition-api'
 import moment from 'moment'
 moment.locale('uz-latn')
 
@@ -267,10 +267,10 @@ import envParams from '@envParams'
 import StudentStoreModule from './StudentStoreModule'
 
 // composition function
-import useStudentList from './useStudentList'
+import DialogConfirm from '@/views/components/DialogConfirm.vue'
 import StudentForm from './StudentForm'
 import StudentPhoto from './StudentPhoto'
-import DialogConfirm from '@/views/components/DialogConfirm.vue'
+import useStudentList from './useStudentList'
 
 const MODULE_NAME = 'student'
 
@@ -281,10 +281,10 @@ export default {
     DialogConfirm,
   },
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		// sum: value => numeral(value).format('0,0'),
-		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
-	},
+    date: value => (value ? moment(value).format('D MMMM YYYY') : ''),
+    // sum: value => numeral(value).format('0,0'),
+    feed: value => value[1] + '/' + value[2] + '/' + value[3],
+  },
   setup() {
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
@@ -300,7 +300,7 @@ export default {
 
     //logics
     const {
-			filter,
+      filter,
       tableColumns,
       deleteRow,
 
@@ -360,13 +360,13 @@ export default {
 
     // Return
     return {
-			BACKEND_URL,
+      BACKEND_URL,
       state,
 
       picker,
       isDate,
       tableColumns,
-			filter,
+      filter,
       options,
       loading,
       notify,
