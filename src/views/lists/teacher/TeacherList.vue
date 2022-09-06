@@ -108,7 +108,7 @@ export default {
     DialogConfirm,
   },
   filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
+		date: value => (value ? moment(value).format('D MMMM YYYY') : ''),
 		// sum: value => numeral(value).format('0,0'),
 		feed: value => (value[1] + '/' + value[2] + '/' + value[3]),
 	},
