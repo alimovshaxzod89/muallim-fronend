@@ -76,6 +76,7 @@
           <small class="text--disabled text-capitalize">{{ userData.role }}</small>
         </div>
       </div>
+      <div>Filial: {{place.name}}</div>
 
       <v-divider></v-divider>
 
@@ -199,6 +200,7 @@ export default {
     const vm = getCurrentInstance().proxy
     const { router } = useRouter()
     const userData = JSON.parse(localStorage.getItem('userData'))
+    const place = JSON.parse(localStorage.getItem('place'))
 
     const logoutUser = () => {
       // Remove userData from localStorage
@@ -219,6 +221,7 @@ export default {
     return {
       logoutUser,
       userData,
+      place,
 
       icons: {
         mdiAccountOutline,
