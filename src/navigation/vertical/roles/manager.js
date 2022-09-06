@@ -1,5 +1,5 @@
 import {
-  mdiAccountDetailsOutline, mdiFilterVariant, mdiPercent
+	mdiAccountDetailsOutline, mdiFilterVariant, mdiHumanCapacityDecrease, mdiPercent,
 } from '@mdi/js'
 
 export default [
@@ -17,6 +17,13 @@ export default [
     resource: 'Student',
     action: 'read',
   },
+	{
+		title: 'Guruh talabalari',
+		to: 'student-groups',
+		icon: mdiHumanCapacityDecrease,
+		resource: 'StudentGroup',
+		action: 'read',
+	},
   {
     subheader: '#',
     badge: 'New',
