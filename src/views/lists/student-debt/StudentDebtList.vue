@@ -3,25 +3,8 @@
 		<!-- search -->
 		<v-card-text class='d-flex align-center flex-wrap pb-0'>
 
-			<v-col cols='3'>
-				<v-text-field
-					v-model='filter.query'
-					dense
-					outlined
-					hide-details
-					label='Qidirish'
-					class='data-list-search me-3'
-				></v-text-field>
-			</v-col>
+			<student-debt-search v-model='filter' />
 
-			<v-col cols='9'>
-				<student-paid-search v-model='filter' />
-			</v-col>
-			<v-spacer></v-spacer>
-
-			<div class='btnAdd ml-auto'>
-				<v-btn class='primary mb-3' @click='openForm()'>Qo'shish</v-btn>
-			</div>
 		</v-card-text>
 
 		<!-- table -->
@@ -31,12 +14,11 @@
 			:items='state.rows'
 			:options.sync='options'
 			:server-items-length='state.total'
-			:loading='loading'
 			:items-per-page='options.itemsPerPage'
 			:footer-props='footerProps'
 			class='text-no-wrap'
 		>
-			<template slot='item.index' slot-scope='props'>
+			<template slot='item.index' scope='props'>
 				{{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
 			</template>
 
@@ -46,7 +28,7 @@
 			<template late #[`item.actions`]='{ item }'>
 				<div class='d-flex align-center justify-center'>
 					<!-- delete -->
-					<v-tooltip bottom>
+					<v-tooltip bottom v-if="$can('delete', 'Group')">
 						<template #activator='{ on, attrs }'>
 							<v-btn icon small v-bind='attrs' v-on='on' @click='confirmDelete(item.id)'>
 								<v-icon size='18'>
@@ -58,7 +40,7 @@
 					</v-tooltip>
 
 					<!-- view  -->
-					<v-tooltip bottom>
+					<v-tooltip bottom v-if="$can('update', 'Group')">
 						<template #activator='{ on, attrs }'>
 							<v-btn icon small v-bind='attrs' v-on='on' @click='openForm(item.id)'>
 								<v-icon size='18'>
@@ -71,56 +53,35 @@
 				</div>
 			</template>
 
-			<template #[`item.month_year`]='{ item }'>
-				{{ item.payment.date | year_month }}
+			<template #[`item.group.number`]='{ item }'>
+				{{ item.group.number }}
 				<br>
-				{{ item.payment.amount | summa }}
+				{{ item.group.subject.name }}
+				<br>
+				{{ item.group.teacher.full_name }}
 			</template>
-			<template #[`item.amount`]='{ item }'>
+
+			<template #[`item.student.full_name`]='{ item }'>
+				{{ item.student.full_name }}
+				<br>
+				{{ item.student.phone }}
+			</template>
+
+			<template #[`item.month`]='{ item }'>
+				{{ item.date | year_month }}
+				<br>
 				{{ item.amount | summa }}
 			</template>
 
-			<template #[`item.date`]='{ item }'>
-				<div v-if='item.date != today'>
-					{{ item.date | date }}
-					<br>
-				</div>
-				<div v-if='getDate(item.created_at) == item.date'>
-					{{ getHourMinute(item.created_at) }}
-				</div>
+			<template #[`item.amount`]='{ item }'> {{ item.amount | summa }}</template>
+			<template #[`item.paid`]='{ item }'> {{ item.paid | summa }}</template>
 
+			<template #[`item.dept`]='{ item }'>
+				{{ item.amount - item.paid | summa }}
 			</template>
-
-			<template #[`item.group`]='{ item }'>
-				{{ item.payment.group.number }}
-				<br>
-				{{ item.payment.group.subject.name }}
-			</template>
-
-
-			<!--      <template v-slot:footer>-->
-			<!--				<table class="totalAmount">-->
-			<!--					<tbody>-->
-			<!--						<tr>-->
-			<!--							<td></td>-->
-			<!--							<td></td>-->
-			<!--							<td></td>-->
-			<!--							<td></td>-->
-			<!--							<td rowspan="10" class="text-end">Jami summa:</td>-->
-			<!--							<td rowspan="1" class="text-end">{{totalAmount()}}</td>-->
-			<!--							<td></td>-->
-			<!--						</tr>-->
-			<!--					</tbody>-->
-			<!--				</table>-->
-			<!--      </template>-->
 		</v-data-table>
 
 		<dialog-confirm ref='dialogConfirm' />
-
-		<student-paid-form
-			ref='studentPaidForm'
-			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
-		/>
 	</v-card>
 </template>
 
@@ -132,47 +93,41 @@ import {
 	mdiDotsVertical,
 	mdiEyeOutline,
 	mdiPencilOutline,
+	mdiFilterOutline,
+	mdiCalendar,
 } from '@mdi/js'
 
 import { ref } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
-import moment from 'moment'
+import numeral from 'numeral'
 
 import envParams from '@envParams'
 
 // store module
-import StudentPaidStoreModule from './StudentPaidStoreModule'
+import StudentDebtStoreModule from './StudentDebtStoreModule'
 
 // composition function
-import useStudentPaidList from './useStudentPaidList'
-import StudentPaidForm from './StudentPaidForm'
-import StudentPaidSearch from './StudentPaidSearch'
+import useStudentDebtList from './useStudentDebtList'
 import DialogConfirm from '../../components/DialogConfirm.vue'
+import StudentDebtSearch from '@/views/lists/student-debt/StudentDebtSearch'
 
-const MODULE_NAME = 'studentPaid'
+const MODULE_NAME = 'studentDebt'
 
 export default {
 	components: {
-		StudentPaidForm,
-		StudentPaidSearch,
+		StudentDebtSearch,
 		DialogConfirm,
 	},
 	filters: {
+		date: value => moment(value).format('D MMMM YYYY'),
+		summa: value => numeral(value).format('0,0'),
 		feed: value => value[1] + '/' + value[2] + '/' + value[3],
-	},
-	methods: {
-		getDate(datetime) {
-			return moment(datetime).format('YYYY-MM-DD')
-		},
-		getHourMinute(datetime) {
-			return moment(datetime).format('H:mm')
-		},
 	},
 	setup() {
 		// Register module
 		if (!store.hasModule(MODULE_NAME)) {
-			store.registerModule(MODULE_NAME, StudentPaidStoreModule)
+			store.registerModule(MODULE_NAME, StudentDebtStoreModule)
 		}
 		// UnRegister on leave
 		// onUnmounted(() => {
@@ -188,12 +143,11 @@ export default {
 			searchQuery,
 			tableColumns,
 			deleteRow,
+			selectedTableData,
 
 			options,
-			loading,
 			notify,
-			selectedTableData,
-		} = useStudentPaidList(MODULE_NAME)
+		} = useStudentDebtList(MODULE_NAME)
 
 		//interface additional elements
 		const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -203,13 +157,6 @@ export default {
 			{ title: 'Delete', icon: mdiDeleteOutline },
 			{ title: 'Edit', icon: mdiPencilOutline },
 		]
-
-
-		//Form
-		const studentPaidForm = ref(null)
-		const openForm = id => {
-			studentPaidForm.value.open(id)
-		}
 
 		//Delete Confirm Dialog
 		const dialogConfirm = ref(null)
@@ -223,37 +170,17 @@ export default {
 
 		const BASE_URL = envParams.BASE_URL
 
-		// const selectsDatas = ref({
-		//   amount: null,
-		// })
-		//
-		// const totalAmount = () => {
-		//   return selectsDatas.value.amount.reduce((a, c) => a + c.amount, 0)
-		// }
-		// axios.get('/api/payment-paids').then(response => {
-		//   if (response.data.success) {
-		//     selectsDatas.value.amount = response.data.data
-		//   }
-		// })
-
-		const today = new Date().toISOString().slice(0, 10)
-
 		// Return
 		return {
 			BASE_URL,
 			state,
 
-			// totalAmount,
-			// selectsDatas,
-
 			tableColumns,
 			searchQuery,
 			options,
-			loading,
 			notify,
-			selectedTableData,
 			filter,
-			today,
+			selectedTableData,
 
 			actions,
 			actionOptions,
@@ -263,11 +190,9 @@ export default {
 			dialogConfirm,
 			confirmDelete,
 
-
-			studentPaidForm,
-			openForm,
-
 			MODULE_NAME,
+
+			// LoadApis
 
 			icons: {
 				mdiTrendingUp,
@@ -276,6 +201,8 @@ export default {
 				mdiDeleteOutline,
 				mdiDotsVertical,
 				mdiEyeOutline,
+				mdiFilterOutline,
+				mdiCalendar,
 			},
 		}
 	},
@@ -296,9 +223,5 @@ export default {
 	.data-list-search {
 		max-width: 10.625rem;
 	}
-}
-
-.totalAmount {
-	margin-left: 70%;
 }
 </style>

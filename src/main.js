@@ -15,6 +15,8 @@ import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import numeral from 'numeral'
 import moment from 'moment'
 
+moment.locale('uz-latn')
+
 Vue.use(vueNumeralFilterInstaller, { locale: 'ru' });
 
 Vue.config.productionTip = false

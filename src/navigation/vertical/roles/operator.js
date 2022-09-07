@@ -54,8 +54,8 @@ export default [
   {
     title: 'Qarzdor talabalar',
     icon: mdiAccountDetailsOutline,
-    to: 'student-depts',
-    resource: 'Public',
+    to: 'student-debts',
+    resource: 'StudentDebt',
     action: 'read',
   },
 	{
