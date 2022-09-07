@@ -12,105 +12,7 @@
           class="data-list-search me-3"
         ></v-text-field>
 
-				<v-expansion-panels class="my-accordion" accordion>
-					<v-expansion-panel>
-						<v-expansion-panel-header disable-icon-rotate>
-							Ko'proq
-							<template #actions>
-							<v-icon color="secondary">
-								{{ icons.mdiFilterOutline  }}
-							</v-icon>
-						</template>
-						</v-expansion-panel-header>
-						<v-expansion-panel-content>
-              <v-autocomplete
-								v-model="filter.group_id"
-								:items="groups"
-								item-text="number"
-								item-value="id"
-								dense
-                solo
-								outlined
-								hide-details
-								label="Gruppa"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
-              <v-autocomplete
-								v-model="filter.teacher_id"
-								:items="teachers"
-								item-text="full_name"
-								item-value="id"
-								dense
-                solo
-								outlined
-								hide-details
-								label="O'qituvchi"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
-							<v-text-field
-								v-model="filter.phone"
-								dense
-								outlined
-								hide-details
-								label="Telefon"
-								class="data-list-search me-3"
-							></v-text-field>
-
-							<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
-								<template v-slot:activator="{ on, attrs }">
-									<v-text-field
-										class="my-date-picker"
-										v-model="filter.birth_date"
-										label="Tug'ilgan sana"
-										readonly
-										v-bind="attrs"
-										hide-details
-										v-on="on"
-										style="height: 40px !important; width: 170px !important"
-										outlined
-										clearable
-										:append-icon="icons.mdiCalendar"
-									></v-text-field>
-								</template>
-								<v-date-picker
-									v-model="filter.birth_date"
-									color="primary"
-									@input="isDate = false"
-									no-title
-									:first-day-of-week="1"
-									locale="ru-ru"
-								></v-date-picker>
-							</v-menu>
-
-							<v-autocomplete
-								v-model="filter.sale"
-								:items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
-								item-text="name"
-								item-value="value"
-								dense
-                solo
-								outlined
-								hide-details
-								label="Chegirma"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
-							<v-text-field
-								v-model="filter.sale_cause"
-								dense
-								outlined
-								hide-details
-								label="Chegirma sababi"
-								class="data-list-search me-3"
-							></v-text-field>
-						</v-expansion-panel-content>
-					</v-expansion-panel>
-				</v-expansion-panels>
+				<payment-search v-model='filter' />
       </div>
 
 			<v-spacer></v-spacer>
@@ -170,9 +72,9 @@
 							<td></td>
 							<td></td>
 							<td rowspan="5" class="text-end">Jami:</td>
-							<td rowspan="1" class="text-end">{{totalAmount()}}</td>
-							<td rowspan="1" class="text-end">{{totalPaid()}}</td>
-							<td rowspan="1" class="text-end">{{totalDebt()}}</td>
+<!--							<td rowspan="1" class="text-end">{{totalAmount()}}</td>-->
+<!--							<td rowspan="1" class="text-end">{{totalPaid()}}</td>-->
+<!--							<td rowspan="1" class="text-end">{{totalDebt()}}</td>-->
 							<td></td>
 						</tr>
 					</tbody>
@@ -225,6 +127,7 @@ import XLSX from 'xlsx'
 // composition function
 import usePaymentList from './usePaymentList'
 import PaymentForm from './PaymentForm.vue'
+import PaymentSearch from './PaymentSearch.vue'
 import PaymentPaidsList from '@/views/lists/payment-paids/PaymentPaidsList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
@@ -233,6 +136,7 @@ const MODULE_NAME = 'payment'
 export default {
   components: {
     PaymentForm,
+    PaymentSearch,
     PaymentPaidsList,
     DialogConfirm,
   },
@@ -275,10 +179,6 @@ export default {
       { title: 'Delete', icon: mdiDeleteOutline },
       { title: 'Edit', icon: mdiPencilOutline },
     ]
-
-    // Datepicker
-    const picker = new Date().toISOString().substr(0, 10)
-    const isDate = ref(false)
 
     //Form
     const studentForm = ref(null)
@@ -388,26 +288,28 @@ export default {
       return result[0].text
     }
 
-    const selectsDatas = ref({
-      amount: null,
-      paid: null,
-    })
-    axios.get('/api/payments').then(response => {
-      if (response.data.success) {
-        selectsDatas.value.amount = response.data.data
-        selectsDatas.value.paid = response.data.data
-      }
-    })
+    // const selectsDatas = ref({
+    //   amount: null,
+    //   paid: null,
+    // })
+		//
+    // axios.get('/api/payments').then(response => {
+    //   if (response.data.success) {
+		// 		console.log(response)
+    //     selectsDatas.value.amount = response.data.data
+    //     selectsDatas.value.paid = response.data.data
+    //   }
+    // })
 
-    const totalAmount = () => {
-      return selectsDatas.value.amount.reduce((a, c) => a + c.amount, 0)
-    }
-    const totalPaid = () => {
-      return selectsDatas.value.paid.reduce((a, c) => a + c.paid, 0)
-    }
-    const totalDebt = () => {
-      return totalAmount() - totalPaid()
-    }
+    // const totalAmount = () => {
+    //   return selectsDatas.value.amount.reduce((a, c) => a + c.amount, 0)
+    // }
+    // const totalPaid = () => {
+    //   return selectsDatas.value.paid.reduce((a, c) => a + c.paid, 0)
+    // }
+    // const totalDebt = () => {
+    //   return totalAmount() - totalPaid()
+    // }
 
     // eport xlsx
     const excel = ref(null)
@@ -423,26 +325,6 @@ export default {
         : XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
     }
 
-    // LoadApis
-    const groups = ref([])
-    const loadGroups = () => {
-      axios.get('/api/groups').then(response => {
-        groups.value = response.data.data
-      })
-    }
-
-    const teachers = ref([])
-    const loadTeachers = () => {
-      axios.get('/api/teachers').then(response => {
-        teachers.value = response.data.data
-      })
-    }
-
-    onMounted(() => {
-      loadGroups()
-      loadTeachers()
-    })
-
     // Paids
     const paymentPaidsList = ref(null)
     const openPaymentPaidsList = item => {
@@ -455,16 +337,14 @@ export default {
       state,
       ExportExcel,
       excel,
-      totalAmount,
-      totalPaid,
-      totalDebt,
+      // totalAmount,
+      // totalPaid,
+      // totalDebt,
       paymentPaidsList,
       openPaymentPaidsList,
       fetchDatas,
-      selectsDatas,
+      // selectsDatas,
 
-      picker,
-      isDate,
       tableColumns,
       filter,
       options,
@@ -486,9 +366,6 @@ export default {
       MODULE_NAME,
       getMonth,
 
-      // LoadApis
-      groups,
-      teachers,
       updateAmount,
 
       icons: {
@@ -513,6 +390,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 #data-list {
   .data-list-actions {
     max-width: 7.81rem;
@@ -522,18 +400,12 @@ export default {
     max-width: 10.625rem;
   }
 }
+
 .img-user {
   width: 50px;
   height: 50px;
   overflow: hidden;
   object-fit: cover;
-}
-
-.my-filter {
-  .v-input {
-    margin-right: 12px;
-    margin-bottom: 12px;
-  }
 }
 
 .my-table-footer {
