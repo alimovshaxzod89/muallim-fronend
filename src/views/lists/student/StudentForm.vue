@@ -4,7 +4,7 @@
     v-model="show"
     @keydown.esc="close()"
     @click:outside="close()"
-    @keydown.enter="onSubmit()"
+    @keyup.enter="onSubmit()"
     max-width="800px"
     width="800px"
   >
@@ -53,6 +53,7 @@
               <v-col cols="6">
                 <v-text-field
                   prefix="+998"
+                  v-mask="'## ### ####'"
                   type="phone"
                   label="TELEFON"
                   v-model="formData.phone"

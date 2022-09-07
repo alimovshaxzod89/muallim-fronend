@@ -20,7 +20,7 @@
                 <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-text-field
                   type="text"
-                  label="NOMER"
+                  label="GURUH NOMI"
                   v-model="formData.number"
                   :rules="[required]"
 									required
@@ -112,7 +112,7 @@
                   type="number"
                   label="NARX"
                   v-model="formData.price"
-                  :rules="[required]"
+                  :rules="selectRule"
                   outlined
                   dense
                   required
