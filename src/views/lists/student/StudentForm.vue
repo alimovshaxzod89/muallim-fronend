@@ -167,7 +167,7 @@
                 ></v-checkbox>
               </v-col>
 
-              <v-col cols="12" v-if="formData.sale">
+              <v-col cols="12" v-if="formData.sale == 1">
                 <v-textarea
                   v-model="formData.sale_cause"
                   label="CHEGIRMA SABABI"
@@ -205,7 +205,7 @@ const MODULE_NAME = 'student'
 
 export default {
   setup(props, { emit }) {
-
+    
     // Register module
     if (!store.hasModule(MODULE_NAME)) {
       store.registerModule(MODULE_NAME, StudentStoreModule)
@@ -213,7 +213,6 @@ export default {
 
     //show, hide
     const show = ref(false)
-    const formData = ref({})
     const form = ref(null)
     const emptyFormData = {
       id: null,
@@ -226,10 +225,12 @@ export default {
       permanent_region_id: null,
       address: null,
       permanent_address: null,
-      gender: null,
-      sale: "1",
+      gender: 2,
+      sale: false,
       sale_cause: null,
     }
+    const formData = ref({ ...emptyFormData })
+
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
 
@@ -251,11 +252,11 @@ export default {
     // on form submit
     const onSubmit = () => {
       if (formData.value.id) {
-				//update
+        //update
         if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
             .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-            .then(({ data, message}) => {
+            .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
               return data
@@ -273,11 +274,11 @@ export default {
           })
         }
       } else {
-				//create
+        //create
         if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
-            .then(({ data, message}) => {
+            .then(({ data, message }) => {
               close()
               // emit('notify', { type: 'success', text: message })
               emit('add-student-to-options', data)
