@@ -4,7 +4,7 @@
     v-model="show"
     @keydown.esc="close()"
     @click:outside="close()"
-    @keydown.enter="onSubmit()"
+    @keyup.enter="onSubmit()"
     max-width="800px"
     width="800px"
   >
