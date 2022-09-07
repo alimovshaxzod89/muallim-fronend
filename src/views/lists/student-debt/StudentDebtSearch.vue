@@ -2,7 +2,7 @@
 	<div>
 		<v-row>
 
-			<v-col cols='4'>
+			<v-col cols='3'>
 				<v-autocomplete
 					v-model='filter.subject_id'
 					:items='subjects'
@@ -17,7 +17,7 @@
 				></v-autocomplete>
 			</v-col>
 
-			<v-col cols='4'>
+			<v-col cols='3'>
 				<v-autocomplete
 					v-model='filter.teacher_id'
 					:items='teachers'
@@ -32,7 +32,7 @@
 				></v-autocomplete>
 			</v-col>
 
-			<v-col cols='4'>
+			<v-col cols='3'>
 				<v-autocomplete
 					v-model='filter.group_id'
 					:items='groups'
@@ -42,6 +42,21 @@
 					outlined
 					hide-details
 					label='GURUH'
+					class='data-list-search me-3'
+					clearable
+				></v-autocomplete>
+			</v-col>
+
+			<v-col cols='3'>
+				<v-autocomplete
+					v-model='filter.student_id'
+					:items='students'
+					item-text='full_name'
+					item-value='id'
+					dense
+					outlined
+					hide-details
+					label='TALABA'
 					class='data-list-search me-3'
 					clearable
 				></v-autocomplete>
@@ -60,7 +75,6 @@
 		</v-row>
 
 		<v-row>
-
 
 			<v-col cols='3'>
 				<v-text-field
@@ -104,54 +118,38 @@
 				/>
 			</v-col>
 
-<!--			<v-col cols='6'>-->
+			<!--			<v-col cols='6'>-->
 
-<!--				<v-menu-->
-<!--					ref='menu'-->
-<!--					v-model='timeMenu'-->
-<!--					:close-on-content-click='false'-->
-<!--					:nudge-right='40'-->
-<!--					:return-value.sync='filter.time'-->
-<!--					transition='scale-transition'-->
-<!--					offset-y-->
-<!--				>-->
-<!--					<template v-slot:activator='{ on, attrs }'>-->
-<!--						<v-text-field-->
-<!--							v-model='filter.time'-->
-<!--							label='Soat nechchida keladiganlar'-->
-<!--							prepend-icon='mdi-clock-time-four-outline'-->
-<!--							readonly-->
-<!--							v-bind='attrs'-->
-<!--							v-on='on'-->
-<!--						></v-text-field>-->
-<!--					</template>-->
-<!--					<v-time-picker-->
-<!--						v-if='timeMenu'-->
-<!--						format='24hr'-->
-<!--						v-model='filter.time'-->
-<!--						full-width-->
-<!--						@click:minute='$refs.menu.save(filter.time)'-->
-<!--					></v-time-picker>-->
-<!--				</v-menu>-->
+			<!--				<v-menu-->
+			<!--					ref='menu'-->
+			<!--					v-model='timeMenu'-->
+			<!--					:close-on-content-click='false'-->
+			<!--					:nudge-right='40'-->
+			<!--					:return-value.sync='filter.time'-->
+			<!--					transition='scale-transition'-->
+			<!--					offset-y-->
+			<!--				>-->
+			<!--					<template v-slot:activator='{ on, attrs }'>-->
+			<!--						<v-text-field-->
+			<!--							v-model='filter.time'-->
+			<!--							label='Soat nechchida keladiganlar'-->
+			<!--							prepend-icon='mdi-clock-time-four-outline'-->
+			<!--							readonly-->
+			<!--							v-bind='attrs'-->
+			<!--							v-on='on'-->
+			<!--						></v-text-field>-->
+			<!--					</template>-->
+			<!--					<v-time-picker-->
+			<!--						v-if='timeMenu'-->
+			<!--						format='24hr'-->
+			<!--						v-model='filter.time'-->
+			<!--						full-width-->
+			<!--						@click:minute='$refs.menu.save(filter.time)'-->
+			<!--					></v-time-picker>-->
+			<!--				</v-menu>-->
 
-<!--			</v-col>-->
+			<!--			</v-col>-->
 		</v-row>
-
-		<!--			<v-col cols='3'>-->
-		<!--				<v-autocomplete-->
-		<!--					v-model='filter.student_id'-->
-		<!--					:items='students'-->
-		<!--					item-text='full_name'-->
-		<!--					item-value='id'-->
-		<!--					solo-->
-		<!--					dense-->
-		<!--					outlined-->
-		<!--					hide-details-->
-		<!--					label='TALABA'-->
-		<!--					class='data-list-search me-3'-->
-		<!--					clearable-->
-		<!--				></v-autocomplete>-->
-		<!--			</v-col>-->
 	</div>
 </template>
 
@@ -220,14 +218,20 @@ export default {
 			})
 		}
 		loadGroups()
+		watch(() => filter.value.group_id, val => {
+			loadStudents()
+		})
 
-		// const students = ref([])
-		// const loadStudents = () => {
-		// 	axios.get('/api/students').then(response => {
-		// 		students.value = response.data.data
-		// 	})
-		// }
-		// loadStudents()
+		const students = ref([])
+		const loadStudents = () => {
+			const params = clearParams({
+				group_id: filter.value.group_id,
+			})
+			axios.get('/api/students', { params }).then(response => {
+				students.value = response.data.data
+			})
+		}
+		loadStudents()
 
 		// const picker = new Date().toISOString().substr(0, 10)
 		const isDate = ref(false)
@@ -316,7 +320,7 @@ export default {
 			subjects,
 			teachers,
 			groups,
-			// students,
+			students,
 
 			today,
 			isDate,
