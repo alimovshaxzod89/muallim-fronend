@@ -14,12 +14,12 @@ export default function useStudentPaidList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
-    { text: 'FAN', value: 'payment.group.subject.name' },
-    { text: 'GURUH', value: 'payment.group.number' },
+    // { text: 'FAN', value: 'payment.group.subject.name' },
+    { text: 'GURUH', value: 'group' },
     { text: 'TALABA', value: 'payment.student.full_name' },
-    { text: 'OY/YIL', value: 'month_year' },
-    { text: 'SUMMA', value: 'amount' },
-    { text: 'SA\'NA', value: 'date' },
+		{ text: 'TO\'LADI', value: 'amount', align: 'right' },
+		{ text: 'SA\'NA', value: 'date', align: 'center' },
+    { text: "QAYSI OY UCHUN", value: 'month_year', align: 'center' },
 	]
 
   const filter = ref({
