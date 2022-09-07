@@ -53,6 +53,7 @@
               <v-col cols="6">
                 <v-text-field
                   prefix="+998"
+                  v-mask="'## ### ####'"
                   type="phone"
                   label="TELEFON"
                   v-model="formData.phone"
