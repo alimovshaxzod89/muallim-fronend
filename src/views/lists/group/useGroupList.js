@@ -13,7 +13,7 @@ export default function useGroupList(MODULE_NAME) {
       align: 'center',
       sortable: false,
     },
-    { text: 'NOMER', value: 'number' },
+    { text: 'GURUH NOMI', value: 'number' },
     { text: 'BINO', value: 'place.name' },
     { text: 'FAN', value: 'subject.name' },
     { text: 'USTOZ', value: 'teacher.full_name' },
