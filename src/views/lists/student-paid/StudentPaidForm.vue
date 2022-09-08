@@ -2,9 +2,9 @@
 	<!-- form dialog -->
 	<v-dialog
 		v-model='show'
-		@keydown.enter='onSubmit()'
 		@keydown.esc='close()'
 		@click:outside='close()'
+		@keydown.enter="onSubmit()"
 		max-width='1000px'
 		width='1000px'
 	>
@@ -139,7 +139,7 @@
 										locale='ru-ru'
 									></v-date-picker>
 								</v-menu>
-							</v-col>
+    						</v-col>
 						</v-row>
 					</v-container>
 				</v-card-text>
@@ -147,7 +147,20 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn color='gray' outlined @click='close()'>Bekor qilish</v-btn>
-					<v-btn color='success' type='submit' @click.prevent='onSubmit'> Saqlash</v-btn>
+					<v-btn 
+						color="success" 
+						type="button" 
+						@click="onSubmit" 
+						:disabled="submitDisabled"
+					>
+						<v-icon
+							class="loading-animation"
+							v-if="submitDisabled"
+						>
+							{{ icons.mdiLoading }}
+						</v-icon>
+						Saqlash
+					</v-btn>
 				</v-card-actions>
 			</v-form>
 
@@ -228,18 +241,22 @@ export default {
 				}
 			}
 		}
+		// Default date time
+		const datePicker = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),)
+		const defaultDate = datePicker.value;
+		
 		const close = () => {
 			show.value = false
 			form.value.resetValidation()
 			formData.value = { ...emptyFormData }
 		}
-
+		console.log(datePicker);
 		const form = ref(null)
 		const emptyFormData = {
 			id: null,
 			payment_id: null,
 			amount: null,
-			date: null,
+			date: defaultDate,
 			currency: null,
 
 			student_id: null,
@@ -390,7 +407,22 @@ export default {
 
 
 		// on form submit
+		const submitDisabled = ref(false)
 		const onSubmit = () => {
+			if(submitDisabled.value === true)
+				return
+			else
+				submitDisabled.value = true
+
+				submitDisabled.value = true
+
+			if (!form.value.validate()) {
+				console.log('form inputs not valid!')
+
+				submitDisabled.value = false
+				return
+			}
+
 			if (form.value.validate()) {
 				if (formData.value.id) {
 					store
@@ -403,6 +435,9 @@ export default {
 							console.log(error)
 							emit('notify', { type: 'error', text: error.message })
 						})
+						.finally(() => {
+							submitDisabled.value = false
+						})
 				} else {
 					store
 						.dispatch(`${MODULE_NAME}/addRow`, formData.value)
@@ -413,6 +448,9 @@ export default {
 						.catch(error => {
 							console.log(error)
 							emit('notify', { type: 'error', text: error.message })
+						})
+						.finally(() => {
+							submitDisabled.value = false
 						})
 				}
 			}
@@ -461,6 +499,8 @@ export default {
 			formData,
 			selectRule,
 
+			submitDisabled,
+
 			students,
 			subjects,
 			groups,
@@ -475,6 +515,9 @@ export default {
 			onSubmit,
 			open,
 			close,
+
+			datePicker,
+			defaultDate,
 
 			subjectForm,
 			addSubject,
