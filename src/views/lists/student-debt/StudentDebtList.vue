@@ -5,14 +5,16 @@
 
 			<student-debt-search v-model='filter' />
 
-			<div v-if="state.rows.length > 0" class="ml-auto my-4">
-				<v-btn v-if="$can('create', 'Room')" class="success exportXlsx" color="white" outlined @click="ExportExcel()">Jadvalni yuklab olish</v-btn>
+			<div v-if='state.rows.length > 0' class='ml-auto my-4'>
+				<v-btn v-if="$can('create', 'Room')" class='success exportXlsx' color='white' outlined
+							 @click='ExportExcel()'>Jadvalni yuklab olish
+				</v-btn>
 			</div>
 		</v-card-text>
 
 		<!-- table -->
 		<v-data-table
-			ref="excel"
+			ref='excel'
 			v-model='selectedTableData'
 			:headers='tableColumns'
 			:items='state.rows'
@@ -81,8 +83,25 @@
 			<template #[`item.paid`]='{ item }'> {{ item.paid | summa }}</template>
 
 			<template #[`item.dept`]='{ item }'>
-				{{ item.amount - item.paid | summa }}
+				{{ (item.amount - item.paid) | summa }}
 			</template>
+
+			<template v-slot:footer>
+				<table class='my-table-footer'>
+					<tbody>
+
+					</tbody>
+				</table>
+			</template>
+
+			<template slot='body.append'>
+				<tr>
+					<th colspan='3' class='text-end'>Jami:</th>
+					<th colspan='1' class='text-end'>{{ totalDebt | summa }}</th>
+					<th colspan='1' class='text-center'>{{ totalPayment | summa }}</th>
+				</tr>
+			</template>
+
 		</v-data-table>
 
 		<dialog-confirm ref='dialogConfirm' />
@@ -101,7 +120,7 @@ import {
 	mdiCalendar,
 } from '@mdi/js'
 
-import { ref } from '@vue/composition-api'
+import { computed, ref, watch } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
 import numeral from 'numeral'
@@ -180,15 +199,30 @@ export default {
 			let elt = excel.value.$el.children[0]
 			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
 			return dl
-			  ? XLSX.write(wb, {
-				bookType: type,
-				bookSST: true,
-				type: 'base64',
-			})
-			: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+				? XLSX.write(wb, {
+					bookType: type,
+					bookSST: true,
+					type: 'base64',
+				})
+				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
 		}
 
 		const BASE_URL = envParams.BASE_URL
+
+
+		const totalDebt = computed(() => {
+			let total = 0
+			if (state.value.rows !== undefined && state.value.rows.length > 0)
+				state.value.rows.forEach(item => (total += (item.amount - item.paid)))
+			return total
+		})
+
+		const totalPayment = computed(() => {
+			let total = 0
+			if (state.value.rows !== undefined && state.value.rows.length > 0)
+				state.value.rows.forEach(item => (total += item.amount))
+			return total
+		})
 
 		// Return
 		return {
@@ -209,6 +243,9 @@ export default {
 			actionOptions,
 			selectedAction,
 			footerProps,
+
+			totalDebt,
+			totalPayment,
 
 			dialogConfirm,
 			confirmDelete,
