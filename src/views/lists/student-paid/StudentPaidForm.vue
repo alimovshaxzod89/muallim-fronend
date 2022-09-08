@@ -113,7 +113,7 @@
 									{{ payment.amount | summa }}
 								</div>
 							</v-col>
-							
+
 
 							<v-col cols='8'>
 								<h4 class='text-required no-text'><span>*</span></h4>
@@ -147,10 +147,10 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn color='gray' outlined @click='close()'>Bekor qilish</v-btn>
-					<v-btn 
-						color="success" 
-						type="button" 
-						@click="onSubmit" 
+					<v-btn
+						color="success"
+						type="button"
+						@click="onSubmit"
 						:disabled="submitDisabled"
 					>
 						<v-icon
@@ -244,7 +244,7 @@ export default {
 		// Default date time
 		const datePicker = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),)
 		const defaultDate = datePicker.value;
-		
+
 		const close = () => {
 			show.value = false
 			form.value.resetValidation()
@@ -412,8 +412,6 @@ export default {
 			if(submitDisabled.value === true)
 				return
 			else
-				submitDisabled.value = true
-
 				submitDisabled.value = true
 
 			if (!form.value.validate()) {
