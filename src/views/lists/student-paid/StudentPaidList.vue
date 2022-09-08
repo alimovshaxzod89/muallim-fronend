@@ -19,7 +19,7 @@
 			</v-col>
 			<v-spacer></v-spacer>
 
-			<div class='btnAdd ml-auto'>
+			<div class='btnAdd ml-auto' v-if="$can('create', 'StudentPaid')">
 				<v-btn class='primary mb-3' @click='openForm()'>Qo'shish</v-btn>
 			</div>
 		</v-card-text>
@@ -48,7 +48,7 @@
 					<!-- delete -->
 					<v-tooltip bottom>
 						<template #activator='{ on, attrs }'>
-							<v-btn icon small v-bind='attrs' v-on='on' @click='confirmDelete(item.id)'>
+							<v-btn icon small v-bind='attrs' v-on='on' @click='confirmDelete(item.id)' v-if="$can('delete', 'StudentPaid')">
 								<v-icon size='18'>
 									{{ icons.mdiDeleteOutline }}
 								</v-icon>
@@ -60,7 +60,7 @@
 					<!-- view  -->
 					<v-tooltip bottom>
 						<template #activator='{ on, attrs }'>
-							<v-btn icon small v-bind='attrs' v-on='on' @click='openForm(item.id)'>
+							<v-btn icon small v-bind='attrs' v-on='on' @click='openForm(item.id)' v-if="$can('update', 'StudentPaid')">
 								<v-icon size='18'>
 									{{ icons.mdiPencilOutline }}
 								</v-icon>
