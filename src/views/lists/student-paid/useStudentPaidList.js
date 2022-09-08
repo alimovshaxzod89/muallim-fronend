@@ -17,7 +17,8 @@ export default function useStudentPaidList(MODULE_NAME) {
     // { text: 'FAN', value: 'payment.group.subject.name' },
     { text: 'GURUH', value: 'group' },
     { text: 'TALABA', value: 'payment.student.full_name' },
-		{ text: 'TO\'LADI', value: 'amount', align: 'right' },
+		{ text: 'TO\'LADI', value: 'amount', align: 'center' },
+    { text: "VALYUTA", value: 'currency', align: 'center' },
 		{ text: 'SA\'NA', value: 'date', align: 'center' },
     { text: "QAYSI OY UCHUN", value: 'month_year', align: 'center' },
 	]

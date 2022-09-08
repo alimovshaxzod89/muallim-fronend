@@ -79,6 +79,9 @@
 			<template #[`item.amount`]='{ item }'>
 				{{ item.amount | summa }}
 			</template>
+			<template #[`item.currency`]='{ item }'>
+				{{ item.currency }}
+			</template>
 
 			<template #[`item.date`]='{ item }'>
 				<div v-if='item.date != today'>
@@ -101,7 +104,8 @@
 			<template slot='body.append'>
 				<tr>
 					<th colspan='4' class='text-end'>Jami:</th>
-					<th colspan='1' class='text-end mr-4'>{{ totalWasPaid | summa }}</th>
+					<th colspan='1' class='text-center mr-4'>{{ totalWasPaid | summa }}</th>
+					<th colspan='1'></th>
 					<th colspan='1'></th>
 					<th colspan='1' class='text-center'>{{ totalPayment | summa }}</th>
 				</tr>
