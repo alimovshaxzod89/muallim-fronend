@@ -86,14 +86,6 @@
 				{{ (item.amount - item.paid) | summa }}
 			</template>
 
-			<template v-slot:footer>
-				<table class='my-table-footer'>
-					<tbody>
-
-					</tbody>
-				</table>
-			</template>
-
 			<template slot='body.append'>
 				<tr>
 					<th colspan='3' class='text-end'>Jami:</th>
