@@ -185,7 +185,7 @@ export default {
 				})
 		}
 
-		// eport xlsx
+		// export xlsx
 		const excel = ref(null)
 		const ExportExcel = (type, fn, dl) => {
 			let elt = excel.value.$el.children[0]
