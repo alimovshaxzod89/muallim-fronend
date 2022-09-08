@@ -62,6 +62,18 @@
 								>
 								</v-autocomplete>
 							</v-col>
+							<v-col cols="4">
+								<h4 class='text-required no-text'><span>*</span></h4>
+								<v-select
+									v-model="formData.currency"
+									label="VALYUTANI KIRITING"
+									:items="currency"
+									item-value="id"
+									hide-details
+									dense
+									outlined
+								></v-select>
+							</v-col>
 
 							<!--							<v-col cols='4'>-->
 							<!--								<h4 class='text-required no-text'></h4>-->
@@ -101,8 +113,9 @@
 									{{ payment.amount | summa }}
 								</div>
 							</v-col>
+							
 
-							<v-col cols='6'>
+							<v-col cols='8'>
 								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-menu v-model='isDate' :close-on-content-click='false' offset-y min-width='auto'>
 									<template v-slot:activator='{ on, attrs }'>
@@ -227,6 +240,7 @@ export default {
 			payment_id: null,
 			amount: null,
 			date: null,
+			currency: null,
 
 			student_id: null,
 			group_id: null,
@@ -269,6 +283,19 @@ export default {
 				.catch(error => console.log(error))
 		}
 		loadStudent()
+
+		const currency = ref([])
+		const loadCurrency = () => {
+			axios
+				.get('/api/currency', { params: { itemsPerPage: -1 } })
+				.then(response => {
+					if (response.data.success) {
+						currency.value = response.data.data
+					}
+				})
+				.catch(error => console.log(error))
+		}
+		loadCurrency()
 
 		const groups = ref([])
 		// const loadGroup = () => {
@@ -439,6 +466,7 @@ export default {
 			groups,
 			payments,
 			payment,
+			currency,
 
 			months,
 
