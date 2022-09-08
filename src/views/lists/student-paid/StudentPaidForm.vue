@@ -137,6 +137,32 @@
 									{{ payment.amount | summa }}
 								</div>
 							</v-col>
+
+							<v-col cols='8'>
+								<h4 class='text-required no-text'><span>*</span></h4>
+								<v-menu v-model='isDate' :close-on-content-click='false' offset-y min-width='auto'>
+									<template v-slot:activator='{ on, attrs }'>
+										<v-text-field
+											v-model='formData.date'
+											label="SA'NA"
+											readonly
+											v-bind='attrs'
+											v-on='on'
+											hide-details
+											outlined
+											:append-icon='icons.mdiCalendar'
+										></v-text-field>
+									</template>
+									<v-date-picker
+										v-model='formData.date'
+										color='primary'
+										@input='isDate = false'
+										no-title
+										:first-day-of-week='1'
+										locale='ru-ru'
+									></v-date-picker>
+								</v-menu>
+    						</v-col>
 						</v-row>
 					</v-container>
 				</v-card-text>
@@ -144,10 +170,10 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn color='gray' outlined @click='close()'>Bekor qilish</v-btn>
-					<v-btn 
-						color="success" 
-						type="button" 
-						@click="onSubmit" 
+					<v-btn
+						color="success"
+						type="button"
+						@click="onSubmit"
 						:disabled="submitDisabled"
 					>
 						<v-icon
@@ -241,7 +267,7 @@ export default {
 		// Default date time
 		const datePicker = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),)
 		const defaultDate = datePicker.value;
-		
+
 		const close = () => {
 			show.value = false
 			form.value.resetValidation()
@@ -409,8 +435,6 @@ export default {
 			if(submitDisabled.value === true)
 				return
 			else
-				submitDisabled.value = true
-
 				submitDisabled.value = true
 
 			if (!form.value.validate()) {
