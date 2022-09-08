@@ -5,10 +5,14 @@
 
 			<student-debt-search v-model='filter' />
 
+			<div v-if="state.rows.length > 0" class="ml-auto my-4">
+				<v-btn v-if="$can('create', 'Room')" class="success exportXlsx" color="white" outlined @click="ExportExcel()">Jadvalni yuklab olish</v-btn>
+			</div>
 		</v-card-text>
 
 		<!-- table -->
 		<v-data-table
+			ref="excel"
 			v-model='selectedTableData'
 			:headers='tableColumns'
 			:items='state.rows'
@@ -102,6 +106,8 @@ import store from '@/store'
 import axios from '@axios'
 import numeral from 'numeral'
 
+import XLSX from 'xlsx'
+
 import envParams from '@envParams'
 
 // store module
@@ -168,12 +174,29 @@ export default {
 				})
 		}
 
+		// eport xlsx
+		const excel = ref(null)
+		const ExportExcel = (type, fn, dl) => {
+			let elt = excel.value.$el.children[0]
+			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+			return dl
+			  ? XLSX.write(wb, {
+				bookType: type,
+				bookSST: true,
+				type: 'base64',
+			})
+			: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+		}
+
 		const BASE_URL = envParams.BASE_URL
 
 		// Return
 		return {
 			BASE_URL,
 			state,
+
+			excel,
+			ExportExcel,
 
 			tableColumns,
 			searchQuery,
