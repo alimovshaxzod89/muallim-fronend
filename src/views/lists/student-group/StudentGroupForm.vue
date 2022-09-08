@@ -2,7 +2,7 @@
   <!-- form dialog -->
   <v-dialog
     v-model="show"
-    @keydown.enter="onSubmit()"
+    @keyup="onSubmit()"
     @keydown.esc="close()"
     @click:outside="close()"
     max-width="1000px"

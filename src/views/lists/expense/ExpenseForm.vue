@@ -128,13 +128,20 @@
           >
             Bekor qilish
           </v-btn>
-          <v-btn
-            color="success"
-            type="submit"
-            @click.prevent="onSubmit"
-          >
-            Saqlash
-          </v-btn>
+          <v-btn 
+						color="success" 
+						type="button" 
+						@click="onSubmit" 
+						:disabled="submitDisabled"
+					>
+						<v-icon
+							class="loading-animation"
+							v-if="submitDisabled"
+						>
+							{{ icons.mdiLoading }}
+						</v-icon>
+						Saqlash
+					</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -206,7 +213,23 @@ export default {
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
 
     // on form submit
+    const submitDisabled = ref(false)
     const onSubmit = () => {
+
+      if(submitDisabled.value === true)
+				return
+			else
+				submitDisabled.value = true
+
+				submitDisabled.value = true
+
+			if (!form.value.validate()) {
+				console.log('form inputs not valid!')
+
+				submitDisabled.value = false
+				return
+			}
+
       if (form.value.validate()) {
         if (formData.value.id) {
           store
@@ -220,6 +243,9 @@ export default {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
             })
+            .finally(() => {
+							submitDisabled.value = false
+						})
         } else {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
@@ -231,6 +257,9 @@ export default {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
             })
+            .finally(() => {
+							submitDisabled.value = false
+						})
         }
       }
     }
@@ -308,6 +337,7 @@ export default {
       selectRule,
       show,
       onSubmit,
+      submitDisabled,
       open,
       close,
 

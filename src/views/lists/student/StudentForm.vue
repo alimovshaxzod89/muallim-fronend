@@ -4,7 +4,7 @@
     v-model="show"
     @keydown.esc="close()"
     @click:outside="close()"
-    @keyup.enter="onSubmit()"
+    @keydown.enter="onSubmit()"
     max-width="800px"
     width="800px"
   >
@@ -185,7 +185,20 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-          <v-btn color="success" type="submit" @click.prevent="onSubmit">Saqlash</v-btn>
+          <v-btn 
+						color="success" 
+						type="button" 
+						@click="onSubmit" 
+						:disabled="submitDisabled"
+					>
+						<v-icon
+							class="loading-animation"
+							v-if="submitDisabled"
+						>
+							{{ icons.mdiLoading }}
+						</v-icon>
+						Saqlash
+					</v-btn>        
         </v-card-actions>
       </v-form>
     </v-card>
@@ -251,7 +264,21 @@ export default {
       form.value.resetValidation()
     }
     // on form submit
+    const submitDisabled = ref(false)
     const onSubmit = () => {
+      if(submitDisabled.value === true)
+				return
+			else
+				submitDisabled.value = true
+
+				submitDisabled.value = true
+
+			if (!form.value.validate()) {
+				console.log('form inputs not valid!')
+
+				submitDisabled.value = false
+				return
+			}
       if (formData.value.id) {
         //update
         if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
@@ -268,6 +295,9 @@ export default {
 
               return false
             })
+            .finally(() => {
+							submitDisabled.value = false
+						})
         } else {
           emit('notify', {
             type: 'warning',
@@ -289,6 +319,9 @@ export default {
               emit('notify', { type: 'error', text: error.message })
               return false
             })
+            .finally(() => {
+							submitDisabled.value = false
+						})
         } else {
           emit('notify', {
             type: 'warning',
@@ -329,6 +362,7 @@ export default {
       validate,
       show,
       onSubmit,
+      submitDisabled,
       open,
       close,
       regions,

@@ -2,6 +2,7 @@
   <!-- form dialog -->
   <v-dialog 
     v-model="show" 
+    @keydown.enter="onSubmit()"
     @keydown.esc="close()" 
     @click:outside="close()" 
     max-width="600px" 
@@ -138,7 +139,21 @@ export default {
     }
 
     // on form submit
+    const submitDisabled = ref(false)
     const onSubmit = () => {
+      if(submitDisabled.value === true)
+				return
+			else
+				submitDisabled.value = true
+
+				submitDisabled.value = true
+
+			if (!form.value.validate()) {
+				console.log('form inputs not valid!')
+
+				submitDisabled.value = false
+				return
+			}
       if (form.value.validate()) {
         if (formData.value.id) {
           store
@@ -151,6 +166,9 @@ export default {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
             })
+            .finally(() => {
+              submitDisabled.value = false
+            })
         } else {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
@@ -161,6 +179,9 @@ export default {
             .catch(error => {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
+            })
+            .finally(() => {
+              submitDisabled.value = false
             })
         }
       }
@@ -187,6 +208,7 @@ export default {
       validate,
       show,
       onSubmit,
+      submitDisabled,
       open,
       close,
 

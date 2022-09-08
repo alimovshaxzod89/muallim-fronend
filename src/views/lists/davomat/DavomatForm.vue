@@ -21,7 +21,6 @@
                     <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                          class="my-date-picker"
                           v-model="formData.date"
                           label="SA'NA"
                           readonly
@@ -115,7 +114,20 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-          <v-btn color="success" type="submit" @click.prevent="onSubmit"> Saqlash</v-btn>
+          <v-btn 
+						color="success" 
+						type="button" 
+						@click="onSubmit" 
+						:disabled="submitDisabled"
+					>
+						<v-icon
+							class="loading-animation"
+							v-if="submitDisabled"
+						>
+							{{ icons.mdiLoading }}
+						</v-icon>
+						Saqlash
+					</v-btn>
         </v-card-actions>
       </v-form>
 
@@ -230,7 +242,21 @@ export default {
     }
 
     // on form submit
+    const submitDisabled = ref(false)
     const onSubmit = () => {
+      if(submitDisabled.value === true)
+				return
+			else
+				submitDisabled.value = true
+
+				submitDisabled.value = true
+
+			if (!form.value.validate()) {
+				console.log('form inputs not valid!')
+
+				submitDisabled.value = false
+				return
+			}
       if (formData.value.id) {
         if (formData.value.date && formData.value.group_id && formData.value.student_id && formData.value.came) {
           store
@@ -243,10 +269,16 @@ export default {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
             })
+            .finally(() => {
+							submitDisabled.value = false
+						})
         } else {
           emit('notify', {
             type: 'warning',
             text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
+          })
+          .finally(() => {
+            submitDisabled.value = false
           })
         }
       } else {
@@ -261,10 +293,16 @@ export default {
               console.log(error)
               emit('notify', { type: 'error', text: error.message })
             })
+            .finally(() => {
+							submitDisabled.value = false
+						})
         } else {
           emit('notify', {
             type: 'warning',
             text: "Bo'limda xatolik! bo'limlarni to'gri to'ldiring!",
+          })
+          .finally(() => {
+            submitDisabled.value = false
           })
         }
       }
@@ -303,6 +341,7 @@ export default {
       validate,
       show,
       onSubmit,
+      submitDisabled,
       open,
       close,
 
