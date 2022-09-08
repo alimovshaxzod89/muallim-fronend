@@ -205,14 +205,14 @@ export default {
 		const totalDebt = computed(() => {
 			let total = 0
 			if (state.value.rows !== undefined && state.value.rows.length > 0)
-				state.value.rows.forEach(item => (total += (item.amount - item.paid)))
+				total = state.value.rows.reduce((prev, item) => prev + (item.amount - item.paid), 0)
 			return total
 		})
 
 		const totalPayment = computed(() => {
 			let total = 0
 			if (state.value.rows !== undefined && state.value.rows.length > 0)
-				state.value.rows.forEach(item => (total += item.amount))
+				total = state.value.rows.reduce((prev, item) => prev + item.amount, 0)
 			return total
 		})
 
