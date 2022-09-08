@@ -98,21 +98,14 @@
 			</template>
 
 
-			<!--      <template v-slot:footer>-->
-			<!--				<table class="totalAmount">-->
-			<!--					<tbody>-->
-			<!--						<tr>-->
-			<!--							<td></td>-->
-			<!--							<td></td>-->
-			<!--							<td></td>-->
-			<!--							<td></td>-->
-			<!--							<td rowspan="10" class="text-end">Jami summa:</td>-->
-			<!--							<td rowspan="1" class="text-end">{{totalAmount()}}</td>-->
-			<!--							<td></td>-->
-			<!--						</tr>-->
-			<!--					</tbody>-->
-			<!--				</table>-->
-			<!--      </template>-->
+			<template slot='body.append'>
+				<tr>
+					<th colspan='4' class='text-end'>Jami:</th>
+					<th colspan='1' class='text-end mr-4'>{{ totalWasPaid | summa }}</th>
+					<th colspan='1'></th>
+					<th colspan='1' class='text-center'>{{ totalPayment | summa }}</th>
+				</tr>
+			</template>
 		</v-data-table>
 
 		<dialog-confirm ref='dialogConfirm' />
@@ -134,7 +127,7 @@ import {
 	mdiPencilOutline,
 } from '@mdi/js'
 
-import { ref } from '@vue/composition-api'
+import { ref, computed } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
 import moment from 'moment'
@@ -238,6 +231,20 @@ export default {
 
 		const today = new Date().toISOString().slice(0, 10)
 
+		const totalWasPaid = computed(() => {
+			let total = 0
+			if (state.value.rows !== undefined && state.value.rows.length > 0)
+				total = state.value.rows.reduce((prev, item) => prev + item.amount, 0)
+			return total
+		})
+
+		const totalPayment = computed(() => {
+			let total = 0
+			if (state.value.rows !== undefined && state.value.rows.length > 0)
+				total = state.value.rows.reduce((prev, item) => prev + item.payment.amount, 0)
+			return total
+		})
+
 		// Return
 		return {
 			BASE_URL,
@@ -254,6 +261,9 @@ export default {
 			selectedTableData,
 			filter,
 			today,
+
+			totalWasPaid,
+			totalPayment,
 
 			actions,
 			actionOptions,
