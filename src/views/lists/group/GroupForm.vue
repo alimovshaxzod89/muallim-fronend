@@ -30,10 +30,9 @@
               </v-col>
 
               <v-col cols="6">
-                <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.place_id"
-                  :items="selectsDatas.room"
+                  :items="places"
                   item-text="name"
                   item-value="id"
                   label="BINO"
@@ -41,7 +40,7 @@
                   outlined
                   hide-details
                   clearable
-                  :rules="selectRule"
+                  :disabled="place"
                 >
                 </v-autocomplete>
               </v-col>
@@ -247,13 +246,16 @@ export default {
       store.registerModule(MODULE_NAME, GroupStoreModule)
     }
 
+    // Place default
+    const place = JSON.parse(localStorage.getItem('place'))
+    console.log(place)
+
     //show, hide
     const show = ref(false)
-    const formData = ref({ ...emptyFormData })
     const form = ref(null)
     const emptyFormData = {
       id: null,
-      place_id: null,
+      place_id: place.id,
       number: null,
       subject_id: null,
       stage_id: null,
@@ -265,6 +267,8 @@ export default {
       end_date: null,
       status: '1',
     }
+    
+    const formData = ref({ ...emptyFormData })
 
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
@@ -288,19 +292,8 @@ export default {
       form.value.resetValidation()
     }
 
-    //form options for selects
-    const selectsDatas = ref({})
-    // ! METHODS
-    const loadPlace = () => {
-      axios
-        .get('/api/places', { params: { itemsPerPage: -1 } })
-        .then(response => {
-          if (response.data.success) {
-            selectsDatas.value.room = response.data.data
-          }
-        })
-        .catch(error => console.log(error))
-    }
+
+    
 
     // on form submit
     const onSubmit = () => {
@@ -373,13 +366,24 @@ export default {
         }
       })
     }
+    const places = ref({})
+    const loadPlace = () => {
+      axios
+        .get('/api/places', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            places.value = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
+    loadPlace()
 
     onMounted(() => {
       loadSubjects()
       loadStages()
       loadRooms()
       loadTeachers()
-      loadPlace()
     })
 
     // ProductTypeForm
@@ -387,10 +391,10 @@ export default {
     const addPlace = (id = null) => {
       roomForm.value.open(id)
     }
-    const addPlaceToOptions = row => {
-      selectsDatas.value.room = selectsDatas.value.room.concat([row])
-      formData.value.place_id = row.id
-    }
+    // const addPlaceToOptions = row => {
+    //   selectsDatas.value.room = selectsDatas.value.room.concat([row])
+    //   formData.value.place_id = row.id
+    // }
 
     return {
       form,
@@ -401,8 +405,7 @@ export default {
       maxLengthValidator,
       formData,
       selectRule,
-      selectsDatas,
-      loadPlace,
+      places,
       validate,
       show,
       onSubmit,
@@ -414,9 +417,11 @@ export default {
       teachers,
       isDate2,
 
+      place,
+      // addPlaceToOptions,
+
       addPlace,
       roomForm,
-      addPlaceToOptions,
 
       icons: {
         mdiCalendar,
