@@ -20,8 +20,8 @@
                 <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-text-field
                   type="text"
-                  label="ISM"
-                  v-model="formData.first_name"
+                  label="FAMILIYA"
+                  v-model="formData.last_name"
                   outlined
                   dense
                   :rules="[required]"
@@ -32,8 +32,8 @@
                 <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-text-field
                   type="text"
-                  label="FAMILIYA"
-                  v-model="formData.last_name"
+                  label="ISM"
+                  v-model="formData.first_name"
                   outlined
                   dense
                   :rules="[required]"
