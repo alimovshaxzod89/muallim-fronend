@@ -91,8 +91,9 @@
 								<v-select
 									v-model="formData.cashbox_id"
 									label="VALYUTANI KIRITING"
-									:items="cashbox_id"
+									:items="cashboxes"
 									item-value="id"
+									item-text="name"
 									hide-details
 									dense
 									outlined
@@ -323,13 +324,13 @@ export default {
 		}
 		loadStudent()
 
-		const cashbox_id = ref([])
+		const cashboxes = ref([])
 		const loadCurrency = () => {
 			axios
-				.get('/api/cashbox_id', { params: { itemsPerPage: -1 } })
+				.get('/api/cashboxes', { params: { itemsPerPage: -1 } })
 				.then(response => {
 					if (response.data.success) {
-						cashbox_id.value = response.data.data
+						cashboxes.value = response.data.data
 					}
 				})
 				.catch(error => console.log(error))
@@ -526,7 +527,7 @@ export default {
 			groups,
 			payments,
 			payment,
-			cashbox_id,
+			cashboxes,
 
 			months,
 
