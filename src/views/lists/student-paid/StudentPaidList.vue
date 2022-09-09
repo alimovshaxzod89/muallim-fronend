@@ -79,8 +79,8 @@
 			<template #[`item.amount`]='{ item }'>
 				{{ item.amount | summa }}
 			</template>
-			<template #[`item.currency`]='{ item }'>
-				{{ item.currency }}
+			<template #[`item.cashbox_id`]='{ item }'>
+				{{ item.cashbox_id }}
 			</template>
 
 			<template #[`item.date`]='{ item }'>
