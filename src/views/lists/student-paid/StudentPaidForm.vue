@@ -34,31 +34,6 @@
 								>
 								</v-autocomplete>
 							</v-col>
-							<v-col cols="6">
-								<h4 class="text-required no-text"><span>*</span></h4>
-								<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
-									<template v-slot:activator="{ on, attrs }">
-										<v-text-field
-										v-model="formData.date"
-										label="SA'NA"
-										readonly
-										v-bind="attrs"
-										v-on="on"
-										hide-details
-										outlined
-										:append-icon="icons.mdiCalendar"
-										></v-text-field>
-									</template>
-									<v-date-picker
-										v-model="formData.date"
-										color="primary"
-										@input="isDate = false"
-										no-title
-										:first-day-of-week="1"
-										locale="ru-ru"
-									></v-date-picker>
-								</v-menu>
-							</v-col>
 							<v-col cols='4'>
 								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-text-field
@@ -67,7 +42,22 @@
 									v-model='formData.amount'
 									outlined
 									dense
+									:rules='[required]'
 								></v-text-field>
+							</v-col>
+							<v-col cols="4">
+								<h4 class='text-required no-text'><span>*</span></h4>
+								<v-select
+									v-model="formData.cashbox_id"
+									label="TO'LOV TURI"
+									:items="cashboxes"
+									item-value="id"
+									item-text="name"
+									hide-details
+									dense
+									outlined
+									:rules='selectRule'
+								></v-select>
 							</v-col>
 
 							<v-col cols='8'>
@@ -86,18 +76,31 @@
 								>
 								</v-autocomplete>
 							</v-col>
+
 							<v-col cols="4">
-								<h4 class='text-required no-text'><span>*</span></h4>
-								<v-select
-									v-model="formData.cashbox_id"
-									label="TO'LOV TURI"
-									:items="cashboxes"
-									item-value="id"
-									item-text="name"
-									hide-details
-									dense
-									outlined
-								></v-select>
+								<h4 class="text-required no-text"><span>*</span></h4>
+								<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+									<template v-slot:activator="{ on, attrs }">
+										<v-text-field
+											v-model="formData.date"
+											label="SA'NA"
+											readonly
+											v-bind="attrs"
+											v-on="on"
+											hide-details
+											outlined
+											:append-icon="icons.mdiCalendar"
+										></v-text-field>
+									</template>
+									<v-date-picker
+										v-model="formData.date"
+										color="primary"
+										@input="isDate = false"
+										no-title
+										:first-day-of-week="1"
+										locale="ru-ru"
+									></v-date-picker>
+								</v-menu>
 							</v-col>
 
 							<!--							<v-col cols='4'>-->
@@ -129,6 +132,7 @@
 									hide-details
 									dense
 									outlined
+									:rules='selectRule'
 								></v-select>
 							</v-col>
 
