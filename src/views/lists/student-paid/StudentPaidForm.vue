@@ -273,7 +273,6 @@ export default {
 			form.value.resetValidation()
 			formData.value = { ...emptyFormData }
 		}
-		console.log(datePicker);
 		const form = ref(null)
 		const emptyFormData = {
 			id: null,
