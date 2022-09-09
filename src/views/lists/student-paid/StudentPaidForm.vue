@@ -139,31 +139,6 @@
 								</div>
 							</v-col>
 
-							<v-col cols='8'>
-								<h4 class='text-required no-text'><span>*</span></h4>
-								<v-menu v-model='isDate' :close-on-content-click='false' offset-y min-width='auto'>
-									<template v-slot:activator='{ on, attrs }'>
-										<v-text-field
-											v-model='formData.date'
-											label="SA'NA"
-											readonly
-											v-bind='attrs'
-											v-on='on'
-											hide-details
-											outlined
-											:append-icon='icons.mdiCalendar'
-										></v-text-field>
-									</template>
-									<v-date-picker
-										v-model='formData.date'
-										color='primary'
-										@input='isDate = false'
-										no-title
-										:first-day-of-week='1'
-										locale='ru-ru'
-									></v-date-picker>
-								</v-menu>
-    						</v-col>
 						</v-row>
 					</v-container>
 				</v-card-text>
