@@ -21,7 +21,8 @@ import {
   mdiAccountTieVoice,
   mdiCreditCardMultiple,
   mdiCurrencyEur,
-  mdiCashRegister ,
+  mdiCashRegister,
+  mdiFileImportOutline,
 } from '@mdi/js'
 
 export default [
@@ -211,6 +212,13 @@ export default [
     resource: 'currency',
     action: 'read',
     icon: mdiCurrencyEur,
+  },
+  {
+    title: 'Import',
+    to: 'import',
+    resource: 'import',
+    action: 'read',
+    icon: mdiFileImportOutline,
   },
 
   // {

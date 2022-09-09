@@ -265,6 +265,16 @@ const views = [
       action: 'read',
     },
   },
+  {
+    path: '/import',
+    name: 'import',
+    component: () => import('@/views/lists/import/ImportList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'money',
+      action: 'read',
+    },
+  },
 	{
 		path: '/lead-form/:lead_id',
 		name: 'lead-form',
@@ -274,6 +284,7 @@ const views = [
 			resource: 'Public',
 		},
 	},
+  
   // {
   //   path: '/center-profit',
   //   name: 'center-profit',
