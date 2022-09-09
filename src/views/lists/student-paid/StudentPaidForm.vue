@@ -89,9 +89,9 @@
 							<v-col cols="4">
 								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-select
-									v-model="formData.currency"
+									v-model="formData.cashbox_id"
 									label="VALYUTANI KIRITING"
-									:items="currency"
+									:items="cashbox_id"
 									item-value="id"
 									hide-details
 									dense
@@ -279,7 +279,7 @@ export default {
 			payment_id: null,
 			amount: null,
 			date: defaultDate,
-			currency: null,
+			cashbox_id: null,
 
 			student_id: null,
 			group_id: null,
@@ -323,13 +323,13 @@ export default {
 		}
 		loadStudent()
 
-		const currency = ref([])
+		const cashbox_id = ref([])
 		const loadCurrency = () => {
 			axios
-				.get('/api/currency', { params: { itemsPerPage: -1 } })
+				.get('/api/cashbox_id', { params: { itemsPerPage: -1 } })
 				.then(response => {
 					if (response.data.success) {
-						currency.value = response.data.data
+						cashbox_id.value = response.data.data
 					}
 				})
 				.catch(error => console.log(error))
@@ -526,7 +526,7 @@ export default {
 			groups,
 			payments,
 			payment,
-			currency,
+			cashbox_id,
 
 			months,
 
