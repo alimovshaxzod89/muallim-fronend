@@ -90,7 +90,7 @@
 								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-select
 									v-model="formData.cashbox_id"
-									label="VALYUTANI KIRITING"
+									label="TO'LOV TURI"
 									:items="cashboxes"
 									item-value="id"
 									item-text="name"
@@ -230,6 +230,7 @@ export default {
 				formData.value = {
 					id: paymentPaid.id,
 					payment_id: paymentPaid.payment_id,
+					cashbox_id: paymentPaid.cashbox_id,
 					amount: paymentPaid.amount,
 					date: paymentPaid.date,
 
@@ -300,7 +301,7 @@ export default {
 		loadStudent()
 
 		const cashboxes = ref([])
-		const loadCurrency = () => {
+		const loadCashbox = () => {
 			axios
 				.get('/api/cashboxes', { params: { itemsPerPage: -1 } })
 				.then(response => {
@@ -310,7 +311,7 @@ export default {
 				})
 				.catch(error => console.log(error))
 		}
-		loadCurrency()
+		loadCashbox()
 
 		const groups = ref([])
 		// const loadGroup = () => {
