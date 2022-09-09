@@ -80,7 +80,7 @@
 				{{ item.amount | summa }}
 			</template>
 			<template #[`item.cashbox_id`]='{ item }'>
-				{{ item.cashbox_id }}
+				{{ item.cashbox_id ? item.cashbox.name : '' }}
 			</template>
 
 			<template #[`item.date`]='{ item }'>
