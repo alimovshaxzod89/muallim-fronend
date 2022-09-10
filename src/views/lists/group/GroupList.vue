@@ -31,14 +31,14 @@
 						<v-expansion-panel-header disable-icon-rotate>
 							Ko'proq
 							<template #actions>
-							<v-icon color="secondary">
-								{{ icons.mdiFilterOutline  }}
-							</v-icon>
-						</template>
+                <v-icon color="secondary">
+                  {{ icons.mdiFilterOutline  }}
+                </v-icon>
+              </template>
 						</v-expansion-panel-header>
 						<v-expansion-panel-content>
 							<v-text-field
-								v-model="options.first_name"
+								v-model="filter.teacher.full_name"
 								dense
 								outlined
 								hide-details
@@ -47,7 +47,7 @@
 							></v-text-field>
 
 							<v-text-field
-								v-model="options.phone"
+								v-model="filter.phone"
 								dense
 								outlined
 								hide-details
@@ -56,12 +56,11 @@
 							></v-text-field>
 
 							<v-autocomplete
-								v-model="options.region_id"
+								v-model="filter.region_id"
 								:items="regions"
 								item-text="name"
 								item-value="id"
 								dense
-                solo
 								outlined
 								hide-details
 								label="Tuman"
@@ -70,7 +69,7 @@
 							></v-autocomplete>
 
 							<v-text-field
-								v-model="options.address"
+								v-model="filter.address"
 								dense
 								outlined
 								hide-details
@@ -79,12 +78,11 @@
 							></v-text-field>
 
 							<v-autocomplete
-								v-model="options.permanent_region_id"
+								v-model="filter.permanent_region_id"
 								:items="regions"
 								item-text="name"
 								item-value="id"
 								dense
-                solo
 								outlined
 								hide-details
 								label="D.Y. Tuman"
@@ -93,7 +91,7 @@
 							></v-autocomplete>
 
 							<v-text-field
-								v-model="options.permanent_address"
+								v-model="filter.permanent_address"
 								dense
 								outlined
 								hide-details
@@ -102,12 +100,11 @@
 							></v-text-field>
 
 							<v-autocomplete
-								v-model="options.gender"
+								v-model="filter.gender"
 								:items="[{value: 1, name: 'Erkak'}, {value: 2, name: 'Ayol'}]"
 								item-text="name"
 								item-value="value"
 								dense
-                solo
 								outlined
 								hide-details
 								label="Jinsi"
@@ -118,7 +115,7 @@
 							<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
 								<template v-slot:activator="{ on, attrs }">
 									<v-text-field
-										v-model="options.birth_date"
+										v-model="filter.birth_date"
 										label="Tug'ilgan sana"
 										readonly
 										v-bind="attrs"
@@ -131,7 +128,7 @@
 									></v-text-field>
 								</template>
 								<v-date-picker
-									v-model="options.birth_date"
+									v-model="filter.birth_date"
 									color="primary"
 									@input="isDate = false"
 									no-title
@@ -141,12 +138,11 @@
 							</v-menu>
 
 							<v-autocomplete
-								v-model="options.sale"
+								v-model="filter.sale"
 								:items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
 								item-text="name"
 								item-value="value"
 								dense
-                solo
 								outlined
 								hide-details
 								label="Chegirma"
@@ -155,7 +151,7 @@
 							></v-autocomplete>
 
 							<v-text-field
-								v-model="options.sale_cause"
+								v-model="filter.sale_cause"
 								dense
 								outlined
 								hide-details
@@ -340,7 +336,6 @@ export default {
     //logics
     const {
       filter,
-      searchQuery,
       tableColumns,
       deleteRow,
       fetchDatas,
@@ -444,7 +439,6 @@ export default {
       picker,
       isDate,
       tableColumns,
-      searchQuery,
       fetchDatas,
       options,
       loading,

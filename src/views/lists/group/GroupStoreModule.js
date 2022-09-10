@@ -20,7 +20,7 @@ export default {
       state.rows = payload
     },
     addRow(state, payload) {
-      state.rows.push(payload)
+      state.rows.unshift(payload)
     },
     updateRow(state, { row, index }) {
       state.rows.splice(index, 1, row)

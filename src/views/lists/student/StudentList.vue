@@ -17,10 +17,10 @@
 						<v-expansion-panel-header disable-icon-rotate>
 							Ko'proq
 							<template #actions>
-							<v-icon color="secondary">
-								{{ icons.mdiFilterOutline  }}
-							</v-icon>
-						</template>
+                <v-icon color="secondary">
+                  {{ icons.mdiFilterOutline  }}
+                </v-icon>
+              </template>
 						</v-expansion-panel-header>
 						<v-expansion-panel-content>
 							<v-text-field
