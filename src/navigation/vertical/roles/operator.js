@@ -1,11 +1,10 @@
-import { mdiAccountDetailsOutline, mdiCashCheck, mdiPercent } from '@mdi/js'
+import { mdiAccountDetailsOutline, mdiCashCheck, mdiPercent, mdiHumanCapacityDecrease } from '@mdi/js'
 
 export default [
   {
     title: 'Guruhlar',
     to: 'groups',
     icon: mdiPercent,
-
     resource: 'Group',
     action: 'read',
   },
@@ -16,6 +15,13 @@ export default [
     resource: 'Student',
     action: 'read',
   },
+  {
+		title: 'Guruh talabalari',
+		to: 'student-groups',
+		icon: mdiHumanCapacityDecrease,
+		resource: 'StudentGroup',
+		action: 'read',
+	},
   {
     subheader: '#',
     badge: 'New',
