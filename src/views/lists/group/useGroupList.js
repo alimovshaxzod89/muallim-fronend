@@ -27,17 +27,10 @@ export default function useGroupList(MODULE_NAME) {
   ]
 
   const filter = ref({
-    query: '',
+    group_id: '',
+    subject_id: '',
     full_name: '',
-		phone: '',
-		region_id: '',
-		address: '',
-		permanent_region_id: '',
-		permanent_address: '',
-		gender: '',
-		birth_date: '',
-		sale: '',
-		sale_cause: '',
+    place_id: ''
 	})
 	const options = ref({
 		sortBy: ['id'],

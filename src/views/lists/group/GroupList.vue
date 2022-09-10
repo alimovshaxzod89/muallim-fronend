@@ -39,126 +39,47 @@
 						</v-expansion-panel-header>
 						<v-expansion-panel-content>
 							<v-text-field
-								v-model="filter.full_name"
+                v-model="filter.group_id"
 								dense
 								outlined
 								hide-details
-								label="Fish"
-								class="data-list-search me-3"
-							></v-text-field>
-
-							<v-text-field
-								v-model="filter.phone"
-								dense
-								outlined
-								hide-details
-								label="Telefon"
+								label="GURUH NOMI"
 								class="data-list-search me-3"
 							></v-text-field>
 
 							<v-autocomplete
-								v-model="filter.region_id"
-								:items="regions"
-								item-text="name"
-								item-value="id"
-								dense
-								outlined
-								hide-details
-								label="Tuman"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
+                v-model="filter.place_id"
+                :items="places"
+                item-text="name"
+                item-value="id"
+                label="BINO"
+                class="data-list-search me-3"
+                dense
+                solo
+                outlined
+                hide-details
+                clearable
+              >
+              </v-autocomplete>
 
 							<v-text-field
-								v-model="filter.address"
+                v-model="filter.subject_id"
 								dense
 								outlined
 								hide-details
-								label="Manzil"
+								label="FAN"
 								class="data-list-search me-3"
 							></v-text-field>
 
-							<v-autocomplete
-								v-model="filter.permanent_region_id"
-								:items="regions"
-								item-text="name"
-								item-value="id"
-								dense
-								outlined
-								hide-details
-								label="D.Y. Tuman"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
 							<v-text-field
-								v-model="filter.permanent_address"
+              v-model="filter.full_name"
 								dense
 								outlined
 								hide-details
-								label="D.Y. Manzil"
+								label="USTOZ"
 								class="data-list-search me-3"
 							></v-text-field>
 
-							<v-autocomplete
-								v-model="filter.gender"
-								:items="[{value: 1, name: 'Erkak'}, {value: 2, name: 'Ayol'}]"
-								item-text="name"
-								item-value="value"
-								dense
-								outlined
-								hide-details
-								label="Jinsi"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
-							<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
-								<template v-slot:activator="{ on, attrs }">
-									<v-text-field
-										v-model="filter.birth_date"
-										label="Tug'ilgan sana"
-										readonly
-										v-bind="attrs"
-										hide-details
-										v-on="on"
-										style="height: 40px !important; width: 170px !important"
-										outlined
-										clearable
-										:append-icon="icons.mdiCalendar"
-									></v-text-field>
-								</template>
-								<v-date-picker
-									v-model="filter.birth_date"
-									color="primary"
-									@input="isDate = false"
-									no-title
-									:first-day-of-week="1"
-									locale="ru-ru"
-								></v-date-picker>
-							</v-menu>
-
-							<v-autocomplete
-								v-model="filter.sale"
-								:items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
-								item-text="name"
-								item-value="value"
-								dense
-								outlined
-								hide-details
-								label="Chegirma"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
-							<v-text-field
-								v-model="filter.sale_cause"
-								dense
-								outlined
-								hide-details
-								label="Chegirma sababi"
-								class="data-list-search me-3"
-							></v-text-field>
 						</v-expansion-panel-content>
 					</v-expansion-panel>
 				</v-expansion-panels>
