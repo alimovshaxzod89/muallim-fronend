@@ -271,7 +271,7 @@ const views = [
     component: () => import('@/views/lists/import/ImportList.vue'),
     meta: {
       layout: 'content',
-      resource: 'money',
+      resource: 'Public',
       action: 'read',
     },
   },
@@ -284,7 +284,7 @@ const views = [
 			resource: 'Public',
 		},
 	},
-  
+
   // {
   //   path: '/center-profit',
   //   name: 'center-profit',

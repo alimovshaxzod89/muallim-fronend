@@ -1,5 +1,10 @@
 import {
-	mdiAccountDetailsOutline, mdiCashCheck, mdiFilterVariant, mdiHumanCapacityDecrease, mdiPercent,
+	mdiAccountDetailsOutline,
+	mdiCashCheck,
+	mdiFileImportOutline,
+	mdiFilterVariant,
+	mdiHumanCapacityDecrease,
+	mdiPercent,
 } from '@mdi/js'
 
 export default [
@@ -120,5 +125,19 @@ export default [
 				action: 'read',
 			},
 		],
+	},
+	{
+		subheader: '####',
+		badge: 'New',
+		bageColor: 'success',
+		resource: 'Public',
+		action: 'read',
+	},
+	{
+		title: 'Import qilish',
+		to: 'import',
+		resource: 'Public',
+		action: 'read',
+		icon: mdiFileImportOutline,
 	},
 ]
