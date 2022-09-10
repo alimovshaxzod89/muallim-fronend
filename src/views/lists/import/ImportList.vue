@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import XLSX from "xlsx"
 export default {
     setup(){
         

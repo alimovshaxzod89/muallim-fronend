@@ -79,7 +79,6 @@
 								>
 									<template v-slot:activator="{ on, attrs }">
 										<v-text-field
-										class="my-date-picker"
 											outlined
 											v-model="formData.time_begin"
 											label="VAQT ...DAN"
@@ -114,7 +113,6 @@
 								>
 									<template v-slot:activator="{ on, attrs }">
 										<v-text-field
-										class="my-date-picker"
 											outlined
 											v-model="formData.time_end"
 											label="VAQT ...GACHA"
