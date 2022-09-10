@@ -86,7 +86,7 @@ import SubjectStoreModule from './SubjectStoreModule'
 import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
-import { required, minLengthValidator } from '@core/utils/validation'
+import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
 import Button from '../../components/button/Button'
 
 const MODULE_NAME = 'subject'
@@ -107,7 +107,6 @@ export default {
 
     // show, hide
     const show = ref(false)
-    const formData = ref({})
 
     const form = ref(null)
     const emptyFormData = {
@@ -116,6 +115,7 @@ export default {
 			price: null,
       status: '1',
     }
+    const formData = ref({ ...emptyFormData })
 
     const open = (id = null) => {
       show.value = true

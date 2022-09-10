@@ -265,7 +265,6 @@ export default {
       end_date: null,
       status: '1',
     }
-
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
     const isDate2 = ref(false)
