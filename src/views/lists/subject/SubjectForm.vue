@@ -1,11 +1,11 @@
 <template>
   <!-- form dialog -->
-  <v-dialog 
-    v-model="show" 
-    @keydown.esc="close()" 
-    @click:outside="close()" 
+  <v-dialog
+    v-model="show"
+    @keydown.esc="close()"
+    @click:outside="close()"
     @keydown.enter="onSubmit()"
-    max-width="550px" 
+    max-width="550px"
     width="550px"
   >
     <v-card>
@@ -17,11 +17,10 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <h4 class="text-required no-text"><span>*</span></h4>  
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
                   label="NOMI"
                   v-model="formData.name"
-                  :items="selectsDatas.subject"
                   type="text"
                   dense
                   outlined
@@ -29,6 +28,18 @@
                   :rules="[required]"
                 ></v-text-field>
               </v-col>
+							<v-col cols="12">
+								<h4 class="text-required no-text"><span>*</span></h4>
+								<v-text-field
+									label="NARXI"
+									v-model="formData.price"
+									type="number"
+									dense
+									outlined
+									hide-details
+									:rules="[required]"
+								></v-text-field>
+							</v-col>
               <v-col cols="6" class="mt-0">
                 <v-checkbox
                   v-model="formData.status"
@@ -45,10 +56,10 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-          <v-btn 
-						color="success" 
-						type="button" 
-						@click="onSubmit" 
+          <v-btn
+						color="success"
+						type="button"
+						@click="onSubmit"
 						:disabled="submitDisabled"
 					>
 						<v-icon
@@ -102,6 +113,7 @@ export default {
     const emptyFormData = {
       id: null,
       name: null,
+			price: null,
       status: '1',
     }
 
