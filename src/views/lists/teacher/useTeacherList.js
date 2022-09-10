@@ -27,15 +27,24 @@ export default function useTeacherList(MODULE_NAME) {
   ]
 
   const filter = ref({
-      first_name: '',
-  })
-
-  const options = ref({
-    sortBy: ['id'],
-    sortDesc: [true],
-    limit: 10,
-    skip: 0,
-  })
+    query: '',
+    full_name: '',
+		phone: '',
+		region_id: '',
+		address: '',
+		permanent_region_id: '',
+		permanent_address: '',
+		gender: '',
+		birth_date: '',
+		sale: '',
+		sale_cause: '',
+	})
+	const options = ref({
+		sortBy: ['id'],
+		sortDesc: [true],
+		limit: 10,
+		skip: 0,
+	})
   const loading = ref(false)
 
   let lastQuery = '';
@@ -78,17 +87,17 @@ export default function useTeacherList(MODULE_NAME) {
   }
 
   watch(filter, () => {
-    if (options.value.page != 1) options.value.page
-      loading.value = true
+		if (options.value.page != 1) options.value.page = 1
+		loading.value = true
 
-      setTimeout(() => fetchDatas(), 1000);
-  }, {deep: true})
+		setTimeout(() => fetchDatas(), 1000);
+	}, {deep: true})
 
   watch(options, () => {
-    loading.value = true
-    fetchDatas()
-    // selectedTableData.value = []
-  })
+		loading.value = true
+		fetchDatas()
+		// selectedTableData.value = []
+	})
 
   //delete
   const deleteRow = (id) => {

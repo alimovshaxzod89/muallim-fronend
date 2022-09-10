@@ -25,8 +25,9 @@
           clearable
         >
         </v-autocomplete>
+       
 
-				<v-expansion-panels class="my-accordion" accordion>
+				<v-expansion-panels class="my-accordion" accordion multiple>
 					<v-expansion-panel>
 						<v-expansion-panel-header disable-icon-rotate>
 							Ko'proq
@@ -332,6 +333,9 @@ export default {
 
     //store state
     const state = ref(store.state[MODULE_NAME])
+
+    const panel = [1, 2];
+    const readonly = false;
 
     //logics
     const {
