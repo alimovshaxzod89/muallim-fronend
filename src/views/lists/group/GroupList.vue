@@ -38,7 +38,7 @@
 						</v-expansion-panel-header>
 						<v-expansion-panel-content>
 							<v-text-field
-								v-model="filter.teacher.full_name"
+								v-model="filter.full_name"
 								dense
 								outlined
 								hide-details
