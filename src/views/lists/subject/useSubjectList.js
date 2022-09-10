@@ -15,6 +15,7 @@ export default function useSubjectList(MODULE_NAME) {
       sortable: false,
     },
     { text: 'NOMI', value: 'name' },
+    { text: 'NARXI', value: 'price', align: 'center' },
     { text: 'AKTIV', value: 'status' },
   ]
 

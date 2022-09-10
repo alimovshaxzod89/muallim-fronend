@@ -37,6 +37,8 @@
       <!-- total -->
       <template #[`item.total`]="{ item }"> ${{ item.total }}</template>
 
+      <template #[`item.price`]="{ item }">{{ item.price | summa }}</template>
+
       <template late #[`item.actions`]="{ item }">
         <div class="d-flex align-center justify-center">
           <!-- delete -->
@@ -64,7 +66,7 @@
           </v-tooltip>
         </div>
 
-        
+
       </template>
 
       <template #[`item.status`]="{ item }">
