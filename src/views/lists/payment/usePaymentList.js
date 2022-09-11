@@ -43,29 +43,21 @@ export default function usePaymentList(MODULE_NAME) {
     options.value.skip = (options.value.page - 1) * options.value.itemsPerPage
     options.value.limit = options.value.itemsPerPage
 
-    const queryParams = {
-      ...options.value,
-    }
+		const queryParams = {
+			...options.value,
+		}
 
-    const filterCleared = {}
-    for (let key in filter.value) {
-      let value = filter.value[key]
-      if (value !== null && value !== '') {
-        filterCleared[key] = value
-      }
-    }
-    queryParams.filter = filterCleared
+		for (let key in filter.value) {
+			let value = filter.value[key]
+			if (value !== null && value !== '') {
+				queryParams[key] = value
+			}
+		}
 
-    const newQuery = JSON.stringify(queryParams)
+		const newQuery = JSON.stringify(queryParams)
 
-    if (force || lastQuery !== newQuery) {
-      // if (lastQuery) {
-      // 	const lastParam = JSON.parse(lastQuery)
-      // 	console.log(JSON.stringify(lastParam.filter))
-      // }
-      // console.log(JSON.stringify(filterCleared))
-
-      lastQuery = newQuery
+		if (force || lastQuery !== newQuery) {
+			lastQuery = newQuery
 
       store
         .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)

@@ -2,18 +2,8 @@
   <v-card id="data-list">
     <!-- search -->
     <v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
-      <div class="d-flex pb-5" style="width: 100%">
-				<v-text-field
-          v-model="filter.query"
-          dense
-          outlined
-          hide-details
-          label="Qidiruv"
-          class="data-list-search me-3"
-        ></v-text-field>
 
-				<payment-search v-model='filter' />
-      </div>
+			<payment-search v-model='filter' />
 
 			<v-spacer></v-spacer>
 			<div v-if="state.rows.length > 0">

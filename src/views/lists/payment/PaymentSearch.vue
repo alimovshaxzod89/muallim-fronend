@@ -1,156 +1,337 @@
 <template>
-	<v-expansion-panels class='my-accordion' accordion>
-		<v-expansion-panel>
-			<v-expansion-panel-header disable-icon-rotate>
-				Ko'proq
-				<template #actions>
-					<v-icon color='secondary'>
-						{{ icons.mdiFilterOutline }}
-					</v-icon>
-				</template>
-			</v-expansion-panel-header>
-			<v-expansion-panel-content>
+	<div>
+		<v-row>
+
+			<v-col cols='3'>
 				<v-autocomplete
-					v-model='filter.group_id'
-					:items='groups'
-					item-text='number'
+					v-model='filter.subject_id'
+					:items='subjects'
+					item-text='name'
 					item-value='id'
 					dense
-					solo
 					outlined
 					hide-details
-					label='Guruh'
+					label='FAN'
 					class='data-list-search me-3'
 					clearable
 				></v-autocomplete>
+			</v-col>
 
+			<v-col cols='3'>
 				<v-autocomplete
 					v-model='filter.teacher_id'
 					:items='teachers'
 					item-text='full_name'
 					item-value='id'
 					dense
-					solo
 					outlined
 					hide-details
-					label="O'qituvchi"
+					label='USTOZ'
 					class='data-list-search me-3'
 					clearable
 				></v-autocomplete>
+			</v-col>
 
-				<v-text-field
-					v-model='filter.phone'
-					dense
-					outlined
-					hide-details
-					label='Telefon'
-					class='data-list-search me-3'
-				></v-text-field>
-
-				<v-menu v-model='isDate' :close-on-content-click='false' offset-y min-width='auto'>
-					<template v-slot:activator='{ on, attrs }'>
-						<v-text-field
-							class='my-date-picker'
-							v-model='filter.birth_date'
-							label="Tug'ilgan sana"
-							readonly
-							v-bind='attrs'
-							hide-details
-							v-on='on'
-							style='height: 40px !important; width: 170px !important'
-							outlined
-							clearable
-							:append-icon='icons.mdiCalendar'
-						></v-text-field>
-					</template>
-					<v-date-picker
-						v-model='filter.birth_date'
-						color='primary'
-						@input='isDate = false'
-						no-title
-						:first-day-of-week='1'
-						locale='ru-ru'
-					></v-date-picker>
-				</v-menu>
-
+			<v-col cols='3'>
 				<v-autocomplete
-					v-model='filter.sale'
-					:items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
-					item-text='name'
-					item-value='value'
+					v-model='filter.group_id'
+					:items='groups'
+					item-text='number'
+					item-value='id'
 					dense
-					solo
 					outlined
 					hide-details
-					label='Chegirma'
+					label='GURUH'
 					class='data-list-search me-3'
 					clearable
 				></v-autocomplete>
+			</v-col>
 
-				<v-text-field
-					v-model='filter.sale_cause'
+			<v-col cols='3'>
+				<v-autocomplete
+					v-model='filter.student_id'
+					:items='students'
+					item-text='full_name'
+					item-value='id'
 					dense
 					outlined
 					hide-details
-					label='Chegirma sababi'
+					label='TALABA'
 					class='data-list-search me-3'
+					clearable
+				></v-autocomplete>
+			</v-col>
+
+			<!-- <div class="d-flex align-center pb-5">
+				<v-text-field
+					v-model="filter.query"
+					dense
+					outlined
+					hide-details
+					label="Qidiruv"
+					class="data-list-search me-3"
 				></v-text-field>
-			</v-expansion-panel-content>
-		</v-expansion-panel>
-	</v-expansion-panels>
+			</div> -->
+		</v-row>
+
+		<v-row>
+
+			<v-col cols='3'>
+				<v-text-field
+					v-model='filter.year'
+					dense
+					outlined
+					hide-details
+					label='QAYSI YIL UCHUN'
+					clearable
+				/>
+			</v-col>
+
+			<v-col cols='5'>
+				<v-autocomplete
+					v-model='filter.month'
+					:items='months'
+					item-text='text'
+					item-value='id'
+					dense
+					outlined
+					hide-details
+					label='QAYSI OY UCHUN'
+					class='data-list-search me-3'
+					clearable
+				></v-autocomplete>
+			</v-col>
+		</v-row>
+
+		<v-row>
+
+			<v-col cols='10'>
+				<v-select
+					label='HAFTANING QAYSI KUNIDA KELADIGAN TALABALAR CHIQARILSIN'
+					v-model='filter.week_day'
+					:items='weekDays'
+					item-value='value'
+					item-text='text'
+					outlined
+					dense
+					clearable
+				/>
+			</v-col>
+
+			<!--			<v-col cols='6'>-->
+
+			<!--				<v-menu-->
+			<!--					ref='menu'-->
+			<!--					v-model='timeMenu'-->
+			<!--					:close-on-content-click='false'-->
+			<!--					:nudge-right='40'-->
+			<!--					:return-value.sync='filter.time'-->
+			<!--					transition='scale-transition'-->
+			<!--					offset-y-->
+			<!--				>-->
+			<!--					<template v-slot:activator='{ on, attrs }'>-->
+			<!--						<v-text-field-->
+			<!--							v-model='filter.time'-->
+			<!--							label='Soat nechchida keladiganlar'-->
+			<!--							prepend-icon='mdi-clock-time-four-outline'-->
+			<!--							readonly-->
+			<!--							v-bind='attrs'-->
+			<!--							v-on='on'-->
+			<!--						></v-text-field>-->
+			<!--					</template>-->
+			<!--					<v-time-picker-->
+			<!--						v-if='timeMenu'-->
+			<!--						format='24hr'-->
+			<!--						v-model='filter.time'-->
+			<!--						full-width-->
+			<!--						@click:minute='$refs.menu.save(filter.time)'-->
+			<!--					></v-time-picker>-->
+			<!--				</v-menu>-->
+
+			<!--			</v-col>-->
+		</v-row>
+	</div>
 </template>
 
 <script>
+import { ref, watch } from '@vue/composition-api'
 
 import {
 	mdiCalendar,
-	mdiFilterOutline,
 } from '@mdi/js'
-import { ref, watch } from '@vue/composition-api'
 import axios from '@axios'
+import moment from 'moment'
 
 export default {
-	name: 'PaymentSearch',
+	name: 'StudentDebtSearch',
 	props: ['value'],
-	setup(props, {emit}) {
+	setup(props, { emit }) {
 
 		const filter = ref(props.value)
-		watch(filter, (value) => {
-			emit('input', value)
-		}, {deep: true})
+		watch(filter, value => emit('input', value), { deep: true })
 
-		// Datepicker
-		// const picker = new Date().toISOString().substr(0, 10)
-		const isDate = ref(false)
+		const clearParams = (params) => {
+			return Object.keys(params)
+				.filter((key) => params[key] !== null && params[key] !== '')
+				.reduce((obj, key) => {
+					return Object.assign(obj, {
+						[key]: params[key],
+					})
+				}, {})
+		}
 
-		// LoadApis
-		const groups = ref([])
-		const loadGroups = () => {
-			axios.get('/api/groups').then(response => {
-				groups.value = response.data.data
+		const subjects = ref([])
+		const loadSubjects = () => {
+			axios.get('/api/subjects').then(response => {
+				subjects.value = response.data.data
 			})
 		}
-		loadGroups()
+		loadSubjects()
+		watch(() => filter.value.subject_id, val => {
+			loadTeachers()
+			loadGroups()
+		})
 
 		const teachers = ref([])
 		const loadTeachers = () => {
-			axios.get('/api/teachers').then(response => {
+			//todo: fan tanlangan bo'lsa faqat shu fanni o'tadigan ustozlar olinsin, backend tomonni to'g'rilash kerak
+			const params = clearParams({
+				subject_id: filter.value.subject_id,
+			})
+			axios.get('/api/teachers', { params }).then(response => {
 				teachers.value = response.data.data
 			})
 		}
 		loadTeachers()
+		watch(() => filter.value.teacher_id, val => {
+			loadGroups()
+		})
+
+		const groups = ref([])
+		const loadGroups = () => {
+			const params = clearParams({
+				subject_id: filter.value.subject_id,
+				teacher_id: filter.value.teacher_id,
+			})
+			axios.get('/api/groups', { params }).then(response => {
+				groups.value = response.data.data
+			})
+		}
+		loadGroups()
+		watch(() => filter.value.group_id, val => {
+			loadStudents()
+		})
+
+		const students = ref([])
+		const loadStudents = () => {
+			const params = clearParams({
+				group_id: filter.value.group_id,
+			})
+			axios.get('/api/students', { params }).then(response => {
+				students.value = response.data.data
+			})
+		}
+		loadStudents()
+
+		// const picker = new Date().toISOString().substr(0, 10)
+		const isDate = ref(false)
+
+		// LoadApis
+		const months = ref([
+			{
+				value: 'Yanvar',
+				text: 'Yanvar',
+				id: 1,
+			},
+			{
+				value: 'Fevral',
+				text: 'Fevral',
+				id: 2,
+			},
+			{
+				value: 'Mart',
+				text: 'Mart',
+				id: 3,
+			},
+			{
+				value: 'Aprel',
+				text: 'Aprel',
+				id: 4,
+			},
+			{
+				value: 'May',
+				text: 'May',
+				id: 5,
+			},
+			{
+				value: 'Iyun',
+				text: 'Iyun',
+				id: 6,
+			},
+			{
+				value: 'Iyul',
+				text: 'Iyul',
+				id: 7,
+			},
+			{
+				value: 'Avgust',
+				text: 'Avgust',
+				id: 8,
+			},
+			{
+				value: 'Sentabr',
+				text: 'Sentabr',
+				id: 9,
+			},
+			{
+				value: 'Oktabr',
+				text: 'Oktabr',
+				id: 10,
+			},
+			{
+				value: 'Noyabr',
+				text: 'Noyabr',
+				id: 11,
+			},
+			{
+				value: 'Dekabr',
+				text: 'Dekabr',
+				id: 12,
+			},
+		])
+
+		const today = Date.now()
+
+		const weekDays = [
+			{ value: 1, text: 'Dushanba' },
+			{ value: 2, text: 'Seshanba' },
+			{ value: 3, text: 'Chorshanba' },
+			{ value: 4, text: 'Payshanba' },
+			{ value: 5, text: 'Juma' },
+			{ value: 6, text: 'Shanba' },
+			{ value: 7, text: 'Yakshanba' },
+		]
+
+		const timeMenu = ref(false)
 
 		return {
 			filter,
 
-			isDate,
-			// picker,
-
-			groups,
+			subjects,
 			teachers,
+			groups,
+			students,
+
+			today,
+			isDate,
+
+			timeMenu: false,
+
+			months,
+			weekDays,
+
 
 			icons: {
-				mdiFilterOutline,
 				mdiCalendar,
 			},
 		}
@@ -158,12 +339,6 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style scoped>
 
-.my-filter {
-	.v-input {
-		margin-right: 12px;
-		margin-bottom: 12px;
-	}
-}
 </style>
