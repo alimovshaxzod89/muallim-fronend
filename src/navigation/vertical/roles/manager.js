@@ -8,6 +8,13 @@ import {
 } from '@mdi/js'
 
 export default [
+	{
+		title: 'Ustozlar',
+		icon: mdiAccountDetailsOutline,
+		to: 'teachers',
+		resource: 'Teacher',
+		action: 'read',
+	},
   {
     title: 'Guruhlar',
     to: 'groups',
@@ -115,13 +122,6 @@ export default [
 				icon: mdiAccountDetailsOutline,
 				to: 'rooms',
 				resource: 'Room',
-				action: 'read',
-			},
-			{
-				title: 'Ustozlar',
-				icon: mdiAccountDetailsOutline,
-				to: 'teachers',
-				resource: 'Teacher',
 				action: 'read',
 			},
 		],

@@ -2,88 +2,8 @@
   <v-card id="data-list">
     <!-- search -->
     <v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
-      <div class="d-flex pb-5" style="width: 100%">
-				<v-text-field
-          v-model="filter.query"
-          dense
-          outlined
-          hide-details
-          label="Qidiruv"
-          class="data-list-search me-3"
-        ></v-text-field>
-        <v-autocomplete
-          v-model="filter.place_id"
-          :items="places"
-          item-text="name"
-          item-value="id"
-          label="BINO"
-          class="data-list-search me-3"
-          dense
-          solo
-          outlined
-          hide-details
-          clearable
-        >
-        </v-autocomplete>
-       
 
-				<v-expansion-panels class="my-accordion" accordion multiple>
-					<v-expansion-panel>
-						<v-expansion-panel-header disable-icon-rotate>
-							Ko'proq
-							<template #actions>
-                <v-icon color="secondary">
-                  {{ icons.mdiFilterOutline  }}
-                </v-icon>
-              </template>
-						</v-expansion-panel-header>
-						<v-expansion-panel-content>
-							<v-text-field
-                v-model="filter.group_id"
-								dense
-								outlined
-								hide-details
-								label="GURUH NOMI"
-								class="data-list-search me-3"
-							></v-text-field>
-
-							<v-autocomplete
-                v-model="filter.place_id"
-                :items="places"
-                item-text="name"
-                item-value="id"
-                label="BINO"
-                class="data-list-search me-3"
-                dense
-                solo
-                outlined
-                hide-details
-                clearable
-              >
-              </v-autocomplete>
-
-							<v-text-field
-                v-model="filter.subject_id"
-								dense
-								outlined
-								hide-details
-								label="FAN"
-								class="data-list-search me-3"
-							></v-text-field>
-
-							<v-text-field
-              v-model="filter.full_name"
-								dense
-								outlined
-								hide-details
-								label="USTOZ"
-								class="data-list-search me-3"
-							></v-text-field>
-
-						</v-expansion-panel-content>
-					</v-expansion-panel>
-				</v-expansion-panels>
-      </div>
+			<group-search v-model='filter' />
 
 			<v-spacer></v-spacer>
 			<v-btn v-if="$can('create', 'Group')" class="primary" @click="openForm()">Qo'shish</v-btn>
@@ -228,11 +148,13 @@ import useGroupList from './useGroupList'
 import GroupForm from './GroupForm'
 import GroupTimeList from '@/views/lists/group-time/crud/GroupTimeList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
+import GroupSearch from '@/views/lists/group/GroupSearch'
 
 const MODULE_NAME = 'group'
 
 export default {
   components: {
+		GroupSearch,
     GroupForm,
     GroupTimeList,
     DialogConfirm,
@@ -255,9 +177,6 @@ export default {
     //store state
     const state = ref(store.state[MODULE_NAME])
 
-    const panel = [1, 2];
-    const readonly = false;
-
     //logics
     const {
       filter,
@@ -279,10 +198,6 @@ export default {
       { title: 'Delete', icon: mdiDeleteOutline },
       { title: 'Edit', icon: mdiPencilOutline },
     ]
-
-    // Datepicker
-    const picker = new Date().toISOString().substr(0, 10)
-    const isDate = ref(false)
 
     //Form
     const GroupForm = ref(null)
@@ -327,54 +242,18 @@ export default {
       return result[0].name
     }
 
-    // ! METHODS
-    const places = ref([])
-    const loadPlace = () => {
-      axios.get('/api/places').then(response => {
-        places.value = response.data.data
-      })
-    }
-
-    // LoadApis
-    const regions = ref([])
-    const loadRegions = () => {
-      axios.get('/api/regions').then(response => {
-        regions.value = response.data.data
-      })
-    }
-
-    onMounted(() => {
-      loadRegions()
-      loadPlace()
-    })
-
-    // PlaceForm
-    const placeForm = ref(null)
-    const addPlace = (id = null) => {
-      placeForm.value.open(id)
-    }
-
     // Return
     return {
       BASE_URL,
       state,
       filter,
-      loadPlace,
 
-      picker,
-      isDate,
       tableColumns,
       fetchDatas,
       options,
       loading,
       notify,
       selectedTableData,
-
-      placeForm,
-      addPlace,
-
-      // LoadApis
-      places,
 
       actions,
       actionOptions,
@@ -391,9 +270,6 @@ export default {
 
       groupTimeList,
       openGroupTimeList,
-
-      // LoadApis
-      regions,
 
       getDay,
 
