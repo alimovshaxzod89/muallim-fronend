@@ -38,7 +38,7 @@ export default function useStudentDebtList(MODULE_NAME) {
 		sortDesc: [true],
 		limit: 10,
 		skip: 0,
-		only_dept: 1,
+		only_debt: 1,
 	})
 	const loading = ref(false)
 
