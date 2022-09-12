@@ -42,7 +42,7 @@
 									v-model='formData.amount'
 									outlined
 									dense
-									:rules='[required]'
+									:rules="selectRule"
 								></v-text-field>
 							</v-col>
 							<v-col cols="4">
