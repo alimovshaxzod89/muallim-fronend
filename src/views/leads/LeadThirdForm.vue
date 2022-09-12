@@ -36,7 +36,7 @@
                   :items="selectsDatas.subject"
                   item-text="name"
                   item-value="id"
-                  label="FAN"
+                  label="Kurs"
                   dense
                   outlined
                   hide-details

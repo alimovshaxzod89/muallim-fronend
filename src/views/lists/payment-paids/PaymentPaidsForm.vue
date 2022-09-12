@@ -22,7 +22,7 @@
                   :items="subjects"
                   item-text="name"
                   item-value="id"
-                  label="FAN"
+                  label="KURS"
                   dense
                   solo
                   outlined

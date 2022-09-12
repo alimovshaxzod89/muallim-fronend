@@ -70,7 +70,7 @@
 									<div class="title">
 										<div class="field">
 											<span class="field-value" v-show="!showField('name')" @click="focusField('name')">{{user.name}}</span>
-											<b><input placeholder="Fan / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name7" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
+											<b><input placeholder="Kurs / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name7" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
 										</div>
 
 									</div>
@@ -148,7 +148,7 @@
 									<div class="title">
 										<div class="field">
 											<span class="field-value" v-show="!showField('name')" @click="focusField('name')">{{user.name}}</span>
-											<b><input placeholder="Fan / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
+											<b><input placeholder="Kurs / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
 										</div>
 
 									</div>
@@ -353,7 +353,7 @@
 									<div class="title">
 										<div class="field">
 											<span class="field-value" v-show="!showField('name')" @click="focusField('name')">{{user.name}}</span>
-											<b><input placeholder="Fan / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name5" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
+											<b><input placeholder="Kurs / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name5" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
 										</div>
 
 									</div>
@@ -431,7 +431,7 @@
 									<div class="title">
 										<div class="field">
 											<span class="field-value" v-show="!showField('name')" @click="focusField('name')">{{user.name}}</span>
-											<b><input placeholder="Fan / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name6" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
+											<b><input placeholder="Kurs / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name6" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
 										</div>
 
 									</div>
@@ -637,7 +637,7 @@
 									<div class="title">
 										<div class="field">
 											<span class="field-value" v-show="!showField('name')" @click="focusField('name')">{{user.name}}</span>
-											<b><input placeholder="Fan / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name1" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
+											<b><input placeholder="Kurs / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name1" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
 										</div>
 
 									</div>
@@ -715,7 +715,7 @@
 									<div class="title">
 										<div class="field">
 											<span class="field-value" v-show="!showField('name')" @click="focusField('name')">{{user.name}}</span>
-											<b><input placeholder="Fan / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name2" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
+											<b><input placeholder="Kurs / Ustoz / Guruh" v-model="user.name" v-show="showField('name')" id="user-name2" type="text" class="field-value form-control" @focus="focusField('name')" @blur="blurField"></b>
 										</div>
 
 									</div>
@@ -907,7 +907,7 @@ export default {
 				{ name: { first: 'Name', last: 'Surname' }},
 				{ name: { first: 'Name', last: 'Surname' }}
 			],
-			subject: 'Fan',
+			subject: 'Kurs',
 			teacher: 'Ustoz',
 			group: 'Guruhi',
 			list1: [{ name: "" }],

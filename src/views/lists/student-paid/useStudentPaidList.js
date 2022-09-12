@@ -14,7 +14,7 @@ export default function useStudentPaidList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
-    // { text: 'FAN', value: 'payment.group.subject.name' },
+    // { text: 'KURS', value: 'payment.group.subject.name' },
     { text: 'GURUH', value: 'group' },
     { text: 'TALABA', value: 'payment.student.full_name' },
 		{ text: 'TO\'LADI', value: 'amount', align: 'center' },

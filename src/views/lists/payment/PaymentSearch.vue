@@ -11,7 +11,7 @@
 					dense
 					outlined
 					hide-details
-					label='FAN'
+					label='KURS'
 					class='data-list-search me-3'
 					clearable
 				></v-autocomplete>
@@ -194,7 +194,7 @@ export default {
 
 		const teachers = ref([])
 		const loadTeachers = () => {
-			//todo: fan tanlangan bo'lsa faqat shu fanni o'tadigan ustozlar olinsin, backend tomonni to'g'rilash kerak
+			//todo: Kurs tanlangan bo'lsa faqat shu Kursni o'tadigan ustozlar olinsin, backend tomonni to'g'rilash kerak
 			const params = clearParams({
 				subject_id: filter.value.subject_id,
 			})

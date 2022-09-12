@@ -110,7 +110,7 @@
 							<!--									:items='subjects'-->
 							<!--									item-text='name'-->
 							<!--									item-value='id'-->
-							<!--									label='FAN / Guruhlarni filtrlash'-->
+							<!--									label='KURS / Guruhlarni filtrlash'-->
 							<!--									dense-->
 							<!--									outlined-->
 							<!--									hide-details-->

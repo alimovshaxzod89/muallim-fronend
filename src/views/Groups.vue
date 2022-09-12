@@ -30,7 +30,7 @@
 				</div>
 				<div class="filter-input">
 					<div class="filter-label">
-						<span>Fan</span>
+						<span>KURS</span>
 						<button class="clear-date" @click="clearDate('subjectSelected')" v-if="this.filter.subjectSelected">
 							<svg height="512pt" viewBox="0 0 512 512" width="512pt" xmlns="http://www.w3.org/2000/svg">
 								<path
@@ -203,7 +203,7 @@
 								<th>#</th>
 								<th></th>
 								<th>Nomer</th>
-								<th>Fan</th>
+								<th>Kurs</th>
 								<th>Bosqich</th>
 								<th>Ustoz</th>
 								<th>Narx</th>
@@ -264,7 +264,7 @@
 					</div>
 					<div class="col-6">
 						<div class="form-group">
-							<label>Fan <span class="required-input">*</span></label>
+							<label>KURS <span class="required-input">*</span></label>
 							<multiselect
 								v-model="subjectSelected"
 								class="table-select"

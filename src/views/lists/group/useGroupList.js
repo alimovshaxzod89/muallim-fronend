@@ -15,7 +15,7 @@ export default function useGroupList(MODULE_NAME) {
     },
     { text: 'GURUH NOMI', value: 'number' },
     { text: 'BINO', value: 'place.name' },
-    { text: 'FAN', value: 'subject.name' },
+    { text: 'KURS', value: 'subject.name' },
     { text: 'USTOZ', value: 'teacher.full_name'},
     { text: 'VAQTLAR', value: 'group_times', align: 'center', sortable: false },
 		{ text: 'NARX', value: 'price' },

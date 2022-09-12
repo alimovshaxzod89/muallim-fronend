@@ -34,7 +34,7 @@
                   :items="selectDatas.subjects"
                   item-text="name"
                   item-value="id"
-                  label="FAN"
+                  label="Kurs"
                   solo
                   dense
                   outlined

@@ -7,7 +7,7 @@
 			<div class="card-body filter-body">
 				<div class="filter-input">
 					<div class="filter-label">
-						<span>Fan</span>
+						<span>Kurs</span>
 						<button class="clear-date" @click="clearDate('subjectName')" v-if="this.filter.subjectName">
 							<svg height="512pt" viewBox="0 0 512 512" width="512pt" xmlns="http://www.w3.org/2000/svg">
 								<path

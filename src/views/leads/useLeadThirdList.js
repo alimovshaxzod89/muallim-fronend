@@ -15,7 +15,7 @@ export default function useThirdList(MODULE_NAME4) {
         sortable: false,
     },
     { text: 'NOMI', value: 'name' },
-    { text: 'FAN', value: 'subject' },
+    { text: 'KURS', value: 'subject' },
     { text: 'USTOZ', value: 'teacher.full_name' },
     { text: 'KUNLAR', value: 'day.name' },
     ]

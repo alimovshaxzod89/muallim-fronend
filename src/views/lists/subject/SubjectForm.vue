@@ -11,7 +11,7 @@
     <v-card>
       <v-form ref="form">
         <v-card-title>
-          <span class="headline">Fan qo'shish</span>
+          <span class="headline">Kurs qo'shish</span>
         </v-card-title>
         <v-card-text>
           <v-container>

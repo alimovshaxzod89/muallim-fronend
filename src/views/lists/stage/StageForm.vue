@@ -23,7 +23,7 @@
                   :items="selectsDatas.subject"
                   item-text="name"
                   item-value="id"
-                  label="FAN"
+                  label="FKursAN"
                   dense
                   outlined
                   hide-details

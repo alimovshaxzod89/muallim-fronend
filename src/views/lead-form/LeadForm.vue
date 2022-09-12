@@ -67,7 +67,7 @@
 								cols='12'
 								md='3'
 							>
-								<label for='subjectsHorizontalIcons'>Fan</label>
+								<label for='subjectsHorizontalIcons'>Kurs</label>
 							</v-col>
 
 							<v-col
@@ -82,7 +82,7 @@
 									:prepend-inner-icon='icons.mdiBookOutline'
 									item-text='name'
 									item-value='id'
-									label='Fan'
+									label='FaKursn'
 									dense
 									outlined
 									hide-details

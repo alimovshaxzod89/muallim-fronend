@@ -53,7 +53,7 @@
                   :items="subjects"
                   item-text="name"
                   item-value="id"
-                  label="FAN"
+                  label="KURS"
 									:rules="selectRule"
                   dense
                   outlined
