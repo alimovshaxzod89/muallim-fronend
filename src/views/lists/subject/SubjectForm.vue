@@ -37,7 +37,7 @@
 									dense
 									outlined
 									hide-details
-									:rules="[required]"
+									:rules='selectRule'
 								></v-text-field>
 							</v-col>
               <v-col cols="6" class="mt-0">
@@ -134,6 +134,7 @@ export default {
     const validate = () => {
       form.value.validate()
     }
+    const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     //form options for selects
     const selectsDatas = ref({})
     // ! METHODS
@@ -210,6 +211,7 @@ export default {
       formData,
       validate,
       selectsDatas,
+      selectRule,
       show,
       onSubmit,
       submitDisabled,

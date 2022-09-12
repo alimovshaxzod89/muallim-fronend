@@ -11,7 +11,7 @@
               outlined
               hide-details
               label="Fish"
-              class="data-list-search me-3"
+              class="mx-auto"
             ></v-text-field>
           </v-col>
 
@@ -23,7 +23,7 @@
               outlined
               hide-details
               label="Telefon"
-              class="data-list-search me-3"
+              class="mx-auto"
             ></v-text-field>
           </v-col>
 
@@ -38,7 +38,7 @@
               outlined
               hide-details
               label="Tuman"
-              class="data-list-search me-3"
+              class="mx-auto"
               clearable
             ></v-autocomplete>
           </v-col>
@@ -51,7 +51,7 @@
             outlined
             hide-details
             label="Manzil"
-            class="data-list-search me-3"
+            class="mx-auto"
             ></v-text-field>
           </v-col>
 
@@ -66,14 +66,14 @@
               outlined
               hide-details
               label="D.Y. Tuman"
-              class="data-list-search me-3"
+              class="mx-auto"
               clearable
             ></v-autocomplete>
           </v-col>
         </v-row>
          
 
-        <v-row class="mx-auto">
+        <v-row>
           <v-col>
             <v-text-field
               v-col
@@ -82,7 +82,7 @@
               outlined
               hide-details
               label="D.Y. Manzil"
-              class="data-list-search me-3"
+              class="mx-auto"
             ></v-text-field>
           </v-col>
 
@@ -97,7 +97,7 @@
               outlined
               hide-details
               label="Jinsi"
-              class="data-list-search me-3"
+              class="mx-auto"
               clearable
             ></v-autocomplete>
           </v-col>
@@ -112,7 +112,7 @@
               outlined
               hide-details
               label="Chegirma"
-              class="data-list-search me-3"
+              class="mx-auto"
               clearable
             ></v-autocomplete>
           </v-col>
@@ -124,7 +124,7 @@
               outlined
               hide-details
               label="Chegirma sababi"
-              class="data-list-search me-3"
+              class="mx-auto"
             ></v-text-field>
           </v-col>
           <v-col>

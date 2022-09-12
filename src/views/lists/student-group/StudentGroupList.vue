@@ -1,156 +1,130 @@
 <template>
   <v-card id="data-list">
     <!-- search -->
-    <v-card-text class="d-flex align-center flex-wrap pb-0">
-
-        <v-col cols="3">
-          <v-text-field
-            v-model="filter.query"
+    <v-card-text class="d-flex flex-column">
+      <v-row class="flex-wrap">
+        <v-col>
+          <v-autocomplete
+            v-model="filter.teacher_id"
+            :items="teachers"
+            item-text="full_name"
+            item-value="id"
             dense
             outlined
             hide-details
-            label="Qidirish"
-            class="data-list-search me-3"
-          ></v-text-field>
+            label="USTOZ"
+            class="mx-auto"
+            clearable
+          >
+          </v-autocomplete>
         </v-col>
 
-        <v-col cols="9">
-          <v-expansion-panels class="my-accordion" accordion>
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                Ko'proq
-                <template #actions>
-                <v-icon color="secondary">
-                  {{ icons.mdiFilterOutline  }}
-                </v-icon>
-              </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-
-                <v-col cols="3">
-                  <v-autocomplete
-                    v-model="filter.teacher_id"
-                    :items="teachers"
-                    item-text="full_name"
-                    item-value="id"
-                    dense
-                    outlined
-                    hide-details
-                    label="USTOZ"
-                    class="data-list-search me-3"
-                    clearable
-                  >
-                  </v-autocomplete>
-                </v-col>
-
-                <v-col cols="3">
-                  <v-autocomplete
-                    v-model="filter.group_id"
-                    :items="groups"
-                    item-text="number"
-                    item-value="id"
-                    dense
-                    outlined
-                    hide-details
-                    label="GURUH"
-                    class="data-list-search me-3"
-                    clearable
-                  ></v-autocomplete>
-                </v-col>
-
-                <v-col cols="3">
-                  <v-autocomplete
-                    v-model="filter.student_id"
-                    :items="students"
-                    item-text="full_name"
-                    item-value="id"
-                    dense
-                    outlined
-                    hide-details
-                    label="TALABA"
-                    class="data-list-search me-3"
-                    clearable
-                  ></v-autocomplete>
-                </v-col>
-
-                <v-col cols="3">
-                  <v-autocomplete
-                    v-model="filter.status"
-                    :items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
-                    item-text="name"
-                    item-value="value"
-                    dense
-                    outlined
-                    hide-details
-                    label="Aktiv"
-                    class="data-list-search me-3"
-                    clearable
-                  ></v-autocomplete>
-                </v-col>
-
-                <v-col cols="3">
-                  <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="filter.begin_date"
-                        label="Boshlangan sana"
-                        readonly
-                        v-bind="attrs"
-                        hide-details
-                        v-on="on"
-                        outlined
-                        clearable
-                        :append-icon="icons.mdiCalendar"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="filter.begin_date"
-                      color="primary"
-                      @input="isDate = false"
-                      no-title
-                      :first-day-of-week="1"
-                      locale="ru-ru"
-                    ></v-date-picker>
-                  </v-menu>
-                </v-col>
-
-                <v-col cols="3">
-                  <v-menu
-                    v-model="isDateTwo"
-                    :close-on-content-click="false"
-                    offset-y min-width="auto"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="filter.end_date"
-                        label="Tugagan sana"
-                        readonly
-                        v-bind="attrs"
-                        hide-details
-                        v-on="on"
-                        outlined
-                        clearable
-                        :append-icon="icons.mdiCalendar"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="filter.end_date"
-                      color="primary"
-                      @input="isDateTwo = false"
-                      no-title
-                      :first-day-of-week="1"
-                      locale="ru-ru"
-                    ></v-date-picker>
-                  </v-menu>
-                </v-col>
-
-              </v-expansion-panel-content>
-              <v-expansion-panel-content>
-
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
+        <v-col>
+          <v-autocomplete
+            v-model="filter.group_id"
+            :items="groups"
+            item-text="number"
+            item-value="id"
+            dense
+            outlined
+            hide-details
+            label="GURUH"
+            class="mx-auto"
+            clearable
+          ></v-autocomplete>
         </v-col>
+
+        <v-col cols="3">
+          <v-autocomplete
+            v-model="filter.student_id"
+            :items="students"
+            item-text="full_name"
+            item-value="id"
+            dense
+            outlined
+            hide-details
+            label="TALABA"
+            class="mx-auto"
+            clearable
+          ></v-autocomplete>
+        </v-col>
+
+        <v-col cols="3">
+          <v-autocomplete
+            v-model="filter.status"
+            :items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
+            item-text="name"
+            item-value="value"
+            dense
+            outlined
+            hide-details
+            label="Aktiv"
+            class="mx-auto"
+            clearable
+          ></v-autocomplete>
+        </v-col>
+
+      </v-row>
+
+      <v-row>
+        <v-col cols="3">
+          <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="filter.begin_date"
+                label="Boshlangan sana"
+                readonly
+                v-bind="attrs"
+                hide-details
+                v-on="on"
+                outlined
+                clearable
+                :append-icon="icons.mdiCalendar"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="filter.begin_date"
+              color="primary"
+              @input="isDate = false"
+              no-title
+              :first-day-of-week="1"
+              locale="ru-ru"
+            ></v-date-picker>
+          </v-menu>
+        </v-col>
+
+        <v-col cols="3">
+          <v-menu
+            v-model="isDateTwo"
+            :close-on-content-click="false"
+            offset-y min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="filter.end_date"
+                label="Tugagan sana"
+                readonly
+                v-bind="attrs"
+                hide-details
+                v-on="on"
+                outlined
+                clearable
+                :append-icon="icons.mdiCalendar"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="filter.end_date"
+              color="primary"
+              @input="isDateTwo = false"
+              no-title
+              :first-day-of-week="1"
+              locale="ru-ru"
+            ></v-date-picker>
+          </v-menu>
+        </v-col>
+
+      </v-row>
+
       <v-spacer></v-spacer>
 
       <div class="d-flex align-center ml-auto my-4">
