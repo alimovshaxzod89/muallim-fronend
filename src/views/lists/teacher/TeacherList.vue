@@ -6,12 +6,20 @@
 			<teacher-search v-model='filter' />
 
       <v-spacer></v-spacer>
-
-      <v-btn v-if="$can('create', 'Teacher')" class="primary" @click="openForm()">Qo'shish</v-btn>
-    </v-card-text>
+      
+      <div class="d-flex align-center">
+        <div v-if='state.rows.length > 0' class='mx-2 my-4'>
+          <v-btn class='success exportXlsx' color='white' outlined
+            @click='ExportExcel()'>Jadvalni yuklab olish
+          </v-btn>
+        </div>
+        <v-btn v-if="$can('create', 'Teacher')" class="primary" @click="openForm()">Qo'shish</v-btn>
+      </div>
+      </v-card-text>
 
     <!-- table -->
     <v-data-table
+      ref='excel'
       v-model="selectedTableData"
       :headers="tableColumns"
       :items="state.rows"
@@ -90,6 +98,7 @@ import TeacherStoreModule from './TeacherStoreModule'
 // composition function
 import useTeacherList from './useTeacherList'
 import TeacherForm from './TeacherForm'
+import XLSX from 'xlsx'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 import TeacherSearch from '@/views/lists/teacher/TeacherSearch'
 
@@ -156,12 +165,29 @@ export default {
         .catch(() => {})
     }
 
+    // export xlsx
+		const excel = ref(null)
+		const ExportExcel = (type, fn, dl) => {
+			let elt = excel.value.$el.children[0]
+			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+			return dl
+				? XLSX.write(wb, {
+					bookType: type,
+					bookSST: true,
+					type: 'base64',
+				})
+				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+		}
+
     const BASE_URL = envParams.BASE_URL
 
     // Return
     return {
       BASE_URL,
       state,
+
+      excel,
+			ExportExcel,
 
       tableColumns,
       searchQuery,

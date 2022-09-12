@@ -154,15 +154,25 @@
             </v-expansion-panel>
           </v-expansion-panels>
         </v-col> -->
+        
       <v-spacer></v-spacer>
 
-    <div class="btnAdd ml-auto">
-      <v-btn class="primary mb-3" @click="openForm()">Qo'shish</v-btn>
+    <div class="d-flex align-center">
+      
+      <div v-if='state.rows.length > 0' class='mx-2'>
+        <v-btn class='success exportXlsx' color='white' outlined
+          @click='ExportExcel()'>Jadvalni yuklab olish
+        </v-btn>
+		  </div>
+       <div class="btnAdd ml-auto">
+        <v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
+      </div>
     </div>
     </v-card-text>
 
     <!-- table -->
     <v-data-table
+      ref='excel'
       v-model="selectedTableData"
       :headers="tableColumns"
       :items="state.rows"
@@ -252,6 +262,8 @@ import useDavomatList from './useDavomatList'
 import DavomatForm from './DavomatForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
+import XLSX from 'xlsx'
+
 import moment from 'moment'
 moment.locale('uz-latn')
 
@@ -319,6 +331,20 @@ export default {
         .catch(() => {})
     }
 
+    // export xlsx
+		const excel = ref(null)
+		const ExportExcel = (type, fn, dl) => {
+			let elt = excel.value.$el.children[0]
+			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+			return dl
+				? XLSX.write(wb, {
+					bookType: type,
+					bookSST: true,
+					type: 'base64',
+				})
+				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+		}
+
     const BASE_URL = envParams.BASE_URL
 
     const groups = ref([])
@@ -343,6 +369,9 @@ export default {
     return {
       BASE_URL,
       state,
+
+      excel,
+      ExportExcel,
 
       tableColumns,
       searchQuery,

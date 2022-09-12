@@ -150,11 +150,22 @@
       </div>
 
 			<v-spacer></v-spacer>
-			<v-btn v-if="$can('create', 'Room')" class="primary" @click="openForm()">Qo'shish</v-btn>
+			
+      <div class="d-flex align-center">
+        <div v-if='state.rows.length > 0' class='mx-2 my-4'>
+          <v-btn class='success exportXlsx' color='white' outlined
+            @click='ExportExcel()'>Jadvalni yuklab olish
+          </v-btn>
+		    </div>
+        <div class="btnAdd ml-auto">
+          <v-btn v-if="$can('create', 'Student')" class="primary" @click="openForm()">Qo'shish</v-btn>     
+        </div> 
+      </div>
     </v-card-text>
 
     <!-- table -->
     <v-data-table
+      ref='excel'
       v-model="selectedTableData"
       :headers="tableColumns"
       :items="state.rows"
@@ -263,6 +274,8 @@ moment.locale('uz-latn')
 
 import envParams from '@envParams'
 
+import XLSX from 'xlsx'
+
 // store module
 import StudentStoreModule from './StudentStoreModule'
 
@@ -354,6 +367,20 @@ export default {
       })
     }
 
+    // export xlsx
+		const excel = ref(null)
+		const ExportExcel = (type, fn, dl) => {
+			let elt = excel.value.$el.children[0]
+			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+			return dl
+				? XLSX.write(wb, {
+					bookType: type,
+					bookSST: true,
+					type: 'base64',
+				})
+				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+		}
+
     onMounted(() => {
       loadRegions()
     })
@@ -362,6 +389,9 @@ export default {
     return {
       BACKEND_URL,
       state,
+
+      excel,
+			ExportExcel,
 
       picker,
       isDate,

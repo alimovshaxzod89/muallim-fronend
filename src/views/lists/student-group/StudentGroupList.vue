@@ -153,13 +153,20 @@
         </v-col>
       <v-spacer></v-spacer>
 
-    <div class="btnAdd ml-auto">
-      <v-btn class="primary mb-3" @click="openForm()">Qo'shish</v-btn>
-    </div>
+      <div class="d-flex align-center ml-auto my-4">
+        
+        <div v-if='state.rows.length > 0' class='mx-2'>
+          <v-btn class='success exportXlsx' color='white' outlined
+            @click='ExportExcel()'>Jadvalni yuklab olish
+          </v-btn>
+		    </div>
+        <v-btn class="primary" @click="openForm()">Qo'shish</v-btn>
+      </div>
     </v-card-text>
 
     <!-- table -->
     <v-data-table
+    ref='excel'
       v-model="selectedTableData"
       :headers="tableColumns"
       :items="state.rows"
@@ -247,6 +254,7 @@ import {
 import { onMounted, ref, watch } from '@vue/composition-api'
 import moment from 'moment'
 import numeral from 'numeral'
+import XLSX from 'xlsx'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 import StudentGroupForm from './StudentGroupForm'
 // store module
@@ -370,6 +378,20 @@ export default {
       })
     }
 
+    // export xlsx
+		const excel = ref(null)
+		const ExportExcel = (type, fn, dl) => {
+			let elt = excel.value.$el.children[0]
+			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+			return dl
+				? XLSX.write(wb, {
+					bookType: type,
+					bookSST: true,
+					type: 'base64',
+				})
+				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+		}
+
     onMounted(() => {
       loadTeachers(), loadGroups(), loadStudents()
     })
@@ -378,6 +400,9 @@ export default {
     return {
       BASE_URL,
       state,
+
+      excel,
+			ExportExcel,
 
       tableColumns,
       searchQuery,

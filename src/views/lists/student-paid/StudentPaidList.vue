@@ -17,15 +17,21 @@
 			<v-col cols='9'>
 				<student-paid-search v-model='filter' />
 			</v-col>
-			<v-spacer></v-spacer>
-
-			<div class='btnAdd ml-auto' v-if="$can('create', 'StudentPaid')">
-				<v-btn class='primary mb-3' @click='openForm()'>Qo'shish</v-btn>
+			<div v-if='state.rows.length > 0' class='ml-auto mx-2 my-4'>
+				<v-btn class='success exportXlsx' color='white' outlined
+					@click='ExportExcel()'>Jadvalni yuklab olish
+				</v-btn>
+			</div>
+			<div class="d-flex align-center">
+				<div class="btnAdd ml-auto">
+					<v-btn v-if="$can('create', 'StudentPaid')" class="primary" @click="openForm()">Qo'shish</v-btn>     
+				</div> 
 			</div>
 		</v-card-text>
 
 		<!-- table -->
 		<v-data-table
+			ref='excel'
 			v-model='selectedTableData'
 			:headers='tableColumns'
 			:items='state.rows'
@@ -138,6 +144,8 @@ import moment from 'moment'
 
 import envParams from '@envParams'
 
+import XLSX from 'xlsx'
+
 // store module
 import StudentPaidStoreModule from './StudentPaidStoreModule'
 
@@ -249,10 +257,27 @@ export default {
 			return total
 		})
 
+		// export xlsx
+		const excel = ref(null)
+		const ExportExcel = (type, fn, dl) => {
+			let elt = excel.value.$el.children[0]
+			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+			return dl
+				? XLSX.write(wb, {
+					bookType: type,
+					bookSST: true,
+					type: 'base64',
+				})
+				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+		}
+
 		// Return
 		return {
 			BASE_URL,
 			state,
+
+			excel,
+			ExportExcel,
 
 			// totalAmount,
 			// selectsDatas,
