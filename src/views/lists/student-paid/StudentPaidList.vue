@@ -100,9 +100,9 @@
 					{{ item.date | date }}
 					<br>
 				</div>
-				<div v-if='getDate(item.created_at) == item.date'>
+<!--				<div v-if='getDate(item.created_at) == item.date'>-->
 					{{ getHourMinute(item.created_at) }}
-				</div>
+<!--				</div>-->
 
 			</template>
 
