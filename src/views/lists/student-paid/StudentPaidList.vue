@@ -106,10 +106,18 @@
 
 			</template>
 
+			<template #[`item.payment.student.full_name`]='{ item }'>
+				{{ item.payment.student.full_name }}
+				<br>
+				{{ item.payment.student.phone }}
+			</template>
+
 			<template #[`item.group`]='{ item }'>
 				{{ item.payment.group.number }}
 				<br>
 				{{ item.payment.group.subject.name }}
+				<br>
+				{{ item.payment.group.teacher.full_name }}
 			</template>
 
 
