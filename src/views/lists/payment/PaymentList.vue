@@ -43,7 +43,7 @@
 
 			<template #[`item.paid`]='{ item }'>
 				<v-btn outlined color='success' title="To'lov amalga oshirish uchun bosing"
-							 @click='openPaymentPaidsList(item)'>{{ item.paid | summa }}
+							 @click='openPaymentPaidList(item)'>{{ item.paid | summa }}
 				</v-btn>
 			</template>
 
@@ -106,8 +106,8 @@
 			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
 		/>
 
-		<payment-paids-list
-			ref='paymentPaidsList'
+		<payment-paid-list
+			ref='paymentPaidList'
 			v-on:refresh-list='fetchDatas(true)'
 			v-on:delete-row='fetchDatas(true)'
 			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
@@ -144,7 +144,7 @@ import XLSX from 'xlsx'
 import usePaymentList from './usePaymentList'
 import PaymentForm from './PaymentForm.vue'
 import PaymentSearch from './PaymentSearch.vue'
-import PaymentPaidsList from '@/views/lists/payment-paids/PaymentPaidsList.vue'
+import PaymentPaidList from '@/views/lists/payment-paids/PaymentPaidList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 const MODULE_NAME = 'payment'
@@ -153,7 +153,7 @@ export default {
 	components: {
 		PaymentForm,
 		PaymentSearch,
-		PaymentPaidsList,
+		PaymentPaidList,
 		DialogConfirm,
 	},
 	filters: {
@@ -343,9 +343,9 @@ export default {
 		}
 
 		// Paids
-		const paymentPaidsList = ref(null)
-		const openPaymentPaidsList = item => {
-			paymentPaidsList.value.open(item)
+		const paymentPaidList = ref(null)
+		const openPaymentPaidList = item => {
+			paymentPaidList.value.open(item)
 		}
 
 		// Return
@@ -357,8 +357,8 @@ export default {
 			// totalAmount,
 			// totalPaid,
 			// totalDebt,
-			paymentPaidsList,
-			openPaymentPaidsList,
+			paymentPaidList,
+			openPaymentPaidList,
 			fetchDatas,
 			// selectsDatas,
 

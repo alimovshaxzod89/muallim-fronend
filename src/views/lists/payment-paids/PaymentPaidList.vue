@@ -25,7 +25,6 @@
 											item-text='number'
 											item-value='id'
 											dense
-											solo
 											outlined
 											hide-details
 											label='Guruh'
@@ -39,7 +38,6 @@
 											item-text='full_name'
 											item-value='id'
 											dense
-											solo
 											outlined
 											hide-details
 											label='Talaba'
@@ -53,7 +51,6 @@
 											item-text='text'
 											item-value='value'
 											dense
-											solo
 											outlined
 											hide-details
 											label='Yil'
@@ -63,11 +60,10 @@
 
 										<v-autocomplete
 											v-model='filter.month'
-											:items='monthOptions'
-											item-text='text'
-											item-value='value'
+											:items='months'
+											item-text='name'
+											item-value='id'
 											dense
-											solo
 											outlined
 											hide-details
 											label='Oy'
@@ -87,7 +83,7 @@
 
 									<v-spacer></v-spacer>
 
-									<v-btn class='primary' @click='openPaidsForm()'>Qo'shish</v-btn>
+									<v-btn class='primary' @click='openPaidForm()'>Qo'shish</v-btn>
 									<div v-if='state.rows.length > 0' class='ml-5'>
 										<v-btn v-if="$can('create', 'Room')" class='success exportXlsx' color='white'
 													 outlined @click='ExportExcel()'>Jadvalni yuklab olish
@@ -134,7 +130,7 @@
 											<!-- edit  -->
 											<v-tooltip bottom>
 												<template #activator='{ on, attrs }'>
-													<v-btn icon small v-bind='attrs' v-on='on' @click='openPaidsForm(item)'>
+													<v-btn icon small v-bind='attrs' v-on='on' @click='openPaidForm(item)'>
 														<v-icon size='18'>
 															{{ icons.mdiPencilOutline }}
 														</v-icon>
@@ -157,7 +153,24 @@
 										</div>
 									</template>
 
-									<template #[`item.amount`]='{ item }'> {{ item.amount | summa }}</template>
+									<template #[`item.amount`]='{ item }'><b>{{ item.amount | summa }}</b></template>
+
+									<template #[`item.payment.group.number`]='{ item }'>
+										{{ item.payment.group.number }}
+										<br>
+										{{ item.payment.group.subject.name }}
+										<br>
+										{{ item.payment.group.teacher.full_name }}
+									</template>
+
+									<template #[`item.date`]='{ item }'> {{ item.date | date }}</template>
+
+									<template #[`item.payment.date`]='{ item }'>
+										{{ item.payment.date  | year_month }}
+										<br>
+										<b>{{ item.payment.amount | summa }}</b>
+									</template>
+
 								</v-data-table>
 							</div>
 						</v-col>
@@ -173,11 +186,11 @@
 
 		<dialog-confirm ref='dialogConfirm' />
 
-		<payment-paids-form
-			ref='PaymentPaidsForm'
+		<payment-paid-form
+			ref='PaymentPaidForm'
 			:MODULE_NAME='MODULE_NAME'
-			v-on:refresh-list="$emit('refresh-list'), fetchDatas(true)"
-			v-on:delete-row="$emit('delete-row'), fetchDatas(true)"
+			v-on:refresh-list="$emit('refresh-list'); fetchDatas(true)"
+			v-on:delete-row="$emit('delete-row'); fetchDatas(true)"
 			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
 		/>
 	</v-dialog>
@@ -210,16 +223,16 @@ import numeral from 'numeral'
 require('moment/locale/uz-latn')
 
 // store module
-import PaymentPaidsStoreModule from './PaymentPaidsStoreModule'
+import PaymentPaidsStoreModule from './PaymentPaidStoreModule'
 
 // composition function
-import usePaymentPaidsList from './usePaymentPaidsList'
-import PaymentPaidsForm from './PaymentPaidsForm.vue'
+import usePaymentPaidList from './usePaymentPaidList'
+import PaymentPaidForm from './PaymentPaidForm.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 
 export default {
 	components: {
-		PaymentPaidsForm,
+		PaymentPaidForm,
 		DialogConfirm,
 	},
 	filters: {
@@ -228,7 +241,7 @@ export default {
 		feed: value => value[1] + '/' + value[2] + '/' + value[3],
 	},
 	setup(props, { emit }) {
-		const MODULE_NAME = 'payment-paids'
+		const MODULE_NAME = 'paymentPaid'
 		const BASE_URL = envParams.BASE_URL
 		const BACKEND_URL = envParams.BACKEND_URL
 
@@ -251,7 +264,7 @@ export default {
 			filter.value.group_id = item.group_id
 			filter.value.student_id = item.student_id
 			filter.value.year = item.year
-			filter.value.month = item.month
+			filter.value.month = item.month ? parseInt(item.month) : null
 
 			fetchDatas(true)
 		}
@@ -273,7 +286,7 @@ export default {
 			loading,
 			notify,
 			selectedTableData,
-		} = usePaymentPaidsList(MODULE_NAME)
+		} = usePaymentPaidList(MODULE_NAME)
 
 		//interface additional elements
 		const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -289,16 +302,18 @@ export default {
 		const isDate = ref(false)
 
 		// Form
-		const PaymentPaidsForm = ref(null)
-		const openPaidsForm = item => {
+		const PaymentPaidForm = ref(null)
+		const openPaidForm = item => {
 			const data = {
 				// subject_id: filter.value.subject_id ? filter.value.subject_id.id : null,
 				student_id: filter.value.student_id ? filter.value.student_id : null,
 				group_id: filter.value.group_id ? filter.value.group_id : null,
-				payment_id: filter.value.payment_id ? filter.value.payment_id : null,
+
+				year: filter.value.year ? filter.value.year : null,
+				month: filter.value.month ? filter.value.month : null,
 			}
 
-			PaymentPaidsForm.value.open(item, data)
+			PaymentPaidForm.value.open(item, data)
 		}
 
 		//Delete Confirm Dialog
@@ -352,13 +367,20 @@ export default {
 			{ value: '2022', text: '2022' },
 		])
 
-		const monthOptions = (function() {
-			const arr = [{ value: '', text: '' }]
-			for (let i = 1; i <= 12; i++) {
-				arr.push({ value: i, text: moment(`2000-${i}-01`).format('MMMM') })
-			}
-			return arr
-		})()
+		const months = [
+			{ id: 1, name: 'Yanvar' },
+			{ id: 2, name: 'Fevral' },
+			{ id: 3, name: 'Mart' },
+			{ id: 4, name: 'Aprel' },
+			{ id: 5, name: 'May' },
+			{ id: 6, name: 'Iyun' },
+			{ id: 7, name: 'Iyul' },
+			{ id: 8, name: 'Avgust' },
+			{ id: 9, name: 'Sentabr' },
+			{ id: 10, name: 'Oktabr' },
+			{ id: 11, name: 'Noyabr' },
+			{ id: 12, name: 'Dekabr' },
+		]
 
 		// eport xlsx
 		const excel = ref(null)
@@ -435,7 +457,7 @@ export default {
 			groups,
 			students,
 
-			monthOptions,
+			months,
 			yearOptions,
 			excel,
 			ExportExcel,
@@ -460,8 +482,8 @@ export default {
 			dialogConfirm,
 			confirmDelete,
 
-			PaymentPaidsForm,
-			openPaidsForm,
+			PaymentPaidForm,
+			openPaidForm,
 			group_id,
 			deleteRow,
 
