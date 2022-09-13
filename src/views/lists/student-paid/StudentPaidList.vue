@@ -1,31 +1,23 @@
 <template>
 	<v-card id='data-list'>
 		<!-- search -->
-		<v-card-text class='d-flex align-center flex-wrap pb-0'>
+		<v-card-text class='d-flex align-flex-start flex-wrap justify-end my-filter'>
 
-			<v-col cols='3'>
-				<v-text-field
-					v-model='filter.query'
-					dense
-					outlined
-					hide-details
-					label='Qidirish'
-					class='data-list-search me-3'
-				></v-text-field>
-			</v-col>
+			<student-paid-search v-model='filter' />
 
-			<v-col cols='9'>
-				<student-paid-search v-model='filter' />
-			</v-col>
-			<div v-if='state.rows.length > 0' class='ml-auto mx-2 my-4'>
-				<v-btn class='success exportXlsx' color='white' outlined
-					@click='ExportExcel()'>Jadvalni yuklab olish
-				</v-btn>
-			</div>
-			<div class="d-flex align-center">
-				<div class="btnAdd ml-auto">
-					<v-btn v-if="$can('create', 'StudentPaid')" class="primary" @click="openForm()">Qo'shish</v-btn>     
-				</div> 
+			<v-spacer></v-spacer>
+
+			<div class='d-flex align-center'>
+				<div v-if='state.rows.length > 0' class='ml-auto mx-2 my-4'>
+					<v-btn class='success exportXlsx' color='white' outlined
+								 @click='ExportExcel()'>Jadvalni yuklab olish
+					</v-btn>
+				</div>
+
+				<div class='btnAdd ml-auto'>
+					<v-btn v-if="$can('create', 'StudentPaid')" class='primary' @click='openForm()'>Qo'shish
+					</v-btn>
+				</div>
 			</div>
 		</v-card-text>
 
@@ -54,7 +46,8 @@
 					<!-- delete -->
 					<v-tooltip bottom>
 						<template #activator='{ on, attrs }'>
-							<v-btn icon small v-bind='attrs' v-on='on' @click='confirmDelete(item.id)' v-if="$can('delete', 'StudentPaid')">
+							<v-btn icon small v-bind='attrs' v-on='on' @click='confirmDelete(item.id)'
+										 v-if="$can('delete', 'StudentPaid')">
 								<v-icon size='18'>
 									{{ icons.mdiDeleteOutline }}
 								</v-icon>
@@ -66,13 +59,26 @@
 					<!-- view  -->
 					<v-tooltip bottom>
 						<template #activator='{ on, attrs }'>
-							<v-btn icon small v-bind='attrs' v-on='on' @click='openForm(item.id)' v-if="$can('update', 'StudentPaid')">
+							<v-btn icon small v-bind='attrs' v-on='on' @click='openForm(item.id)'
+										 v-if="$can('update', 'StudentPaid')">
 								<v-icon size='18'>
 									{{ icons.mdiPencilOutline }}
 								</v-icon>
 							</v-btn>
 						</template>
 						<span>Edit</span>
+					</v-tooltip>
+
+					<!-- print  -->
+					<v-tooltip bottom>
+						<template #activator="{ on, attrs }">
+							<v-btn icon small v-bind="attrs" v-on="on" @click="printCheck(item)">
+								<v-icon size="18">
+									{{ icons.mdiPrinter   }}
+								</v-icon>
+							</v-btn>
+						</template>
+						<span>Chop etish</span>
 					</v-tooltip>
 				</div>
 			</template>
@@ -135,14 +141,15 @@ import {
 	mdiDotsVertical,
 	mdiEyeOutline,
 	mdiPencilOutline,
+	mdiPrinter,
 } from '@mdi/js'
 
 import { ref, computed } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
 import moment from 'moment'
-
 import envParams from '@envParams'
+
 
 import XLSX from 'xlsx'
 
@@ -162,6 +169,7 @@ export default {
 		StudentPaidForm,
 		StudentPaidSearch,
 		DialogConfirm,
+		mdiPrinter,
 	},
 	filters: {
 		feed: value => value[1] + '/' + value[2] + '/' + value[3],
@@ -183,6 +191,9 @@ export default {
 		// onUnmounted(() => {
 		//   if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
 		// })
+
+		const BASE_URL = envParams.BASE_URL
+		const BACKEND_URL = envParams.BACKEND_URL
 
 		//store state
 		const state = ref(store.state[MODULE_NAME])
@@ -225,8 +236,6 @@ export default {
 				.catch(() => {
 				})
 		}
-
-		const BASE_URL = envParams.BASE_URL
 
 		// const selectsDatas = ref({
 		//   amount: null,
@@ -271,6 +280,16 @@ export default {
 				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
 		}
 
+
+		const printCheck = data => {
+			var myWindow = window.open(
+				BACKEND_URL + '/print/' + data.id,
+				'MsgWindow',
+				'toolbar=no,status=no,menubar=no,width=600,height=600',
+			)
+			//myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
+		}
+
 		// Return
 		return {
 			BASE_URL,
@@ -306,6 +325,8 @@ export default {
 			studentPaidForm,
 			openForm,
 
+			printCheck,
+
 			MODULE_NAME,
 
 			icons: {
@@ -315,6 +336,7 @@ export default {
 				mdiDeleteOutline,
 				mdiDotsVertical,
 				mdiEyeOutline,
+				mdiPrinter,
 			},
 		}
 	},

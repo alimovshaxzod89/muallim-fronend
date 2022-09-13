@@ -8,13 +8,14 @@ export default function usePaymentList(MODULE_NAME) {
   const tableColumns = [
     { text: '#', sortable: false, value: 'index' },
     { text: 'GURUH', value: 'group.number' },
-    { text: 'USTOZ', value: 'group.teacher.full_name' },
+    // { text: 'USTOZ', value: 'group.teacher.full_name' },
     { text: 'TALABA', value: 'student.full_name' },
-    { text: 'TELEFON', value: 'student.phone' },
+    // { text: 'TELEFON', value: 'student.phone' },
     { text: "OYLIK TO'LOV", value: 'amount' },
     { text: "TO'LADI", value: 'paid' },
-    { text: 'QARZ', value: 'dept' },
-    { text: 'OY', value: 'month', align: 'center' },
+    { text: 'QARZ', value: 'debt' },
+    // { text: 'OY', value: 'month', align: 'center' },
+		{ text: 'CHEGIRMA', value: 'sale' },
   ]
 
   const filter = ref({

@@ -1,5 +1,6 @@
 import store from '@/store'
 import { ref, watch, } from '@vue/composition-api'
+import moment from 'moment'
 
 export default function useStudentPaidList(MODULE_NAME) {
 
@@ -24,12 +25,15 @@ export default function useStudentPaidList(MODULE_NAME) {
 	]
 
   const filter = ref({
-    query: '',
-    year: '',
+		year: moment(Date.now()).format('YYYY'),
+		month: parseInt(moment(Date.now()).format('M')),
+		day: parseInt(moment(Date.now()).format('D')),
     // date: new Date().toISOString().substr(0, 10),
+    date1: '',
     date2: '',
     group_id: '',
     student_id: '',
+		cashbox_id: '',
   })
   const options = ref({
     sortBy: ['id'],

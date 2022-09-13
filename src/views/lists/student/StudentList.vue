@@ -71,7 +71,7 @@
             ></v-autocomplete>
           </v-col>
         </v-row>
-         
+
 
         <v-row>
           <v-col>
@@ -155,10 +155,10 @@
         </v-row>
       </v-row>
 
-      
+
 
 			<v-spacer></v-spacer>
-			
+
       <div class="d-flex align-center">
         <div v-if='state.rows.length > 0' class='mx-2 my-4'>
           <v-btn class='success exportXlsx' color='white' outlined
@@ -166,8 +166,8 @@
           </v-btn>
 		    </div>
         <div class="btnAdd ml-auto">
-          <v-btn v-if="$can('create', 'Student')" class="primary" @click="openForm()">Qo'shish</v-btn>     
-        </div> 
+          <v-btn v-if="$can('create', 'Student')" class="primary" @click="openForm()">Qo'shish</v-btn>
+        </div>
       </div>
     </v-card-text>
 
