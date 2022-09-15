@@ -16,7 +16,7 @@
 				<v-card-text>
 					<v-container>
 						<v-row>
-							<v-col cols='6'>
+							<v-col cols='4'>
 								<v-list-item-title>Talaba</v-list-item-title>
 								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-autocomplete
@@ -47,7 +47,38 @@
 									</template>
 								</v-autocomplete>
 							</v-col>
-							<v-col cols='6'>
+							<v-col cols="4">
+								<v-list-item-title>Ustozlar</v-list-item-title>
+								<h4 class="text-required no-text"><span>*</span></h4>
+								<v-autocomplete
+									v-model="formData.teacher_id"
+									:items="teachers"
+									item-text="name"
+									item-value="id"
+									label="USTOZ"
+									dense
+									outlined
+									hide-details
+									clearable
+									:rules="selectRule"
+									required
+								>
+									<template v-slot:append-outer>
+										<v-btn
+											class="btn-dialog-add-item"
+											color="secondary"
+											height="40px !important"
+											outlined
+											@click="addTeacher()"
+										>
+											<v-icon size="22">
+												{{ icons.mdiPlusCircleOutline }}
+											</v-icon>
+										</v-btn>
+									</template>
+								</v-autocomplete>
+							</v-col>
+							<v-col cols='4'>
 								<v-list-item-title>Guruh</v-list-item-title>
 								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-autocomplete
@@ -193,7 +224,7 @@
 
 		<student-form ref='studentForm' v-on:add-student-to-options='addStudentToOptions($event)' />
 		<group-form ref='groupForm' v-on:add-group-to-options='addGroupToOptions($event)' />
-
+		<teacher-form ref="teacherForm" v-on:add-group-to-options="addTeacherToOptions($event)" />
 
 	</v-dialog>
 </template>
@@ -203,7 +234,6 @@ import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 // formats
 import moment from 'moment'
-
 moment.locale('uz')
 
 import store from '@/store'
@@ -211,16 +241,17 @@ import StudentGroupStoreModule from './StudentGroupStoreModule'
 
 import axios from '@axios'
 
-import { ref, watch } from '@vue/composition-api'
+import { ref, onMounted } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import StudentForm from '@/views/lists/student/StudentForm'
 import GroupForm from '@/views/lists/group/GroupForm'
 import Button from '../../components/button/Button'
+import teacherForm from '@/views/lists/teacher/TeacherForm.vue'
 
 const MODULE_NAME = 'studentGroup'
 
 export default {
-	components: { StudentForm, GroupForm, Button },
+  components: { StudentForm, GroupForm, teacherForm, Button },
 
 	filters: {
 		date: value => moment(value).format('D MMMM YYYY'),
@@ -321,6 +352,17 @@ export default {
 				.catch(error => console.log(error))
 		}
 
+		//
+		const teachers = ref()
+		const loadTeachers = () => {
+			axios.get('/api/teachers').then(response => {
+				if (response.data.success) {
+					teachers.value = response.data.data
+				}
+			})
+		}
+		loadTeachers()
+
 		// on form submit
 		const onSubmit = () => {
 			if (form.value.validate()) {
@@ -369,23 +411,44 @@ export default {
 			formData.value.group_id = row.id
 		}
 
-		return {
-			form,
-			picker,
-			isDateFirst,
-			isDateSecond,
-			required,
-			minLengthValidator,
-			formData,
-			selectRule,
-			loadStudent,
-			loadGroup,
-			validate,
-			show,
-			onSubmit,
-			open,
-			close,
+    // TeacherForm
+    const teacherForm = ref(null)
+    const addTeacher = (id = null) => {
+      teacherForm.value.open(id)
+    }
+    const addTeacherToOptions = row => {
+      selectsDatas.value.teacher = selectsDatas.value.teacher.concat([row])
+      formData.value.teacher_id = row.id
+    }
 
+    return {
+      form,
+      picker,
+      isDateFirst,
+      isDateSecond,
+      required,
+      minLengthValidator,
+      formData,
+      selectRule,
+      loadStudent,
+      loadGroup,
+      validate,
+      show,
+      onSubmit,
+      open,
+      close,
+
+      teachers,
+
+      studentForm,
+      addStudent,
+      addStudentToOptions,
+      groupForm,
+      teacherForm,
+      addGroup,
+      addGroupToOptions,
+      addTeacher,
+      addTeacherToOptions,
 			groups,
 			students,
 
