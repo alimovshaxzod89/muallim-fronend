@@ -17,6 +17,7 @@ export default function useStudentGroupList(MODULE_NAME) {
     { text: 'USTOZ', value: 'group.teacher.full_name' },
     { text: 'GURUH', value: 'group.number' },
     { text: 'TALABA', value: 'student.full_name' },
+		{ text: 'CHEGIRMA', value: 'sale' },
     { text: 'BOSHLANGAN SANA', value: 'begin_date' },
     { text: 'TUGAGAN SANA', value: 'end_date' },
     { text: 'AKTIV', value: 'status' },

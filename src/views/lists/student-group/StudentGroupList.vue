@@ -128,7 +128,7 @@
       <v-spacer></v-spacer>
 
       <div class="d-flex align-center ml-auto my-4">
-        
+
         <div v-if='state.rows.length > 0' class='mx-2'>
           <v-btn class='success exportXlsx' color='white' outlined
             @click='ExportExcel()'>Jadvalni yuklab olish
@@ -196,6 +196,14 @@
       <template #[`item.end_date`]="{ item }">
         {{ item.end_date | date }}
       </template>
+
+			<template #[`item.sale`]="{ item }">
+				<div v-if='item.sale'>
+					{{ item.sale | summa }}
+					<br>
+					<i>{{ item.sale_cause }}</i>
+				</div>
+			</template>
 
       <template #[`item.status`]="{ item }">
           {{item.status ? 'ha' : 'yo\'q'}}
@@ -309,14 +317,13 @@ export default {
 
     const BASE_URL = envParams.BASE_URL
 
-    const teachers = ref({
-      teacher_id: null,
-    })
+    const teachers = ref([])
     const loadTeachers = () => {
       axios.get('/api/teachers').then(response => {
         teachers.value = response.data.data
       })
     }
+		loadTeachers()
 
     const groups = ref([])
     const freshGroups = ref([])
@@ -337,6 +344,7 @@ export default {
         freshGroups.value = response.data.data
       })
     }
+		loadGroups()
 
     watch(
       () => filter.value.teacher_id,
@@ -351,6 +359,7 @@ export default {
         students.value = response.data.data
       })
     }
+		loadStudents()
 
     // export xlsx
 		const excel = ref(null)
@@ -365,10 +374,6 @@ export default {
 				})
 				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
 		}
-
-    onMounted(() => {
-      loadTeachers(), loadGroups(), loadStudents()
-    })
 
     // Return
     return {
