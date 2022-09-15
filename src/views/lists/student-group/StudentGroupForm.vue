@@ -52,7 +52,7 @@
                 <h4 class="text-required no-text"><span>*</span></h4>
                 <v-autocomplete
                   v-model="formData.teacher_id"
-                  :items="teacher"
+                  :items="teachers"
                   item-text="name"
                   item-value="id"
                   label="USTOZ"
@@ -283,19 +283,14 @@ export default {
         })
         .catch(error => console.log(error))
     }
-    // 
-    const teacher = ref()
-    const loadTeachers = () => {
-      axios.get('/api/teachers').then(response => {
-        if (response.data.success) {
-          teacher.value = response.data.data
-        }
-      })
-    }
 
-    onMounted(() => {
-      loadTeachers()
-    })
+    const teachers = ref([])
+		const loadTeachers = () => {
+			axios.get('/api/teachers').then(response => {
+				teachers.value = response.data.data
+			})
+		}
+		loadTeachers()
 
     // on form submit
     const onSubmit = () => {
@@ -373,7 +368,7 @@ export default {
       open,
       close,
 
-      teacher,
+      teachers,
 
       studentForm,
       addStudent,
