@@ -36,13 +36,6 @@ export default [
 		resource: 'StudentGroup',
 		action: 'read',
 	},
-  {
-    subheader: '#',
-    badge: 'New',
-    bageColor: 'success',
-    resource: 'Public',
-    action: 'read',
-  },
 	{
 		title: 'Guruh vaqtlari',
 		icon: mdiAccountDetailsOutline,
@@ -58,7 +51,7 @@ export default [
     action: 'read',
   },
   {
-    subheader: '##',
+    subheader: 'To\'lov',
     badge: 'New',
     bageColor: 'success',
     resource: 'Public',
@@ -100,7 +93,7 @@ export default [
     action: 'read',
   },
   {
-    subheader: '###',
+    subheader: 'Qo\'shimcha',
     badge: 'New',
     bageColor: 'success',
     resource: 'Public',
@@ -125,13 +118,6 @@ export default [
 				action: 'read',
 			},
 		],
-	},
-	{
-		subheader: '####',
-		badge: 'New',
-		bageColor: 'success',
-		resource: 'Public',
-		action: 'read',
 	},
 	{
 		title: 'Import qilish',
