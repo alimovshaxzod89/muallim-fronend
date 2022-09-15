@@ -454,13 +454,6 @@ export default {
 
 			hasSale,
 
-			studentForm,
-			addStudent,
-			addStudentToOptions,
-			groupForm,
-			addGroup,
-			addGroupToOptions,
-
 			icons: {
 				mdiPlusCircleOutline,
 				mdiCalendar,
