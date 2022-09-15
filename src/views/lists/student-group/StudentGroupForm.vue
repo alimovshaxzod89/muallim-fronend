@@ -47,31 +47,31 @@
 									</template>
 								</v-autocomplete>
 							</v-col>
-							<v-col cols="4">
+							<v-col cols='4'>
 								<v-list-item-title>Ustozlar</v-list-item-title>
-								<h4 class="text-required no-text"><span>*</span></h4>
+								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-autocomplete
-									v-model="formData.teacher_id"
-									:items="teachers"
-									item-text="name"
-									item-value="id"
-									label="USTOZ"
+									v-model='formData.teacher_id'
+									:items='teachers'
+									item-text='full_name'
+									item-value='id'
+									label='USTOZ'
 									dense
 									outlined
 									hide-details
 									clearable
-									:rules="selectRule"
+									:rules='selectRule'
 									required
 								>
 									<template v-slot:append-outer>
 										<v-btn
-											class="btn-dialog-add-item"
-											color="secondary"
-											height="40px !important"
+											class='btn-dialog-add-item'
+											color='secondary'
+											height='40px !important'
 											outlined
-											@click="addTeacher()"
+											@click='addTeacher()'
 										>
-											<v-icon size="22">
+											<v-icon size='22'>
 												{{ icons.mdiPlusCircleOutline }}
 											</v-icon>
 										</v-btn>
@@ -224,7 +224,7 @@
 
 		<student-form ref='studentForm' v-on:add-student-to-options='addStudentToOptions($event)' />
 		<group-form ref='groupForm' v-on:add-group-to-options='addGroupToOptions($event)' />
-		<teacher-form ref="teacherForm" v-on:add-group-to-options="addTeacherToOptions($event)" />
+		<teacher-form ref='teacherForm' v-on:add-group-to-options='addTeacherToOptions($event)' />
 
 	</v-dialog>
 </template>
@@ -234,6 +234,7 @@ import { mdiPlusCircleOutline, mdiCalendar } from '@mdi/js'
 
 // formats
 import moment from 'moment'
+
 moment.locale('uz')
 
 import store from '@/store'
@@ -241,7 +242,7 @@ import StudentGroupStoreModule from './StudentGroupStoreModule'
 
 import axios from '@axios'
 
-import { ref, onMounted } from '@vue/composition-api'
+import { ref, watch } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import StudentForm from '@/views/lists/student/StudentForm'
 import GroupForm from '@/views/lists/group/GroupForm'
@@ -251,7 +252,7 @@ import teacherForm from '@/views/lists/teacher/TeacherForm.vue'
 const MODULE_NAME = 'studentGroup'
 
 export default {
-  components: { StudentForm, GroupForm, teacherForm, Button },
+	components: { StudentForm, GroupForm, teacherForm, Button },
 
 	filters: {
 		date: value => moment(value).format('D MMMM YYYY'),
@@ -259,10 +260,6 @@ export default {
 		feed: value => value[1] + '/' + value[2] + '/' + value[3],
 	},
 
-	created() {
-		this.loadStudent()
-		this.loadGroup()
-	},
 	setup(props, { emit }) {
 		// Register module
 		if (!store.hasModule(MODULE_NAME)) {
@@ -329,28 +326,27 @@ export default {
 		})
 
 
+		const clearParams = (params) => {
+			return Object.keys(params)
+				.filter((key) => params[key] !== null && params[key] !== '')
+				.reduce((obj, key) => {
+					return Object.assign(obj, {
+						[key]: params[key],
+					})
+				}, {})
+		}
+
+
 		const students = ref([])
-		const loadStudent = () => {
-			axios
-				.get('/api/students', { params: { itemsPerPage: -1 } })
-				.then(response => {
-					if (response.data.success) {
-						students.value = response.data.data
-					}
-				})
+		const loadStudents = () => {
+			axios.get('/api/students').then(response => {
+				if (response.data.success) {
+					students.value = response.data.data
+				}
+			})
 				.catch(error => console.log(error))
 		}
-		const groups = ref([])
-		const loadGroup = () => {
-			axios
-				.get('/api/groups', { params: { itemsPerPage: -1 } })
-				.then(response => {
-					if (response.data.success) {
-						groups.value = response.data.data
-					}
-				})
-				.catch(error => console.log(error))
-		}
+		loadStudents()
 
 		//
 		const teachers = ref()
@@ -362,6 +358,25 @@ export default {
 			})
 		}
 		loadTeachers()
+
+		const groups = ref([])
+		const loadGroups = () => {
+			const params = clearParams({
+				teacher_id: formData.value.teacher_id,
+			})
+
+			axios.get(`/api/groups`, { params }).then(response => {
+				groups.value = response.data.data
+			})
+		}
+		loadGroups()
+
+		watch(
+			() => formData.value.teacher_id,
+			() => {
+				loadGroups()
+			},
+		)
 
 		// on form submit
 		const onSubmit = () => {
@@ -411,44 +426,42 @@ export default {
 			formData.value.group_id = row.id
 		}
 
-    // TeacherForm
-    const teacherForm = ref(null)
-    const addTeacher = (id = null) => {
-      teacherForm.value.open(id)
-    }
-    const addTeacherToOptions = row => {
-      selectsDatas.value.teacher = selectsDatas.value.teacher.concat([row])
-      formData.value.teacher_id = row.id
-    }
+		// TeacherForm
+		const teacherForm = ref(null)
+		const addTeacher = (id = null) => {
+			teacherForm.value.open(id)
+		}
+		const addTeacherToOptions = row => {
+			selectsDatas.value.teacher = selectsDatas.value.teacher.concat([row])
+			formData.value.teacher_id = row.id
+		}
 
-    return {
-      form,
-      picker,
-      isDateFirst,
-      isDateSecond,
-      required,
-      minLengthValidator,
-      formData,
-      selectRule,
-      loadStudent,
-      loadGroup,
-      validate,
-      show,
-      onSubmit,
-      open,
-      close,
+		return {
+			form,
+			picker,
+			isDateFirst,
+			isDateSecond,
+			required,
+			minLengthValidator,
+			formData,
+			selectRule,
+			validate,
+			show,
+			onSubmit,
+			open,
+			close,
 
-      teachers,
+			teachers,
 
-      studentForm,
-      addStudent,
-      addStudentToOptions,
-      groupForm,
-      teacherForm,
-      addGroup,
-      addGroupToOptions,
-      addTeacher,
-      addTeacherToOptions,
+			studentForm,
+			addStudent,
+			addStudentToOptions,
+			groupForm,
+			teacherForm,
+			addGroup,
+			addGroupToOptions,
+			addTeacher,
+			addTeacherToOptions,
 			groups,
 			students,
 

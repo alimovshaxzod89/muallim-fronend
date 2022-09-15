@@ -317,6 +317,17 @@ export default {
 
     const BASE_URL = envParams.BASE_URL
 
+
+		const clearParams = (params) => {
+			return Object.keys(params)
+				.filter((key) => params[key] !== null && params[key] !== '')
+				.reduce((obj, key) => {
+					return Object.assign(obj, {
+						[key]: params[key],
+					})
+				}, {})
+		}
+
     const teachers = ref([])
     const loadTeachers = () => {
       axios.get('/api/teachers').then(response => {
@@ -330,18 +341,12 @@ export default {
     const params = ref({})
 
     const loadGroups = () => {
-      if (filter.value.teacher_id) {
-        params.value.teacher_id = filter.value.teacher_id
-      } else if (filter.value.teacher_id === null) {
-        return (groups.value = freshGroups.value) && (filter.value.group_id = groups.value)
-      }
+			const params = clearParams({
+				teacher_id: filter.value.teacher_id,
+			})
 
-      axios.get(`/api/groups`, { params: params.value }).then(response => {
+      axios.get(`/api/groups`, { params }).then(response => {
         groups.value = response.data.data
-      })
-
-      axios.get('/api/groups').then(response => {
-        freshGroups.value = response.data.data
       })
     }
 		loadGroups()
