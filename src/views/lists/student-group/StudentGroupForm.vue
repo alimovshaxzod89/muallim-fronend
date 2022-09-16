@@ -270,7 +270,13 @@ export default {
 		const show = ref(false)
 		const open = (id = null) => {
 			show.value = true
-			if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+			if (id) {
+				formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+
+				if (formData.value.group.teacher_id)
+					formData.value.teacher_id = formData.value.group.teacher_id
+			}
+
 		}
 		const close = () => {
 			show.value = false
