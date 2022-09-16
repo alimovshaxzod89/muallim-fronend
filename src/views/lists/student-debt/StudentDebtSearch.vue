@@ -1,5 +1,5 @@
 <template>
-	<div class="mx-auto">
+	<div>
 		<v-row>
 			<v-col cols='3'>
 				<v-autocomplete
