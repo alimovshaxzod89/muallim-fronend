@@ -76,7 +76,7 @@
 
 		<v-row>
 
-			<v-col cols='3'>
+			<v-col cols='4'>
 				<v-text-field
 					v-model='filter.year'
 					dense
@@ -87,7 +87,7 @@
 				/>
 			</v-col>
 
-			<v-col cols='5'>
+			<v-col cols='4'>
 				<v-autocomplete
 					v-model='filter.month'
 					:items='months'
@@ -101,11 +101,7 @@
 					clearable
 				></v-autocomplete>
 			</v-col>
-		</v-row>
-
-		<v-row>
-
-			<v-col cols='10'>
+			<v-col cols='4'>
 				<v-select
 					label='HAFTANING QAYSI KUNIDA KELADIGAN TALABALAR CHIQARILSIN'
 					v-model='filter.week_day'
@@ -117,6 +113,9 @@
 					clearable
 				/>
 			</v-col>
+		</v-row>
+
+		<v-row>
 
 			<!--			<v-col cols='6'>-->
 

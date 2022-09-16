@@ -1,16 +1,17 @@
 <template>
 	<v-card id='data-list'>
 		<!-- search -->
-		<v-card-text class='d-flex align-flex-start flex-wrap justify-end my-filter'>
+		<v-card-text class='my-filter'>
 
 			<payment-search v-model='filter' />
 
-			<v-spacer></v-spacer>
-			<div v-if='state.rows.length > 0'>
-				<v-btn v-if="$can('create', 'Room')" class='success exportXlsx' color='white' outlined
-							 @click='ExportExcel()'>Jadvalni yuklab olish
-				</v-btn>
+			<v-row>
+				<div v-if='state.rows.length > 0' class="ml-auto my-4">
+					<v-btn v-if="$can('create', 'Room')" class='success exportXlsx' color='white' outlined
+						@click='ExportExcel()'>Jadvalni yuklab olish
+					</v-btn>
 			</div>
+			</v-row>
 		</v-card-text>
 
 		<!-- table -->
