@@ -1,5 +1,5 @@
 <template>
-	<v-row>
+	<!-- <v-row>
 		<v-col
 			v-for="place in places"
 			cols="12"
@@ -14,35 +14,44 @@
 				{{place.name}}
 			</v-btn>
 		</v-col>
-	</v-row>
+	</v-row> -->
 </template>
-
 <script>
-import { useRouter } from '@core/utils'
-import axios from '@axios'
-import { ref } from '@vue/composition-api/dist/vue-composition-api'
+// import { useRouter } from '@core/utils'
+// import axios from '@axios'
+import { ref  } from '@vue/composition-api/dist/vue-composition-api'
 
 export default {
-  setup() {
-    const { router } = useRouter()
+  setup(props, context) {
+    
+    // const { router } = useRouter()
 
-    const places = ref([])
-    const loadPlaces = () => {
-      axios.get('/api/places').then(response => {
-        if (response.data.success) {
-          places.value = response.data.data
-        }
-      })
-    }
-    loadPlaces()
+    // const places = ref([])
+    // const loadPlaces = () => {
+    //   axios.get('/api/places').then(response => {
+    //     if (response.data.success) {
+    //       places.value = response.data.data
+    //     }
+    //   })
+    // }
+    // loadPlaces()
+
+
+    const selected_id = JSON.parse(localStorage.getItem('place')).id;
+      setTimeout(() => {
+        context.emit("select-place", selected_id)
+      }, 0);
+
+    
+    
 
     return {
-      router,
-      places,
+      // router,
+      // places,
+      selected_id,
     }
   },
 }
 </script>
-
 <style scoped>
 </style>

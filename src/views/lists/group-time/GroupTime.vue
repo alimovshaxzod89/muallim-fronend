@@ -15,8 +15,9 @@
 							Орқага
 						</v-btn>
 						<h2>
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ places[filter.place_id] ? places[filter.place_id] : null
-							}}</h2>
+							<!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ places[filter.place_id] ? places[filter.place_id] : null}} -->
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{selectedPlace_name}}
+            </h2>
 					</div>
 					<div>
 						<div class='month'>
@@ -78,6 +79,8 @@ export default {
 
     //store state
     // const stateBron = ref(store.state[MODULE_NAME])
+
+    const selectedPlace_name = JSON.parse(localStorage.getItem('place')).name;
 
 		const { router, route } = useRouter()
 
@@ -171,6 +174,8 @@ export default {
       weekDays,
       setWeekDays,
       setWeekDay,
+
+      selectedPlace_name,
 
       icons: {
         mdiArrowLeft,
