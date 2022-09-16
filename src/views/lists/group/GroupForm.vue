@@ -212,7 +212,7 @@
                   label="AKTIV"
                   true-value="1"
                   false-value="0"
-                ></v-checkbox>         
+                ></v-checkbox>
               </v-col>
             </v-row>
           </v-container>
@@ -249,22 +249,22 @@ export default {
 
     //show, hide
     const show = ref(false)
+		const emptyFormData = {
+			id: null,
+			place_id: null,
+			number: null,
+			subject_id: null,
+			stage_id: null,
+			teacher_id: null,
+			price: null,
+			teacher_share: null,
+			max_students: null,
+			begin_date: null,
+			end_date: null,
+			status: '1',
+		}
     const formData = ref({ ...emptyFormData })
     const form = ref(null)
-    const emptyFormData = {
-      id: null,
-      place_id: null,
-      number: null,
-      subject_id: null,
-      stage_id: null,
-      teacher_id: null,
-      price: null,
-      teacher_share: null,
-      max_students: null,
-      begin_date: null,
-      end_date: null,
-      status: '1',
-    }
     const picker = new Date().toISOString().substr(0, 10)
     const isDate = ref(false)
     const isDate2 = ref(false)

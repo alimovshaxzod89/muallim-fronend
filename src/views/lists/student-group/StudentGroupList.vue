@@ -240,7 +240,7 @@ import {
 	mdiPlus,
 	mdiTrendingUp,
 } from '@mdi/js'
-import { onMounted, ref, watch } from '@vue/composition-api'
+import { ref, watch } from '@vue/composition-api'
 import moment from 'moment'
 import numeral from 'numeral'
 import XLSX from 'xlsx'
@@ -406,7 +406,6 @@ export default {
 
 			isDate,
 			isDateTwo,
-			picker,
 
 			freshGroups,
 
