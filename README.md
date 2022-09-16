@@ -1,4 +1,6 @@
-# Muallim
+# Materio - Vuetify Vuejs Admin Template
+
+> Thank you for purchasing our template 🥂
 
 ## Installation
 
