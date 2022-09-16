@@ -14,7 +14,7 @@ export default function useStudentGroupList(MODULE_NAME) {
 			align: 'center',
 			sortable: false,
 		},
-		{ text: 'USTOZ', value: 'group.teacher.full_name' },
+		// { text: 'USTOZ', value: 'group.teacher.full_name' },
 		{ text: 'GURUH', value: 'group.number' },
 		{ text: 'TALABA', value: 'student.full_name' },
 		{ text: 'CHEGIRMA', value: 'sale' },

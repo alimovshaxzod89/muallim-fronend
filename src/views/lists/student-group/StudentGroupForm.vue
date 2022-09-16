@@ -48,6 +48,36 @@
 								</v-autocomplete>
 							</v-col>
 							<v-col cols='4'>
+								<v-list-item-title>Guruh</v-list-item-title>
+								<h4 class='text-required no-text'><span>*</span></h4>
+								<v-autocomplete
+									v-model='formData.group_id'
+									:items='groups'
+									item-text='number'
+									item-value='id'
+									label='GURUH'
+									dense
+									outlined
+									hide-details
+									clearable
+									:rules='selectRule'
+								>
+									<template v-slot:append-outer>
+										<v-btn
+											class='btn-dialog-add-item'
+											color='secondary'
+											height='40px !important'
+											outlined
+											@click='addGroup()'
+										>
+											<v-icon size='22'>
+												{{ icons.mdiPlusCircleOutline }}
+											</v-icon>
+										</v-btn>
+									</template>
+								</v-autocomplete>
+							</v-col>
+							<v-col cols='4'>
 								<v-list-item-title>Talaba</v-list-item-title>
 								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-autocomplete
@@ -70,36 +100,6 @@
 											height='40px !important'
 											outlined
 											@click='addStudent()'
-										>
-											<v-icon size='22'>
-												{{ icons.mdiPlusCircleOutline }}
-											</v-icon>
-										</v-btn>
-									</template>
-								</v-autocomplete>
-							</v-col>
-							<v-col cols='4'>
-								<v-list-item-title>Guruh</v-list-item-title>
-								<h4 class='text-required no-text'><span>*</span></h4>
-								<v-autocomplete
-									v-model='formData.group_id'
-									:items='groups'
-									item-text='number'
-									item-value='id'
-									label='GURUH'
-									dense
-									outlined
-									hide-details
-									clearable
-									:rules='selectRule'
-								>
-									<template v-slot:append-outer>
-										<v-btn
-											class='btn-dialog-add-item'
-											color='secondary'
-											height='40px !important'
-											outlined
-											@click='addGroup()'
 										>
 											<v-icon size='22'>
 												{{ icons.mdiPlusCircleOutline }}

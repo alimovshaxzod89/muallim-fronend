@@ -186,8 +186,15 @@
 				</div>
 			</template>
 
-			<template #[`item.group_id`]="{ item }">
-				{{ item.group_id | numeral('0,0') }}
+			<template #[`item.group.number`]="{ item }">
+				{{ item.group.number }}
+				<br>
+				{{ item.group.teacher.full_name }}
+			</template>
+
+			<template #[`item.student.full_name`]='{ item }'>
+				{{item.student.full_name}} <br>
+				{{item.student.phone}}
 			</template>
 
 			<template #[`item.begin_date`]="{ item }">
