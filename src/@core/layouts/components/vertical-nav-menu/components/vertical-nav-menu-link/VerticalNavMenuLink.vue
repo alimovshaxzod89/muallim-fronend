@@ -74,4 +74,8 @@ export default {
     @include elevationTransition();
   }
 }
+
+.v-list-item__title {
+	z-index: 1;
+}
 </style>

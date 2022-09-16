@@ -1,11 +1,11 @@
 {
   "name": "materio-vuetify-vuejs-admin-template",
   "description": "Production Ready, Carefully Crafted, Extensive Vuetifty Admin Template",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --no-clean",
+    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -18,12 +18,11 @@
     "apexcharts-clevision": "^3.28.3",
     "axios": "^0.21.1",
     "axios-mock-adapter": "^1.19.0",
-    "bootstrap-vue": "^2.21.2",
     "chart.js": "2.9.4",
     "core-js": "^3.6.5",
     "jsonwebtoken": "^8.5.1",
     "leaflet": "^1.7.1",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "numeral": "^2.0.6",
     "prismjs": "^1.23.0",
     "v-mask": "^2.3.0",
@@ -35,17 +34,16 @@
     "vue-numeral-filter": "^2.2.0",
     "vue-prism-component": "1",
     "vue-router": "^3.5.2",
-    "vue-tel-input-vuetify": "^1.5.0",
+    "vue-tel-input-vuetify": "^1.5.3",
     "vue-toastification": "^1.7.14",
     "vue2-leaflet": "^2.7.1",
     "vue2-perfect-scrollbar": "^1.5.0",
     "vuedraggable": "^2.24.3",
     "vuetify": "^2.5.5",
     "vuex": "^3.4.0",
-    "xlsx": "^0.17.5"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@types/numeral": "^2.0.2",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
