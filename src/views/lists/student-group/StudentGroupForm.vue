@@ -17,37 +17,6 @@
 					<v-container>
 						<v-row>
 							<v-col cols='4'>
-								<v-list-item-title>Ustozlar</v-list-item-title>
-								<h4 class='text-required no-text'><span>*</span></h4>
-								<v-autocomplete
-									v-model='formData.teacher_id'
-									:items='teachers'
-									item-text='full_name'
-									item-value='id'
-									label='USTOZ'
-									dense
-									outlined
-									hide-details
-									clearable
-									:rules='selectRule'
-									required
-								>
-									<template v-slot:append-outer>
-										<v-btn
-											class='btn-dialog-add-item'
-											color='secondary'
-											height='40px !important'
-											outlined
-											@click='addTeacher()'
-										>
-											<v-icon size='22'>
-												{{ icons.mdiPlusCircleOutline }}
-											</v-icon>
-										</v-btn>
-									</template>
-								</v-autocomplete>
-							</v-col>
-							<v-col cols='4'>
 								<v-list-item-title>Talaba</v-list-item-title>
 								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-autocomplete
@@ -70,6 +39,37 @@
 											height='40px !important'
 											outlined
 											@click='addStudent()'
+										>
+											<v-icon size='22'>
+												{{ icons.mdiPlusCircleOutline }}
+											</v-icon>
+										</v-btn>
+									</template>
+								</v-autocomplete>
+							</v-col>
+							<v-col cols='4'>
+								<v-list-item-title>Ustozlar</v-list-item-title>
+								<h4 class='text-required no-text'><span>*</span></h4>
+								<v-autocomplete
+									v-model='formData.teacher_id'
+									:items='teachers'
+									item-text='full_name'
+									item-value='id'
+									label='USTOZ'
+									dense
+									outlined
+									hide-details
+									clearable
+									:rules='selectRule'
+									required
+								>
+									<template v-slot:append-outer>
+										<v-btn
+											class='btn-dialog-add-item'
+											color='secondary'
+											height='40px !important'
+											outlined
+											@click='addTeacher()'
 										>
 											<v-icon size='22'>
 												{{ icons.mdiPlusCircleOutline }}

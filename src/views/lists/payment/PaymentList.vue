@@ -31,8 +31,9 @@
 			</template>
 
 			<template #[`item.amount`]='{ item }'>
+				{{ getMonth(item.month) }} {{ item.year }}
 				<v-text-field
-					style='width: 150px'
+					style='width: 150px; margin-top: 0; padding-top: 0;'
 					:value='item.amount'
 					hide-details
 					:append-icon='icons.mdiPencilOutline'
@@ -58,19 +59,17 @@
 			</template>
 
 			<template #[`item.sale`]='{ item }'>
-				<span></span>
+				<div v-if='item.student.student_groups[0].sale'>
+					{{ item.student.student_groups[0].sale | summa }}
+					<br>
+					<i>{{ item.student.student_groups[0].sale_cause }}</i>
+				</div>
 			</template>
 
 			<template #[`item.month`]='{ item }'>
 				{{ getMonth(item.month) }}
 				<br>
 				{{ item.year }}
-			</template>
-
-			<template #[`item.amount`]='{ item }'>
-				{{ getMonth(item.month) }} {{ item.year }}
-				<br>
-				<b>{{ item.amount | summa }}</b>
 			</template>
 
 			<template #[`item.student.full_name`]='{ item }'>

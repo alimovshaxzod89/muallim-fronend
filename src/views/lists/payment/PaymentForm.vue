@@ -96,7 +96,6 @@
                   item-text="name"
                   item-value="id"
                   label="TUMAN"
-                  solo
                   dense
                   outlined
                   clearable
@@ -111,7 +110,6 @@
                   item-text="name"
                   item-value="id"
                   label="D.Y. TUMAN"
-                  solo
                   dense
                   outlined
                   clearable
