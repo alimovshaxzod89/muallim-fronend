@@ -17,7 +17,6 @@
 
           <v-col>
             <v-text-field
-              v-col
               v-model="filter.phone"
               dense
               outlined
@@ -29,7 +28,6 @@
 
           <v-col>
             <v-autocomplete
-              v-col
               v-model="filter.region_id"
               :items="regions"
               item-text="name"
@@ -45,7 +43,6 @@
 
           <v-col>
             <v-text-field
-            v-col
             v-model="filter.address"
             dense
             outlined
@@ -57,7 +54,6 @@
 
           <v-col>
             <v-autocomplete
-              v-col
               v-model="filter.permanent_region_id"
               :items="regions"
               item-text="name"
@@ -76,7 +72,6 @@
         <v-row>
           <v-col>
             <v-text-field
-              v-col
               v-model="filter.permanent_address"
               dense
               outlined
@@ -88,7 +83,6 @@
 
           <v-col>
             <v-autocomplete
-              v-col
               v-model="filter.gender"
               :items="[{value: 1, name: 'Erkak'}, {value: 2, name: 'Ayol'}]"
               item-text="name"
@@ -103,7 +97,6 @@
           </v-col>
           <v-col>
             <v-autocomplete
-              v-col
               v-model="filter.sale"
               :items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
               item-text="name"
@@ -118,7 +111,6 @@
           </v-col>
           <v-col>
             <v-text-field
-              v-col
               v-model="filter.sale_cause"
               dense
               outlined
@@ -128,7 +120,7 @@
             ></v-text-field>
           </v-col>
           <v-col>
-            <v-menu v-col v-model="isDate" :close-on-content-click="false" offset-y>
+            <v-menu v-model="isDate" :close-on-content-click="false" offset-y>
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
                   v-model="filter.birth_date"
