@@ -27,7 +27,7 @@
 			outlined
 			hide-details
 			label="GURUH NOMI"
-			class="mx-auto"
+			class="data-list-search me-3"
 			clearable
 		></v-autocomplete>
 
