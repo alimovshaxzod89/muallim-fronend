@@ -27,6 +27,7 @@ export default function useGroupList(MODULE_NAME) {
   ]
 
   const filter = ref({
+    teacher_id: '',
     group_id: '',
     subject_id: '',
     full_name: '',
