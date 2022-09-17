@@ -111,23 +111,24 @@
                   </v-textarea>
               </v-col>
               <v-col cols="6">
-                <h4 class="text-required no-text"><span>*</span></h4> 
-                <v-radio-group
-                 v-model="formData.gender"
-                 class="mt-0"
-                 hide-details
-                 :rules="[required]"
-                >
-                    <v-radio
-                      label="ERKAK"
-                      value="1"
-                    ></v-radio>
-                    <v-radio
-                      label="AYOL"
-                      value="0"
-                    ></v-radio>
-                </v-radio-group>
-              </v-col>
+								<h4 class="text-required">Jinsi <span>*</span></h4>
+								<v-radio-group
+									v-model="formData.gender"
+									column
+									hide-details=""
+									class="mt-0"
+									required
+								>
+									<v-radio
+										label="Erkak"
+										:value="1"
+									></v-radio>
+									<v-radio
+										label="Ayol"
+										:value="2"
+									></v-radio>
+								</v-radio-group>
+							</v-col>
               <v-col cols="6">  
                 <v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
@@ -183,9 +184,6 @@ const MODULE_NAME = 'teacher'
 
 export default {
   components: { Button },
-  // props: {
-  //
-  // },
   created() {
     this.loadRegion()
   },
@@ -221,10 +219,10 @@ export default {
       address: null,
       permanent_region_id: null,
       permanent_address: null,
-      gender: '0',
+      gender: 2,
       birth_date: null,
     }
-    const formData = ref({})
+    const formData = ref({...emptyFormData})
 
     // birth date picker
     const picker = new Date().toISOString().substr(0, 10)
