@@ -19,19 +19,6 @@
 		></v-text-field> -->
 
 		<v-autocomplete
-			v-model="filter.number"
-			:items="groups"
-			item-text="number"
-			item-value="id"
-			dense
-			outlined
-			hide-details
-			label="GURUH NOMI"
-			class="data-list-search me-3"
-			clearable
-		></v-autocomplete>
-
-		<v-autocomplete
 			v-model="filter.teacher_id"
 			:items="teachers"
 			item-text="full_name"
@@ -46,6 +33,20 @@
 		>
 		</v-autocomplete>
 
+		<v-autocomplete
+			v-model="filter.group_id"
+			:items="groups"
+			item-text="number"
+			item-value="id"
+			dense
+			solo
+			outlined
+			hide-details
+			label="GURUH NOMI"
+			class="data-list-search me-3"
+			clearable
+		></v-autocomplete>
+		
 		<v-autocomplete
 			v-model="filter.subject_id"
 			:items="subjects"
