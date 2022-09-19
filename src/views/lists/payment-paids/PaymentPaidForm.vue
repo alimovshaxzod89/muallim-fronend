@@ -4,7 +4,7 @@
 		v-model='show'
 		@keydown.esc='close()'
 		@click:outside='close()'
-		@keydown.enter="onSubmit()"
+		@keydown.enter='onSubmit()'
 		max-width='1000px'
 		width='1000px'
 	>
@@ -42,17 +42,17 @@
 									v-model='formData.amount'
 									outlined
 									dense
-									:rules="selectRule"
+									:rules='selectRule'
 								></v-text-field>
 							</v-col>
-							<v-col cols="4">
+							<v-col cols='4'>
 								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-select
-									v-model="formData.cashbox_id"
+									v-model='formData.cashbox_id'
 									label="TO'LOV TURI"
-									:items="cashboxes"
-									item-value="id"
-									item-text="name"
+									:items='cashboxes'
+									item-value='id'
+									item-text='name'
 									hide-details
 									dense
 									outlined
@@ -77,28 +77,28 @@
 								</v-autocomplete>
 							</v-col>
 
-							<v-col cols="4">
-								<h4 class="text-required no-text"><span>*</span></h4>
-								<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
-									<template v-slot:activator="{ on, attrs }">
+							<v-col cols='4'>
+								<h4 class='text-required no-text'><span>*</span></h4>
+								<v-menu v-model='isDate' :close-on-content-click='false' offset-y min-width='auto'>
+									<template v-slot:activator='{ on, attrs }'>
 										<v-text-field
-											v-model="formData.date"
+											v-model='formData.date'
 											label="SA'NA"
 											readonly
-											v-bind="attrs"
-											v-on="on"
+											v-bind='attrs'
+											v-on='on'
 											hide-details
 											outlined
-											:append-icon="icons.mdiCalendar"
+											:append-icon='icons.mdiCalendar'
 										></v-text-field>
 									</template>
 									<v-date-picker
-										v-model="formData.date"
-										color="primary"
-										@input="isDate = false"
+										v-model='formData.date'
+										color='primary'
+										@input='isDate = false'
 										no-title
-										:first-day-of-week="1"
-										locale="ru-ru"
+										:first-day-of-week='1'
+										locale='ru-ru'
 									></v-date-picker>
 								</v-menu>
 							</v-col>
@@ -151,14 +151,14 @@
 					<v-spacer></v-spacer>
 					<v-btn color='gray' outlined @click='close()'>Bekor qilish</v-btn>
 					<v-btn
-						color="success"
-						type="button"
-						@click="onSubmit"
-						:disabled="submitDisabled"
+						color='success'
+						type='button'
+						@click='onSubmit'
+						:disabled='submitDisabled'
 					>
 						<v-icon
-							class="loading-animation"
-							v-if="submitDisabled"
+							class='loading-animation'
+							v-if='submitDisabled'
 						>
 							{{ icons.mdiLoading }}
 						</v-icon>
@@ -190,7 +190,7 @@ moment.locale('uz')
 import numeral from 'numeral'
 
 import store from '@/store'
-import StudentPaidStoreModule from './StudentPaidStoreModule'
+import StudentPaidStoreModule from './PaymentPaidStoreModule'
 
 import axios from '@axios'
 
@@ -201,7 +201,7 @@ import SubjectForm from '@/views/lists/subject/SubjectForm.vue'
 import GroupForm from '@/views/lists/group/GroupForm.vue'
 import Button from '../../components/button/Button'
 
-const MODULE_NAME = 'studentPaid'
+const MODULE_NAME = 'paymentPaid'
 
 export default {
 	components: {
@@ -211,25 +211,22 @@ export default {
 		Button,
 	},
 
-	filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		sum: value => numeral(value).format('0,0'),
-		feed: value => value[1] + '/' + value[2] + '/' + value[3],
-	},
-
 	setup(props, { emit }) {
 		// Register module
 		if (!store.hasModule(MODULE_NAME)) {
 			store.registerModule(MODULE_NAME, StudentPaidStoreModule)
 		}
 
+		const parentFilter = ref({})
+
 		// show, hide
 		const show = ref(false)
-		const open = (id = null) => {
+		const open = (item, data = null) => {
+
 			show.value = true
-			if (id) {
-				const paymentPaid = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
-				formData.value = paymentPaid
+			if (item && item.id !== undefined && item.id) {
+				const paymentPaid = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](item.id)))
+				// formData.value = paymentPaid
 
 				formData.value = {
 					id: paymentPaid.id,
@@ -243,16 +240,28 @@ export default {
 
 					subject_id: paymentPaid.payment.group.subject_id,
 				}
+
+			} else if (data) {
+
+				formData.value = {
+					...formData.value,
+					student_id: data.student_id,
+					group_id: data.group_id,
+				}
+
+				parentFilter.value = data
+
 			}
 		}
 		// Default date time
-		const datePicker = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),)
-		const defaultDate = datePicker.value;
+		const datePicker = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10))
+		const defaultDate = datePicker.value
 
 		const close = () => {
 			show.value = false
 			form.value.resetValidation()
 			formData.value = { ...emptyFormData }
+			parentFilter.value = {}
 		}
 		const form = ref(null)
 		const emptyFormData = {
@@ -396,8 +405,15 @@ export default {
 			payment.value = {}
 
 			payments.value.forEach(item => {
+
 				if (item.id == formData.value.payment_id)
 					payment.value = item
+				else if (parentFilter.value && String(parentFilter.value.year) === String(item.year) && String(parentFilter.value.month) === String(item.month)) {
+					payment.value = item
+					formData.value.payment_id = item.id
+				}
+
+
 			})
 		}
 
@@ -412,7 +428,7 @@ export default {
 		// on form submit
 		const submitDisabled = ref(false)
 		const onSubmit = () => {
-			if(submitDisabled.value === true)
+			if (submitDisabled.value === true)
 				return
 			else
 				submitDisabled.value = true
@@ -438,6 +454,7 @@ export default {
 						})
 						.finally(() => {
 							submitDisabled.value = false
+							emit('refresh-list')
 						})
 				} else {
 					store
@@ -452,6 +469,7 @@ export default {
 						})
 						.finally(() => {
 							submitDisabled.value = false
+							emit('refresh-list')
 						})
 				}
 			}

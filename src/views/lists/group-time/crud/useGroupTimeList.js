@@ -13,7 +13,7 @@ export default function useGroupList(MODULE_NAME) {
       align: 'start',
       sortable: false,
     },
-    { text: 'GRURH', value: 'group.name' },
+    { text: 'GURUH', value: 'group.name' },
     { text: 'KUN', value: 'week_day' },
     { text: 'XONA', value: 'room.name' },
     { text: 'VAQT ...DAN', value: 'time_begin' },

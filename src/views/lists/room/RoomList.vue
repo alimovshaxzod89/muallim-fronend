@@ -14,12 +14,17 @@
       </div>
 
       <v-spacer></v-spacer>
-
+      <div v-if='state.rows.length > 0' class='mx-2 my-4'>
+        <v-btn class='success exportXlsx' color='white' outlined
+          @click='ExportExcel()'>Jadvalni yuklab olish
+        </v-btn>
+      </div>
       <v-btn v-if="$can('create', 'Room')" class="primary" @click="openForm()">Qo'shish</v-btn>
     </v-card-text>
 
     <!-- table -->
     <v-data-table
+      ref="excel"
       v-model="selectedTableData"
       :headers="tableColumns"
       :items="state.rows"
@@ -90,6 +95,8 @@ import envParams from '@envParams'
 // store module
 import RoomStoreModule from './RoomStoreModule'
 
+import XLSX from 'xlsx'
+
 // composition function
 import useRoomList from './useRoomList'
 import RoomForm from './RoomForm'
@@ -151,6 +158,19 @@ export default {
         .then(() => deleteRow(id))
         .catch(() => {})
     }
+    // export xlsx
+		const excel = ref(null)
+		const ExportExcel = (type, fn, dl) => {
+			let elt = excel.value.$el.children[0]
+			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+			return dl
+				? XLSX.write(wb, {
+					bookType: type,
+					bookSST: true,
+					type: 'base64',
+				})
+				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+		}
 
     const BASE_URL = envParams.BASE_URL
 
@@ -158,6 +178,9 @@ export default {
     return {
       BASE_URL,
       state,
+
+      excel,
+      ExportExcel,
 
       tableColumns,
       searchQuery,

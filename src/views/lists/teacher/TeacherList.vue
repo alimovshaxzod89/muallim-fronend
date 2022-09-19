@@ -1,25 +1,25 @@
 <template>
   <v-card id="data-list">
     <!-- search -->
-    <v-card-text class="d-flex align-center flex-wrap pb-0">
-      <div class="d-flex align-center pb-5">
-        <v-text-field
-          v-model="filter.query"
-          dense
-          outlined
-          hide-details
-          label="Qidirish"
-          class="data-list-search me-3"
-        ></v-text-field>
-      </div>
+    <v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
+
+			<teacher-search v-model='filter' />
 
       <v-spacer></v-spacer>
-
-      <v-btn v-if="$can('create', 'Teacher')" class="primary" @click="openForm()">Qo'shish</v-btn>
-    </v-card-text>
+      
+      <div class="d-flex align-center">
+        <div v-if='state.rows.length > 0' class='mx-2 my-4'>
+          <v-btn class='success exportXlsx' color='white' outlined
+            @click='ExportExcel()'>Jadvalni yuklab olish
+          </v-btn>
+        </div>
+        <v-btn v-if="$can('create', 'Teacher')" class="primary" @click="openForm()">Qo'shish</v-btn>
+      </div>
+      </v-card-text>
 
     <!-- table -->
     <v-data-table
+      ref='excel'
       v-model="selectedTableData"
       :headers="tableColumns"
       :items="state.rows"
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
+import { mdiCalendar, mdiFilterOutline,  mdiTrendingUp, mdiPlus, mdiDeleteOutline, mdiDotsVertical, mdiEyeOutline, mdiPencilOutline } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
@@ -98,12 +98,15 @@ import TeacherStoreModule from './TeacherStoreModule'
 // composition function
 import useTeacherList from './useTeacherList'
 import TeacherForm from './TeacherForm'
+import XLSX from 'xlsx'
 import DialogConfirm from '../../components/DialogConfirm.vue'
+import TeacherSearch from '@/views/lists/teacher/TeacherSearch'
 
 const MODULE_NAME = 'teacher'
 
 export default {
   components: {
+		TeacherSearch,
     TeacherForm,
     DialogConfirm,
   },
@@ -162,12 +165,29 @@ export default {
         .catch(() => {})
     }
 
+    // export xlsx
+		const excel = ref(null)
+		const ExportExcel = (type, fn, dl) => {
+			let elt = excel.value.$el.children[0]
+			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+			return dl
+				? XLSX.write(wb, {
+					bookType: type,
+					bookSST: true,
+					type: 'base64',
+				})
+				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+		}
+
     const BASE_URL = envParams.BASE_URL
 
     // Return
     return {
       BASE_URL,
       state,
+
+      excel,
+			ExportExcel,
 
       tableColumns,
       searchQuery,
@@ -197,6 +217,8 @@ export default {
         mdiDeleteOutline,
         mdiDotsVertical,
         mdiEyeOutline,
+        mdiCalendar,
+        mdiFilterOutline
       },
     }
   },
@@ -216,6 +238,19 @@ export default {
 
   .data-list-search {
     max-width: 10.625rem;
+  }
+}
+.img-user {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.my-filter {
+  .v-input {
+    margin-right: 12px;
+    margin-bottom: 12px;
   }
 }
 </style>

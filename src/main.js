@@ -10,19 +10,24 @@ import router from './router'
 import store from './store'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
+import { VueMaskDirective } from 'v-mask'
+
 
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import numeral from 'numeral'
 import moment from 'moment'
+
+moment.locale('uz-latn')
 
 Vue.use(vueNumeralFilterInstaller, { locale: 'ru' });
 
 Vue.config.productionTip = false
 Vue.use(Toast)
 
-Vue.filter('summa', value => numeral(String(value).replace('.', ',')).format('0,0'))
+Vue.filter('summa', value => (value !== null && value !== '' ? numeral(String(value).replace('.', ',')).format('0,0') : '—'))
 Vue.filter('date', value => moment(value).format('D MMMM YYYY'))
 Vue.filter('year_month', value => moment(value).format('MMMM YYYY'))
+Vue.directive('mask', VueMaskDirective);
 
 new Vue({
   router,

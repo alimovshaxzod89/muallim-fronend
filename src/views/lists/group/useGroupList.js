@@ -13,91 +13,83 @@ export default function useGroupList(MODULE_NAME) {
       align: 'center',
       sortable: false,
     },
-    { text: 'NOMER', value: 'number' },
+    { text: 'GURUH NOMI', value: 'number' },
     { text: 'BINO', value: 'place.name' },
-    { text: 'FAN', value: 'subject.name' },
-    { text: 'USTOZ', value: 'teacher.full_name' },
+    { text: 'KURS', value: 'subject.name' },
+    { text: 'USTOZ', value: 'teacher.full_name'},
     { text: 'VAQTLAR', value: 'group_times', align: 'center', sortable: false },
 		{ text: 'NARX', value: 'price' },
     { text: 'BOSHLANGAN SANA / TUGASH SANASI', value: 'begin_date', align: 'center', sortable: false },
-    { text: 'BOSQICH', value: 'stage_id' },
-    { text: 'ULUSH', value: 'teacher_share' },
-    { text: "MAKS O'QUVCHI SONI", value: 'max_students' },
+    { text: 'BOSQICH', value: 'stage_id', align: 'center' },
+    { text: 'ULUSH', value: 'teacher_share', align: 'center' },
+    { text: "MAKS O'QUVCHI SONI", value: 'max_students', align: 'center' },
     { text: "AKTIV", value: 'status' },
   ]
 
   const filter = ref({
-    query: '',
-    place_id: '',
-  })
-
-  const options = ref({
-    sortBy: ['id'],
-    sortDesc: [true],
-    number: null,
-    first_name: null,
-    phone: null,
-    stage_id: null,
-    teacher_id: null,
-    price: null,
-    teacher_share: null,
-    max_students: null,
-    begin_date: null,
-    end_date: null,
-    limit: 10,
-    skip: 0,
-  })
+    teacher_id: '',
+    group_id: '',
+    subject_id: '',
+    full_name: '',
+    place_id: ''
+	})
+	const options = ref({
+		sortBy: ['id'],
+		sortDesc: [true],
+		limit: 10,
+		skip: 0,
+	})
   const loading = ref(false)
 
   let lastQuery = ''
   const fetchDatas = (force = false) => {
 
-    options.value.skip = (options.value.page - 1) * options.value.itemsPerPage
-    options.value.limit = options.value.itemsPerPage
+		options.value.skip = (options.value.page - 1) * options.value.itemsPerPage
+		options.value.limit = options.value.itemsPerPage
 
-    const queryParams = {
-      ...options.value,
-    }
+		const queryParams = {
+			...options.value,
+		}
 
-    for (let key in filter.value) {
+		for (let key in filter.value) {
 			let value = filter.value[key]
 			if (value !== null && value !== '') {
 				queryParams[key] = value
 			}
 		}
 
-    const newQuery = JSON.stringify(queryParams)
+		const newQuery = JSON.stringify(queryParams)
 
-    if (force || lastQuery !== newQuery) {
-      lastQuery = newQuery
+		if (force || lastQuery !== newQuery) {
+			lastQuery = newQuery
 
-      store
-        .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
-        .then(() => {
-          loading.value = false
-        })
-        .catch(error => {
-          console.log(error)
-          loading.value = false
-          notify.value = { type: 'error', text: error, time: Date.now() }
-        })
-    }
+			store
+				.dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
+				.then(() => {
+					loading.value = false
+				})
+				.catch(error => {
+					console.log(error)
+					loading.value = false
+					notify.value = { type: 'error', text: error, time: Date.now() }
+				})
+		}
 
-    lastQuery = JSON.stringify(queryParams)
-  }
+		lastQuery = JSON.stringify(queryParams)
+	}
 
   watch(filter, () => {
-    if (options.value.page != 1) options.value.page
-      options.value.page = 1
+		if (options.value.page != 1) options.value.page = 1
+		loading.value = true
 
-      setTimeout(() => fetchDatas(), 1000);
-  }, {deep: true})
+		setTimeout(() => fetchDatas(), 1000);
+	}, {deep: true})
 
   watch(options, () => {
-    loading.value = true
-    fetchDatas()
-    // selectedTableData.value = []
-  })
+		loading.value = true
+		fetchDatas()
+		// selectedTableData.value = []
+	})
 
   //delete
   const deleteRow = (id) => {

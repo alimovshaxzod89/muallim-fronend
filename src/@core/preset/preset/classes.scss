@@ -100,6 +100,18 @@
         height: calc((var(--vh, 1vh) * 100) - 128px - (1.5rem * 2));
       }
     }
+    // If SystemBar & Footer are present & AppBar is not present
+    &[style='padding: 64px 0px 48px;'] {
+      .max-h-content-container {
+        height: calc((var(--vh, 1vh) * 100) - 64px - 48px - (1.5rem * 2));
+      }
+    }
+    // If SystemBar & Footer are not present & AppBar is present
+    &[style='padding: 64px 0px 0px;'] {
+      .max-h-content-container {
+        height: calc((var(--vh, 1vh) * 100) - 64px - (1.5rem * 2));
+      }
+    }
   }
 }
 // #endregion
@@ -142,42 +154,42 @@
 
 // According to TailwindCSS
 $font-sizes: (
-  '.text-xs': (
-    'font-size': 0.75rem,
-    'line-height': 1rem,
-  ),
-  '.text-sm': (
-    'font-size': 0.875rem,
-    'line-height': 1.25rem,
-  ),
-  '.text-base': (
-    'font-size': 1rem,
-    'line-height': 1.5rem,
-  ),
-  '.text-lg': (
-    'font-size': 1.125rem,
-    'line-height': 1.75rem,
-  ),
-  '.text-xl': (
-    'font-size': 1.25rem,
-    'line-height': 1.75rem,
-  ),
-  '.text-2xl': (
-    'font-size': 1.5rem,
-    'line-height': 2rem,
-  ),
-  '.text-3xl': (
-    'font-size': 1.875rem,
-    'line-height': 2.25rem,
-  ),
-  '.text-4xl': (
-    'font-size': 2.25rem,
-    'line-height': 2.5rem,
-  ),
-  '.text-5xl': (
-    'font-size': 3rem,
-    'line-height': 1,
-  ),
+        '.text-xs': (
+                'font-size': 0.75rem,
+                'line-height': 1rem,
+        ),
+        '.text-sm': (
+                'font-size': 0.875rem,
+                'line-height': 1.25rem,
+        ),
+        '.text-base': (
+                'font-size': 1rem,
+                'line-height': 1.5rem,
+        ),
+        '.text-lg': (
+                'font-size': 1.125rem,
+                'line-height': 1.75rem,
+        ),
+        '.text-xl': (
+                'font-size': 1.25rem,
+                'line-height': 1.75rem,
+        ),
+        '.text-2xl': (
+                'font-size': 1.5rem,
+                'line-height': 2rem,
+        ),
+        '.text-3xl': (
+                'font-size': 1.875rem,
+                'line-height': 2.25rem,
+        ),
+        '.text-4xl': (
+                'font-size': 2.25rem,
+                'line-height': 2.5rem,
+        ),
+        '.text-5xl': (
+                'font-size': 3rem,
+                'line-height': 1,
+        ),
 );
 /* 'text-6xl': ( 'font-size': 3.75rem, 'line-height': 1 ),
     'text-7xl': ( 'font-size': 4.5rem, 'line-height': 1 ),
@@ -308,7 +320,7 @@ $font-sizes: (
 
 // ? Set inner circle color of inactive step dark compatible
 @include theme('custom-header.v-stepper .v-stepper__step.v-stepper__step--inactive .v-stepper__step__step::after') using
-  ($material) {
+($material) {
   background-color: map-deep-get($material, 'cards');
 }
 

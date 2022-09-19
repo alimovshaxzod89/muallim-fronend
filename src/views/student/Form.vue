@@ -12,7 +12,7 @@
 			<form @submit="handleForm" @keydown.enter="handleForm">
 				<div class="row">
 					<div class="col-6 mb-1">
-						<label>Fan</label>
+						<label>Kurs</label>
 						<b-form-select v-model="subject_id" :options="options.subjects" value-field="id" text-field="name" />
 					</div>
 					<div class="col-6 mb-1">

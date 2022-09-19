@@ -14,7 +14,7 @@ export default function useTeacherPaidList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
-    { text: 'FAN', value: 'subject.name' },
+    { text: 'KURS', value: 'subject.name' },
     { text: 'NOMI', value: 'name' },
     { text: 'AKTIV', value: 'status'},
     ]

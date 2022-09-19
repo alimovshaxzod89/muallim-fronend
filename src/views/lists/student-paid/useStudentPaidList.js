@@ -1,5 +1,6 @@
 import store from '@/store'
 import { ref, watch, } from '@vue/composition-api'
+import moment from 'moment'
 
 export default function useStudentPaidList(MODULE_NAME) {
 
@@ -14,21 +15,25 @@ export default function useStudentPaidList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
-    { text: 'FAN', value: 'payment.group.subject.name' },
-    { text: 'GURUH', value: 'payment.group.number' },
+    // { text: 'KURS', value: 'payment.group.subject.name' },
+    { text: 'GURUH', value: 'group' },
     { text: 'TALABA', value: 'payment.student.full_name' },
-    { text: 'OY/YIL', value: 'month_year' },
-    { text: 'SUMMA', value: 'amount' },
-    { text: 'SA\'NA', value: 'date' },
+		{ text: 'TO\'LADI', value: 'amount', align: 'center' },
+    { text: "TO'LOV TURI", value: 'cashbox_id', align: 'center' },
+		{ text: 'SA\'NA', value: 'date', align: 'center' },
+    { text: "QAYSI OY UCHUN", value: 'month_year', align: 'center' },
 	]
 
   const filter = ref({
-    query: '',
-    year: '',
+		year: moment(Date.now()).format('YYYY'),
+		month: parseInt(moment(Date.now()).format('M')),
+		day: parseInt(moment(Date.now()).format('D')),
     // date: new Date().toISOString().substr(0, 10),
+    date1: '',
     date2: '',
     group_id: '',
     student_id: '',
+		cashbox_id: '',
   })
   const options = ref({
     sortBy: ['id'],

@@ -17,7 +17,8 @@ export default function useGroupList(MODULE_NAME) {
     { text: "TO'LOV OYI", value: 'payment.date' },
     { text: 'TALABA', value: 'payment.student.full_name' },
     { text: "TO'LADI", value: 'amount' },
-    { text: 'SANA', value: 'date' },
+    { text: "TO'LOV TURI", value: 'cashbox.name' },
+    { text: 'TO\'LOV QILGAN SANA', value: 'date' },
   ]
 
   const searchQuery = ref('')

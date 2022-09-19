@@ -1,7 +1,7 @@
 <template>
   <v-card id="data-list">
     <!-- search -->
-    <v-card-text class="d-flex align-center flex-wrap pb-0">
+    <v-card-text class="d-flex  pb-0">
       <div class="d-flex pb-5" style="width: 100%">
         <v-text-field
           v-model="filter.query"
@@ -151,11 +151,19 @@
 
       <v-spacer></v-spacer>
 
+      <div class="d-flex align-center">
+        <div v-if='state.rows.length > 0' class='mx-2 my-4'>
+        <v-btn class='success exportXlsx' color='white' outlined
+          @click='ExportExcel()'>Jadvalni yuklab olish
+        </v-btn>
+		  </div>
       <v-btn v-if="$can('create', 'Teacher')" class="primary" @click="openForm()">Qo'shish</v-btn>
+      </div>
     </v-card-text>
 
     <!-- table -->
     <v-data-table
+      ref='excel'
       v-model="selectedTableData"
       :headers="tableColumns"
       :items="state.rows"
@@ -241,6 +249,8 @@ import DialogConfirm from '../../components/DialogConfirm.vue'
 
 import moment from 'moment'
 moment.locale('uz-latn')
+
+import XLSX from 'xlsx'
 
 import numeral from 'numeral'
 numeral.locale('ru')
@@ -379,12 +389,29 @@ export default {
     //   loadStudents()
     // })
 
+    // export xlsx
+		const excel = ref(null)
+		const ExportExcel = (type, fn, dl) => {
+			let elt = excel.value.$el.children[0]
+			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+			return dl
+				? XLSX.write(wb, {
+					bookType: type,
+					bookSST: true,
+					type: 'base64',
+				})
+				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+		}
+
     const BASE_URL = envParams.BASE_URL
 
     // Return
     return {
       BASE_URL,
       state,
+
+      excel,
+			ExportExcel,
 
       tableColumns,
       searchQuery,

@@ -1,11 +1,10 @@
-import { mdiAccountDetailsOutline, mdiPercent } from '@mdi/js'
+import { mdiAccountDetailsOutline, mdiCashCheck, mdiPercent, mdiHumanCapacityDecrease } from '@mdi/js'
 
 export default [
   {
     title: 'Guruhlar',
     to: 'groups',
     icon: mdiPercent,
-
     resource: 'Group',
     action: 'read',
   },
@@ -16,6 +15,13 @@ export default [
     resource: 'Student',
     action: 'read',
   },
+  {
+		title: 'Guruh talabalari',
+		to: 'student-groups',
+		icon: mdiHumanCapacityDecrease,
+		resource: 'StudentGroup',
+		action: 'read',
+	},
   {
     subheader: '#',
     badge: 'New',
@@ -44,18 +50,25 @@ export default [
     resource: 'Public',
     action: 'read',
   },
-  {
-    title: "To'lovlar",
-    icon: mdiAccountDetailsOutline,
-    to: 'payments',
-    resource: 'Public',
-    action: 'read',
-  },
+	{
+		title: "Talabadan to\'lovlar",
+		icon: mdiCashCheck,
+		to: 'student-paids',
+		resource: 'StudentPaid',
+		action: 'read',
+	},
   {
     title: 'Qarzdor talabalar',
     icon: mdiAccountDetailsOutline,
-    to: 'student-depts',
-    resource: 'Public',
+    to: 'student-debts',
+    resource: 'StudentDebt',
     action: 'read',
   },
+	{
+		title: "To'lovlar",
+		icon: mdiAccountDetailsOutline,
+		to: 'payments',
+		resource: 'Public',
+		action: 'read',
+	},
 ]

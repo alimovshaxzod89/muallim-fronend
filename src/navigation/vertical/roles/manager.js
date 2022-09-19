@@ -1,8 +1,20 @@
 import {
-  mdiAccountDetailsOutline, mdiFilterVariant, mdiPercent
+	mdiAccountDetailsOutline,
+	mdiCashCheck,
+	mdiFileImportOutline,
+	mdiFilterVariant,
+	mdiHumanCapacityDecrease,
+	mdiPercent,
 } from '@mdi/js'
 
 export default [
+	{
+		title: 'Ustozlar',
+		icon: mdiAccountDetailsOutline,
+		to: 'teachers',
+		resource: 'Teacher',
+		action: 'read',
+	},
   {
     title: 'Guruhlar',
     to: 'groups',
@@ -17,13 +29,13 @@ export default [
     resource: 'Student',
     action: 'read',
   },
-  {
-    subheader: '#',
-    badge: 'New',
-    bageColor: 'success',
-    resource: 'Public',
-    action: 'read',
-  },
+	{
+		title: 'Guruh talabalari',
+		to: 'student-groups',
+		icon: mdiHumanCapacityDecrease,
+		resource: 'StudentGroup',
+		action: 'read',
+	},
 	{
 		title: 'Guruh vaqtlari',
 		icon: mdiAccountDetailsOutline,
@@ -39,26 +51,33 @@ export default [
     action: 'read',
   },
   {
-    subheader: '##',
+    subheader: 'To\'lov',
     badge: 'New',
     bageColor: 'success',
     resource: 'Public',
     action: 'read',
   },
   {
-    title: "To'lovlar",
-    icon: mdiAccountDetailsOutline,
-    to: 'payments',
-    resource: 'Public',
+    title: "Talabadan to\'lovlar",
+    icon: mdiCashCheck,
+    to: 'student-paids',
+    resource: 'StudentPaid',
     action: 'read',
   },
   {
     title: 'Qarzdor talabalar',
     icon: mdiAccountDetailsOutline,
-    to: 'student-depts',
-    resource: 'Public',
+    to: 'student-debts',
+    resource: 'StudentDebt',
     action: 'read',
   },
+	{
+		title: "Oylik to'lovlar",
+		icon: mdiAccountDetailsOutline,
+		to: 'payments',
+		resource: 'Public',
+		action: 'read',
+	},
   {
     title: "Ustozlarga to'lovlar",
     icon: mdiAccountDetailsOutline,
@@ -74,7 +93,7 @@ export default [
     action: 'read',
   },
   {
-    subheader: '###',
+    subheader: 'Qo\'shimcha',
     badge: 'New',
     bageColor: 'success',
     resource: 'Public',
@@ -98,13 +117,13 @@ export default [
 				resource: 'Room',
 				action: 'read',
 			},
-			{
-				title: 'Ustozlar',
-				icon: mdiAccountDetailsOutline,
-				to: 'teachers',
-				resource: 'Teacher',
-				action: 'read',
-			},
 		],
+	},
+	{
+		title: 'Import qilish',
+		to: 'import',
+		resource: 'Public',
+		action: 'read',
+		icon: mdiFileImportOutline,
 	},
 ]

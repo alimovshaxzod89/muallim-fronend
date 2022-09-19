@@ -2,177 +2,23 @@
   <v-card id="data-list">
     <!-- search -->
     <v-card-text class="d-flex align-flex-start flex-wrap justify-end my-filter">
-      <div class="d-flex pb-5" style="width: 100%">
-				<v-text-field
-          v-model="filter.query"
-          dense
-          outlined
-          hide-details
-          label="Qidiruv"
-          class="data-list-search me-3"
-        ></v-text-field>
-        <v-autocomplete
-          v-model="filter.place_id"
-          :items="places"
-          item-text="name"
-          item-value="id"
-          label="BINO"
-          class="data-list-search me-3"
-          dense
-          solo
-          outlined
-          hide-details
-          clearable
-        >
-        </v-autocomplete>
 
-				<v-expansion-panels class="my-accordion" accordion>
-					<v-expansion-panel>
-						<v-expansion-panel-header disable-icon-rotate>
-							Ko'proq
-							<template #actions>
-							<v-icon color="secondary">
-								{{ icons.mdiFilterOutline  }}
-							</v-icon>
-						</template>
-						</v-expansion-panel-header>
-						<v-expansion-panel-content>
-							<v-text-field
-								v-model="options.first_name"
-								dense
-								outlined
-								hide-details
-								label="Fish"
-								class="data-list-search me-3"
-							></v-text-field>
-
-							<v-text-field
-								v-model="options.phone"
-								dense
-								outlined
-								hide-details
-								label="Telefon"
-								class="data-list-search me-3"
-							></v-text-field>
-
-							<v-autocomplete
-								v-model="options.region_id"
-								:items="regions"
-								item-text="name"
-								item-value="id"
-								dense
-                solo
-								outlined
-								hide-details
-								label="Tuman"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
-							<v-text-field
-								v-model="options.address"
-								dense
-								outlined
-								hide-details
-								label="Manzil"
-								class="data-list-search me-3"
-							></v-text-field>
-
-							<v-autocomplete
-								v-model="options.permanent_region_id"
-								:items="regions"
-								item-text="name"
-								item-value="id"
-								dense
-                solo
-								outlined
-								hide-details
-								label="D.Y. Tuman"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
-							<v-text-field
-								v-model="options.permanent_address"
-								dense
-								outlined
-								hide-details
-								label="D.Y. Manzil"
-								class="data-list-search me-3"
-							></v-text-field>
-
-							<v-autocomplete
-								v-model="options.gender"
-								:items="[{value: 1, name: 'Erkak'}, {value: 2, name: 'Ayol'}]"
-								item-text="name"
-								item-value="value"
-								dense
-                solo
-								outlined
-								hide-details
-								label="Jinsi"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
-							<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
-								<template v-slot:activator="{ on, attrs }">
-									<v-text-field
-										v-model="options.birth_date"
-										label="Tug'ilgan sana"
-										readonly
-										v-bind="attrs"
-										hide-details
-										v-on="on"
-										style="height: 40px !important; width: 170px !important"
-										outlined
-										clearable
-										:append-icon="icons.mdiCalendar"
-									></v-text-field>
-								</template>
-								<v-date-picker
-									v-model="options.birth_date"
-									color="primary"
-									@input="isDate = false"
-									no-title
-									:first-day-of-week="1"
-									locale="ru-ru"
-								></v-date-picker>
-							</v-menu>
-
-							<v-autocomplete
-								v-model="options.sale"
-								:items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
-								item-text="name"
-								item-value="value"
-								dense
-                solo
-								outlined
-								hide-details
-								label="Chegirma"
-								class="data-list-search me-3"
-								clearable
-							></v-autocomplete>
-
-							<v-text-field
-								v-model="options.sale_cause"
-								dense
-								outlined
-								hide-details
-								label="Chegirma sababi"
-								class="data-list-search me-3"
-							></v-text-field>
-						</v-expansion-panel-content>
-					</v-expansion-panel>
-				</v-expansion-panels>
-      </div>
+			<group-search v-model='filter' />
 
 			<v-spacer></v-spacer>
-			<v-btn v-if="$can('create', 'Group')" class="primary" @click="openForm()">Qo'shish</v-btn>
+			<div class="d-flex align-center">
+        <div v-if='state.rows.length > 0' class='mx-2 my-4'>
+          <v-btn class='success exportXlsx' color='white' outlined
+            @click='ExportExcel()'>Jadvalni yuklab olish
+          </v-btn>
+		    </div>
+        <v-btn v-if="$can('create', 'Group')" class="primary" @click="openForm()">Qo'shish</v-btn>
+      </div>
     </v-card-text>
 
     <!-- table -->
     <v-data-table
+      ref='excel'
       v-model="selectedTableData"
       :headers="tableColumns"
       :items="state.rows"
@@ -305,16 +151,20 @@ import envParams from '@envParams'
 // store module
 import GroupStoreModule from './GroupStoreModule'
 
+import XLSX from 'xlsx'
+
 // composition function
 import useGroupList from './useGroupList'
 import GroupForm from './GroupForm'
 import GroupTimeList from '@/views/lists/group-time/crud/GroupTimeList.vue'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
+import GroupSearch from '@/views/lists/group/GroupSearch'
 
 const MODULE_NAME = 'group'
 
 export default {
   components: {
+		GroupSearch,
     GroupForm,
     GroupTimeList,
     DialogConfirm,
@@ -340,7 +190,6 @@ export default {
     //logics
     const {
       filter,
-      searchQuery,
       tableColumns,
       deleteRow,
       fetchDatas,
@@ -359,10 +208,6 @@ export default {
       { title: 'Delete', icon: mdiDeleteOutline },
       { title: 'Edit', icon: mdiPencilOutline },
     ]
-
-    // Datepicker
-    const picker = new Date().toISOString().substr(0, 10)
-    const isDate = ref(false)
 
     //Form
     const GroupForm = ref(null)
@@ -407,55 +252,35 @@ export default {
       return result[0].name
     }
 
-    // ! METHODS
-    const places = ref([])
-    const loadPlace = () => {
-      axios.get('/api/places').then(response => {
-        places.value = response.data.data
-      })
-    }
-
-    // LoadApis
-    const regions = ref([])
-    const loadRegions = () => {
-      axios.get('/api/regions').then(response => {
-        regions.value = response.data.data
-      })
-    }
-
-    onMounted(() => {
-      loadRegions()
-      loadPlace()
-    })
-
-    // PlaceForm
-    const placeForm = ref(null)
-    const addPlace = (id = null) => {
-      placeForm.value.open(id)
-    }
+    // export xlsx
+		const excel = ref(null)
+		const ExportExcel = (type, fn, dl) => {
+			let elt = excel.value.$el.children[0]
+			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+			return dl
+				? XLSX.write(wb, {
+					bookType: type,
+					bookSST: true,
+					type: 'base64',
+				})
+				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+		}
 
     // Return
     return {
       BASE_URL,
       state,
       filter,
-      loadPlace,
 
-      picker,
-      isDate,
+      excel,
+			ExportExcel,
+
       tableColumns,
-      searchQuery,
       fetchDatas,
       options,
       loading,
       notify,
       selectedTableData,
-
-      placeForm,
-      addPlace,
-
-      // LoadApis
-      places,
 
       actions,
       actionOptions,
@@ -472,9 +297,6 @@ export default {
 
       groupTimeList,
       openGroupTimeList,
-
-      // LoadApis
-      regions,
 
       getDay,
 

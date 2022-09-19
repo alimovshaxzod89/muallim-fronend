@@ -1,290 +1,165 @@
 <template>
-  <v-card id="data-list">
-    <!-- search -->
-    <v-card-text class="d-flex align-center flex-wrap pb-0">
+	<v-card id='data-list'>
+		<!-- search -->
+		<v-card-text class='d-flex align-flex-start flex-wrap justify-end my-filter'>
 
-        <v-col cols="3">
-          <v-text-field
-            v-model="filter.query"
-            dense
-            outlined
-            hide-details
-            label="Qidirish"
-            class="data-list-search me-3"
-          ></v-text-field>
-        </v-col>
+			<student-paid-search v-model='filter' />
 
-        <v-col cols="9">
-          <v-expansion-panels class="my-accordion" accordion>
-					<v-expansion-panel>
-						<v-expansion-panel-header disable-icon-rotate>
-							Ko'proq
-							<template #actions>
-							<v-icon color="secondary">
-								{{ icons.mdiFilterOutline  }}
-							</v-icon>
+			<v-spacer></v-spacer>
+
+			<div class='d-flex align-center'>
+				<div v-if='state.rows.length > 0' class='ml-auto mx-2 my-4'>
+					<v-btn class='success exportXlsx' color='white' outlined
+								 @click='ExportExcel()'>Jadvalni yuklab olish
+					</v-btn>
+				</div>
+
+				<div class='btnAdd ml-auto'>
+					<v-btn v-if="$can('create', 'StudentPaid')" class='primary' @click='openForm()'>Qo'shish
+					</v-btn>
+				</div>
+			</div>
+		</v-card-text>
+
+		<!-- table -->
+		<v-data-table
+			ref='excel'
+			v-model='selectedTableData'
+			:headers='tableColumns'
+			:items='state.rows'
+			:options.sync='options'
+			:server-items-length='state.total'
+			:loading='loading'
+			:items-per-page='options.itemsPerPage'
+			:footer-props='footerProps'
+			class='text-no-wrap'
+		>
+			<template slot='item.index' slot-scope='props'>
+				{{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
+			</template>
+
+			<!-- total -->
+			<template #[`item.total`]='{ item }'> ${{ item.total }}</template>
+
+			<template late #[`item.actions`]='{ item }'>
+				<div class='d-flex align-center justify-center'>
+					<!-- delete -->
+					<v-tooltip bottom>
+						<template #activator='{ on, attrs }'>
+							<v-btn icon small v-bind='attrs' v-on='on' @click='confirmDelete(item.id)'
+										 v-if="$can('delete', 'StudentPaid')">
+								<v-icon size='18'>
+									{{ icons.mdiDeleteOutline }}
+								</v-icon>
+							</v-btn>
 						</template>
-						</v-expansion-panel-header>
-						  <v-expansion-panel-content>
+						<span>Delete</span>
+					</v-tooltip>
 
-              <v-col cols="3">
-							  <v-autocomplete
-							  	v-model="filter.year"
-                  :items="years"
-                  item-text="number"
-							  	item-value="id"
-                  solo
-							  	dense
-							  	outlined
-							  	hide-details
-							  	label="YIL"
-							  	class="data-list-search me-3"
-                  clearable
-							  ></v-autocomplete>
-              </v-col>
+					<!-- view  -->
+					<v-tooltip bottom>
+						<template #activator='{ on, attrs }'>
+							<v-btn icon small v-bind='attrs' v-on='on' @click='openForm(item.id)'
+										 v-if="$can('update', 'StudentPaid')">
+								<v-icon size='18'>
+									{{ icons.mdiPencilOutline }}
+								</v-icon>
+							</v-btn>
+						</template>
+						<span>Edit</span>
+					</v-tooltip>
 
-              <v-col cols="3">
-							  <v-autocomplete
-							  	v-model="filter.month"
-                  :items="months"
-                  item-text="name"
-							  	item-value="id"
-                  solo
-							  	dense
-							  	outlined
-							  	hide-details
-							  	label="OY"
-							  	class="data-list-search me-3"
-                  clearable
-							  ></v-autocomplete>
-              </v-col>
+					<!-- print  -->
+					<v-tooltip bottom>
+						<template #activator="{ on, attrs }">
+							<v-btn icon small v-bind="attrs" v-on="on" @click="printCheck(item)">
+								<v-icon size="18">
+									{{ icons.mdiPrinter   }}
+								</v-icon>
+							</v-btn>
+						</template>
+						<span>Chop etish</span>
+					</v-tooltip>
+				</div>
+			</template>
 
-              <v-col cols="3">
-                <v-menu
-                  ref="menuref"
-                  v-model="menu1"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="auto"
-                >
+			<template #[`item.month_year`]='{ item }'>
+				{{ item.payment.date | year_month }}
+				<br>
+				{{ item.payment.amount | summa }}
+			</template>
+			<template #[`item.amount`]='{ item }'>
+				{{ item.amount | summa }}
+			</template>
+			<template #[`item.cashbox_id`]='{ item }'>
+				{{ item.cashbox_id ? item.cashbox.name : '' }}
+			</template>
 
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="filter.date"
-                        label="Hozirgi san'a"
-                        persistent-hint
-                        :prepend-icon="icons.mdiCalendar"
-                        v-bind="attrs"
-                        @blur="date = parseDate(dateFormatted)"
-                        v-on="on"
-                        outlined
-                        dense
-                        clearable
-                      ></v-text-field>
-                    </template>
+			<template #[`item.date`]='{ item }'>
+				<div v-if='item.date != today'>
+					{{ item.date | date }}
+					<br>
+				</div>
+<!--				<div v-if='getDate(item.created_at) == item.date'>-->
+					{{ getHourMinute(item.created_at) }}
+<!--				</div>-->
 
+			</template>
 
-                    <v-date-picker
-                      v-model="filter.date"
-                      no-title
-                      color="primary"
-                      @input="menu1 = false"
-                    ></v-date-picker>
+			<template #[`item.payment.student.full_name`]='{ item }'>
+				{{ item.payment.student.full_name }}
+				<br>
+				{{ item.payment.student.phone }}
+			</template>
 
-                </v-menu>
-              </v-col>
-
-              <v-col cols="3">
-                <v-menu
-                  v-model="menu2"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="auto"
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="filter.date2"
-                        label="san'ani tanlash"
-                        persistent-hint
-                        :prepend-icon="icons.mdiCalendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                        outlined
-                        dense
-                        clearable
-                      ></v-text-field>
-                    </template>
-
-                  <v-date-picker
-                    v-model="filter.date2"
-                    no-title
-                    color="primary"
-                    @input="menu2 = false"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-
-							  <!-- <v-autocomplete
-							  	v-model="filter.full_name"
-							  	:items="teachers"
-							  	item-text="full_name"
-							  	item-value="id"
-							  	dense
-							  	outlined
-							  	hide-details
-							  	label="Ustozlar"
-							  	class="data-list-search me-3"
-							  	clearable
-							  ></v-autocomplete> -->
-
-							  <v-autocomplete
-							  	v-model="filter.group_id"
-							  	:items="groups"
-							  	item-text="number"
-							  	item-value="id"
-                  solo
-							  	dense
-							  	outlined
-							  	hide-details
-							  	label="Guruhlar"
-							  	class="data-list-search me-3"
-							  	clearable
-							  ></v-autocomplete>
-
-							  <v-autocomplete
-							  	v-model="filter.student_id"
-							  	:items="students"
-							  	item-text="full_name"
-							  	item-value="id"
-                  solo
-							  	dense
-							  	outlined
-							  	hide-details
-							  	label="Studentlar"
-							  	class="data-list-search me-3"
-							  	clearable
-							  ></v-autocomplete>
-
-						  </v-expansion-panel-content>
-					</v-expansion-panel>
-				</v-expansion-panels>
-        </v-col>
-      <v-spacer></v-spacer>
-
-    <div class="btnAdd ml-auto">
-      <v-btn class="primary mb-3" @click="openForm()">Qo'shish</v-btn>
-    </div>
-    </v-card-text>
-
-    <!-- table -->
-    <v-data-table
-      v-model="selectedTableData"
-      :headers="tableColumns"
-      :items="state.rows"
-      :options.sync="options"
-      :server-items-length="state.total"
-      :loading="loading"
-      :items-per-page="options.itemsPerPage"
-      :footer-props="footerProps"
-      class="text-no-wrap"
-    >
-      <template slot="item.index" slot-scope="props">
-        {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
-      </template>
-
-      <!-- total -->
-      <template #[`item.total`]="{ item }"> ${{ item.total }}</template>
-
-      <template late #[`item.actions`]="{ item }">
-        <div class="d-flex align-center justify-center">
-          <!-- delete -->
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="confirmDelete(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiDeleteOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Delete</span>
-          </v-tooltip>
-
-          <!-- view  -->
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on" @click="openForm(item.id)">
-                <v-icon size="18">
-                  {{ icons.mdiPencilOutline }}
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Edit</span>
-          </v-tooltip>
-        </div>
-      </template>
-
-      <template #[`item.month_year`]="{ item }">
-        {{ item.payment.date | year_month }}
-      </template>
-      <template #[`item.amount`]="{ item }">
-        {{ item.amount | summa }}
-      </template>
-
-      <template #[`item.date`]="{ item }">
-        {{ item.date | date }}
-      </template>
+			<template #[`item.group`]='{ item }'>
+				{{ item.payment.group.number }}
+				<br>
+				{{ item.payment.group.subject.name }}
+				<br>
+				{{ item.payment.group.teacher.full_name }}
+			</template>
 
 
-      <template v-slot:footer>
-				<table class="totalAmount">
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td rowspan="10" class="text-end">Jami summa:</td>
-							<td rowspan="1" class="text-end">{{totalAmount()}}</td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-      </template>
-    </v-data-table>
+			<template slot='body.append'>
+				<tr>
+					<th colspan='4' class='text-end'>Jami:</th>
+					<th colspan='1' class='text-center mr-4'>{{ totalWasPaid | summa }}</th>
+					<th colspan='1'></th>
+					<th colspan='1'></th>
+					<th colspan='1' class='text-center'>{{ totalPayment | summa }}</th>
+				</tr>
+			</template>
+		</v-data-table>
 
-    <dialog-confirm ref="dialogConfirm" />
+		<dialog-confirm ref='dialogConfirm' />
 
-    <student-paid-form
-      ref="studentPaidForm"
-      v-on:notify="notify = { type: $event.type, text: $event.text, time: Date.now() }"
-    />
-  </v-card>
+		<student-paid-form
+			ref='studentPaidForm'
+			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
+		/>
+	</v-card>
 </template>
 
 <script>
 import {
-  mdiFilterOutline,
-  mdiCalendar,
-  mdiTrendingUp,
-  mdiPlus,
-  mdiDeleteOutline,
-  mdiDotsVertical,
-  mdiEyeOutline,
-  mdiPencilOutline,
+	mdiTrendingUp,
+	mdiPlus,
+	mdiDeleteOutline,
+	mdiDotsVertical,
+	mdiEyeOutline,
+	mdiPencilOutline,
+	mdiPrinter,
 } from '@mdi/js'
 
-import { onMounted, ref, computed, watch } from '@vue/composition-api'
+import { ref, computed } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
 import moment from 'moment'
-moment.locale('uz-latn')
-
 import envParams from '@envParams'
+
+
+import XLSX from 'xlsx'
 
 // store module
 import StudentPaidStoreModule from './StudentPaidStoreModule'
@@ -292,243 +167,207 @@ import StudentPaidStoreModule from './StudentPaidStoreModule'
 // composition function
 import useStudentPaidList from './useStudentPaidList'
 import StudentPaidForm from './StudentPaidForm'
+import StudentPaidSearch from './StudentPaidSearch'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 
 const MODULE_NAME = 'studentPaid'
 
 export default {
-  components: {
-    StudentPaidForm,
-    DialogConfirm,
-  },
-  filters: {
-    feed: value => value[1] + '/' + value[2] + '/' + value[3],
-  },
-  setup() {
-    // Register module
-    if (!store.hasModule(MODULE_NAME)) {
-      store.registerModule(MODULE_NAME, StudentPaidStoreModule)
-    }
-    // UnRegister on leave
-    // onUnmounted(() => {
-    //   if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
-    // })
+	components: {
+		StudentPaidForm,
+		StudentPaidSearch,
+		DialogConfirm,
+		mdiPrinter,
+	},
+	filters: {
+		feed: value => value[1] + '/' + value[2] + '/' + value[3],
+	},
+	methods: {
+		getDate(datetime) {
+			return moment(datetime).format('YYYY-MM-DD')
+		},
+		getHourMinute(datetime) {
+			return moment(datetime).format('H:mm')
+		},
+	},
+	setup() {
+		// Register module
+		if (!store.hasModule(MODULE_NAME)) {
+			store.registerModule(MODULE_NAME, StudentPaidStoreModule)
+		}
+		// UnRegister on leave
+		// onUnmounted(() => {
+		//   if (store.hasModule(MODULE_NAME)) store.unregisterModule(MODULE_NAME)
+		// })
 
-    //store state
-    const state = ref(store.state[MODULE_NAME])
+		const BASE_URL = envParams.BASE_URL
+		const BACKEND_URL = envParams.BACKEND_URL
 
-    //logics
-    const {
-      filter,
-      searchQuery,
-      tableColumns,
-      deleteRow,
+		//store state
+		const state = ref(store.state[MODULE_NAME])
 
-      options,
-      loading,
-      notify,
-      selectedTableData,
-    } = useStudentPaidList(MODULE_NAME)
+		//logics
+		const {
+			filter,
+			searchQuery,
+			tableColumns,
+			deleteRow,
 
-    //interface additional elements
-    const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
-    const actions = ['Delete', 'Edit']
-    const selectedAction = ref('')
-    const actionOptions = [
-      { title: 'Delete', icon: mdiDeleteOutline },
-      { title: 'Edit', icon: mdiPencilOutline },
-    ]
+			options,
+			loading,
+			notify,
+			selectedTableData,
+		} = useStudentPaidList(MODULE_NAME)
 
-    // Filter date picker
-    const date = ref(new Date().toISOString().substr(0, 10))
-    const menu1 = ref(false)
-    const menu2 = ref(false)
+		//interface additional elements
+		const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
+		const actions = ['Delete', 'Edit']
+		const selectedAction = ref('')
+		const actionOptions = [
+			{ title: 'Delete', icon: mdiDeleteOutline },
+			{ title: 'Edit', icon: mdiPencilOutline },
+		]
 
-    const formatDate = dates => {
-      if (!dates) return null
-      const [year, month, day] = dates.split('-')
 
-      return `${month}/${day}/${year}`
-    }
+		//Form
+		const studentPaidForm = ref(null)
+		const openForm = id => {
+			studentPaidForm.value.open(id)
+		}
 
-    let dateFormatted = formatDate(new Date().toISOString().substr(0, 10))
+		//Delete Confirm Dialog
+		const dialogConfirm = ref(null)
+		const confirmDelete = id => {
+			dialogConfirm.value
+				.open('O\'chirishga aminmisiz?')
+				.then(() => deleteRow(id))
+				.catch(() => {
+				})
+		}
 
-    const parseDate = dates => {
-      if (!dates) return null
-      const [month, day, year] = dates.split('/')
+		// const selectsDatas = ref({
+		//   amount: null,
+		// })
+		//
+		// const totalAmount = () => {
+		//   return selectsDatas.value.amount.reduce((a, c) => a + c.amount, 0)
+		// }
+		// axios.get('/api/payment-paids').then(response => {
+		//   if (response.data.success) {
+		//     selectsDatas.value.amount = response.data.data
+		//   }
+		// })
 
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    }
+		const today = new Date().toISOString().slice(0, 10)
 
-    const computedDateFormatted = computed(() => formatDate(date.value))
+		const totalWasPaid = computed(() => {
+			let total = 0
+			if (state.value.rows !== undefined && state.value.rows.length > 0)
+				total = state.value.rows.reduce((prev, item) => prev + item.amount, 0)
+			return total
+		})
 
-    watch(date, () => {
-      dateFormatted = formatDate(date.value)
-    })
+		const totalPayment = computed(() => {
+			let total = 0
+			if (state.value.rows !== undefined && state.value.rows.length > 0)
+				total = state.value.rows.reduce((prev, item) => prev + item.payment.amount, 0)
+			return total
+		})
 
-    // Datepicker
-    const picker = new Date().toISOString().substr(0, 10)
-    const isDate = ref(false)
-    const isDateTwo = ref(false)
+		// export xlsx
+		const excel = ref(null)
+		const ExportExcel = (type, fn, dl) => {
+			let elt = excel.value.$el.children[0]
+			let wb = XLSX.utils.table_to_book(elt, { sheet: 'Sheet JS' })
+			return dl
+				? XLSX.write(wb, {
+					bookType: type,
+					bookSST: true,
+					type: 'base64',
+				})
+				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
+		}
 
-    //Form
-    const studentPaidForm = ref(null)
-    const openForm = id => {
-      studentPaidForm.value.open(id)
-    }
 
-    //Delete Confirm Dialog
-    const dialogConfirm = ref(null)
-    const confirmDelete = id => {
-      dialogConfirm.value
-        .open("O'chirishga aminmisiz?")
-        .then(() => deleteRow(id))
-        .catch(() => {})
-    }
+		const printCheck = data => {
+			var myWindow = window.open(
+				BACKEND_URL + '/print/' + data.id,
+				'MsgWindow',
+				'toolbar=no,status=no,menubar=no,width=600,height=600',
+			)
+			//myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
+		}
 
-    const BASE_URL = envParams.BASE_URL
+		// Return
+		return {
+			BASE_URL,
+			state,
 
-    const years = ref([
-      { id: 1, number: '2020' },
-      { id: 2, number: '2021' },
-      { id: 3, number: '2022' },
-    ])
-    const months = ref([
-      { id: 1, name: 'Yanvar' },
-      { id: 2, name: 'Fevral' },
-      { id: 3, name: 'Mart' },
-      { id: 4, name: 'Aprel' },
-      { id: 5, name: 'May' },
-      { id: 6, name: 'Iyun' },
-      { id: 7, name: 'Iyul' },
-      { id: 8, name: 'Avgust' },
-      { id: 9, name: 'Sentabr' },
-      { id: 10, name: 'Oktabr' },
-      { id: 11, name: 'Noyabr' },
-      { id: 12, name: 'Dekabr' },
-    ])
+			excel,
+			ExportExcel,
 
-    const teachers = ref([])
-    const loadTeachers = () => {
-      axios.get('/api/teachers').then(response => {
-        teachers.value = response.data.data
-      })
-    }
+			// totalAmount,
+			// selectsDatas,
 
-    const groups = ref([])
-    const loadGroups = () => {
-      axios.get('/api/groups').then(response => {
-        groups.value = response.data.data
-      })
-    }
+			tableColumns,
+			searchQuery,
+			options,
+			loading,
+			notify,
+			selectedTableData,
+			filter,
+			today,
 
-    const students = ref([])
-    const loadStudents = () => {
-      axios.get('/api/students').then(response => {
-        students.value = response.data.data
-      })
-    }
+			totalWasPaid,
+			totalPayment,
 
-    const selectsDatas = ref({
-      amount: null,
-    })
+			actions,
+			actionOptions,
+			selectedAction,
+			footerProps,
 
-    const totalAmount = () => {
-      return selectsDatas.value.amount.reduce((a, c) => a + c.amount, 0)
-    }
-    axios.get('/api/payment-paids').then(response => {
-      if (response.data.success) {
-        selectsDatas.value.amount = response.data.data
-      }
-    })
+			dialogConfirm,
+			confirmDelete,
 
-    onMounted(() => {
-      loadTeachers()
-      loadGroups()
-      loadStudents()
-    })
 
-    // Return
-    return {
-      BASE_URL,
-      state,
+			studentPaidForm,
+			openForm,
 
-      totalAmount,
-      selectsDatas,
+			printCheck,
 
-      tableColumns,
-      searchQuery,
-      options,
-      loading,
-      notify,
-      selectedTableData,
-      filter,
-      picker,
+			MODULE_NAME,
 
-      isDate,
-      isDateTwo,
-
-      actions,
-      actionOptions,
-      selectedAction,
-      footerProps,
-
-      dialogConfirm,
-      confirmDelete,
-
-      years,
-      months,
-      teachers,
-      loadTeachers,
-      groups,
-      loadGroups,
-      students,
-      loadStudents,
-
-      date,
-      dateFormatted,
-      menu1,
-      menu2,
-      computedDateFormatted,
-      parseDate,
-      formatDate,
-
-      studentPaidForm,
-      openForm,
-
-      MODULE_NAME,
-
-      icons: {
-        mdiTrendingUp,
-        mdiPlus,
-        mdiPencilOutline,
-        mdiDeleteOutline,
-        mdiDotsVertical,
-        mdiEyeOutline,
-        mdiFilterOutline,
-        mdiCalendar,
-      },
-    }
-  },
-  watch: {
-    ['notify']() {
-      this.$toast[this.notify.type](this.notify.text)
-    },
-  },
+			icons: {
+				mdiTrendingUp,
+				mdiPlus,
+				mdiPencilOutline,
+				mdiDeleteOutline,
+				mdiDotsVertical,
+				mdiEyeOutline,
+				mdiPrinter,
+			},
+		}
+	},
+	watch: {
+		['notify']() {
+			this.$toast[this.notify.type](this.notify.text)
+		},
+	},
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
 #data-list {
-  .data-list-actions {
-    max-width: 7.81rem;
-  }
+	.data-list-actions {
+		max-width: 7.81rem;
+	}
 
-  .data-list-search {
-    max-width: 10.625rem;
-  }
+	.data-list-search {
+		max-width: 10.625rem;
+	}
 }
+
 .totalAmount {
-  margin-left: 70%;
+	margin-left: 70%;
 }
 </style>

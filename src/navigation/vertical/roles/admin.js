@@ -21,7 +21,8 @@ import {
   mdiAccountTieVoice,
   mdiCreditCardMultiple,
   mdiCurrencyEur,
-  mdiCashRegister ,
+  mdiCashRegister,
+  mdiFileImportOutline,
 } from '@mdi/js'
 
 export default [
@@ -90,8 +91,8 @@ export default [
       },
       {
         title: 'Qarzdor talabalar',
-        to: 'student-depts',
-        resource: 'Teacher',
+        to: 'student-debts',
+        resource: 'StudentDebt',
         action: 'read',
         icon: mdiCashMinus,
       },
@@ -203,7 +204,7 @@ export default [
     to: 'expense-category',
     resource: 'ExpenseCategory',
     action: 'read',
-    icon: mdiCashRegister, 
+    icon: mdiCashRegister,
   },
   {
     title: 'Valyuta',
@@ -211,6 +212,13 @@ export default [
     resource: 'currency',
     action: 'read',
     icon: mdiCurrencyEur,
+  },
+  {
+    title: 'Import',
+    to: 'import',
+    resource: 'import',
+    action: 'read',
+    icon: mdiFileImportOutline,
   },
 
   // {

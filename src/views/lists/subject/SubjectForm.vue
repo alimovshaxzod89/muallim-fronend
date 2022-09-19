@@ -1,26 +1,26 @@
 <template>
   <!-- form dialog -->
-  <v-dialog 
-    v-model="show" 
-    @keydown.esc="close()" 
-    @click:outside="close()" 
-    max-width="550px" 
+  <v-dialog
+    v-model="show"
+    @keydown.esc="close()"
+    @click:outside="close()"
+    @keydown.enter="onSubmit()"
+    max-width="550px"
     width="550px"
   >
     <v-card>
       <v-form ref="form">
         <v-card-title>
-          <span class="headline">Fan qo'shish</span>
+          <span class="headline">Kurs qo'shish</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12">
-                <h4 class="text-required no-text"><span>*</span></h4>  
+                <h4 class="text-required no-text"><span>*</span></h4>
                 <v-text-field
                   label="NOMI"
                   v-model="formData.name"
-                  :items="selectsDatas.subject"
                   type="text"
                   dense
                   outlined
@@ -28,6 +28,18 @@
                   :rules="[required]"
                 ></v-text-field>
               </v-col>
+							<v-col cols="12">
+								<h4 class="text-required no-text"><span>*</span></h4>
+								<v-text-field
+									label="NARXI"
+									v-model="formData.price"
+									type="number"
+									dense
+									outlined
+									hide-details
+									:rules='selectRule'
+								></v-text-field>
+							</v-col>
               <v-col cols="6" class="mt-0">
                 <v-checkbox
                   v-model="formData.status"
@@ -44,8 +56,20 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
-
-          <v-btn color="success" type="submit" @click.prevent="onSubmit"> Saqlash</v-btn>
+          <v-btn
+						color="success"
+						type="button"
+						@click="onSubmit"
+						:disabled="submitDisabled"
+					>
+						<v-icon
+							class="loading-animation"
+							v-if="submitDisabled"
+						>
+							{{ icons.mdiLoading }}
+						</v-icon>
+						Saqlash
+					</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -62,7 +86,7 @@ import SubjectStoreModule from './SubjectStoreModule'
 import axios from '@axios'
 
 import { ref } from '@vue/composition-api'
-import { required, minLengthValidator } from '@core/utils/validation'
+import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
 import Button from '../../components/button/Button'
 
 const MODULE_NAME = 'subject'
@@ -83,14 +107,15 @@ export default {
 
     // show, hide
     const show = ref(false)
-    const formData = ref({})
 
     const form = ref(null)
     const emptyFormData = {
       id: null,
       name: null,
+			price: null,
       status: '1',
     }
+    const formData = ref({ ...emptyFormData })
 
     const open = (id = null) => {
       show.value = true
@@ -109,6 +134,7 @@ export default {
     const validate = () => {
       form.value.validate()
     }
+    const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
     //form options for selects
     const selectsDatas = ref({})
     // ! METHODS
@@ -124,7 +150,21 @@ export default {
     }
 
     // on form submit
+    const submitDisabled = ref(false)
     const onSubmit = () => {
+      if(submitDisabled.value === true)
+				return
+			else
+				submitDisabled.value = true
+
+				submitDisabled.value = true
+
+			if (!form.value.validate()) {
+				console.log('form inputs not valid!')
+
+				submitDisabled.value = false
+				return
+			}
       if (form.value.validate()) {
         if (formData.value.id) {
           store
@@ -140,6 +180,9 @@ export default {
 
               return false
             })
+             .finally(() => {
+							submitDisabled.value = false
+						})
         } else {
           store
             .dispatch(`${MODULE_NAME}/addRow`, formData.value)
@@ -154,6 +197,9 @@ export default {
 
               return false
             })
+             .finally(() => {
+							submitDisabled.value = false
+						})
         }
       }
     }
@@ -165,8 +211,10 @@ export default {
       formData,
       validate,
       selectsDatas,
+      selectRule,
       show,
       onSubmit,
+      submitDisabled,
       open,
       close,
       loadSubject,

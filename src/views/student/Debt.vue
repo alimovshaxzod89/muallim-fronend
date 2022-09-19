@@ -33,7 +33,7 @@
 				</div>
 				<div class="filter-input">
 					<div class="filter-label">
-						<span>fan</span>
+						<span>Kurs</span>
 						<button class="clear-date" @click="clearDate('subject_id')" v-if="filters.subject_id">
 							<svg height="512pt" viewBox="0 0 512 512" width="512pt" xmlns="http://www.w3.org/2000/svg">
 								<path

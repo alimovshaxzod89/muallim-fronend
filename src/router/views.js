@@ -114,9 +114,9 @@ const views = [
     },
   },
   {
-    path: '/student-dept',
-    name: 'student-dept',
-    component: () => import('@/views/lists/student-dept/StudentDeptList.vue'),
+    path: '/student-debt',
+    name: 'student-debt',
+    component: () => import('@/views/lists/student-debt/StudentDebtList.vue'),
     meta: {
       layout: 'content',
     },
@@ -146,11 +146,13 @@ const views = [
     },
   },
   {
-    path: '/student-depts',
-    name: 'student-depts',
-    component: () => import('@/views/lists/student-dept/StudentDeptList.vue'),
+    path: '/student-debts',
+    name: 'student-debts',
+    component: () => import('@/views/lists/student-debt/StudentDebtList.vue'),
     meta: {
       layout: 'content',
+			resource: 'StudentDebt',
+			action: 'read'
     },
   },
   {
@@ -263,6 +265,16 @@ const views = [
       action: 'read',
     },
   },
+  {
+    path: '/import',
+    name: 'import',
+    component: () => import('@/views/lists/import/ImportList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'Public',
+      action: 'read',
+    },
+  },
 	{
 		path: '/lead-form/:lead_id',
 		name: 'lead-form',
@@ -272,6 +284,7 @@ const views = [
 			resource: 'Public',
 		},
 	},
+
   // {
   //   path: '/center-profit',
   //   name: 'center-profit',

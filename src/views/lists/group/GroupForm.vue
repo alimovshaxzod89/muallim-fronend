@@ -20,7 +20,7 @@
                 <h4 class="text-required no-texts"><span>*</span></h4>
                 <v-text-field
                   type="text"
-                  label="NOMER"
+                  label="GURUH NOMI"
                   v-model="formData.number"
                   :rules="[required]"
 									required
@@ -52,7 +52,7 @@
                   :items="subjects"
                   item-text="name"
                   item-value="id"
-                  label="FAN"
+                  label="KURS"
 									:rules="selectRule"
                   dense
                   outlined
@@ -211,7 +211,7 @@
                   label="AKTIV"
                   true-value="1"
                   false-value="0"
-                ></v-checkbox>         
+                ></v-checkbox>
               </v-col>
             </v-row>
           </v-container>
@@ -267,7 +267,7 @@ export default {
       end_date: null,
       status: '1',
     }
-    
+
     const formData = ref({ ...emptyFormData })
 
     const picker = new Date().toISOString().substr(0, 10)
@@ -293,7 +293,7 @@ export default {
     }
 
 
-    
+
 
     // on form submit
     const onSubmit = () => {
