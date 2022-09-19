@@ -18,6 +18,20 @@
 			class="data-list-search me-3"
 		></v-text-field> -->
 
+		<v-text-field
+			v-model="filter.number"
+			:items="groups"
+			item-text="number"
+			item-value="id"
+			dense
+			solo
+			outlined
+			hide-details
+			label="GURUH NOMI"
+			class="data-list-search me-3"
+			clearable
+		></v-text-field>
+
 		<v-autocomplete
 			v-model="filter.teacher_id"
 			:items="teachers"
@@ -32,20 +46,6 @@
 			clearable
 		>
 		</v-autocomplete>
-
-		<v-autocomplete
-			v-model="filter.group_id"
-			:items="groups"
-			item-text="number"
-			item-value="id"
-			dense
-			solo
-			outlined
-			hide-details
-			label="GURUH NOMI"
-			class="data-list-search me-3"
-			clearable
-		></v-autocomplete>
 		
 		<v-autocomplete
 			v-model="filter.subject_id"
@@ -120,43 +120,8 @@ export default {
 		}
 		loadSubjects()
 
-		const groups = ref([])
-		const freshGroups = ref([])
-		const params = ref({})
-
-		const clearParams = (params) => {
-			return Object.keys(params)
-				.filter((key) => params[key] !== null && params[key] !== '')
-				.reduce((obj, key) => {
-					return Object.assign(obj, {
-						[key]: params[key],
-					})
-				}, {})
-		}
-
-		const loadGroups = () => {
-			const params = clearParams({
-				teacher_id: filter.value.teacher_id,
-			})
-
-			axios.get(`/api/groups`, { params }).then(response => {
-				groups.value = response.data.data
-			})
-		}
-		loadGroups()
-		watch(
-			() => filter.value.teacher_id,
-			() => {
-				loadGroups()
-			},
-		)
-
 		return {
 			filter,
-
-			freshGroups,
-			params,
-			groups,
 
 			places,
 			teachers,
