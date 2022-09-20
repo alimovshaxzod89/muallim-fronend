@@ -329,6 +329,16 @@ export default {
 			}
 		}
 
+		const clearParams = (params) => {
+			return Object.keys(params)
+				.filter((key) => params[key] !== null && params[key] !== '')
+				.reduce((obj, key) => {
+					return Object.assign(obj, {
+						[key]: params[key],
+					})
+				}, {})
+		}
+
 		// Load subjects
 		const subjects = ref()
 		const loadSubjects = () => {
@@ -350,7 +360,10 @@ export default {
 		// Load rooms
 		const rooms = ref()
 		const loadRooms = () => {
-			axios.get('/api/rooms').then(response => {
+			const params = clearParams({
+				place_id: formData.value.place_id,
+			})
+			axios.get('/api/rooms', { params }).then(response => {
 				if (response.data.success) {
 					rooms.value = response.data.data
 				}
@@ -359,7 +372,10 @@ export default {
 		// Load teachers
 		const teachers = ref()
 		const loadTeachers = () => {
-			axios.get('/api/teachers').then(response => {
+			const params = clearParams({
+				place_id: formData.value.place_id,
+			})
+			axios.get('/api/teachers', { params }).then(response => {
 				if (response.data.success) {
 					teachers.value = response.data.data
 				}
