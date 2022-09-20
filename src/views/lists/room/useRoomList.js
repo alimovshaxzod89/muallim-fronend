@@ -8,6 +8,7 @@ export default function useRoomList(MODULE_NAME) {
 
 	const tableColumns = [
 		{ text: '#', sortable: false, value: 'index' },
+		// { text: '#', sortable: false, value: 'index' },
 		{
 			text: 'Amallar',
 			value: 'actions',
