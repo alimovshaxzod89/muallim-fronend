@@ -20,8 +20,25 @@
 							<v-col cols='6'>
 								<h4 class='text-required no-texts'><span>*</span></h4>
 								<v-autocomplete
+									v-model='formData.teacher_id'
+									:items='teachers'
+									item-text='full_name'
+									item-value='id'
+									label='USTOZ'
+									dense
+									outlined
+									hide-details
+									clearable
+									:rules='selectRule'
+								>
+								</v-autocomplete>
+							</v-col>
+
+							<v-col cols='6'>
+								<h4 class='text-required no-texts'><span>*</span></h4>
+								<v-autocomplete
 									v-model='formData.group_id'
-									:items='selectsDatas.groups'
+									:items='groups'
 									item-text='number'
 									item-value='id'
 									label='GURUH'
@@ -157,7 +174,7 @@ import { mdiCalendar, mdiClockTimeFourOutline } from '@mdi/js'
 import store from '@/store'
 import axios from '@axios'
 
-import { ref, onMounted } from '@vue/composition-api'
+import { ref, watch } from '@vue/composition-api'
 
 const MODULE_NAME = 'group-time'
 
@@ -173,19 +190,14 @@ export default {
 
 		const form = ref(null)
 		const show = ref(false)
-		const emptyFormData = {
-			id: null,
-			group_id: null,
-			week_day: null,
-			room_id: null,
-			time_begin: null,
-			time_end: null,
-		}
-		const formData = ref({ ...emptyFormData })
 		const open = (item = null, group_id = null) => {
 			show.value = true
 			if (item) {
-				formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](item.id)))
+				const row = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](item.id)))
+				formData.value = row
+
+				if (row.group.teacher_id)
+					formData.value.teacher_id = row.group.teacher_id
 			}
 			if (group_id) {
 				formData.value.group_id = group_id
@@ -194,10 +206,27 @@ export default {
 		const open2 = (id = null, item = null) => {
 			show.value = true
 			if (id) {
-				formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+				const row = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
+				formData.value = row
+
+				if (row.group.teacher_id) {
+					//todo: fix: after this watch teacher_id don't working
+					formData.value.teacher_id = parseInt(row.group.teacher_id)
+				}
+
+
 			} else if (item) {
 				const t = JSON.parse(JSON.stringify(formData.value))
 				for (const field in item) {
+
+					console.log('field', field)
+
+					if (field === 'teacher_id') {
+						console.log('teacher_id', item)
+						t[field] = item.group.teacher_id
+						continue
+					}
+
 					t[field] = item[field]
 				}
 				formData.value = t
@@ -208,6 +237,18 @@ export default {
 			formData.value = { ...emptyFormData }
 			form.value.resetValidation()
 		}
+
+		const emptyFormData = {
+			id: null,
+			group_id: null,
+			week_day: null,
+			room_id: null,
+			time_begin: null,
+			time_end: null,
+
+			teacher_id: null,
+		}
+		const formData = ref({ ...emptyFormData })
 
 		const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
 
@@ -267,20 +308,50 @@ export default {
 		])
 
 
-		//form options for selects
-		const selectsDatas = ref({})
-		// ! METHODS
-		const loadPlace = () => {
+		const clearParams = (params) => {
+			return Object.keys(params)
+				.filter((key) => params[key] !== null && params[key] !== '')
+				.reduce((obj, key) => {
+					return Object.assign(obj, {
+						[key]: params[key],
+					})
+				}, {})
+		}
+
+		const teachers = ref([])
+		const loadTeachers = () => {
 			axios
-				.get('/api/groups', { params: { place_id: props.place_id } })
+				.get('/api/teachers', { params: { place_id: props.place_id } })
 				.then(response => {
 					if (response.data.success) {
-						selectsDatas.value.groups = response.data.data
+						teachers.value = response.data.data
 					}
 				})
 				.catch(error => console.log(error))
 		}
-		loadPlace()
+		loadTeachers()
+
+		const groups = ref([])
+		const loadGroups = () => {
+			const params = clearParams({
+				place_id: props.place_id,
+				teacher_id: formData.value.teacher_id,
+			})
+			axios
+				.get('/api/groups', { params })
+				.then(response => {
+					if (response.data.success) {
+						groups.value = response.data.data
+					}
+				})
+				.catch(error => console.log(error))
+		}
+		loadGroups()
+
+		watch(() => formData.value.teacher_id, () => {
+			console.log('teacher_id', formData.value.teacher_id)
+			loadGroups()
+		})
 
 		// Load subjects
 		const rooms = ref(null)
@@ -298,12 +369,12 @@ export default {
 		const time2 = ref(null)
 
 		// ProductTypeForm
-		const roomForm = ref(null)
-		const addPlace = (id = null) => {
-			roomForm.value.open(id)
+		const groupForm = ref(null)
+		const addGroup = (id = null) => {
+			groupForm.value.open(id)
 		}
-		const addPlaceToOptions = row => {
-			selectsDatas.value.groups = selectsDatas.value.groups.concat([row])
+		const addGroupToOptions = row => {
+			groups.value = groups.value.concat([row])
 			formData.value.group_id = row.id
 		}
 
@@ -315,16 +386,19 @@ export default {
 			open,
 			open2,
 			close,
-			rooms,
 			days,
 
 			time,
 			time2,
 
-			roomForm,
-			addPlace,
-			addPlaceToOptions,
-			selectsDatas,
+			rooms,
+			teachers,
+			groups,
+
+			groupForm,
+			addGroup,
+			addGroupToOptions,
+
 			selectRule,
 
 			icons: {

@@ -34,6 +34,22 @@
 								{{ day }}
 							</v-btn>
 						</div>
+
+						<div style='max-width: 300px; margin-top: 20px;'>
+							<v-autocomplete
+								v-model='filter.teacher_id'
+								:items='teachers'
+								item-text='full_name'
+								item-value='id'
+								label='USTOZ'
+								dense
+								outlined
+								hide-details
+								clearable
+							>
+							</v-autocomplete>
+						</div>
+
 					</div>
 				</v-col>
 			</div>
@@ -79,6 +95,53 @@ export default {
 
 		const { router, route } = useRouter()
 
+		//filters
+		const filter = ref({
+			place_id: store.state.branch_id,
+			teacher_id: null,
+			weekDays: [],
+		})
+		watch(() => store.state.branch_id, () => {
+			filter.value.place_id = store.state.branch_id
+		})
+
+		//urldan olish, agarki ruxsat bo'lsa
+		if (!store.state.branch_id) {
+			filter.value.place_id = route.value.query.place_id ? parseInt(route.value.query.place_id) : null
+		}
+
+		const loadGroupTimes = () => {
+
+			const { place_id, weekDays } = filter.value
+
+			if (place_id && weekDays.length > 0) {
+				store
+					.dispatch(`${MODULE_NAME}/fetchDatas`, filter.value)
+					.then(() => {
+					})
+					.catch(error => {
+						console.log(error)
+						notify.value = {
+							type: 'error',
+							text: error,
+							time: Date.now(),
+						}
+					})
+			} else {
+				store.commit(`${MODULE_NAME}/setRows`, [])
+				store.commit(`${MODULE_NAME}/setTotal`, 0)
+			}
+		}
+		loadGroupTimes()
+
+		watch(
+			filter,
+			value => {
+				loadGroupTimes()
+			},
+			{ deep: true },
+		)
+
 		const places = ref({})
 		const loadPlaces = () => {
 			axios.get('/api/places').then(response => {
@@ -90,8 +153,35 @@ export default {
 				}
 			})
 		}
-
 		loadPlaces()
+
+
+		const clearParams = (params) => {
+			return Object.keys(params)
+				.filter((key) => params[key] !== null && params[key] !== '')
+				.reduce((obj, key) => {
+					return Object.assign(obj, {
+						[key]: params[key],
+					})
+				}, {})
+		}
+
+
+		const teachers = ref([])
+		const loadTeachers = () => {
+			const params = clearParams({
+				place_id: filter.value.place_id,
+			})
+			axios
+				.get('/api/teachers', { params })
+				.then(response => {
+					if (response.data.success) {
+						teachers.value = response.data.data
+					}
+				})
+				.catch(error => console.log(error))
+		}
+		loadTeachers()
 
 		const selectPlace = id => {
 			filter.value.place_id = id
@@ -102,20 +192,6 @@ export default {
 					place_id: id,
 				},
 			})
-		}
-
-		//filters
-		const filter = ref({
-			place_id: store.state.branch_id,
-			weekDays: [],
-		})
-		watch(() => store.state.branch_id, () => {
-			filter.value.place_id = store.state.branch_id
-		})
-
-		//urldan olish, agarki ruxsat bo'lsa
-		if (!store.state.branch_id) {
-			filter.value.place_id = route.value.query.place_id ? parseInt(route.value.query.place_id) : null
 		}
 
 		filter.value.weekDays.push(new Date().getDay())
@@ -143,36 +219,16 @@ export default {
 			}
 		}
 
-		watch(
+		return {
+			router,
+			places,
+			selectPlace,
 			filter,
-			value => {
-				const { place_id, weekDays } = value
+			weekDays,
+			setWeekDays,
+			setWeekDay,
 
-				if (place_id && weekDays.length > 0) {
-					store
-						.dispatch(`${MODULE_NAME}/fetchDatas`, filter.value)
-						.then(() => {})
-						.catch(error => {
-							console.log(error)
-							notify.value = {
-								type: 'error',
-								text: error,
-								time: Date.now(),
-							}
-						})
-				}
-			},
-			{ deep: true },
-		)
-
-    return {
-      router,
-      places,
-      selectPlace,
-      filter,
-      weekDays,
-      setWeekDays,
-      setWeekDay,
+			teachers,
 
 			icons: {
 				mdiArrowLeft,
