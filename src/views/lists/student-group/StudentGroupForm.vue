@@ -90,6 +90,7 @@
 									outlined
 									hide-details
 									clearable
+									:multiple='formData.id == null'
 									:rules='selectRule'
 									required
 								>
@@ -404,16 +405,27 @@ export default {
 							emit('notify', { type: 'error', text: error.message })
 						})
 				} else {
-					store
-						.dispatch(`${MODULE_NAME}/addRow`, formData.value)
-						.then(({ message }) => {
-							close()
-							emit('notify', { type: 'success', text: message })
-						})
-						.catch(error => {
-							console.log(error)
-							emit('notify', { type: 'error', text: error.message })
-						})
+					//create
+
+					let studentIds = []
+					if (Array.isArray(formData.value.student_id)) {
+						studentIds = formData.value.student_id
+					} else {
+						studentIds.push(formData.value.student_id)
+					}
+
+					studentIds.forEach(student_id => {
+						store
+							.dispatch(`${MODULE_NAME}/addRow`, { ...formData.value, student_id })
+							.then(({ message }) => {
+								close()
+								emit('notify', { type: 'success', text: message })
+							})
+							.catch(error => {
+								console.log(error)
+								emit('notify', { type: 'error', text: error.message })
+							})
+					})
 				}
 			}
 		}
