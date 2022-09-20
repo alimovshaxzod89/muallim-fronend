@@ -37,9 +37,9 @@
 							<v-col cols='4'>
 								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-text-field
+									v-model='formData.amount'
 									type='text'
 									label='SUMMA'
-									v-model='formData.amount'
 									outlined
 									dense
 									:rules='selectRule'
@@ -136,10 +136,16 @@
 								></v-select>
 							</v-col>
 
-							<v-col cols='6'>
+							<v-col cols='3'>
 								<h4 class='no-text' style='margin-top: 20px'>Oylik to'lov:</h4>
 								<div v-if='formData.payment_id && payment'>
 									{{ payment.amount | summa }}
+								</div>
+							</v-col>
+							<v-col cols='3' v-if="bonus">
+								<h4 class='no-text' style='margin-top: 20px'>Chegirma:</h4>
+								<div v-if='formData.payment_id && payment'>
+									{{ (( payment.amount * 10 ) / 100) | summa }}
 								</div>
 							</v-col>
 
@@ -168,7 +174,7 @@
 			</v-form>
 
 			<template #[`item.date`]='{ item }'> {{ item.date | date }}</template>
-			<template #[`item.amount`]='{ item }'> {{ item.amount | sum }}</template>
+			<template #[`item.amount`]='{ item }'> {{ item.amount | summa }}</template>
 		</v-card>
 
 		<subject-form ref='subjectForm' v-on:add-subject-to-options='addSubjectToOptions($event)' />
@@ -204,365 +210,414 @@ import Button from '../../components/button/Button'
 const MODULE_NAME = 'paymentPaid'
 
 export default {
-	components: {
-		SubjectForm,
-		StudentForm,
-		GroupForm,
-		Button,
-	},
+  components: {
+    SubjectForm,
+    StudentForm,
+    GroupForm,
+    Button,
+  },
 
-	setup(props, { emit }) {
-		// Register module
-		if (!store.hasModule(MODULE_NAME)) {
-			store.registerModule(MODULE_NAME, StudentPaidStoreModule)
-		}
+  setup(props, { emit }) {
+    // Register module
+    if (!store.hasModule(MODULE_NAME)) {
+      store.registerModule(MODULE_NAME, StudentPaidStoreModule)
+    }
 
-		const parentFilter = ref({})
+    const parentFilter = ref({})
 
-		// show, hide
-		const show = ref(false)
-		const open = (item, data = null) => {
+    // show, hide
+    const show = ref(false)
+    const open = (item, data = null) => {
+      show.value = true
+      if (item && item.id !== undefined && item.id) {
+        const paymentPaid = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](item.id)))
+        // formData.value = paymentPaid
 
-			show.value = true
-			if (item && item.id !== undefined && item.id) {
-				const paymentPaid = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](item.id)))
-				// formData.value = paymentPaid
+        formData.value = {
+          id: paymentPaid.id,
+          payment_id: paymentPaid.payment_id,
+          cashbox_id: paymentPaid.cashbox_id,
+          amount: paymentPaid.amount,
+          date: paymentPaid.date,
 
-				formData.value = {
-					id: paymentPaid.id,
-					payment_id: paymentPaid.payment_id,
-					cashbox_id: paymentPaid.cashbox_id,
-					amount: paymentPaid.amount,
-					date: paymentPaid.date,
+          student_id: paymentPaid.payment.student_id,
+          group_id: paymentPaid.payment.group_id,
 
-					student_id: paymentPaid.payment.student_id,
-					group_id: paymentPaid.payment.group_id,
+          subject_id: paymentPaid.payment.group.subject_id,
+        }
+      } else if (data) {
+        formData.value = {
+          ...formData.value,
+          student_id: data.student_id,
+          group_id: data.group_id,
+        }
 
-					subject_id: paymentPaid.payment.group.subject_id,
-				}
+        parentFilter.value = data
+      }
+    }
+    // Default date time
+    const datePicker = ref(new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10))
+    const defaultDate = datePicker.value
 
-			} else if (data) {
+    const close = () => {
+      show.value = false
+      form.value.resetValidation()
+      formData.value = { ...emptyFormData }
+      parentFilter.value = {}
+    }
+    const form = ref(null)
+    const emptyFormData = {
+      id: null,
+      payment_id: null,
+      amount: null,
+      date: defaultDate,
+      cashbox_id: null,
 
-				formData.value = {
-					...formData.value,
-					student_id: data.student_id,
-					group_id: data.group_id,
-				}
+      student_id: null,
+      group_id: null,
+      subject_id: null,
+    }
 
-				parentFilter.value = data
+    const bonus = ref(false)
 
-			}
-		}
-		// Default date time
-		const datePicker = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10))
-		const defaultDate = datePicker.value
+    const picker = new Date().toISOString().substr(0, 10)
+    const isDate = ref(false)
 
-		const close = () => {
-			show.value = false
-			form.value.resetValidation()
-			formData.value = { ...emptyFormData }
-			parentFilter.value = {}
-		}
-		const form = ref(null)
-		const emptyFormData = {
-			id: null,
-			payment_id: null,
-			amount: null,
-			date: defaultDate,
-			cashbox_id: null,
+    //validation
+    const formData = ref({ ...emptyFormData })
+    const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
+    const validate = () => {
+      form.value.validate()
+    }
 
-			student_id: null,
-			group_id: null,
-			subject_id: null,
-		}
+    // ! METHODS
+    const subjects = ref([])
+    const loadSubject = () => {
+      axios
+        .get('/api/subjects', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            subjects.value = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
+    loadSubject()
 
-		const picker = new Date().toISOString().substr(0, 10)
-		const isDate = ref(false)
+    const students = ref([])
+    const loadStudent = () => {
+      axios
+        .get('/api/students', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            students.value = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
+    loadStudent()
 
-		//validation
-		const formData = ref({ ...emptyFormData })
-		const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
-		const validate = () => {
-			form.value.validate()
-		}
+    const cashboxes = ref([])
+    const loadCashbox = () => {
+      axios
+        .get('/api/cashboxes', { params: { itemsPerPage: -1 } })
+        .then(response => {
+          if (response.data.success) {
+            cashboxes.value = response.data.data
+          }
+        })
+        .catch(error => console.log(error))
+    }
+    loadCashbox()
 
-		// ! METHODS
-		const subjects = ref([])
-		const loadSubject = () => {
-			axios
-				.get('/api/subjects', { params: { itemsPerPage: -1 } })
-				.then(response => {
-					if (response.data.success) {
-						subjects.value = response.data.data
-					}
-				})
-				.catch(error => console.log(error))
-		}
-		loadSubject()
+    const groups = ref([])
+    // const loadGroup = () => {
+    // 	axios
+    // 		.get('/api/groups', { params: { itemsPerPage: -1 } })
+    // 		.then(response => {
+    // 			if (response.data.success) {
+    // 				groups.value = response.data.data
+    // 			}
+    // 		})
+    // 		.catch(error => console.log(error))
+    // }
+    // loadGroup()
 
-		const students = ref([])
-		const loadStudent = () => {
-			axios
-				.get('/api/students', { params: { itemsPerPage: -1 } })
-				.then(response => {
-					if (response.data.success) {
-						students.value = response.data.data
-					}
-				})
-				.catch(error => console.log(error))
-		}
-		loadStudent()
+    const loadStudentGroups = student_id => {
+      axios
+        .get('/api/student-groups', { params: { itemsPerPage: -1, student_id } })
+        .then(response => {
+          if (response.data.success) {
+            groups.value = []
+            response.data.data.forEach(item => {
+              groups.value.push(item.group)
+            })
 
-		const cashboxes = ref([])
-		const loadCashbox = () => {
-			axios
-				.get('/api/cashboxes', { params: { itemsPerPage: -1 } })
-				.then(response => {
-					if (response.data.success) {
-						cashboxes.value = response.data.data
-					}
-				})
-				.catch(error => console.log(error))
-		}
-		loadCashbox()
+            if (groups.value.length == 1)
+              setTimeout(() => {
+                formData.value.group_id = groups.value[0].id
+              }, 500)
+          } else {
+            groups.value = []
+          }
+        })
+        .catch(error => {
+          groups.value = []
+          console.log(error)
+        })
+    }
+    watch(
+      () => formData.value.student_id,
+      value => {
+        if (value) loadStudentGroups(value)
+        else groups.value = []
+      },
+    )
 
-		const groups = ref([])
-		// const loadGroup = () => {
-		// 	axios
-		// 		.get('/api/groups', { params: { itemsPerPage: -1 } })
-		// 		.then(response => {
-		// 			if (response.data.success) {
-		// 				groups.value = response.data.data
-		// 			}
-		// 		})
-		// 		.catch(error => console.log(error))
-		// }
-		// loadGroup()
+    const payments = ref([])
+    const loadPayments = (student_id, group_id) => {
+      axios
+        .get('/api/payments', { params: { itemsPerPage: -1, student_id, group_id } })
+        .then(response => {
+          if (response.data.success) {
+            payments.value = response.data.data
 
-		const loadStudentGroups = (student_id) => {
-			axios
-				.get('/api/student-groups', { params: { itemsPerPage: -1, student_id } })
-				.then(response => {
-					if (response.data.success) {
+            setPayment()
+          } else {
+            payments.value = []
+          }
+        })
+        .catch(error => {
+          payments.value = []
+          console.log(error)
+        })
+    }
+    watch([() => formData.value.student_id, () => formData.value.group_id], ({ 0: student_id, 1: group_id }) => {
+      if (group_id && student_id) {
+        loadPayments(student_id, group_id)
+      } else {
+        payments.value = []
+      }
+    })
 
-						groups.value = []
-						response.data.data.forEach((item) => {
-							groups.value.push(item.group)
-						})
+    const payment = ref({})
+    function setPayment() {
+      payment.value = {}
 
-						if (groups.value.length == 1)
-							setTimeout(() => {
-								formData.value.group_id = groups.value[0].id
-							}, 500)
-					} else {
-						groups.value = []
-					}
-				})
-				.catch(error => {
-					groups.value = []
-					console.log(error)
-				})
-		}
-		watch(() => formData.value.student_id, (value) => {
-			if (value)
-				loadStudentGroups(value)
-			else
-				groups.value = []
-		})
+      payments.value.forEach(item => {
+        if (item.id == formData.value.payment_id) payment.value = item
+        else if (
+          parentFilter.value &&
+          String(parentFilter.value.year) === String(item.year) &&
+          String(parentFilter.value.month) === String(item.month)
+        ) {
+          payment.value = item
+          formData.value.payment_id = item.id
+        }
+      })
+    }
 
-		const payments = ref([])
-		const payment = ref({})
-		const loadPayments = (student_id, group_id) => {
-			axios
-				.get('/api/payments', { params: { itemsPerPage: -1, student_id, group_id } })
-				.then(response => {
-					if (response.data.success) {
-						payments.value = response.data.data
+    watch(
+      () => formData.value.payment_id,
+      val => {
+        if (val) {
+          setPayment()
+        } else payment.value = {}
+      },
+    )
 
-						setPayment()
-					} else {
-						payments.value = []
-					}
-				})
-				.catch(error => {
-					payments.value = []
-					console.log(error)
-				})
-		}
-		watch(
-			[() => formData.value.student_id, () => formData.value.group_id],
-			({ 0: student_id, 1: group_id }) => {
+    // Bonus
 
-				if (group_id && student_id) {
-					loadPayments(student_id, group_id)
-				} else {
-					payments.value = []
-				}
-			},
-		)
+    watch(
+      () => formData.value,
+      value => {
+        setTimeout(() => {
+          // Bugungi sana
+          const selectedDay = value.date.split('').splice(8, 9).join('') * 1
+          // Joriy oy
+          const selectedMonth = value.date.split('-')[1] * 1
+          // Tanlangan oy id si
+          const month_year = value.payment_id
 
-		function setPayment() {
-			payment.value = {}
+          if (selectedDay <= 10) {
+            payments.value.forEach(el => {
+              if (month_year == el.id) {
+                const monthForPayment = el.month * 1
+                if (monthForPayment == selectedMonth) {
+                  console.log('Cheigrma')
+                  const day_is_true = () => {
+                    bonus.value = true
+                  }
+                  day_is_true()
+                }
+              }
+            })
+          }
+        }, 800)
+      },
+    )
 
-			payments.value.forEach(item => {
+    watch(
+      [payment, bonus],
+      val => {
+        calcAmount()
+      },
+      { deep: true },
+    )
 
-				if (item.id == formData.value.payment_id)
-					payment.value = item
-				else if (parentFilter.value && String(parentFilter.value.year) === String(item.year) && String(parentFilter.value.month) === String(item.month)) {
-					payment.value = item
-					formData.value.payment_id = item.id
-				}
+    const calcAmount = () => {
+      if (formData.value.id) return
 
+      if (payment.value.amount) {
+        let amount = payment.value.amount
 
-			})
-		}
+        //minus if bonus has
+        if (bonus.value) {
+          amount = amount * (1 - 0.1)
+        }
+        formData.value.amount = amount
+      } else {
+        formData.value.amount = null
+      }
+    }
 
-		watch(() => formData.value.payment_id, val => {
-			if (val) {
-				setPayment()
-			} else
-				payment.value = {}
-		})
+    // on form submit
+    const submitDisabled = ref(false)
+    const onSubmit = () => {
+      if (submitDisabled.value === true) return
+      else submitDisabled.value = true
 
+      if (!form.value.validate()) {
+        console.log('form inputs not valid!')
 
-		// on form submit
-		const submitDisabled = ref(false)
-		const onSubmit = () => {
-			if (submitDisabled.value === true)
-				return
-			else
-				submitDisabled.value = true
+        submitDisabled.value = false
+        return
+      }
 
-			if (!form.value.validate()) {
-				console.log('form inputs not valid!')
+      if (form.value.validate()) {
+        if (formData.value.id) {
+          store
+            .dispatch(`${MODULE_NAME}/updateRow`, formData.value)
+            .then(({ message }) => {
+              close()
+              // emit('notify', { type: 'success', text: message })
+            })
+            .catch(error => {
+              console.log(error)
+              emit('notify', { type: 'error', text: error.message })
+            })
+            .finally(() => {
+              submitDisabled.value = false
+              emit('refresh-list')
+            })
+        } else {
+          store
+            .dispatch(`${MODULE_NAME}/addRow`, formData.value)
+            .then(({ message }) => {
+              close()
+              emit('notify', { type: 'success', text: message })
+            })
+            .catch(error => {
+              console.log(error)
+              emit('notify', { type: 'error', text: error.message })
+            })
+            .finally(() => {
+              submitDisabled.value = false
+              emit('refresh-list')
+            })
+        }
+      }
+    }
 
-				submitDisabled.value = false
-				return
-			}
+    // SubjectForm
+    const subjectForm = ref(null)
+    const addSubject = (id = null) => {
+      subjectForm.value.open(id)
+    }
+    const addSubjectToOptions = row => {
+      subjects.value = subjects.value.concat([row])
+      formData.value.subject_id = row.id
+    }
+    // GroupForm
+    const groupForm = ref(null)
+    const addGroup = (id = null) => {
+      groupForm.value.open(id)
+    }
+    const addGroupToOptions = row => {
+      groups.value = groups.value.concat([row])
+      formData.value.group_id = row.id
+    }
 
-			if (form.value.validate()) {
-				if (formData.value.id) {
-					store
-						.dispatch(`${MODULE_NAME}/updateRow`, formData.value)
-						.then(({ message }) => {
-							close()
-							// emit('notify', { type: 'success', text: message })
-						})
-						.catch(error => {
-							console.log(error)
-							emit('notify', { type: 'error', text: error.message })
-						})
-						.finally(() => {
-							submitDisabled.value = false
-							emit('refresh-list')
-						})
-				} else {
-					store
-						.dispatch(`${MODULE_NAME}/addRow`, formData.value)
-						.then(({ message }) => {
-							close()
-							emit('notify', { type: 'success', text: message })
-						})
-						.catch(error => {
-							console.log(error)
-							emit('notify', { type: 'error', text: error.message })
-						})
-						.finally(() => {
-							submitDisabled.value = false
-							emit('refresh-list')
-						})
-				}
-			}
-		}
+    const months = [
+      { id: 1, name: 'Yanvar' },
+      { id: 2, name: 'Fevral' },
+      { id: 3, name: 'Mart' },
+      { id: 4, name: 'Aprel' },
+      { id: 5, name: 'May' },
+      { id: 6, name: 'Iyun' },
+      { id: 7, name: 'Iyul' },
+      { id: 8, name: 'Avgust' },
+      { id: 9, name: 'Sentabr' },
+      { id: 10, name: 'Oktabr' },
+      { id: 11, name: 'Noyabr' },
+      { id: 12, name: 'Dekabr' },
+    ]
 
-		// SubjectForm
-		const subjectForm = ref(null)
-		const addSubject = (id = null) => {
-			subjectForm.value.open(id)
-		}
-		const addSubjectToOptions = row => {
-			subjects.value = subjects.value.concat([row])
-			formData.value.subject_id = row.id
-		}
-		// GroupForm
-		const groupForm = ref(null)
-		const addGroup = (id = null) => {
-			groupForm.value.open(id)
-		}
-		const addGroupToOptions = row => {
-			groups.value = groups.value.concat([row])
-			formData.value.group_id = row.id
-		}
+    return {
+      form,
+      picker,
+      isDate,
+      required,
+      minLengthValidator,
+      formData,
+      selectRule,
 
-		const months = [
-			{ id: 1, name: 'Yanvar' },
-			{ id: 2, name: 'Fevral' },
-			{ id: 3, name: 'Mart' },
-			{ id: 4, name: 'Aprel' },
-			{ id: 5, name: 'May' },
-			{ id: 6, name: 'Iyun' },
-			{ id: 7, name: 'Iyul' },
-			{ id: 8, name: 'Avgust' },
-			{ id: 9, name: 'Sentabr' },
-			{ id: 10, name: 'Oktabr' },
-			{ id: 11, name: 'Noyabr' },
-			{ id: 12, name: 'Dekabr' },
-		]
+      submitDisabled,
 
-		return {
-			form,
-			picker,
-			isDate,
-			required,
-			minLengthValidator,
-			formData,
-			selectRule,
+      students,
+      subjects,
+      groups,
+      payments,
+      payment,
+      cashboxes,
 
-			submitDisabled,
+      months,
 
-			students,
-			subjects,
-			groups,
-			payments,
-			payment,
-			cashboxes,
+      validate,
+      show,
+      onSubmit,
+      open,
+      close,
 
-			months,
+      datePicker,
+      defaultDate,
 
-			validate,
-			show,
-			onSubmit,
-			open,
-			close,
+      subjectForm,
+      addSubject,
+      addSubjectToOptions,
+      groupForm,
+      addGroup,
+      addGroupToOptions,
+      bonus,
 
-			datePicker,
-			defaultDate,
-
-			subjectForm,
-			addSubject,
-			addSubjectToOptions,
-			groupForm,
-			addGroup,
-			addGroupToOptions,
-
-			icons: {
-				mdiPlusCircleOutline,
-				mdiCalendar,
-			},
-		}
-	},
+      icons: {
+        mdiPlusCircleOutline,
+        mdiCalendar,
+      },
+    }
+  },
 }
 </script>
 
 <style>
 .v-input__append-outer {
-	margin: 0 0 0 10px !important;
+  margin: 0 0 0 10px !important;
 }
 
 .btn-dialog-add-item {
-	min-width: 60px !important;
-	padding-right: 15px !important;
-	padding-left: 15px !important;
-	border-color: rgba(94, 86, 105, 0.15) !important;
+  min-width: 60px !important;
+  padding-right: 15px !important;
+  padding-left: 15px !important;
+  border-color: rgba(94, 86, 105, 0.15) !important;
 }
 </style>
