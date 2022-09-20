@@ -163,7 +163,7 @@ export default [
         icon: mdiDoor,
       },
       {
-        title: 'Fanlar',
+        title: 'Kurslar',
         to: 'subjects',
         resource: 'Teacher',
         action: 'read',

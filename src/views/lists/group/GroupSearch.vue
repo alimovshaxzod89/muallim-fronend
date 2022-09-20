@@ -33,11 +33,8 @@
 		>
 		</v-autocomplete>
 
-		<v-autocomplete
-			v-model="filter.group_id"
-			:items="groups"
-			item-text="number"
-			item-value="id"
+		<v-text-field
+			v-model="filter.number"
 			dense
 			solo
 			outlined
@@ -45,8 +42,8 @@
 			label="GURUH NOMI"
 			class="data-list-search me-3"
 			clearable
-		></v-autocomplete>
-		
+		></v-text-field>
+
 		<v-autocomplete
 			v-model="filter.subject_id"
 			:items="subjects"
@@ -63,11 +60,12 @@
 		</v-autocomplete>
 
 		<v-autocomplete
+			v-if='BRANCH_ID == null'
 			v-model="filter.place_id"
 			:items="places"
 			item-text="name"
 			item-value="id"
-			label="BINO"
+			label="FILIAL"
 			class="data-list-search me-3"
 			dense
 			solo
@@ -81,9 +79,10 @@
 </template>
 
 <script>
-import { ref, watch } from '@vue/composition-api'
+import { computed, ref, watch } from '@vue/composition-api'
 import axios from '@axios'
 import { mdiCalendar, mdiFilterOutline } from '@mdi/js'
+import store from '@/store'
 
 export default {
 	name: 'GroupSearch',
@@ -91,7 +90,24 @@ export default {
 
 	setup(props, {emit}) {
 
+		const branch_id = computed(() => store.state.branch_id)
+		watch(branch_id, (value) => {
+			filter.value.place_id = value
+		})
+
 		const filter = ref(props.value)
+
+		//default fields
+		filter.value = Object.assign({
+			teacher_id: '',
+			number: '',
+			subject_id: '',
+			place_id: branch_id.value ?? '',
+		}, props.value)
+
+		//return with default fields
+		emit('input', filter.value)
+
 		watch(filter, (value) => {
 			emit('input', value)
 		}, { deep: true })
@@ -120,43 +136,10 @@ export default {
 		}
 		loadSubjects()
 
-		const groups = ref([])
-		const freshGroups = ref([])
-		const params = ref({})
-
-		const clearParams = (params) => {
-			return Object.keys(params)
-				.filter((key) => params[key] !== null && params[key] !== '')
-				.reduce((obj, key) => {
-					return Object.assign(obj, {
-						[key]: params[key],
-					})
-				}, {})
-		}
-
-		const loadGroups = () => {
-			const params = clearParams({
-				teacher_id: filter.value.teacher_id,
-			})
-
-			axios.get(`/api/groups`, { params }).then(response => {
-				groups.value = response.data.data
-			})
-		}
-		loadGroups()
-		watch(
-			() => filter.value.teacher_id,
-			() => {
-				loadGroups()
-			},
-		)
-
 		return {
 			filter,
 
-			freshGroups,
-			params,
-			groups,
+			place_id: branch_id,
 
 			places,
 			teachers,

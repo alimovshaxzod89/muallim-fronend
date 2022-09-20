@@ -26,13 +26,8 @@ export default function useGroupList(MODULE_NAME) {
     { text: "AKTIV", value: 'status' },
   ]
 
-  const filter = ref({
-    teacher_id: '',
-    group_id: '',
-    subject_id: '',
-    full_name: '',
-    place_id: ''
-	})
+  const filter = ref({})
+
 	const options = ref({
 		sortBy: ['id'],
 		sortDesc: [true],
@@ -87,8 +82,7 @@ export default function useGroupList(MODULE_NAME) {
 
   watch(options, () => {
 		loading.value = true
-		fetchDatas()
-		// selectedTableData.value = []
+		setTimeout(() => fetchDatas(), 1000);
 	})
 
   //delete

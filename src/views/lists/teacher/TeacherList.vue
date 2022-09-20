@@ -6,7 +6,7 @@
 			<teacher-search v-model='filter' />
 
       <v-spacer></v-spacer>
-      
+
       <div class="d-flex align-center">
         <div v-if='state.rows.length > 0' class='mx-2 my-4'>
           <v-btn class='success exportXlsx' color='white' outlined
@@ -66,8 +66,12 @@
       </template>
 
       <template #[`item.gender`]="{ item }">
-          {{item.gender ? 'erkak' : 'ayol'}}
+				{{ item.gender == 1 ? 'Erkak' : item.gender == 2 ? 'Ayol' : '' }}
       </template>
+
+			<template #[`item.places`]="{ item }">
+				{{item.places.map(place => place.name).join(', ')}}
+			</template>
 
       <template #[`item.birth_date`]="{ item }"> {{ item.birth_date | date }}</template>
     </v-data-table>

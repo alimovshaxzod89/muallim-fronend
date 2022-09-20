@@ -100,7 +100,7 @@
                       class="mb-2"
                       @click:append="isPasswordVisible = !isPasswordVisible"
                     ></v-text-field>
-                    
+
                     <v-col
                       class="d-flex"
                       cols="12"
@@ -163,6 +163,7 @@ import { mdiFacebook, mdiTwitter, mdiGithub, mdiGoogle, mdiEyeOutline, mdiEyeOff
 import { ref, getCurrentInstance } from '@vue/composition-api'
 import { required } from '@core/utils/validation'
 import axios from '@axios'
+import store from '@/store'
 import { useRouter } from '@core/utils'
 import themeConfig from '@themeConfig'
 
@@ -180,10 +181,10 @@ export default {
     const password = ref('')
 
     const place_id = ref(null)
+
     //set old selected
-    if (localStorage.getItem('place')) {
-      const lastplace = JSON.parse(localStorage.getItem('place'))
-      place_id.value = lastplace.id
+    if (store.state.branch_id) {
+      place_id.value = store.state.branch_id
     }
     //place options
     const places = ref([])
@@ -198,7 +199,7 @@ export default {
     loadPlace()
     const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
 
-    
+
 
     const errorMessages = ref([])
     const socialLink = [
@@ -252,15 +253,17 @@ export default {
           if (success) {
             localStorage.setItem('accessToken', token)
 
-            const place = {
+            const branch = {
               id: place_id.value,
               name: '',
             }
             places.value.forEach(element => {
-              if (element.id == place.id) place.name = element.name
+              if (element.id == branch.id) branch.name = element.name
             })
 
-            localStorage.setItem('place', JSON.stringify(place))
+            localStorage.setItem('branch', JSON.stringify(branch))
+						store.dispatch('setBranch', branch)
+
             localStorage.setItem('multi_currency', multi_currency)
             localStorage.setItem('userData', JSON.stringify(user))
 
@@ -287,6 +290,7 @@ export default {
         .catch(error => {
           // TODO: Next Update - Show notification
           console.error('Oops, Unable to login!')
+          console.log('error :>> ', error)
           console.log('error :>> ', error.response)
           notify.value = { type: 'error', text: error.response.data.error, time: Date.now() }
           errorMessages.value = error.response.data.error
