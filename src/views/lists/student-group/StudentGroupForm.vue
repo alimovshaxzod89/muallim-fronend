@@ -437,7 +437,23 @@ export default {
 		}
 		const addStudentToOptions = row => {
 			students.value = students.value.concat([row])
-			formData.value.student_id = row.id
+
+			if (formData.value.id)
+				formData.value.student_id = row.id
+
+			else {
+
+				let student_ids = []
+				if (Array.isArray(formData.value.student_id)) {
+					student_ids = JSON.parse(JSON.stringify(formData.value.student_id))
+				} else if (formData.value.student_id) {
+					student_ids = [formData.value.student_id]
+				}
+
+				student_ids.push(row.id)
+
+				formData.value.student_id = JSON.parse(JSON.stringify(student_ids))
+			}
 		}
 		// GroupForm
 		const groupForm = ref(null)
