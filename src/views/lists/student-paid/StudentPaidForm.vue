@@ -194,7 +194,7 @@ import StudentPaidStoreModule from './StudentPaidStoreModule'
 
 import axios from '@axios'
 
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch, computed } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import StudentForm from '@/views/lists/student/StudentForm.vue'
 import SubjectForm from '@/views/lists/subject/SubjectForm.vue'
@@ -277,6 +277,35 @@ export default {
 			form.value.validate()
 		}
 
+		const branch_id = computed(() => store.state.branch_id)
+		watch(branch_id, (value) => {
+			filter.value.place_id = value
+		})
+
+		const filter = ref(props.value)
+
+		//default fields
+		filter.value = Object.assign({
+			place_id: branch_id.value ?? '',
+		}, props.value)
+
+		//return with default fields
+		emit('input', filter.value)
+
+		watch(filter, (value) => {
+			emit('input', value)
+		}, { deep: true })
+
+		const clearParams = (params) => {
+			return Object.keys(params)
+				.filter((key) => params[key] !== null && params[key] !== '')
+				.reduce((obj, key) => {
+					return Object.assign(obj, {
+						[key]: params[key],
+					})
+				}, {})
+		}
+
 		// ! METHODS
 		const subjects = ref([])
 		const loadSubject = () => {
@@ -293,14 +322,13 @@ export default {
 
 		const students = ref([])
 		const loadStudent = () => {
-			axios
-				.get('/api/students', { params: { itemsPerPage: -1 } })
-				.then(response => {
-					if (response.data.success) {
-						students.value = response.data.data
-					}
-				})
-				.catch(error => console.log(error))
+
+			const params = clearParams({
+				place_id: filter.value.place_id,
+			})
+			axios.get('/api/students', { params }).then(response => {
+				students.value = response.data.data
+			})
 		}
 		loadStudent()
 
@@ -526,6 +554,9 @@ export default {
 			groupForm,
 			addGroup,
 			addGroupToOptions,
+
+			place_id: branch_id,
+			branch_id,
 
 			icons: {
 				mdiPlusCircleOutline,
