@@ -18,6 +18,16 @@
 			class="data-list-search me-3"
 		></v-text-field> -->
 
+		<v-text-field
+			v-model="filter.number"
+			dense
+			outlined
+			hide-details
+			label="GURUH NOMI"
+			class="data-list-search me-3"
+			clearable
+		></v-text-field>
+
 		<v-autocomplete
 			v-model="filter.teacher_id"
 			:items="teachers"
@@ -26,23 +36,11 @@
 			label="USTOZ"
 			class="data-list-search me-3"
 			dense
-			solo
 			outlined
 			hide-details
 			clearable
 		>
 		</v-autocomplete>
-
-		<v-text-field
-			v-model="filter.number"
-			dense
-			solo
-			outlined
-			hide-details
-			label="GURUH NOMI"
-			class="data-list-search me-3"
-			clearable
-		></v-text-field>
 
 		<v-autocomplete
 			v-model="filter.subject_id"
@@ -52,7 +50,6 @@
 			label="KURS"
 			class="data-list-search me-3"
 			dense
-			solo
 			outlined
 			hide-details
 			clearable
@@ -68,7 +65,6 @@
 			label="FILIAL"
 			class="data-list-search me-3"
 			dense
-			solo
 			outlined
 			hide-details
 			clearable
