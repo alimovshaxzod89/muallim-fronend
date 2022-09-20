@@ -30,7 +30,7 @@
       :footer-props="footerProps"
       class="text-no-wrap"
     >
-      <template slot="item.index" scope="props">
+      <template slot="item.index" slot-scope="props">
         {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
       </template>
 
@@ -82,10 +82,10 @@
               <td
                 rowspan="5"
               >
-                Jami: 
+                Jami:
               </td>
-              <td 
-                rowspan="1" 
+              <td
+                rowspan="1"
                 class="money text-end d-flex"
               >
                 <p>

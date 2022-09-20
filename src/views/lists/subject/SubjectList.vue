@@ -35,7 +35,7 @@
       :footer-props="footerProps"
       class="text-no-wrap"
     >
-      <template slot="item.index" scope="props">
+      <template slot="item.index" slot-scope="props">
         {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
       </template>
 
@@ -96,7 +96,7 @@ import store from '@/store'
 
 import envParams from '@envParams'
 
-import XLSX from 'xlsx' 
+import XLSX from 'xlsx'
 
 // store module
 import SubjectStoreModule from './SubjectStoreModule'
