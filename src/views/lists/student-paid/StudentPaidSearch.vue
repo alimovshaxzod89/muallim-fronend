@@ -63,17 +63,6 @@
 				></v-autocomplete>
 			</v-col>
 
-			<!-- <div class="d-flex align-center pb-5">
-				<v-text-field
-					v-model="filter.query"
-					dense
-					outlined
-					hide-details
-					label="Qidiruv"
-					class="data-list-search me-3"
-				></v-text-field>
-			</div> -->
-
 			<v-col cols='3'>
 				<v-select
 					v-model='filter.cashbox_id'
@@ -87,6 +76,22 @@
 					class='data-list-search me-3'
 					clearable
 				></v-select>
+			</v-col>
+			<v-col cols="3">
+				<v-autocomplete
+					v-if='BRANCH_ID == null'
+					v-model='filter.place_id'
+					:items='places'
+					item-text='name'
+					item-value='id'
+					label='FILIAL'
+					class='data-list-search me-3'
+					dense
+					outlined
+					hide-details
+					clearable
+				>
+				</v-autocomplete>
 			</v-col>
 
 		</v-row>
@@ -229,13 +234,32 @@ import { computed, ref, watch } from '@vue/composition-api'
 import axios from '@axios'
 import { mdiCalendar, mdiFilterOutline } from '@mdi/js'
 import moment from 'moment/moment'
+import store from '@/store'
 
 export default {
 	name: 'StudentPaidSearch',
 	props: ['value'],
 	setup(props, { emit }) {
 
+		const branch_id = computed(() => store.state.branch_id)
+		watch(branch_id, (value) => {
+			filter.value.place_id = value
+		})
+
 		const filter = ref(props.value)
+
+		//default fields
+		filter.value = Object.assign({
+			teacher_id: '',
+			number: '',
+			group_id: '',
+			subject_id: '',
+			place_id: branch_id.value ?? '',
+		}, props.value)
+
+		//return with default fields
+		emit('input', filter.value)
+
 		watch(filter, (value) => {
 			emit('input', value)
 		}, { deep: true })
@@ -267,6 +291,7 @@ export default {
 			//todo: Kurs tanlangan bo'lsa faqat shu Kursni o'tadigan ustozlar olinsin, backend tomonni to'g'rilash kerak
 			const params = clearParams({
 				subject_id: filter.value.subject_id,
+				place_id: filter.value.place_id,
 			})
 			axios.get('/api/teachers', { params }).then(response => {
 				teachers.value = response.data.data
@@ -282,12 +307,14 @@ export default {
 			const params = clearParams({
 				subject_id: filter.value.subject_id,
 				teacher_id: filter.value.teacher_id,
+				place_id: filter.value.place_id,
 			})
 			axios.get('/api/groups', { params }).then(response => {
 				groups.value = response.data.data
 			})
 		}
 		loadGroups()
+
 		watch(() => filter.value.group_id, () => {
 			loadStudents()
 		})
@@ -296,6 +323,7 @@ export default {
 		const loadStudents = () => {
 			const params = clearParams({
 				group_id: filter.value.group_id,
+				place_id: filter.value.place_id,
 			})
 			axios.get('/api/students', { params }).then(response => {
 				students.value = response.data.data
@@ -468,6 +496,8 @@ export default {
 			teachers,
 			students,
 			cashboxes,
+
+			place_id: branch_id,
 
 			icons: {
 				mdiFilterOutline,

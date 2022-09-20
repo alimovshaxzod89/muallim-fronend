@@ -9,15 +9,6 @@
 		<!--			class="data-list-search me-3"-->
 		<!--		></v-text-field>-->
 
-		<!-- <v-text-field
-			v-model="filter.number"
-			dense
-			outlined
-			hide-details
-			label="GURUH NOMI"
-			class="data-list-search me-3"
-		></v-text-field> -->
-
 		<v-text-field
 			v-model='filter.number'
 			dense
@@ -150,6 +141,7 @@ export default {
 			filter,
 
 			place_id: branch_id,
+			branch_id,
 
 			places,
 			teachers,

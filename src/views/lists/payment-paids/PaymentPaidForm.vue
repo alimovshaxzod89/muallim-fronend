@@ -200,7 +200,7 @@ import StudentPaidStoreModule from './PaymentPaidStoreModule'
 
 import axios from '@axios'
 
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch, computed } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import StudentForm from '@/views/lists/student/StudentForm.vue'
 import SubjectForm from '@/views/lists/subject/SubjectForm.vue'
@@ -290,6 +290,42 @@ export default {
       form.value.validate()
     }
 
+    const branch_id = computed(() => store.state.branch_id)
+    watch(branch_id, value => {
+      filter.value.place_id = value
+    })
+
+    const filter = ref(props.value)
+
+    //default fields
+    filter.value = Object.assign(
+      {
+        place_id: branch_id.value ?? '',
+      },
+      props.value,
+    )
+
+    //return with default fields
+    emit('input', filter.value)
+
+    watch(
+      filter,
+      value => {
+        emit('input', value)
+      },
+      { deep: true },
+    )
+
+    const clearParams = params => {
+      return Object.keys(params)
+        .filter(key => params[key] !== null && params[key] !== '')
+        .reduce((obj, key) => {
+          return Object.assign(obj, {
+            [key]: params[key],
+          })
+        }, {})
+    }
+
     // ! METHODS
     const subjects = ref([])
     const loadSubject = () => {
@@ -306,8 +342,11 @@ export default {
 
     const students = ref([])
     const loadStudent = () => {
+      const params = clearParams({
+        place_id: filter.value.place_id,
+      })
       axios
-        .get('/api/students', { params: { itemsPerPage: -1 } })
+        .get('/api/students', { params })
         .then(response => {
           if (response.data.success) {
             students.value = response.data.data
@@ -344,8 +383,13 @@ export default {
     // loadGroup()
 
     const loadStudentGroups = student_id => {
+      const params = clearParams({
+        place_id: filter.value.place_id,
+        student_id,
+      })
       axios
-        .get('/api/student-groups', { params: { itemsPerPage: -1, student_id } })
+        .get('/api/student-groups', { params })
+        // axios.get('/api/student-groups', { params: { itemsPerPage: -1, student_id } })
         .then(response => {
           if (response.data.success) {
             groups.value = []
@@ -444,7 +488,6 @@ export default {
               if (month_year == el.id) {
                 const monthForPayment = el.month * 1
                 if (monthForPayment == selectedMonth) {
-                  console.log('Cheigrma')
                   const day_is_true = () => {
                     bonus.value = true
                   }
@@ -599,6 +642,9 @@ export default {
       addGroup,
       addGroupToOptions,
       bonus,
+
+      place_id: branch_id,
+      branch_id,
 
       icons: {
         mdiPlusCircleOutline,

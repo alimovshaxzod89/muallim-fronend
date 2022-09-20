@@ -35,7 +35,7 @@
 									:items='places'
 									item-text='name'
 									item-value='id'
-									label='BINO'
+									label='FILIAL'
 									dense
 									outlined
 									hide-details
