@@ -104,7 +104,7 @@ export default [
 		icon: mdiFilterVariant,
 		children: [
 			{
-				title: 'Fanlar',
+				title: 'Kurslar',
 				icon: mdiAccountDetailsOutline,
 				to: 'subjects',
 				resource: 'Subject',

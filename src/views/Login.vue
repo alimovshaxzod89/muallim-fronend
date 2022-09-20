@@ -101,6 +101,21 @@
                       @click:append="isPasswordVisible = !isPasswordVisible"
                     ></v-text-field>
 
+                    <v-col
+                      class="d-flex"
+                      cols="12"
+                      sm="6"
+                    >
+                      <v-select
+                        v-model="place_id"
+                        :items="places"
+                        item-text="name"
+                        item-value="id"
+                        :rules="selectRule"
+                        label="Binoni Tanlash"
+                      ></v-select>
+                    </v-col>
+
 <!--                    <div class="d-flex align-center justify-space-between flex-wrap">-->
 <!--                      <v-checkbox hide-details label="Remember Me" class="mt-0"> </v-checkbox>-->
 
@@ -148,6 +163,7 @@ import { mdiFacebook, mdiTwitter, mdiGithub, mdiGoogle, mdiEyeOutline, mdiEyeOff
 import { ref, getCurrentInstance } from '@vue/composition-api'
 import { required } from '@core/utils/validation'
 import axios from '@axios'
+import store from '@/store'
 import { useRouter } from '@core/utils'
 import themeConfig from '@themeConfig'
 
@@ -163,6 +179,28 @@ export default {
 
     const username = ref('')
     const password = ref('')
+
+    const place_id = ref(null)
+
+    //set old selected
+    if (store.state.branch_id) {
+      place_id.value = store.state.branch_id
+    }
+    //place options
+    const places = ref([])
+    const loadPlace = () => {
+      axios.get('/api/places').then(response => {
+        if (response.data.success) {
+          places.value = response.data.data
+        }
+      })
+    }
+
+    loadPlace()
+    const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
+
+
+
     const errorMessages = ref([])
     const socialLink = [
       {
@@ -186,6 +224,7 @@ export default {
         colorInDark: '#db4437',
       },
     ]
+
     const notify = ref({})
 
     const handleFormSubmit = () => {
@@ -204,7 +243,7 @@ export default {
       */
 
       axios
-        .post('/api/login', { username: username.value, password: password.value })
+        .post('/api/login', { username: username.value, password: password.value, place_id: place_id.value })
         .then(response => {
           // ? Set access token in localStorage so axios interceptor can use it
           // Axios Interceptors: https://github.com/axios/axios#interceptors
@@ -213,6 +252,18 @@ export default {
 
           if (success) {
             localStorage.setItem('accessToken', token)
+
+            const branch = {
+              id: place_id.value,
+              name: '',
+            }
+            places.value.forEach(element => {
+              if (element.id == branch.id) branch.name = element.name
+            })
+
+            localStorage.setItem('branch', JSON.stringify(branch))
+						store.dispatch('setBranch', branch)
+
             localStorage.setItem('multi_currency', multi_currency)
             localStorage.setItem('userData', JSON.stringify(user))
 
@@ -239,6 +290,7 @@ export default {
         .catch(error => {
           // TODO: Next Update - Show notification
           console.error('Oops, Unable to login!')
+          console.log('error :>> ', error)
           console.log('error :>> ', error.response)
           notify.value = { type: 'error', text: error.response.data.error, time: Date.now() }
           errorMessages.value = error.response.data.error
@@ -251,9 +303,13 @@ export default {
       isPasswordVisible,
       username,
       password,
+      place_id,
+      selectRule,
       errorMessages,
       socialLink,
       notify,
+      places,
+      loadPlace,
       icons: {
         mdiEyeOutline,
         mdiEyeOffOutline,

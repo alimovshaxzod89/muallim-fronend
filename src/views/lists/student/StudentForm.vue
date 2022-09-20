@@ -1,181 +1,195 @@
 <template>
 	<!-- form dialog -->
 	<v-dialog
-		v-model="show"
-		@keydown.esc="close()"
-		@click:outside="close()"
-		@keydown.enter="onSubmit()"
-		max-width="800px"
-		width="800px"
+		v-model='show'
+		@keydown.esc='close()'
+		@click:outside='close()'
+		@keydown.enter='onSubmit()'
+		max-width='800px'
+		width='800px'
 	>
 		<v-card>
-			<v-form ref="form">
+			<v-form ref='form'>
 				<v-card-title>
-					<span class="headline">Talabalar</span>
+					<span class='headline'>Talabalar</span>
 				</v-card-title>
 				<v-card-text>
 					<v-container>
 						<v-row>
-							<v-col cols="4">
-								<h4 class="text-required no-texts"><span>*</span></h4>
+							<v-col cols='4'>
+								<h4 class='text-required no-texts'><span>*</span></h4>
 								<v-text-field
-									type="text"
-									label="FAMILIYA"
-									v-model="formData.last_name"
+									type='text'
+									label='FAMILIYA'
+									v-model='formData.last_name'
 									outlined
 									dense
-									:rules="[required]"
+									:rules='[required]'
 								></v-text-field>
 							</v-col>
 
-							<v-col cols="4">
-								<h4 class="text-required no-texts"><span>*</span></h4>
+							<v-col cols='4'>
+								<h4 class='text-required no-texts'><span>*</span></h4>
 								<v-text-field
-									type="text"
-									label="ISM"
-									v-model="formData.first_name"
+									type='text'
+									label='ISM'
+									v-model='formData.first_name'
 									outlined
 									dense
-									:rules="[required]"
+									:rules='[required]'
 								></v-text-field>
 							</v-col>
 
-							<v-col cols="4">
+							<v-col cols='4'>
 								<v-text-field
-									type="text"
-									label="SHARIFI"
-									v-model="formData.middle_name"
+									type='text'
+									label='SHARIFI'
+									v-model='formData.middle_name'
 									outlined
 									dense
 								></v-text-field>
 							</v-col>
 
-							<v-col cols="6">
+							<v-col cols='6'>
 								<v-text-field
-									prefix="+998"
+									prefix='+998'
 									v-mask="'## ### ####'"
-									type="phone"
-									label="TELEFON"
-									v-model="formData.phone"
+									type='phone'
+									label='TELEFON'
+									v-model='formData.phone'
 									outlined
 									dense
 								></v-text-field>
 							</v-col>
 
-							<v-col cols="6">
-								<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
-									<template v-slot:activator="{ on, attrs }">
+							<v-col cols='6'>
+								<v-menu v-model='isDate' :close-on-content-click='false' offset-y min-width='auto'>
+									<template v-slot:activator='{ on, attrs }'>
 										<v-text-field
-											v-model="formData.birth_date"
+											v-model='formData.birth_date'
 											label="TUG'ILGAN KUN"
 											readonly
-											v-bind="attrs"
-											v-on="on"
+											v-bind='attrs'
+											v-on='on'
 											outlined
 											clearable
-											:append-icon="icons.mdiCalendar"
+											:append-icon='icons.mdiCalendar'
 										></v-text-field>
 									</template>
 									<v-date-picker
-										v-model="formData.birth_date"
-										color="primary"
-										@input="isDate = false"
+										v-model='formData.birth_date'
+										color='primary'
+										@input='isDate = false'
 										no-title
-										:first-day-of-week="1"
-										locale="ru-ru"
+										:first-day-of-week='1'
+										locale='ru-ru'
 									></v-date-picker>
 								</v-menu>
 							</v-col>
 
-							<v-col cols="6">
+							<v-col cols='6'>
 								<v-autocomplete
-									v-model="formData.region_id"
-									:items="regions"
-									item-text="name"
-									item-value="id"
-									label="TUMAN"
+									v-model='formData.region_id'
+									:items='regions'
+									item-text='name'
+									item-value='id'
+									label='TUMAN'
 									dense
 									outlined
 									clearable
-									class="align-start"
+									class='align-start'
 								></v-autocomplete>
 							</v-col>
 
-							<v-col cols="6">
+							<v-col cols='6'>
 								<v-autocomplete
-									v-model="formData.permanent_region_id"
-									:items="regions"
-									item-text="name"
-									item-value="id"
-									label="D.Y. TUMAN"
+									v-model='formData.permanent_region_id'
+									:items='regions'
+									item-text='name'
+									item-value='id'
+									label='D.Y. TUMAN'
 									dense
 									outlined
 									clearable
-									class="align-start"
+									class='align-start'
 								></v-autocomplete>
 							</v-col>
 
-							<v-col cols="6">
+							<v-col cols='6'>
 								<v-text-field
-									type="text"
-									label="MANZIL"
-									v-model="formData.address"
+									type='text'
+									label='MANZIL'
+									v-model='formData.address'
 									outlined
 									dense
 									required
 								></v-text-field>
 							</v-col>
 
-							<v-col cols="6">
+							<v-col cols='6'>
 								<v-text-field
-									type="text"
-									label="D.Y. MANZILI"
-									v-model="formData.permanent_address"
+									type='text'
+									label='D.Y. MANZILI'
+									v-model='formData.permanent_address'
 									outlined
 									dense
 									required
 								></v-text-field>
 							</v-col>
 
-							<v-col cols="12">
-								<h4 class="text-required">Jinsi <span>*</span></h4>
+							<v-col cols='6'>
+								<h4 class='text-required'>Jinsi <span>*</span></h4>
 								<v-radio-group
-									v-model="formData.gender"
+									v-model='formData.gender'
 									column
-									hide-details=""
-									class="mt-0"
+									hide-details=''
+									class='mt-0'
 									required
 								>
 									<v-radio
-										label="Erkak"
-										:value="1"
+										label='Erkak'
+										:value='1'
 									></v-radio>
 									<v-radio
-										label="Ayol"
-										:value="2"
+										label='Ayol'
+										:value='2'
 									></v-radio>
 								</v-radio-group>
 							</v-col>
 
-							<v-col cols="12">
+							<v-col cols='6' v-if='BRANCH_ID == null'>
+								<v-autocomplete
+									v-model='formData.place_id'
+									:items='places'
+									item-text='name'
+									item-value='id'
+									label='Filial'
+									dense
+									outlined
+									clearable
+									class='align-start'
+								></v-autocomplete>
+							</v-col>
+
+							<v-col cols='12'>
 								<v-checkbox
-									v-model="formData.sale"
+									v-model='formData.sale'
 									hide-details
-									label="CHEGIRMA"
-									@change="changeSale()"
-									false-value="0"
-									true-value="1"
+									label='CHEGIRMA'
+									@change='changeSale()'
+									false-value='0'
+									true-value='1'
 								></v-checkbox>
 							</v-col>
 
-							<v-col cols="12" v-if="formData.sale == 1">
+							<v-col cols='12' v-if='formData.sale == 1'>
 								<v-textarea
-									v-model="formData.sale_cause"
-									label="CHEGIRMA SABABI"
+									v-model='formData.sale_cause'
+									label='CHEGIRMA SABABI'
 									hide-details
 									outlined
 									clearable
-									class="mt-0"
+									class='mt-0'
 								></v-textarea>
 							</v-col>
 						</v-row>
@@ -184,16 +198,16 @@
 
 				<v-card-actions>
 					<v-spacer></v-spacer>
-					<v-btn color="gray" outlined @click="close()">Bekor qilish</v-btn>
+					<v-btn color='gray' outlined @click='close()'>Bekor qilish</v-btn>
 					<v-btn
-						color="success"
-						type="button"
-						@click="onSubmit"
-						:disabled="submitDisabled"
+						color='success'
+						type='button'
+						@click='onSubmit'
+						:disabled='submitDisabled'
 					>
 						<v-icon
-							class="loading-animation"
-							v-if="submitDisabled"
+							class='loading-animation'
+							v-if='submitDisabled'
 						>
 							{{ icons.mdiLoading }}
 						</v-icon>
@@ -211,7 +225,7 @@ import { mdiCalendar } from '@mdi/js'
 import store from '@/store'
 import axios from '@axios'
 
-import { ref, onMounted } from '@vue/composition-api'
+import { ref, onMounted, computed, watch } from '@vue/composition-api'
 import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
 import StudentStoreModule from '../student/StudentStoreModule'
 
@@ -225,11 +239,18 @@ export default {
 			store.registerModule(MODULE_NAME, StudentStoreModule)
 		}
 
+		const branch_id = computed(() => store.state.branch_id)
+		watch(branch_id, val => {
+			emptyFormData.place_id = val
+			formData.value.place_id = val
+		})
+
 		//show, hide
 		const show = ref(false)
 		const form = ref(null)
 		const emptyFormData = {
 			id: null,
+			place_id: branch_id.value,
 			first_name: null,
 			last_name: null,
 			middle_name: null,
@@ -263,10 +284,11 @@ export default {
 			formData.value = { ...emptyFormData }
 			form.value.resetValidation()
 		}
+
 		// on form submit
 		const submitDisabled = ref(false)
 		const onSubmit = () => {
-			if(submitDisabled.value === true)
+			if (submitDisabled.value === true)
 				return
 			else
 				submitDisabled.value = true
@@ -301,7 +323,7 @@ export default {
 				} else {
 					emit('notify', {
 						type: 'warning',
-						text: "Bo'limda xatolik! Bo'limlarni to'g'ri to'ldiring!",
+						text: 'Bo\'limda xatolik! Bo\'limlarni to\'g\'ri to\'ldiring!',
 					})
 				}
 			} else {
@@ -325,7 +347,7 @@ export default {
 				} else {
 					emit('notify', {
 						type: 'warning',
-						text: "Bo'limda xatolik! Bo'limlarni to'gri to'ldiring!",
+						text: 'Bo\'limda xatolik! Bo\'limlarni to\'gri to\'ldiring!',
 					})
 				}
 			}
@@ -339,10 +361,18 @@ export default {
 				}
 			})
 		}
+		loadRegions()
 
-		onMounted(() => {
-			loadRegions()
-		})
+		// Load regions
+		const places = ref()
+		const loadPlaces = () => {
+			axios.get('/api/places').then(response => {
+				if (response.data.success) {
+					places.value = response.data.data
+				}
+			})
+		}
+		loadPlaces()
 
 		// Watch
 		const changeSale = () => {
@@ -365,8 +395,10 @@ export default {
 			submitDisabled,
 			open,
 			close,
-			regions,
 			changeSale,
+
+			regions,
+			places,
 
 			icons: {
 				mdiCalendar,

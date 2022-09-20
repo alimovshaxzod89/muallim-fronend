@@ -23,24 +23,24 @@ import axios from '@axios'
 import { ref } from '@vue/composition-api/dist/vue-composition-api'
 
 export default {
-  setup() {
-    const { router } = useRouter()
+	setup() {
+		const { router } = useRouter()
 
-    const places = ref([])
-    const loadPlaces = () => {
-      axios.get('/api/places').then(response => {
-        if (response.data.success) {
-          places.value = response.data.data
-        }
-      })
-    }
-    loadPlaces()
+		const places = ref([])
+		const loadPlaces = () => {
+			axios.get('/api/places').then(response => {
+				if (response.data.success) {
+					places.value = response.data.data
+				}
+			})
+		}
+		loadPlaces()
 
-    return {
-      router,
-      places,
-    }
-  },
+		return {
+			router,
+			places,
+		}
+	},
 }
 </script>
 

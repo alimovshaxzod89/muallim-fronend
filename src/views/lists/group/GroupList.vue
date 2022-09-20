@@ -137,7 +137,7 @@ import {
   mdiClockTimeThreeOutline,
 } from '@mdi/js'
 
-import { onMounted, onUnmounted, ref } from '@vue/composition-api'
+import { onUnmounted, ref } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
 import moment from 'moment'
@@ -169,7 +169,7 @@ export default {
     GroupTimeList,
     DialogConfirm,
   },
-  filters: {
+	filters: {
     date: value => (value ? moment(value).format('D MMMM YYYY') : ''),
     summa: value => numeral(value).format('0,0'),
     feed: value => value[1] + '/' + value[2] + '/' + value[3],

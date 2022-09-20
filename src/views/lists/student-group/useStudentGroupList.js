@@ -23,15 +23,8 @@ export default function useStudentGroupList(MODULE_NAME) {
 		{ text: 'AKTIV', value: 'status' },
 	]
 
-	const filter = ref({
-		query: '',
-		teacher_id: '',
-		group_id: '',
-		student_id: '',
-		status: '',
-		begin_date: '',
-		end_date: '',
-	})
+	const filter = ref({})
+
 	const options = ref({
 		sortBy: ['id'],
 		sortDesc: [true],

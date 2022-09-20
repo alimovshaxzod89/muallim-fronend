@@ -1,5 +1,5 @@
 import store from '@/store'
-import { ref, watch } from '@vue/composition-api'
+import { computed, ref, watch } from '@vue/composition-api'
 
 export default function useStudentList(MODULE_NAME) {
 	const selectedTableData = ref([])
@@ -26,8 +26,14 @@ export default function useStudentList(MODULE_NAME) {
 		{ text: 'CHEGIRMA SABABI', value: 'sale_cause' },
 	]
 
+	const branch_id = computed(() => store.state.branch_id)
+	watch(branch_id, val => {
+		filter.value.place_id = val
+	})
+
 	const filter = ref({
 		query: '',
+		place_id: branch_id.value ?? '',
 		full_name: '',
 		phone: '',
 		region_id: '',
@@ -88,8 +94,8 @@ export default function useStudentList(MODULE_NAME) {
 		if (options.value.page != 1) options.value.page = 1
 		loading.value = true
 
-		setTimeout(() => fetchDatas(), 1000);
-	}, {deep: true})
+		setTimeout(() => fetchDatas(), 1000)
+	}, { deep: true })
 
 	watch(options, () => {
 		loading.value = true

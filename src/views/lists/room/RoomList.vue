@@ -11,6 +11,21 @@
           label="Qidiruv"
           class="data-list-search me-3"
         ></v-text-field>
+
+				<v-autocomplete
+					v-if='BRANCH_ID == null'
+					v-model="filter.place_id"
+					:items="places"
+					item-text="name"
+					item-value="id"
+					label="FILIAL"
+					class="data-list-search me-3"
+					dense
+					outlined
+					hide-details
+					clearable
+				>
+				</v-autocomplete>
       </div>
 
       <v-spacer></v-spacer>
@@ -101,6 +116,7 @@ import XLSX from 'xlsx'
 import useRoomList from './useRoomList'
 import RoomForm from './RoomForm'
 import DialogConfirm from '../../components/DialogConfirm.vue'
+import axios from '@axios'
 
 const MODULE_NAME = 'room'
 
@@ -174,6 +190,14 @@ export default {
 
     const BASE_URL = envParams.BASE_URL
 
+		const places = ref([])
+		const loadPlaces = () => {
+			axios.get('/api/places').then(response => {
+				places.value = response.data.data
+			})
+		}
+		loadPlaces()
+
     // Return
     return {
       BASE_URL,
@@ -189,6 +213,7 @@ export default {
       notify,
       selectedTableData,
       filter,
+			places,
 
       actions,
       actionOptions,

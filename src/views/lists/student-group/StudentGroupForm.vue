@@ -242,7 +242,7 @@ import StudentGroupStoreModule from './StudentGroupStoreModule'
 
 import axios from '@axios'
 
-import { ref, watch } from '@vue/composition-api'
+import { computed, ref, watch } from '@vue/composition-api'
 import { required, minLengthValidator } from '@core/utils/validation'
 import StudentForm from '@/views/lists/student/StudentForm'
 import GroupForm from '@/views/lists/group/GroupForm'
@@ -301,10 +301,6 @@ export default {
 			status: '1',
 		}
 
-		const picker = new Date().toISOString().substr(0, 10)
-		const isDateFirst = ref(false)
-		const isDateSecond = ref(false)
-
 		//validation
 		const formData = ref({ ...emptyFormData })
 		const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
@@ -312,18 +308,14 @@ export default {
 			form.value.validate()
 		}
 
-
 		const hasSale = ref(false)
 
 		watch(() => formData.value.sale, val => {
-
 			if (val)
 				hasSale.value = true
 			else
 				hasSale.value = false
-
 		})
-
 		watch(hasSale, (val) => {
 			if (!val) {
 				formData.value.sale = null
@@ -343,9 +335,19 @@ export default {
 		}
 
 
+		const branch_id = computed(() => store.state.branch_id)
+		watch(branch_id, (value) => {
+			loadTeachers()
+			loadGroups()
+			loadStudents()
+		})
+
 		const students = ref([])
 		const loadStudents = () => {
-			axios.get('/api/students').then(response => {
+			const params = clearParams({
+				place_id: branch_id.value,
+			})
+			axios.get('/api/students', { params }).then(response => {
 				if (response.data.success) {
 					students.value = response.data.data
 				}
@@ -357,7 +359,10 @@ export default {
 		//
 		const teachers = ref()
 		const loadTeachers = () => {
-			axios.get('/api/teachers').then(response => {
+			const params = clearParams({
+				place_id: branch_id.value,
+			})
+			axios.get('/api/teachers', { params }).then(response => {
 				if (response.data.success) {
 					teachers.value = response.data.data
 				}
@@ -369,8 +374,8 @@ export default {
 		const loadGroups = () => {
 			const params = clearParams({
 				teacher_id: formData.value.teacher_id,
+				place_id: branch_id.value,
 			})
-
 			axios.get(`/api/groups`, { params }).then(response => {
 				groups.value = response.data.data
 			})
@@ -441,6 +446,11 @@ export default {
 			selectsDatas.value.teacher = selectsDatas.value.teacher.concat([row])
 			formData.value.teacher_id = row.id
 		}
+
+
+		const picker = new Date().toISOString().substr(0, 10)
+		const isDateFirst = ref(false)
+		const isDateSecond = ref(false)
 
 		return {
 			form,
