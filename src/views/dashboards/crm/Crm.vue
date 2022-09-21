@@ -69,54 +69,23 @@
 				></statistics-card-with-images>
 			</v-col>
 
+<!--			<v-col-->
+<!--				cols='12'-->
+<!--				md='6'-->
+<!--				sm='12'-->
+<!--				order='6'-->
+<!--			>-->
+<!--				<crm-sales-overview></crm-sales-overview>-->
+<!--			</v-col>-->
 
-			<v-col
-				cols='12'
-				md='6'
-				sm='12'
-				order='5'
-				order-md='3'
-			>
-				<crm-statistics-card></crm-statistics-card>
-			</v-col>
-
-			<v-col
-				cols='12'
-				md='3'
-				sm='6'
-				order='3'
-				order-md='4'
-			>
-				<crm-total-sales></crm-total-sales>
-			</v-col>
-
-			<v-col
-				cols='12'
-				md='3'
-				sm='6'
-				order='3'
-				order-md='4'
-			>
-				<crm-total-outcomes></crm-total-outcomes>
-			</v-col>
-
-			<v-col
-				cols='12'
-				md='6'
-				sm='12'
-				order='6'
-			>
-				<crm-sales-overview></crm-sales-overview>
-			</v-col>
-
-			<v-col
-				cols='12'
-				md='6'
-				sm='12'
-				order='6'
-			>
-				<crm-subjects-overview></crm-subjects-overview>
-			</v-col>
+<!--			<v-col-->
+<!--				cols='12'-->
+<!--				md='6'-->
+<!--				sm='12'-->
+<!--				order='6'-->
+<!--			>-->
+<!--				<crm-subjects-overview></crm-subjects-overview>-->
+<!--			</v-col>-->
 		</v-row>
 
 		<!--    <v-row>-->
@@ -269,14 +238,14 @@ export default {
 				}, {})
 		}
 
-		// //form options for selects
+		//
+
 		const selectsDatas = ref({
 			student: null,
 			group: null,
 			teacher: null,
 			lead: null,
 		})
-		// ! METHODS
 		const loadStudents = () => {
 			const params = clearParams({
 				place_id: branch_id.value,
