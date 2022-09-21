@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
 		branch_id: null,
 		branch_name: null,
+		user_role: null,
 	},
   mutations: {
 		SET_BRANCH_ID(state, value) {
@@ -16,7 +17,11 @@ export default new Vuex.Store({
 		},
 		SET_BRANCH_NAME(state, value) {
 			state.branch_name = value
-		}
+		},
+
+		SET_USER_ROLE(state, value) {
+			state.user_role = value
+		},
 	},
   actions: {},
   modules: {

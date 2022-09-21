@@ -68,25 +68,129 @@
 					:stat-title='ratingsOptions2.statTitle'
 				></statistics-card-with-images>
 			</v-col>
-
-<!--			<v-col-->
-<!--				cols='12'-->
-<!--				md='6'-->
-<!--				sm='12'-->
-<!--				order='6'-->
-<!--			>-->
-<!--				<crm-sales-overview></crm-sales-overview>-->
-<!--			</v-col>-->
-
-<!--			<v-col-->
-<!--				cols='12'-->
-<!--				md='6'-->
-<!--				sm='12'-->
-<!--				order='6'-->
-<!--			>-->
-<!--				<crm-subjects-overview></crm-subjects-overview>-->
-<!--			</v-col>-->
 		</v-row>
+
+		<div v-if='USER_ROLE && ["manager", "director", "admin", "founder", "Direktor"].includes(USER_ROLE)'>
+			<v-row>
+
+				<v-col cols='6' order='1'>
+
+					<v-card>
+						<v-card-text>
+							<h2>{{ `${filter.year}-${filter.month}-01` | year_month }}</h2>
+							<hr>
+
+							<v-simple-table>
+								<template v-slot:default>
+									<tbody>
+									<tr>
+										<td><h3>Oylik to'lov:</h3></td>
+										<td style='text-align: right; white-space: nowrap;'>
+											<span v-if='payment'>{{ payment.amount | summa }}</span></td>
+									</tr>
+									<tr>
+										<td><h3>Shundan to'landi:</h3></td>
+										<td style='text-align: right; white-space: nowrap;'>
+											<span v-if='payment'>{{ payment.paid | summa }}</span>
+										</td>
+									</tr>
+									<tr>
+										<td><h3>Shundan qarzdorlar:</h3></td>
+										<td style='text-align: right; white-space: nowrap;'>
+											<span v-if='payment'>{{ (payment.amount - payment.paid) | summa }}</span></td>
+									</tr>
+									</tbody>
+								</template>
+							</v-simple-table>
+							<br>
+
+						</v-card-text>
+					</v-card>
+
+				</v-col>
+
+			</v-row>
+
+			<v-row>
+				<v-col cols='6' order='6'>
+					<v-card>
+						<v-card-text>
+							<h2>Tushumlar oylar bo'yicha: {{ filter.year }}</h2>
+							<hr>
+
+							<v-simple-table>
+								<template v-slot:default>
+									<tbody>
+									<tr v-for='item in paidByMonth'>
+										<td><h4>{{ `${item.year}-${item.month}-01` | year_month }}</h4></td>
+										<td style='text-align: right; white-space: nowrap;'>
+											<span>{{ item.amount | summa }}</span></td>
+									</tr>
+									<tr v-if='paidByMonth'>
+										<td><h4>Jami:</h4></td>
+										<td style='text-align: right; white-space: nowrap;'>
+											<b>{{ paidByMonth.reduce((s, item) => s += item.amount, 0) | summa }}</b>
+										</td>
+									</tr>
+									</tbody>
+								</template>
+							</v-simple-table>
+
+						</v-card-text>
+					</v-card>
+				</v-col>
+
+				<v-col cols='6' order='7'>
+					<v-card>
+						<v-card-text>
+							<h2>
+								Tushumlar kunlar bo'yicha:
+								<span v-if='filter.month'> {{ filter.month | month }}</span>
+								<span v-if='filter.year'> {{ filter.year | year }}</span>
+							</h2>
+							<hr>
+
+							<v-simple-table>
+								<template v-slot:default>
+									<tbody>
+									<tr v-for='item in paidByDate'>
+										<td><h4>{{ item.date | date_month }}</h4></td>
+										<td style='text-align: right; white-space: nowrap;'>
+											<span>{{ item.amount | summa }}</span></td>
+									</tr>
+									<tr v-if='paidByDate'>
+										<td><h4>Jami:</h4></td>
+										<td style='text-align: right; white-space: nowrap;'>
+											<b>{{ paidByDate.reduce((s, item) => s += item.amount, 0) | summa }}</b>
+										</td>
+									</tr>
+									</tbody>
+								</template>
+							</v-simple-table>
+
+						</v-card-text>
+					</v-card>
+				</v-col>
+			</v-row>
+		</div>
+
+		<!--			<v-col-->
+		<!--				cols='12'-->
+		<!--				md='6'-->
+		<!--				sm='12'-->
+		<!--				order='6'-->
+		<!--			>-->
+		<!--				<crm-sales-overview></crm-sales-overview>-->
+		<!--			</v-col>-->
+
+		<!--			<v-col-->
+		<!--				cols='12'-->
+		<!--				md='6'-->
+		<!--				sm='12'-->
+		<!--				order='6'-->
+		<!--			>-->
+		<!--				<crm-subjects-overview></crm-subjects-overview>-->
+		<!--			</v-col>-->
 
 		<!--    <v-row>-->
 		<!--      <v-col-->
@@ -140,12 +244,9 @@
 import StatisticsCardVertical from '@/@core/components/statistics-card/StatisticsCardVertical.vue'
 import CrmSubjectsOverview from '@/views/dashboards/crm/CrmSubjectsOverview'
 import CrmTotalOutcomes from '@/views/dashboards/crm/CrmTotalOutcomes'
-import axios from '@axios'
 import StatisticsCardAreaChart from '@core/components/statistics-card/StatisticsCardAreaChart.vue'
 import StatisticsCardWithImages from '@core/components/statistics-card/StatisticsCardWithImages.vue'
 // icons
-import { mdiLabelVariantOutline } from '@mdi/js'
-import { computed, ref } from '@vue/composition-api'
 import CrmActivityTimeline from './CrmActivityTimeline.vue'
 import CrmCardDeveloperMeetup from './CrmCardDeveloperMeetup.vue'
 import CrmCardMeetingSchedule from './CrmCardMeetingSchedule.vue'
@@ -157,7 +258,11 @@ import CrmStatisticsCard from './CrmStatisticsCard.vue'
 import CrmTotalSales from './CrmTotalSales.vue'
 import CrmWeeklySales from './CrmWeeklySales.vue'
 
+import { mdiLabelVariantOutline } from '@mdi/js'
+import { computed, ref, watch } from '@vue/composition-api'
+import axios from '@axios'
 import store from '@/store'
+import moment from 'moment'
 
 export default {
 	components: {
@@ -303,6 +408,75 @@ export default {
 		loadTeachers()
 		loadLeads()
 
+		const filter = ref({
+			year: moment().format('Y'),
+			month: moment().format('M'),
+			place_id: branch_id.value,
+		})
+		watch(branch_id, val => filter.value.place_id = val)
+
+		const payment = ref({})
+		const loadPayment = () => {
+			const params = clearParams({
+				year: filter.value.year,
+				month: filter.value.month,
+				place_id: filter.value.place_id,
+			})
+			axios
+				.get('/api/statistics/payment', { params })
+				.then(response => {
+					payment.value = response.data.data
+				})
+				.catch(error => console.log(error))
+		}
+		loadPayment()
+
+		const paidByMonth = ref([])
+		const loadPaidByMonth = () => {
+			const params = clearParams({
+				year: filter.value.year,
+				place_id: filter.value.place_id,
+			})
+			axios
+				.get('/api/statistics/paid-by-month', { params })
+				.then(response => {
+					paidByMonth.value = response.data.data
+				})
+				.catch(error => console.log(error))
+		}
+		loadPaidByMonth()
+
+		const paidByDate = ref([])
+		const loadPaidByDate = () => {
+			const params = clearParams({
+				year: filter.value.year,
+				month: filter.value.month,
+				place_id: filter.value.place_id,
+			})
+			axios
+				.get('/api/statistics/paid-by-date', { params })
+				.then(response => {
+					paidByDate.value = response.data.data
+				})
+				.catch(error => console.log(error))
+		}
+		loadPaidByDate()
+
+		watch(() => filter.value.place_id, () => {
+			loadPayment()
+			loadPaidByMonth()
+			loadPaidByDate()
+		})
+		watch(() => filter.value.year, () => {
+			loadPayment()
+			loadPaidByMonth()
+			loadPaidByDate()
+		})
+		watch(() => filter.value.month, () => {
+			loadPayment()
+			loadPaidByDate()
+		})
+
 		return {
 			ratingsOptions,
 			sessionsOptions,
@@ -311,6 +485,11 @@ export default {
 			growthAreaChart,
 			newProjectOptions,
 			selectsDatas,
+
+			filter,
+			payment,
+			paidByMonth,
+			paidByDate,
 		}
 	},
 }
