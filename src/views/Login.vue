@@ -277,7 +277,7 @@ export default {
             localStorage.setItem('userAbility', JSON.stringify(userAbility))
 
             // notify.value = { type: 'success', text: msg, time: Date.now() }
-            // router.push({ name: 'dashboard-eCommerce' }).catch(err => console.log(err)).then(() => {
+            // router.push({ name: 'dashboard' }).catch(err => console.log(err)).then(() => {
             // router.push('/').catch(err => console.log(err)).then(() => {
             window.location.reload()
             // });

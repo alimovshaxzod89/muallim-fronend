@@ -29,7 +29,9 @@ export default [
   {
     title: 'Asosiy panel',
     icon: mdiHome,
-    to: 'dashboard-eCommerce',
+    to: 'dashboard',
+		resource: 'Public',
+		action: 'read',
   },
   {
     title: 'Lidlar',

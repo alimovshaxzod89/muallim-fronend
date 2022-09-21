@@ -15,7 +15,7 @@ export default [
 	{
 		title: 'Asosiy panel',
 		icon: mdiHome,
-		to: 'dashboard-eCommerce',
+		to: 'dashboard',
 	},
 	{
 		title: "Ro'yxatlar",

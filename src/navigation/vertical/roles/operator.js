@@ -1,6 +1,19 @@
-import { mdiAccountDetailsOutline, mdiCashCheck, mdiPercent, mdiHumanCapacityDecrease } from '@mdi/js'
+import {
+	mdiAccountDetailsOutline,
+	mdiCashCheck,
+	mdiPercent,
+	mdiHumanCapacityDecrease,
+	mdiHome,
+} from '@mdi/js'
 
 export default [
+	{
+		title: 'Asosiy panel',
+		icon: mdiHome,
+		to: 'dashboard',
+		resource: 'Public',
+		action: 'read',
+	},
   {
     title: 'Guruhlar',
     to: 'groups',

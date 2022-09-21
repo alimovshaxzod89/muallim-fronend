@@ -22,7 +22,7 @@ const routes = [
       const accessToken = localStorage.getItem('accessToken')
 
       if (accessToken) {
-        return { name: 'dashboard-eCommerce', query: to.query }
+        return { name: 'dashboard', query: to.query }
       }
       return { name: 'auth-login', query: to.query }
     },
