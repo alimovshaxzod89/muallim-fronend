@@ -122,14 +122,21 @@
 								<template v-slot:default>
 									<tbody>
 									<tr v-for='item in paidByMonth'>
-										<td><h4>{{ `${item.year}-${item.month}-01` | year_month }}</h4></td>
+										<td><h4 style='text-align: center;'>{{ `${item.year}-${item.month}-01` | year_month }}</h4></td>
 										<td style='text-align: right; white-space: nowrap;'>
-											<span>{{ item.amount | summa }}</span></td>
+											<span>{{ item.payment | summa }}</span>
+										</td>
+										<td style='text-align: right; white-space: nowrap;'>
+											<span>{{ item.paid | summa }}</span>
+										</td>
 									</tr>
 									<tr v-if='paidByMonth'>
-										<td><h4>Jami:</h4></td>
+										<td><h4 style='text-align: right;'>Jami:</h4></td>
 										<td style='text-align: right; white-space: nowrap;'>
-											<b>{{ paidByMonth.reduce((s, item) => s += item.amount, 0) | summa }}</b>
+											<b>{{ paidByMonth.reduce((s, item) => s += parseInt(item.payment), 0) | summa }}</b>
+										</td>
+										<td style='text-align: right; white-space: nowrap;'>
+											<b>{{ paidByMonth.reduce((s, item) => s += item.paid, 0) | summa }}</b>
 										</td>
 									</tr>
 									</tbody>
@@ -154,12 +161,12 @@
 								<template v-slot:default>
 									<tbody>
 									<tr v-for='item in paidByDate'>
-										<td><h4>{{ item.date | date_month }}</h4></td>
+										<td><h4 style='text-align: center;'>{{ item.date | date_month }}</h4></td>
 										<td style='text-align: right; white-space: nowrap;'>
 											<span>{{ item.amount | summa }}</span></td>
 									</tr>
 									<tr v-if='paidByDate'>
-										<td><h4>Jami:</h4></td>
+										<td><h4 style='text-align: right;'>Jami:</h4></td>
 										<td style='text-align: right; white-space: nowrap;'>
 											<b>{{ paidByDate.reduce((s, item) => s += item.amount, 0) | summa }}</b>
 										</td>
