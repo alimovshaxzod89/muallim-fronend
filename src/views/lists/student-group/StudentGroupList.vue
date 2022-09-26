@@ -7,7 +7,7 @@
 
 			<v-spacer></v-spacer>
 
-			<div class='d-flex align-center ml-auto my-4'>
+			<div class='d-flex align-center justify-end my-4'>
 
 				<div v-if='state.rows.length > 0' class='mx-2'>
 					<v-btn class='success exportXlsx' color='white' outlined
