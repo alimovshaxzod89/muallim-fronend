@@ -261,13 +261,15 @@ export default {
               if (element.id == branch.id) branch.name = element.name
             })
 
+						const { ability: userAbility, role: userRole } = user
+
             localStorage.setItem('branch', JSON.stringify(branch))
-						store.dispatch('setBranch', branch)
+						store.dispatch('app/setBranch', branch)
+						store.dispatch('app/setUserRole', userRole)
 
             localStorage.setItem('multi_currency', multi_currency)
             localStorage.setItem('userData', JSON.stringify(user))
 
-            const { ability: userAbility } = user
             // Set user ability
             // ? https://casl.js.org/v5/en/guide/intro#update-rules
             vm.$ability.update(userAbility)
@@ -275,7 +277,7 @@ export default {
             localStorage.setItem('userAbility', JSON.stringify(userAbility))
 
             // notify.value = { type: 'success', text: msg, time: Date.now() }
-            // router.push({ name: 'dashboard-eCommerce' }).catch(err => console.log(err)).then(() => {
+            // router.push({ name: 'dashboard' }).catch(err => console.log(err)).then(() => {
             // router.push('/').catch(err => console.log(err)).then(() => {
             window.location.reload()
             // });

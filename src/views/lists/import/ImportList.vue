@@ -63,12 +63,15 @@ async function getBase64(file) {
 	})
 }
 
-import { ref, watch } from '@vue/composition-api'
+import { computed, ref, watch } from '@vue/composition-api'
 import axios from '@axios'
+import store from '@/store'
 
 export default {
 
 	setup() {
+		const branch_id = computed(() => store.state.branch_id)
+
 		const fileInput = ref(null)
 		const teacher_full_name = ref('')
 		const fileExtension = ref('')
@@ -93,6 +96,11 @@ export default {
 
 		const importFile = async () => {
 
+			if (branch_id.value === null) {
+				alert('Filialni tanlagan bo\'lishingiz kerak!')
+				return
+			}
+
 			var file = document.querySelector('input#import-file-input[type="file"]').files[0]
 
 			if (file) {
@@ -108,6 +116,7 @@ export default {
 				axios.post('api/import', {
 					fileBase64: base64,
 					fileExtension: fileExtension.value,
+					place_id: branch_id.value,
 					teacher_full_name: teacher_full_name.value,
 				}).then(response => {
 					if (response.data.success) {

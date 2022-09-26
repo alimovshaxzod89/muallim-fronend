@@ -116,9 +116,9 @@
                 </v-col>
 
                 <v-col cols="3">
-                  <v-menu 
-                    v-model="isDateTwo" 
-                    :close-on-content-click="false" 
+                  <v-menu
+                    v-model="isDateTwo"
+                    :close-on-content-click="false"
                     offset-y min-width="auto"
                   >
                     <template v-slot:activator="{ on, attrs }">
@@ -149,16 +149,16 @@
 
               </v-expansion-panel-content>
               <v-expansion-panel-content>
-                
+
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-col> -->
-        
+
       <v-spacer></v-spacer>
 
     <div class="d-flex align-center">
-      
+
       <div v-if='state.rows.length > 0' class='mx-2'>
         <v-btn class='success exportXlsx' color='white' outlined
           @click='ExportExcel()'>Jadvalni yuklab olish
@@ -183,7 +183,7 @@
       :footer-props="footerProps"
       class="text-no-wrap"
     >
-      <template slot="item.index" scope="props">
+      <template slot="item.index" slot-scope="props">
         {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
       </template>
 
@@ -218,7 +218,7 @@
         </div>
       </template>
 
-      <template #[`item.date`]="{ item }"> 
+      <template #[`item.date`]="{ item }">
         {{item.date | date}}
       </template>
 

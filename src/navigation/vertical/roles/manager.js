@@ -1,4 +1,5 @@
 import {
+	mdiHome,
 	mdiAccountDetailsOutline,
 	mdiCashCheck,
 	mdiFileImportOutline,
@@ -8,6 +9,13 @@ import {
 } from '@mdi/js'
 
 export default [
+	{
+		title: 'Asosiy panel',
+		icon: mdiHome,
+		to: 'dashboard',
+		resource: 'Public',
+		action: 'read',
+	},
 	{
 		title: 'Ustozlar',
 		icon: mdiAccountDetailsOutline,

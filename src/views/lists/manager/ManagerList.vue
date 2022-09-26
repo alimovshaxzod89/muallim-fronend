@@ -35,7 +35,7 @@
       :footer-props="footerProps"
       class="text-no-wrap"
     >
-      <template slot="item.index" scope="props">
+      <template slot="item.index" slot-scope="props">
         {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
       </template>
 
@@ -85,13 +85,13 @@
 </template>
 
 <script>
-import { 
+import {
   mdiTrendingUp,
-  mdiPlus, 
-  mdiDeleteOutline, 
-  mdiDotsVertical, 
-  mdiEyeOutline, 
-  mdiPencilOutline 
+  mdiPlus,
+  mdiDeleteOutline,
+  mdiDotsVertical,
+  mdiEyeOutline,
+  mdiPencilOutline
 } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'

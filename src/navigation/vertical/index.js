@@ -13,6 +13,7 @@ import views from './views'
 
 import admin from './roles/admin'
 import director from './roles/director'
+import founder from './roles/founder'
 import manager from './roles/manager'
 import operator from './roles/operator'
 import teacher from './roles/teacher'
@@ -27,6 +28,9 @@ if (userData && userData.role) {
 			break
 		case 'director':
 			roleMenu = director
+			break
+		case 'founder':
+			roleMenu = founder
 			break
 		case 'manager':
 			roleMenu = manager

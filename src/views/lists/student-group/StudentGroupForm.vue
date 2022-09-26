@@ -90,6 +90,7 @@
 									outlined
 									hide-details
 									clearable
+									:multiple='formData.id == null'
 									:rules='selectRule'
 									required
 								>
@@ -404,16 +405,27 @@ export default {
 							emit('notify', { type: 'error', text: error.message })
 						})
 				} else {
-					store
-						.dispatch(`${MODULE_NAME}/addRow`, formData.value)
-						.then(({ message }) => {
-							close()
-							emit('notify', { type: 'success', text: message })
-						})
-						.catch(error => {
-							console.log(error)
-							emit('notify', { type: 'error', text: error.message })
-						})
+					//create
+
+					let studentIds = []
+					if (Array.isArray(formData.value.student_id)) {
+						studentIds = formData.value.student_id
+					} else {
+						studentIds.push(formData.value.student_id)
+					}
+
+					studentIds.forEach(student_id => {
+						store
+							.dispatch(`${MODULE_NAME}/addRow`, { ...formData.value, student_id })
+							.then(({ message }) => {
+								close()
+								emit('notify', { type: 'success', text: message })
+							})
+							.catch(error => {
+								console.log(error)
+								emit('notify', { type: 'error', text: error.message })
+							})
+					})
 				}
 			}
 		}
@@ -425,7 +437,23 @@ export default {
 		}
 		const addStudentToOptions = row => {
 			students.value = students.value.concat([row])
-			formData.value.student_id = row.id
+
+			if (formData.value.id)
+				formData.value.student_id = row.id
+
+			else {
+
+				let student_ids = []
+				if (Array.isArray(formData.value.student_id)) {
+					student_ids = JSON.parse(JSON.stringify(formData.value.student_id))
+				} else if (formData.value.student_id) {
+					student_ids = [formData.value.student_id]
+				}
+
+				student_ids.push(row.id)
+
+				formData.value.student_id = JSON.parse(JSON.stringify(student_ids))
+			}
 		}
 		// GroupForm
 		const groupForm = ref(null)

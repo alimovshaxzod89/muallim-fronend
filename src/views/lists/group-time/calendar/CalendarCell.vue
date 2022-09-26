@@ -12,18 +12,17 @@
 					{{ icons.mdiPencilOutline }}
 				</v-icon>
 				<span class="text-dots">
-					Guruh:
-					<b>{{ groupTime.group.number }}</b>,
-					Soat:
-					<b>{{ groupTime.time_begin }}</b>
-					-
-					<b>{{ groupTime.time_end }}</b>
+					{{ groupTime.group.teacher.full_name }} <b>{{ groupTime.group.number }}</b>
 				</span>
 			</div>
 		</template>
 		<span>
+			Ustoz:
+			<b>{{ groupTime.group.teacher.full_name }}</b>,
 			Guruh:
 			<b>{{ groupTime.group.number }}</b>,
+			Kurs:
+			<b>{{ groupTime.group.subject.name }}</b>,
 			Soat:
 			<b>{{ groupTime.time_begin }}</b>
 			-

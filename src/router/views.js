@@ -10,8 +10,8 @@ const views = [
     },
   },
   {
-    path: '/main',
-    name: 'dashboard-eCommerce',
+    path: '/dashboard',
+    name: 'dashboard',
     component: () => import('@/views/dashboards/crm/Crm.vue'),
     meta: {
       layout: 'content',

@@ -26,20 +26,27 @@ Vue.use(Toast)
 
 Vue.filter('summa', value => (value !== null && value !== '' ? numeral(String(value).replace('.', ',')).format('0,0') : '—'))
 Vue.filter('date', value => moment(value).format('D MMMM YYYY'))
+Vue.filter('date_month', value => moment(value).format('D MMMM'))
 Vue.filter('year_month', value => moment(value).format('MMMM YYYY'))
+Vue.filter('year', value => moment(value).format('YYYY'))
+Vue.filter('month', value => moment(value).format('MMMM'))
 Vue.directive('mask', VueMaskDirective)
 
 Vue.mixin({
 	data: function() {
 		return {
+			get USER_ROLE() {
+				return store.state.user_role
+			},
+
 			get BRANCH_ID() {
-				return store.state.branch_id;
+				return store.state.branch_id
 			},
 			// get BRANCH_NAME() {
 			// 	return store.state.branch_name;
 			// }
 		}
-	}
+	},
 })
 
 // Vue.prototype.$branchId = store.state.place_id
@@ -51,9 +58,15 @@ new Vue({
 	vuetify,
 	created() {
 		const branch = JSON.parse(localStorage.getItem('branch'))
-		if (branch) {
+		if (branch)
 			store.dispatch('app/setBranch', branch)
-		}
+
+		const userData = JSON.parse(localStorage.getItem('userData'))
+		if (userData)
+			store.dispatch('app/setUserRole', userData.role)
+		else
+			store.dispatch('app/setUserRole', null)
+
 	},
 	render: h => h(App),
 }).$mount('#app')

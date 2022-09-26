@@ -5,6 +5,7 @@ export default {
 	state: {
 		shallContentShowOverlay: false,
 		branch: {},
+		user: { role: null },
 	},
 	getters: {},
 	mutations: {
@@ -22,6 +23,17 @@ export default {
 				store.commit('SET_BRANCH_NAME', null)
 			}
 		},
+
+
+		SET_USER_ROLE(state, value) {
+			if (value) {
+				state.user.role = value
+				store.commit('SET_USER_ROLE', value)
+			} else {
+				state.user.role = null
+				store.commit('SET_USER_ROLE', null)
+			}
+		},
 	},
 	actions: {
 		changeBranch({ commit }, branch) {
@@ -30,6 +42,9 @@ export default {
 		},
 		setBranch({ commit, dispatch }, branch) {
 			dispatch('changeBranch', branch)
-		}
+		},
+		setUserRole({ commit }, role) {
+			commit('SET_USER_ROLE', role)
+		},
 	},
 }

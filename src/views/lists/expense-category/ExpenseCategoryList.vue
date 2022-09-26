@@ -13,7 +13,7 @@
                 >
                 </v-text-field>
             </div>
-                
+
                 <v-spacer></v-spacer>
 
                 <v-btn v-if="$can('create', 'Room')" class="primary" @click="openForm()">Qo'shish</v-btn>
@@ -31,10 +31,10 @@
             :footer-props="footerProps"
             class="text-no-wrap"
         >
-            <template slot="item.index" scope="props">
+            <template slot="item.index" slot-scope="props">
                 {{ props.index + 1 + (options.page - 1) * options.itemsPerPage }}
             </template>
-            
+
             <!-- total -->
             <template #[`item.total`]="{ item }"> ${{ item.total }}</template>
 
@@ -149,8 +149,8 @@ export default {
         }
 
         const BASE_URL = envParams.BASE_URL
-        
-        // Return 
+
+        // Return
         return{
             BASE_URL,
             state,
