@@ -203,14 +203,7 @@
 						color='success'
 						type='button'
 						@click='onSubmit'
-						:disabled='submitDisabled'
 					>
-						<v-icon
-							class='loading-animation'
-							v-if='submitDisabled'
-						>
-							{{ icons.mdiLoading }}
-						</v-icon>
 						Saqlash
 					</v-btn>
 				</v-card-actions>
@@ -286,21 +279,7 @@ export default {
 		}
 
 		// on form submit
-		const submitDisabled = ref(false)
 		const onSubmit = () => {
-			if (submitDisabled.value === true)
-				return
-			else
-				submitDisabled.value = true
-
-			submitDisabled.value = true
-
-			if (!form.value.validate()) {
-				console.log('form inputs not valid!')
-
-				submitDisabled.value = false
-				return
-			}
 			if (formData.value.id) {
 				//update
 				if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
@@ -316,9 +295,6 @@ export default {
 							emit('notify', { type: 'error', text: error.message })
 
 							return false
-						})
-						.finally(() => {
-							submitDisabled.value = false
 						})
 				} else {
 					emit('notify', {
@@ -340,9 +316,6 @@ export default {
 							console.log(error)
 							emit('notify', { type: 'error', text: error.message })
 							return false
-						})
-						.finally(() => {
-							submitDisabled.value = false
 						})
 				} else {
 					emit('notify', {
@@ -392,7 +365,6 @@ export default {
 			validate,
 			show,
 			onSubmit,
-			submitDisabled,
 			open,
 			close,
 			changeSale,
