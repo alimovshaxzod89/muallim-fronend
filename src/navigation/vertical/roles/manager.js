@@ -6,6 +6,7 @@ import {
 	mdiFilterVariant,
 	mdiHumanCapacityDecrease,
 	mdiPercent,
+	mdiCreditCardMultiple,
 } from '@mdi/js'
 
 export default [

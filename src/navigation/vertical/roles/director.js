@@ -1,4 +1,4 @@
-import { mdiAccountDetailsOutline, mdiHome, mdiPercent } from '@mdi/js'
+import { mdiAccountDetailsOutline, mdiHome, mdiPercent, mdiCreditCardMultiple } from '@mdi/js'
 
 export default [
   {
