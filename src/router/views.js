@@ -275,6 +275,16 @@ const views = [
       action: 'read',
     },
   },
+  {
+    path: '/discount',
+    name: 'discount',
+    component: () => import('@/views/lists/discount/DiscountList.vue'),
+    meta: {
+      layout: 'content',
+      resource: 'Public',
+      action: 'read',
+    },
+  },
 	{
 		path: '/lead-form/:lead_id',
 		name: 'lead-form',

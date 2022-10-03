@@ -36,7 +36,7 @@
 									v-model='formData.first_name'
 									outlined
 									dense
-									:rules='[required]'
+									:rules='selectRule'
 								></v-text-field>
 							</v-col>
 
@@ -238,6 +238,8 @@ export default {
 			formData.value.place_id = val
 		})
 
+		const selectRule = [v => !!v || 'Biron qiymatni tanlang!']
+
 		//show, hide
 		const show = ref(false)
 		const form = ref(null)
@@ -368,6 +370,7 @@ export default {
 			open,
 			close,
 			changeSale,
+			selectRule,
 
 			regions,
 			places,

@@ -85,4 +85,11 @@ export default [
     resource: 'Group',
     action: 'read',
   },
+  {
+    title: 'Chegirmalar',
+    to: 'discount',
+    resource: 'discount',
+    action: 'read',
+    icon: mdiCreditCardMultiple,
+  },
 ]

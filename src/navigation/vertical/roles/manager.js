@@ -134,4 +134,11 @@ export default [
 		action: 'read',
 		icon: mdiFileImportOutline,
 	},
+	{
+		title: 'Chegirmalar',
+		to: 'discount',
+		resource: 'discount',
+		action: 'read',
+		icon: mdiCreditCardMultiple,
+	  },
 ]
