@@ -201,7 +201,7 @@ import { ref, onMounted } from '@vue/composition-api'
 import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
 import PaymentStoreModule from './PaymentStoreModule'
 
-const MODULE_NAME = 'student'
+const MODULE_NAME = 'payment'
 
 export default {
   setup(props, { emit }) {
