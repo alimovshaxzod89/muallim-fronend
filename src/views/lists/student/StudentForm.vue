@@ -305,6 +305,9 @@ export default {
 					})
 				}
 			} else {
+				if (MODULE_NAME != 'student') {
+					console.log(MODULE_NAME, formData.value)
+				}
 				//create
 				if (formData.value.first_name && formData.value.last_name && formData.value.gender) {
 					store
