@@ -4,7 +4,7 @@
 		<v-card-text class='d-flex align-flex-start flex-wrap justify-end my-filter'>
 			<v-row class='mx-auto'>
 				<v-row>
-					
+
 					<v-col>
 						<v-autocomplete
 							v-model='filter.sale'
@@ -143,7 +143,7 @@ import DialogConfirm from '@/views/components/DialogConfirm.vue'
 import DiscountForm from './DiscountForm'
 import useDiscountList from './useDiscountList'
 
-const MODULE_NAME = 'student'
+const MODULE_NAME = 'discount'
 
 export default {
 	components: {

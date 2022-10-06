@@ -245,7 +245,7 @@ import GroupStoreModule from '../group/GroupStoreModule'
 import { ref, onMounted } from '@vue/composition-api'
 import { required, minLengthValidator, maxLengthValidator } from '@core/utils/validation'
 
-const MODULE_NAME = 'group'
+const MODULE_NAME = 'center-profit'
 
 export default {
   setup(props, { emit }) {

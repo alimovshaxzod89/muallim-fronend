@@ -66,7 +66,7 @@ export default {
     const form = ref(null)
     // const open = (id = null) => {
     //   show.value = true
-    //   if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${props.MODULE_NAME}/getById`](id)))
+    //   if (id) formData.value = JSON.parse(JSON.stringify(store.getters[`${MODULE_NAME}/getById`](id)))
     // }
     const close = () => {
       show.value = false
