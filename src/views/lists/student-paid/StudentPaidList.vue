@@ -80,6 +80,16 @@
 						</template>
 						<span>Chop etish</span>
 					</v-tooltip>
+
+					<!-- print  -->
+					<v-tooltip bottom>
+						<template #activator="{ on, attrs }">
+							<v-btn icon small v-bind="attrs" v-on="on" @click="printCheck2(item)">
+								P
+							</v-btn>
+						</template>
+						<span>Chop etish</span>
+					</v-tooltip>
 				</div>
 			</template>
 
@@ -100,9 +110,9 @@
 					{{ item.date | date }}
 					<br>
 				</div>
-<!--				<div v-if='getDate(item.created_at) == item.date'>-->
-					{{ getHourMinute(item.created_at) }}
-<!--				</div>-->
+				<!--				<div v-if='getDate(item.created_at) == item.date'>-->
+				{{ getHourMinute(item.created_at) }}
+				<!--				</div>-->
 
 			</template>
 
@@ -298,6 +308,15 @@ export default {
 			//myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
 		}
 
+		const printCheck2 = data => {
+			var myWindow = window.open(
+				BACKEND_URL + '/print2/' + data.id,
+				'MsgWindow',
+				'toolbar=no,status=no,menubar=no,width=600,height=600',
+			)
+			//myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
+		}
+
 		// Return
 		return {
 			BASE_URL,
@@ -334,6 +353,7 @@ export default {
 			openForm,
 
 			printCheck,
+			printCheck2,
 
 			MODULE_NAME,
 
