@@ -217,6 +217,24 @@
 						</template>
 						<span>Suratni tanlash</span>
 					</v-tooltip>
+
+					<!-- image -->
+					<v-tooltip bottom>
+						<template #activator='{ on, attrs }'>
+							<!--//todo color`da accepted_end_date ham hisobga olish-->
+							<v-btn icon small v-bind='attrs' v-on='on' @click='openTurniket(item)'
+										 :color="item.accepted ? 'success' : 'error'">
+								<v-icon size='18' v-if='item.accepted'>
+									{{ icons.mdiLockOpenVariant }}
+								</v-icon>
+								<v-icon size='18' v-if='!item.accepted'>
+									{{ icons.mdiLock }}
+								</v-icon>
+							</v-btn>
+						</template>
+						<span>Ro'xsat</span>
+					</v-tooltip>
+
 				</div>
 			</template>
 
@@ -250,6 +268,11 @@
 			ref='studentPhoto'
 			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
 		/>
+
+		<student-turniket
+			ref='studentTurniket'
+			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
+		/>
 	</v-card>
 </template>
 
@@ -264,6 +287,9 @@ import {
 	mdiPencilOutline,
 	mdiPlus,
 	mdiTrendingUp,
+	mdiLockOutline,
+	mdiLock,
+	mdiLockOpenVariant
 } from '@mdi/js'
 
 import store from '@/store'
@@ -284,6 +310,7 @@ import StudentStoreModule from './StudentStoreModule'
 import DialogConfirm from '@/views/components/DialogConfirm.vue'
 import StudentForm from './StudentForm'
 import StudentPhoto from './StudentPhoto'
+import StudentTurniket from './StudentTurniket'
 import useStudentList from './useStudentList'
 
 const MODULE_NAME = 'student'
@@ -293,6 +320,7 @@ export default {
 		StudentForm,
 		StudentPhoto,
 		DialogConfirm,
+		StudentTurniket,
 	},
 	filters: {
 		date: value => (value ? moment(value).format('D MMMM YYYY') : ''),
@@ -347,6 +375,13 @@ export default {
 		const studentPhoto = ref(null)
 		const openPhoto = item => {
 			studentPhoto.value.openUserImage(item)
+		}
+
+		//Turniket
+		const studentTurniket = ref(null)
+		const openTurniket = item => {
+			console.log(studentTurniket.value)
+			studentTurniket.value.openModal(item)
 		}
 
 		//Delete Confirm Dialog
@@ -417,6 +452,9 @@ export default {
 			openForm,
 			openPhoto,
 
+			studentTurniket,
+			openTurniket,
+
 			MODULE_NAME,
 
 			// LoadApis
@@ -432,6 +470,9 @@ export default {
 				mdiEyeOutline,
 				mdiImageEditOutline,
 				mdiFilterOutline,
+				mdiLockOutline,
+				mdiLock,
+				mdiLockOpenVariant
 			},
 		}
 	},
