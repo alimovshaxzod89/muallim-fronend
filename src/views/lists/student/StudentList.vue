@@ -223,11 +223,11 @@
 						<template #activator='{ on, attrs }'>
 							<!--//todo color`da accepted_end_date ham hisobga olish-->
 							<v-btn icon small v-bind='attrs' v-on='on' @click='openTurniket(item)'
-										 :color="item.accepted ? 'success' : 'error'">
-								<v-icon size='18' v-if='item.accepted'>
+										 :color="isTurniketAccepted(item.accepted, item.accepted_end_date) ? 'success' : 'error'">
+								<v-icon size='18' v-if='isTurniketAccepted(item.accepted, item.accepted_end_date)'>
 									{{ icons.mdiLockOpenVariant }}
 								</v-icon>
-								<v-icon size='18' v-if='!item.accepted'>
+								<v-icon size='18' v-if='!isTurniketAccepted(item.accepted, item.accepted_end_date)'>
 									{{ icons.mdiLock }}
 								</v-icon>
 							</v-btn>
@@ -289,7 +289,7 @@ import {
 	mdiTrendingUp,
 	mdiLockOutline,
 	mdiLock,
-	mdiLockOpenVariant
+	mdiLockOpenVariant,
 } from '@mdi/js'
 
 import store from '@/store'
@@ -383,6 +383,12 @@ export default {
 			console.log(studentTurniket.value)
 			studentTurniket.value.openModal(item)
 		}
+		const isTurniketAccepted = (accepted, end_date) => {
+			if (accepted == 1 && end_date >= moment().format('YYYY-MM-DD'))
+				return true
+			else
+				return false
+		}
 
 		//Delete Confirm Dialog
 		const dialogConfirm = ref(null)
@@ -454,6 +460,7 @@ export default {
 
 			studentTurniket,
 			openTurniket,
+			isTurniketAccepted,
 
 			MODULE_NAME,
 
@@ -472,7 +479,7 @@ export default {
 				mdiFilterOutline,
 				mdiLockOutline,
 				mdiLock,
-				mdiLockOpenVariant
+				mdiLockOpenVariant,
 			},
 		}
 	},

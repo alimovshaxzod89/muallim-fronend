@@ -83,7 +83,7 @@
 				<v-card-actions class='pt-5'>
 					<v-spacer></v-spacer>
 					<v-btn color='gray' outlined @click='close'>Yopish</v-btn>
-					<v-btn color='success' type='button' @click='save()'>Chop etish</v-btn>
+					<v-btn color='success' type='button' @click='save()'>Saqlash</v-btn>
 				</v-card-actions>
 			</v-form>
 		</v-card>
