@@ -69,6 +69,7 @@ export default function useStudentPaidList(MODULE_NAME) {
         .dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
         .then(() => {
           loading.value = false
+					selectedTableData.value = []
         })
         .catch(error => {
           console.log(error)

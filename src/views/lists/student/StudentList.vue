@@ -218,10 +218,9 @@
 						<span>Suratni tanlash</span>
 					</v-tooltip>
 
-					<!-- image -->
+					<!-- turniket -->
 					<v-tooltip bottom>
 						<template #activator='{ on, attrs }'>
-							<!--//todo color`da accepted_end_date ham hisobga olish-->
 							<v-btn icon small v-bind='attrs' v-on='on' @click='openTurniket(item)'
 										 :color="isTurniketAccepted(item.accepted, item.accepted_end_date) ? 'success' : 'error'">
 								<v-icon size='18' v-if='isTurniketAccepted(item.accepted, item.accepted_end_date)'>
@@ -271,6 +270,7 @@
 
 		<student-turniket
 			ref='studentTurniket'
+			v-on:refresh-list='fetchDatas(true)'
 			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
 		/>
 	</v-card>
@@ -345,6 +345,7 @@ export default {
 			filter,
 			tableColumns,
 			deleteRow,
+			fetchDatas,
 
 			options,
 			loading,
@@ -380,8 +381,7 @@ export default {
 		//Turniket
 		const studentTurniket = ref(null)
 		const openTurniket = item => {
-			console.log(studentTurniket.value)
-			studentTurniket.value.openModal(item)
+			studentTurniket.value.openModal([item])
 		}
 		const isTurniketAccepted = (accepted, end_date) => {
 			if (accepted == 1 && end_date >= moment().format('YYYY-MM-DD'))
@@ -444,6 +444,7 @@ export default {
 			loading,
 			notify,
 			selectedTableData,
+			fetchDatas,
 
 			actions,
 			actionOptions,

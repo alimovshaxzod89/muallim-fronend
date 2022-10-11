@@ -9,6 +9,12 @@ export default function useStudentDebtList(MODULE_NAME) {
 
 	const tableColumns = [
 		{ text: '#', sortable: false, value: 'index' },
+		{
+			text: 'AMALLAR',
+			value: 'turniket',
+			align: 'center',
+			sortable: false,
+		},
 		{ text: 'GURUH', value: 'group.number' },
 		// { text: 'USTOZ', value: 'group.teacher.full_name' },
 		{ text: 'TALABA', value: 'student.full_name' },
@@ -68,6 +74,7 @@ export default function useStudentDebtList(MODULE_NAME) {
 				.dispatch(`${MODULE_NAME}/fetchDatas`, queryParams)
 				.then(() => {
 					loading.value = false
+					selectedTableData.value = []
 				})
 				.catch(error => {
 					console.log(error)

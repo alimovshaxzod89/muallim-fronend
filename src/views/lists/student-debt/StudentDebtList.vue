@@ -3,12 +3,12 @@
 		<!-- search -->
 		<v-card-text>
 
-			<student-debt-search v-model='filter' class="d-block" /> 
+			<student-debt-search v-model='filter' class='d-block' />
 
 			<v-row>
 				<div v-if='state.rows.length > 0' class='ml-auto my-4'>
 					<v-btn v-if="$can('create', 'Room')" class='success exportXlsx' color='white' outlined
-						@click='ExportExcel()'>Jadvalni yuklab olish
+								 @click='ExportExcel()'>Jadvalni yuklab olish
 					</v-btn>
 				</div>
 			</v-row>
@@ -18,6 +18,8 @@
 		<v-data-table
 			ref='excel'
 			v-model='selectedTableData'
+			show-select
+			item-key='id'
 			:headers='tableColumns'
 			:items='state.rows'
 			:options.sync='options'
@@ -32,6 +34,30 @@
 
 			<!-- total -->
 			<template #[`item.total`]='{ item }'> ${{ item.total }}</template>
+
+			<template v-slot:top>
+				<div class='d-flex pb-5' style='width: 100%'>
+					<!--					<v-switch-->
+					<!--						v-model='singleSelect'-->
+					<!--						label='Faqat bitta tanlash'-->
+					<!--						class='pa-3'-->
+					<!--					></v-switch>-->
+
+					<v-btn
+						v-if='selectedTableData.length'
+						class='ma-2'
+						outlined
+						color='danger'
+						large
+						@click='openTurniket()'>
+						Turniket
+						<v-icon size='18'>
+							{{ icons.mdiLockOpenVariant }}
+						</v-icon>
+					</v-btn>
+				</div>
+
+			</template>
 
 			<template late #[`item.actions`]='{ item }'>
 				<div class='d-flex align-center justify-center'>
@@ -57,6 +83,45 @@
 							</v-btn>
 						</template>
 						<span>Edit</span>
+					</v-tooltip>
+
+					<!-- turniket -->
+					<v-tooltip bottom>
+						<template #activator='{ on, attrs }'>
+							<v-btn icon small v-bind='attrs' v-on='on' @click='openTurniket(item.student)'
+										 :color="isTurniketAccepted(item.student.accepted, item.student.accepted_end_date) ? 'success' : 'error'">
+								<v-icon size='18'
+												v-if='isTurniketAccepted(item.student.accepted, item.student.accepted_end_date)'>
+									{{ icons.mdiLockOpenVariant }}
+								</v-icon>
+								<v-icon size='18'
+												v-if='!isTurniketAccepted(item.student.accepted, item.student.accepted_end_date)'>
+									{{ icons.mdiLock }}
+								</v-icon>
+							</v-btn>
+						</template>
+						<span>Ro'xsat</span>
+					</v-tooltip>
+
+				</div>
+			</template>
+
+			<template late #[`item.turniket`]='{ item }'>
+				<div class='d-flex align-center justify-center'>
+					<!-- turniket -->
+					<v-tooltip bottom>
+						<template #activator='{ on, attrs }'>
+							<v-btn icon small v-bind='attrs' v-on='on' @click='openTurniket(item.student)'
+										 :color="isTurniketAccepted(item.student.accepted, item.student.accepted_end_date) ? 'success' : 'error'">
+								<v-icon size='18' v-if='isTurniketAccepted(item.student.accepted, item.student.accepted_end_date)'>
+									{{ icons.mdiLockOpenVariant }}
+								</v-icon>
+								<v-icon size='18' v-if='!isTurniketAccepted(item.student.accepted, item.student.accepted_end_date)'>
+									{{ icons.mdiLock }}
+								</v-icon>
+							</v-btn>
+						</template>
+						<span>Ro'xsat</span>
 					</v-tooltip>
 				</div>
 			</template>
@@ -99,6 +164,13 @@
 		</v-data-table>
 
 		<dialog-confirm ref='dialogConfirm' />
+
+		<student-turniket
+			ref='studentTurniket'
+			v-on:refresh-list='fetchDatas(true);'
+			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
+		/>
+
 	</v-card>
 </template>
 
@@ -112,6 +184,8 @@ import {
 	mdiPencilOutline,
 	mdiFilterOutline,
 	mdiCalendar,
+	mdiLockOpenVariant,
+	mdiLock,
 } from '@mdi/js'
 
 import { computed, ref, watch } from '@vue/composition-api'
@@ -130,6 +204,8 @@ import StudentDebtStoreModule from './StudentDebtStoreModule'
 import useStudentDebtList from './useStudentDebtList'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 import StudentDebtSearch from '@/views/lists/student-debt/StudentDebtSearch'
+import StudentTurniket from './../student/StudentTurniket.vue'
+import moment from 'moment/moment'
 
 const MODULE_NAME = 'studentDebt'
 
@@ -137,6 +213,7 @@ export default {
 	components: {
 		StudentDebtSearch,
 		DialogConfirm,
+		StudentTurniket,
 	},
 	filters: {
 		date: value => moment(value).format('D MMMM YYYY'),
@@ -163,6 +240,7 @@ export default {
 			tableColumns,
 			deleteRow,
 			selectedTableData,
+			fetchDatas,
 
 			options,
 			notify,
@@ -218,6 +296,30 @@ export default {
 			return total
 		})
 
+		//turniket begin
+		const studentTurniket = ref()
+		const openTurniket = (item = null) => {
+			let students = []
+
+			if (item) {
+				students = [item]
+			} else {
+				students = selectedTableData.value.map(item => {
+					return item.student
+				})
+			}
+
+			studentTurniket.value.openModal(students)
+		}
+
+		const isTurniketAccepted = (accepted, end_date) => {
+			if (accepted == 1 && end_date >= moment().format('YYYY-MM-DD'))
+				return true
+			else
+				return false
+		}
+		//turniket end
+
 		// Return
 		return {
 			BASE_URL,
@@ -232,6 +334,7 @@ export default {
 			notify,
 			filter,
 			selectedTableData,
+			fetchDatas,
 
 			actions,
 			actionOptions,
@@ -247,6 +350,10 @@ export default {
 			MODULE_NAME,
 
 			// LoadApis
+			studentTurniket,
+			openTurniket,
+			isTurniketAccepted,
+
 
 			icons: {
 				mdiTrendingUp,
@@ -257,6 +364,8 @@ export default {
 				mdiEyeOutline,
 				mdiFilterOutline,
 				mdiCalendar,
+				mdiLockOpenVariant,
+				mdiLock,
 			},
 		}
 	},

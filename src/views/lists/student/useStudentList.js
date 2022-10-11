@@ -100,7 +100,7 @@ export default function useStudentList(MODULE_NAME) {
 	watch(options, () => {
 		loading.value = true
 		fetchDatas()
-		// selectedTableData.value = []
+		selectedTableData.value = []
 	})
 
 	//delete

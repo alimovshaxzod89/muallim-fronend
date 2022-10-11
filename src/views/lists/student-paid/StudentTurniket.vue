@@ -34,7 +34,7 @@
 								</tr>
 								<tr v-if='students.length === 1 && students[0].group'>
 									<td><b>Guruh:</b></td>
-									<td>{{ students[0].group.number }}
+									<td>{{ students[0].group }}
 									</td>
 								</tr>
 								</tbody>

@@ -25,6 +25,9 @@
 		<v-data-table
 			ref='excel'
 			v-model='selectedTableData'
+			:single-select='singleSelect'
+			show-select
+			item-key='id'
 			:headers='tableColumns'
 			:items='state.rows'
 			:options.sync='options'
@@ -40,6 +43,30 @@
 
 			<!-- total -->
 			<template #[`item.total`]='{ item }'> ${{ item.total }}</template>
+
+			<template v-slot:top>
+				<div class='d-flex pb-5' style='width: 100%'>
+<!--					<v-switch-->
+<!--						v-model='singleSelect'-->
+<!--						label='Faqat bitta tanlash'-->
+<!--						class='pa-3'-->
+<!--					></v-switch>-->
+
+					<v-btn
+						v-if='selectedTableData.length'
+						class='ma-2'
+						outlined
+						color='danger'
+						large
+						@click='openTurniket()'>
+						Turniket
+						<v-icon size='18'>
+							{{ icons.mdiLockOpenVariant }}
+						</v-icon>
+					</v-btn>
+				</div>
+
+			</template>
 
 			<template late #[`item.actions`]='{ item }'>
 				<div class='d-flex align-center justify-center'>
@@ -71,25 +98,43 @@
 
 					<!-- print  -->
 					<v-tooltip bottom>
-						<template #activator="{ on, attrs }">
-							<v-btn icon small v-bind="attrs" v-on="on" @click="printCheck(item)">
-								<v-icon size="18">
-									{{ icons.mdiPrinter   }}
+						<template #activator='{ on, attrs }'>
+							<v-btn icon small v-bind='attrs' v-on='on' @click='printCheck(item)'>
+								<v-icon size='18'>
+									{{ icons.mdiPrinter }}
 								</v-icon>
 							</v-btn>
 						</template>
 						<span>Chop etish</span>
 					</v-tooltip>
 
-					<!-- print  -->
+					<!-- print2  -->
+					<!--					<v-tooltip bottom>-->
+					<!--						<template #activator='{ on, attrs }'>-->
+					<!--							<v-btn icon small v-bind='attrs' v-on='on' @click='printCheck2(item)'>-->
+					<!--								P-->
+					<!--							</v-btn>-->
+					<!--						</template>-->
+					<!--						<span>Chop etish</span>-->
+					<!--					</v-tooltip>-->
+
+
+					<!-- turniket -->
 					<v-tooltip bottom>
-						<template #activator="{ on, attrs }">
-							<v-btn icon small v-bind="attrs" v-on="on" @click="printCheck2(item)">
-								P
+						<template #activator='{ on, attrs }'>
+							<v-btn icon small v-bind='attrs' v-on='on' @click='openTurniket(item.payment.student)'
+										 :color="isTurniketAccepted(item.payment.student.accepted, item.payment.student.accepted_end_date) ? 'success' : 'error'">
+								<v-icon size='18' v-if='isTurniketAccepted(item.payment.student.accepted, item.payment.student.accepted_end_date)'>
+									{{ icons.mdiLockOpenVariant }}
+								</v-icon>
+								<v-icon size='18' v-if='!isTurniketAccepted(item.payment.student.accepted, item.payment.student.accepted_end_date)'>
+									{{ icons.mdiLock }}
+								</v-icon>
 							</v-btn>
 						</template>
-						<span>Chop etish</span>
+						<span>Ro'xsat</span>
 					</v-tooltip>
+
 				</div>
 			</template>
 
@@ -148,6 +193,13 @@
 			ref='studentPaidForm'
 			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
 		/>
+
+		<student-turniket
+			ref='studentTurniket'
+			v-on:refresh-list='fetchDatas(true);'
+			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
+		/>
+
 	</v-card>
 </template>
 
@@ -160,9 +212,11 @@ import {
 	mdiEyeOutline,
 	mdiPencilOutline,
 	mdiPrinter,
+	mdiLock,
+	mdiLockOpenVariant,
 } from '@mdi/js'
 
-import { ref, computed } from '@vue/composition-api'
+import { ref, computed, watch } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
 import moment from 'moment'
@@ -179,11 +233,13 @@ import useStudentPaidList from './useStudentPaidList'
 import StudentPaidForm from './StudentPaidForm'
 import StudentPaidSearch from './StudentPaidSearch'
 import DialogConfirm from '../../components/DialogConfirm.vue'
+import StudentTurniket from './../student/StudentTurniket.vue'
 
 const MODULE_NAME = 'studentPaid'
 
 export default {
 	components: {
+		StudentTurniket,
 		StudentPaidForm,
 		StudentPaidSearch,
 		DialogConfirm,
@@ -222,12 +278,39 @@ export default {
 			searchQuery,
 			tableColumns,
 			deleteRow,
+			fetchDatas,
 
 			options,
 			loading,
 			notify,
 			selectedTableData,
 		} = useStudentPaidList(MODULE_NAME)
+
+		const singleSelect = ref(false)
+
+		//turniket begin
+		const studentTurniket = ref()
+		const openTurniket = (item = null) => {
+			let students = []
+
+			if (item) {
+				students = [item]
+			} else {
+				students = selectedTableData.value.map(item => {
+					return item.payment.student
+				})
+			}
+
+			studentTurniket.value.openModal(students)
+		}
+
+		const isTurniketAccepted = (accepted, end_date) => {
+			if (accepted == 1 && end_date >= moment().format('YYYY-MM-DD'))
+				return true
+			else
+				return false
+		}
+		//turniket end
 
 		//interface additional elements
 		const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -333,7 +416,6 @@ export default {
 			options,
 			loading,
 			notify,
-			selectedTableData,
 			filter,
 			today,
 
@@ -345,6 +427,7 @@ export default {
 			selectedAction,
 			footerProps,
 
+			fetchDatas,
 			dialogConfirm,
 			confirmDelete,
 
@@ -357,6 +440,13 @@ export default {
 
 			MODULE_NAME,
 
+			studentTurniket,
+			selectedTableData,
+			// selected,
+			singleSelect,
+			openTurniket,
+			isTurniketAccepted,
+
 			icons: {
 				mdiTrendingUp,
 				mdiPlus,
@@ -365,6 +455,8 @@ export default {
 				mdiDotsVertical,
 				mdiEyeOutline,
 				mdiPrinter,
+				mdiLock,
+				mdiLockOpenVariant,
 			},
 		}
 	},

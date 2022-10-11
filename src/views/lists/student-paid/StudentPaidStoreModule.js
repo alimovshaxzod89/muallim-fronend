@@ -42,15 +42,16 @@ export default {
   actions: {
     fetchDatas({ commit }, queryParams) {
       return new Promise((resolve, reject) => {
-        axios
+				axios
           .get('/api/payment-paids', { params: queryParams })
-          .then(response => {
-            const { data, total } = response.data
-            commit('setRows', data)
-            commit('setTotal', total)
+          .then(async response => {
+						const { data, total } = response.data
 
-            resolve(response.data.message)
-          })
+						commit('setRows', data)
+						commit('setTotal', total)
+
+						resolve(response.data.message)
+					})
           .catch(error => reject(error))
       })
     },
