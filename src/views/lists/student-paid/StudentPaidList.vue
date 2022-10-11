@@ -161,7 +161,7 @@
 
 			</template>
 
-			<template #[`item.payment.student.full_name`]='{ item }'>
+			<template #[`item.student_id`]='{ item }'>
 				{{ item.payment.student.full_name }}
 				<br>
 				{{ item.payment.student.phone }}
