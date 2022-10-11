@@ -175,13 +175,11 @@
 				{{ item.payment.group.teacher.full_name }}
 			</template>
 
-
 			<template slot='body.append'>
 				<tr>
-					<th colspan='4' class='text-end'>Jami:</th>
+					<th colspan='5' class='text-end'>Jami:</th>
 					<th colspan='1' class='text-center mr-4'>{{ totalWasPaid | summa }}</th>
-					<th colspan='1'></th>
-					<th colspan='1'></th>
+					<th colspan='2'></th>
 					<th colspan='1' class='text-center'>{{ totalPayment | summa }}</th>
 				</tr>
 			</template>
