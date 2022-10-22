@@ -254,6 +254,7 @@ export default {
 			number: '',
 			group_id: '',
 			subject_id: '',
+			day: '',
 			place_id: branch_id.value ?? '',
 		}, props.value)
 

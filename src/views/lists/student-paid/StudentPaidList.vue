@@ -14,6 +14,12 @@
 					</v-btn>
 				</div>
 
+				<div v-if='date' class='ml-auto mx-2 my-4'>
+					<v-btn class='success exportXlsx' color='white' outlined
+								 @click='ExportExcel2()'>Kunlik Excel
+					</v-btn>
+				</div>
+
 				<div class='btnAdd ml-auto'>
 					<v-btn v-if="$can('create', 'StudentPaid')" class='primary' @click='openForm()'>Qo'shish
 					</v-btn>
@@ -46,11 +52,11 @@
 
 			<template v-slot:top>
 				<div class='d-flex pb-5' style='width: 100%'>
-<!--					<v-switch-->
-<!--						v-model='singleSelect'-->
-<!--						label='Faqat bitta tanlash'-->
-<!--						class='pa-3'-->
-<!--					></v-switch>-->
+					<!--					<v-switch-->
+					<!--						v-model='singleSelect'-->
+					<!--						label='Faqat bitta tanlash'-->
+					<!--						class='pa-3'-->
+					<!--					></v-switch>-->
 
 					<v-btn
 						v-if='selectedTableData.length'
@@ -124,10 +130,12 @@
 						<template #activator='{ on, attrs }'>
 							<v-btn icon small v-bind='attrs' v-on='on' @click='openTurniket(item.payment.student)'
 										 :color="isTurniketAccepted(item.payment.student.accepted, item.payment.student.accepted_end_date) ? 'success' : 'error'">
-								<v-icon size='18' v-if='isTurniketAccepted(item.payment.student.accepted, item.payment.student.accepted_end_date)'>
+								<v-icon size='18'
+												v-if='isTurniketAccepted(item.payment.student.accepted, item.payment.student.accepted_end_date)'>
 									{{ icons.mdiLockOpenVariant }}
 								</v-icon>
-								<v-icon size='18' v-if='!isTurniketAccepted(item.payment.student.accepted, item.payment.student.accepted_end_date)'>
+								<v-icon size='18'
+												v-if='!isTurniketAccepted(item.payment.student.accepted, item.payment.student.accepted_end_date)'>
 									{{ icons.mdiLock }}
 								</v-icon>
 							</v-btn>
@@ -379,6 +387,24 @@ export default {
 				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
 		}
 
+		const ExportExcel2 = () => {
+			window.open(envParams.BACKEND_URL + `/export/payment-paids/${date.value}`, '_blank')
+		}
+
+		const date = computed(() => {
+			console.log(filter.value.year, 'filter.value.year')
+			console.log(filter.value.month, 'filter.value.month')
+			console.log(filter.value.day, 'filter.value.day')
+
+			let res = null
+			if (filter.value.day && filter.value.month && filter.value.year) {
+				res = moment(`${filter.value.year}-${filter.value.month}-${filter.value.day}`).format('YYYY-MM-DD')
+			}
+			return res
+		})
+		watch(date, function() {
+			console.log(date.value)
+		})
 
 		const printCheck = data => {
 			var myWindow = window.open(
@@ -405,6 +431,8 @@ export default {
 
 			excel,
 			ExportExcel,
+			ExportExcel2,
+			date,
 
 			// totalAmount,
 			// selectsDatas,
