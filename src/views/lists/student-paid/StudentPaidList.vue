@@ -388,7 +388,7 @@ export default {
 		}
 
 		const ExportExcel2 = () => {
-			window.open(envParams.BACKEND_URL + `/export/payment-paids/${date.value}`, '_blank')
+			window.open(envParams.BACKEND_URL + `/export/payment-paids/${filter.value.place_id}/${date.value}`, '_blank')
 		}
 
 		const date = computed(() => {
