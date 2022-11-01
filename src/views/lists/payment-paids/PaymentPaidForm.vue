@@ -489,7 +489,10 @@ export default {
                 const monthForPayment = el.month * 1
                 if (monthForPayment == selectedMonth) {
                   const day_is_true = () => {
-                    bonus.value = true
+                    // bonus.value = true
+
+										//hozircha bonus kerak emas
+										bonus.value = true
                   }
                   day_is_true()
                 }
