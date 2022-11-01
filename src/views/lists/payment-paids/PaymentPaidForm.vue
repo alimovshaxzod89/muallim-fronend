@@ -492,7 +492,7 @@ export default {
                     // bonus.value = true
 
 										//hozircha bonus kerak emas
-										bonus.value = true
+										bonus.value = false
                   }
                   day_is_true()
                 }
