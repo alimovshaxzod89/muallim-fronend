@@ -77,7 +77,7 @@
 					clearable
 				></v-select>
 			</v-col>
-			<v-col cols="3">
+			<v-col cols='3'>
 				<v-autocomplete
 					v-if='BRANCH_ID == null'
 					v-model='filter.place_id'
@@ -316,22 +316,21 @@ export default {
 		}
 		loadGroups()
 
-		watch(() => filter.value.group_id, () => {
-			loadStudents()
+		// const students = computed(() => store.getters['student/getFilteredList'](filter.value))
+		const studentsList = computed(() => store.state['student'].list)
+
+		watch(() => filter.value.group_id, val => {
+			filterStudents(val)
+		})
+		watch(studentsList, () => {
+			filterStudents(filter.value.group_id)
 		})
 
-		const students = ref([])
-		const loadStudents = () => {
-			const params = clearParams({
-				group_id: filter.value.group_id,
-				place_id: filter.value.place_id,
-			})
-			axios.get('/api/students', { params }).then(response => {
-				students.value = response.data.data
-			})
+		const students = ref(studentsList.value)
+		const filterStudents = (group_id) => {
+			console.log(111)
+			students.value = store.getters['student/getFilteredList']({group_id})
 		}
-		loadStudents()
-
 
 		const cashboxes = ref([])
 		const loadCashboxes = () => {

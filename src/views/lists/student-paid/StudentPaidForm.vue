@@ -320,17 +320,7 @@ export default {
 		}
 		loadSubject()
 
-		const students = ref([])
-		const loadStudent = () => {
-
-			const params = clearParams({
-				place_id: filter.value.place_id,
-			})
-			axios.get('/api/students', { params }).then(response => {
-				students.value = response.data.data
-			})
-		}
-		loadStudent()
+		const students = computed(() => store.getters['student/getFilteredList'](filter.value))
 
 		const cashboxes = ref([])
 		const loadCashbox = () => {

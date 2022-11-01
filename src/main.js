@@ -16,6 +16,7 @@ import { VueMaskDirective } from 'v-mask'
 import vueNumeralFilterInstaller from 'vue-numeral-filter'
 import numeral from 'numeral'
 import moment from 'moment'
+import StudentStoreModule from '@/views/lists/student/StudentStoreModule'
 
 moment.locale('uz-latn')
 
@@ -66,6 +67,14 @@ new Vue({
 			store.dispatch('app/setUserRole', userData.role)
 		else
 			store.dispatch('app/setUserRole', null)
+
+		if (store.state.branch_id) {
+			if (!store.hasModule('student')) {
+				store.registerModule('student', StudentStoreModule)
+			}
+
+			store.dispatch(`student/fetchList`, store.state.branch_id)
+		}
 
 	},
 	render: h => h(App),
