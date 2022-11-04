@@ -211,21 +211,24 @@ export default {
 			() => filter.value.place_id,
 			() => {
 				loadGroups()
-				loadStudents()
 				loadTeachers()
 			},
 		)
 
-		const students = ref([])
-		const loadStudents = () => {
-			const params = clearParams({
-				place_id: filter.value.place_id,
-			})
-			axios.get('/api/students', { params }).then(response => {
-				students.value = response.data.data
-			})
+		// const students = computed(() => store.getters['student/getFilteredList'](filter.value))
+		const studentsList = computed(() => store.state['student'].list)
+
+		watch(() => filter.value.group_id, val => {
+			filterStudents(val)
+		})
+		watch(studentsList, () => {
+			filterStudents(filter.value.group_id)
+		})
+
+		const students = ref(studentsList.value)
+		const filterStudents = (group_id) => {
+			students.value = store.getters['student/getFilteredList']({group_id})
 		}
-		loadStudents()
 
 
 		// Datepicker

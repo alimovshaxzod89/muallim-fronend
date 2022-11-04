@@ -340,22 +340,22 @@ export default {
 		watch(branch_id, (value) => {
 			loadTeachers()
 			loadGroups()
-			loadStudents()
 		})
 
-		const students = ref([])
-		const loadStudents = () => {
-			const params = clearParams({
-				place_id: branch_id.value,
-			})
-			axios.get('/api/students', { params }).then(response => {
-				if (response.data.success) {
-					students.value = response.data.data
-				}
-			})
-				.catch(error => console.log(error))
+		// const students = computed(() => store.getters['student/getFilteredList'](filter.value))
+		const studentsList = computed(() => store.state['student'].list)
+
+		watch(() => formData.value.group_id, val => {
+			filterStudents(val)
+		})
+		watch(studentsList, () => {
+			filterStudents(formData.value.group_id)
+		})
+
+		const students = ref(studentsList.value)
+		const filterStudents = (group_id) => {
+			students.value = store.getters['student/getFilteredList']({group_id})
 		}
-		loadStudents()
 
 		//
 		const teachers = ref()
@@ -436,7 +436,9 @@ export default {
 			studentForm.value.open(id)
 		}
 		const addStudentToOptions = row => {
-			students.value = students.value.concat([row])
+
+			//bu qator endi kerak emas, student listdan avtomat yangilanadi
+			// students.value = students.value.concat([row])
 
 			if (formData.value.id)
 				formData.value.student_id = row.id

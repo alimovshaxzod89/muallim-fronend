@@ -1,4 +1,5 @@
 import axios from '@axios'
+import store from '@/store'
 
 export default {
 	namespaced: true,
@@ -91,6 +92,7 @@ export default {
 	},
 	actions: {
 		fetchList({ commit }, place_id) {
+			console.log('asd')
 			return new Promise((resolve, reject) => {
 				axios
 					.get(`/api/students-list/${place_id}`)
@@ -117,7 +119,7 @@ export default {
 					.catch(error => reject(error))
 			})
 		},
-		addRow({ commit }, row) {
+		addRow({ commit, dispatch }, row) {
 			return new Promise((resolve, reject) => {
 				axios
 					.post('/api/students', row)
@@ -130,9 +132,12 @@ export default {
 						}
 					})
 					.catch(error => reject(error))
+					.finally(() => {
+						dispatch('fetchList', store.state.branch_id)
+					})
 			})
 		},
-		updateRow({ commit, getters }, row) {
+		updateRow({ commit, getters, dispatch }, row) {
 			return new Promise((resolve, reject) => {
 				axios
 					.put(`/api/students/${row.id}`, row)
@@ -145,9 +150,12 @@ export default {
 						}
 					})
 					.catch(error => reject(error))
+					.finally(() => {
+						dispatch('fetchList', store.state.branch_id)
+					})
 			})
 		},
-		removeRow({ commit, getters }, id) {
+		removeRow({ commit, getters, dispatch }, id) {
 			return new Promise((resolve, reject) => {
 				axios
 					.delete(`/api/students/${id}`)
@@ -161,6 +169,9 @@ export default {
 						}
 					})
 					.catch(error => reject(error))
+					.finally(() => {
+						dispatch('fetchList', store.state.branch_id)
+					})
 			})
 		},
 	},
