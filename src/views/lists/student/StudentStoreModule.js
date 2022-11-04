@@ -17,9 +17,18 @@ export default {
 		},
 		getFilteredList: (state) => params => {
 
-			const filter = JSON.parse(JSON.stringify(params))
-			delete filter.branch_id
-			delete filter.place_id
+			const param = JSON.parse(JSON.stringify(params))
+			delete param.branch_id
+			delete param.place_id
+
+			//clear empty params
+			const filter = Object.keys(param)
+				.filter((key) => params[key] !== null && params[key] !== '')
+				.reduce((obj, key) => {
+					return Object.assign(obj, {
+						[key]: params[key],
+					})
+				}, {})
 
 			if (Object.keys(filter).length) {
 				let arr = []

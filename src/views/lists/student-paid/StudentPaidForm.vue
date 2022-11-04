@@ -310,7 +310,7 @@ export default {
 		const subjects = ref([])
 		const loadSubject = () => {
 			axios
-				.get('/api/subjects', { params: { itemsPerPage: -1 } })
+				.get('/api/subjects')
 				.then(response => {
 					if (response.data.success) {
 						subjects.value = response.data.data
@@ -320,12 +320,12 @@ export default {
 		}
 		loadSubject()
 
-		const students = computed(() => store.getters['student/getFilteredList'](filter.value))
+		const students = computed(() => store.state['student'].list)
 
 		const cashboxes = ref([])
 		const loadCashbox = () => {
 			axios
-				.get('/api/cashboxes', { params: { itemsPerPage: -1 } })
+				.get('/api/cashboxes')
 				.then(response => {
 					if (response.data.success) {
 						cashboxes.value = response.data.data
@@ -338,7 +338,7 @@ export default {
 		const groups = ref([])
 		// const loadGroup = () => {
 		// 	axios
-		// 		.get('/api/groups', { params: { itemsPerPage: -1 } })
+		// 		.get('/api/groups')
 		// 		.then(response => {
 		// 			if (response.data.success) {
 		// 				groups.value = response.data.data
@@ -350,7 +350,7 @@ export default {
 
 		const loadStudentGroups = (student_id) => {
 			axios
-				.get('/api/student-groups', { params: { itemsPerPage: -1, student_id } })
+				.get('/api/student-groups', { params: { student_id } })
 				.then(response => {
 					if (response.data.success) {
 
@@ -383,7 +383,7 @@ export default {
 		const payment = ref({})
 		const loadPayments = (student_id, group_id) => {
 			axios
-				.get('/api/payments', { params: { itemsPerPage: -1, student_id, group_id } })
+				.get('/api/payments', { params: { student_id, group_id } })
 				.then(response => {
 					if (response.data.success) {
 						payments.value = response.data.data

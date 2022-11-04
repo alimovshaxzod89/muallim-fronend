@@ -328,7 +328,6 @@ export default {
 
 		const students = ref(studentsList.value)
 		const filterStudents = (group_id) => {
-			console.log(111)
 			students.value = store.getters['student/getFilteredList']({group_id})
 		}
 

@@ -210,7 +210,7 @@ import {
 	mdiPrinter,
 } from '@mdi/js'
 
-import { onUnmounted, ref, onMounted } from '@vue/composition-api'
+import { onUnmounted, ref, onMounted, computed, watch } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
 import { useRouter } from '@core/utils'
@@ -424,23 +424,25 @@ export default {
 			})
 		}
 
-		const students = ref(null)
-		const loadStudents = () => {
-			const params = {}
-			if (filter.value.group_id) params.group_id = filter.value.group_id
+		// const students = computed(() => store.getters['student/getFilteredList'](filter.value))
+		const studentsList = computed(() => store.state['student'].list)
 
-			axios.get('/api/students', { params }).then(response => {
-				if (response.data.success) {
-					students.value = response.data.data
-				}
-			})
+		watch(() => filter.value.group_id, val => {
+			filterStudents(val)
+		})
+		watch(studentsList, () => {
+			filterStudents(filter.value.group_id)
+		})
+
+		const students = ref(studentsList.value)
+		const filterStudents = (group_id) => {
+			students.value = store.getters['student/getFilteredList']({group_id})
 		}
 
 		// ! Created
 		onMounted(() => {
 			loadSubjects()
 			loadGroups()
-			loadStudents()
 		})
 
 		// Return
