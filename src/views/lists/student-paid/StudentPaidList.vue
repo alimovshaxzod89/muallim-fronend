@@ -392,18 +392,12 @@ export default {
 		}
 
 		const date = computed(() => {
-			console.log(filter.value.year, 'filter.value.year')
-			console.log(filter.value.month, 'filter.value.month')
-			console.log(filter.value.day, 'filter.value.day')
 
 			let res = null
 			if (filter.value.day && filter.value.month && filter.value.year) {
 				res = moment(`${filter.value.year}-${filter.value.month}-${filter.value.day}`).format('YYYY-MM-DD')
 			}
 			return res
-		})
-		watch(date, function() {
-			console.log(date.value)
 		})
 
 		const printCheck = data => {
