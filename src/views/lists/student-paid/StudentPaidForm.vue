@@ -4,7 +4,7 @@
 		v-model='show'
 		@keydown.esc='close()'
 		@click:outside='close()'
-		@keydown.enter="onSubmit()"
+		@keydown.enter='onSubmit()'
 		max-width='1000px'
 		width='1000px'
 	>
@@ -42,17 +42,17 @@
 									v-model='formData.amount'
 									outlined
 									dense
-									:rules="selectRule"
+									:rules='selectRule'
 								></v-text-field>
 							</v-col>
-							<v-col cols="4">
+							<v-col cols='4'>
 								<h4 class='text-required no-text'><span>*</span></h4>
 								<v-select
-									v-model="formData.cashbox_id"
+									v-model='formData.cashbox_id'
 									label="TO'LOV TURI"
-									:items="cashboxes"
-									item-value="id"
-									item-text="name"
+									:items='cashboxes'
+									item-value='id'
+									item-text='name'
 									hide-details
 									dense
 									outlined
@@ -77,28 +77,28 @@
 								</v-autocomplete>
 							</v-col>
 
-							<v-col cols="4">
-								<h4 class="text-required no-text"><span>*</span></h4>
-								<v-menu v-model="isDate" :close-on-content-click="false" offset-y min-width="auto">
-									<template v-slot:activator="{ on, attrs }">
+							<v-col cols='4'>
+								<h4 class='text-required no-text'><span>*</span></h4>
+								<v-menu v-model='isDate' :close-on-content-click='false' offset-y min-width='auto'>
+									<template v-slot:activator='{ on, attrs }'>
 										<v-text-field
-											v-model="formData.date"
+											v-model='formData.date'
 											label="SA'NA"
 											readonly
-											v-bind="attrs"
-											v-on="on"
+											v-bind='attrs'
+											v-on='on'
 											hide-details
 											outlined
-											:append-icon="icons.mdiCalendar"
+											:append-icon='icons.mdiCalendar'
 										></v-text-field>
 									</template>
 									<v-date-picker
-										v-model="formData.date"
-										color="primary"
-										@input="isDate = false"
+										v-model='formData.date'
+										color='primary'
+										@input='isDate = false'
 										no-title
-										:first-day-of-week="1"
-										locale="ru-ru"
+										:first-day-of-week='1'
+										locale='ru-ru'
 									></v-date-picker>
 								</v-menu>
 							</v-col>
@@ -136,10 +136,16 @@
 								></v-select>
 							</v-col>
 
-							<v-col cols='6'>
+							<v-col cols='3'>
 								<h4 class='no-text' style='margin-top: 20px'>Oylik to'lov:</h4>
 								<div v-if='formData.payment_id && payment'>
 									{{ payment.amount | summa }}
+								</div>
+							</v-col>
+							<v-col cols='3' v-if='bonus'>
+								<h4 class='no-text' style='margin-top: 20px'>Chegirma:</h4>
+								<div v-if='formData.payment_id && payment'>
+									{{ ((payment.amount * 10) / 100) | summa }}
 								</div>
 							</v-col>
 
@@ -151,14 +157,14 @@
 					<v-spacer></v-spacer>
 					<v-btn color='gray' outlined @click='close()'>Bekor qilish</v-btn>
 					<v-btn
-						color="success"
-						type="button"
-						@click="onSubmit"
-						:disabled="submitDisabled"
+						color='success'
+						type='button'
+						@click='onSubmit'
+						:disabled='submitDisabled'
 					>
 						<v-icon
-							class="loading-animation"
-							v-if="submitDisabled"
+							class='loading-animation'
+							v-if='submitDisabled'
 						>
 							{{ icons.mdiLoading }}
 						</v-icon>
@@ -166,9 +172,6 @@
 					</v-btn>
 				</v-card-actions>
 			</v-form>
-
-			<template #[`item.date`]='{ item }'> {{ item.date | date }}</template>
-			<template #[`item.amount`]='{ item }'> {{ item.amount | sum }}</template>
 		</v-card>
 
 		<subject-form ref='subjectForm' v-on:add-subject-to-options='addSubjectToOptions($event)' />
@@ -211,12 +214,6 @@ export default {
 		Button,
 	},
 
-	filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		sum: value => numeral(value).format('0,0'),
-		feed: value => value[1] + '/' + value[2] + '/' + value[3],
-	},
-
 	setup(props, { emit }) {
 		// Register module
 		if (!store.hasModule(MODULE_NAME)) {
@@ -246,8 +243,8 @@ export default {
 			}
 		}
 		// Default date time
-		const datePicker = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),)
-		const defaultDate = datePicker.value;
+		const datePicker = ref((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10))
+		const defaultDate = datePicker.value
 
 		const close = () => {
 			show.value = false
@@ -267,6 +264,8 @@ export default {
 			subject_id: null,
 		}
 
+		const bonus = ref(false)
+
 		const picker = new Date().toISOString().substr(0, 10)
 		const isDate = ref(false)
 
@@ -278,7 +277,7 @@ export default {
 		}
 
 		const branch_id = computed(() => store.state.branch_id)
-		watch(branch_id, (value) => {
+		watch(branch_id, value => {
 			filter.value.place_id = value
 		})
 
@@ -296,9 +295,9 @@ export default {
 			emit('input', value)
 		}, { deep: true })
 
-		const clearParams = (params) => {
+		const clearParams = params => {
 			return Object.keys(params)
-				.filter((key) => params[key] !== null && params[key] !== '')
+				.filter(key => params[key] !== null && params[key] !== '')
 				.reduce((obj, key) => {
 					return Object.assign(obj, {
 						[key]: params[key],
@@ -322,7 +321,6 @@ export default {
 
 		const students = ref([])
 		const loadStudent = () => {
-
 			const params = clearParams({
 				place_id: filter.value.place_id,
 			})
@@ -358,14 +356,18 @@ export default {
 		// }
 		// loadGroup()
 
-		const loadStudentGroups = (student_id) => {
+		const loadStudentGroups = student_id => {
+			const params = clearParams({
+				place_id: filter.value.place_id,
+				student_id,
+			})
 			axios
-				.get('/api/student-groups', { params: { itemsPerPage: -1, student_id } })
+				.get('/api/student-groups', { params })
+				// axios.get('/api/student-groups', { params: { itemsPerPage: -1, student_id } })
 				.then(response => {
 					if (response.data.success) {
-
 						groups.value = []
-						response.data.data.forEach((item) => {
+						response.data.data.forEach(item => {
 							groups.value.push(item.group)
 						})
 
@@ -382,12 +384,13 @@ export default {
 					console.log(error)
 				})
 		}
-		watch(() => formData.value.student_id, (value) => {
-			if (value)
-				loadStudentGroups(value)
-			else
-				groups.value = []
-		})
+		watch(
+			() => formData.value.student_id,
+			value => {
+				if (value) loadStudentGroups(value)
+				else groups.value = []
+			},
+		)
 
 		const payments = ref([])
 		const payment = ref({})
@@ -429,21 +432,77 @@ export default {
 			})
 		}
 
-		watch(() => formData.value.payment_id, val => {
-			if (val) {
-				setPayment()
-			} else
-				payment.value = {}
-		})
+		watch(
+			() => formData.value.payment_id,
+			val => {
+				if (val) {
+					setPayment()
+				} else payment.value = {}
+			},
+		)
 
+		// Bonus
+
+		watch(
+			() => formData.value,
+			value => {
+				setTimeout(() => {
+					// Bugungi sana
+					const selectedDay = value.date.split('').splice(8, 9).join('') * 1
+					// Joriy oy
+					const selectedMonth = value.date.split('-')[1] * 1
+					// Tanlangan oy id si
+					const month_year = value.payment_id
+
+					if (selectedDay <= 10) {
+						payments.value.forEach(el => {
+							if (month_year == el.id) {
+								const monthForPayment = el.month * 1
+								if (monthForPayment == selectedMonth) {
+									const day_is_true = () => {
+										// bonus.value = true
+
+										//hozircha bonus kerak emas
+										bonus.value = false
+									}
+									day_is_true()
+								}
+							}
+						})
+					}
+				}, 800)
+			},
+		)
+
+		watch(
+			[payment, bonus],
+			val => {
+				calcAmount()
+			},
+			{ deep: true },
+		)
+
+		const calcAmount = () => {
+			if (formData.value.id) return
+
+			if (payment.value.amount) {
+				let amount = payment.value.amount
+
+				//minus if bonus has
+				if (bonus.value) {
+					amount = amount * (1 - 0.1)
+				}
+				formData.value.amount = amount
+			} else {
+				formData.value.amount = null
+			}
+		}
 
 		// on form submit
 		const submitDisabled = ref(false)
 		const onSubmit = () => {
-			if(submitDisabled.value === true)
-				return
-			else
-				submitDisabled.value = true
+			if (submitDisabled.value === true) return
+			else submitDisabled.value = true
 
 			if (!form.value.validate()) {
 				console.log('form inputs not valid!')
@@ -466,6 +525,7 @@ export default {
 						})
 						.finally(() => {
 							submitDisabled.value = false
+							emit('refresh-list')
 						})
 				} else {
 					store
@@ -480,6 +540,7 @@ export default {
 						})
 						.finally(() => {
 							submitDisabled.value = false
+							emit('refresh-list')
 						})
 				}
 			}
@@ -554,6 +615,7 @@ export default {
 			groupForm,
 			addGroup,
 			addGroupToOptions,
+			bonus,
 
 			place_id: branch_id,
 			branch_id,

@@ -46,7 +46,7 @@
 										></v-autocomplete>
 
 										<v-autocomplete
-											v-model='filter.year'
+											v-model='filter.payment_year'
 											:items='yearOptions'
 											item-text='text'
 											item-value='value'
@@ -59,7 +59,7 @@
 										></v-autocomplete>
 
 										<v-autocomplete
-											v-model='filter.month'
+											v-model='filter.payment_month'
 											:items='months'
 											item-text='name'
 											item-value='id'
@@ -130,7 +130,7 @@
 											<!-- edit  -->
 											<v-tooltip bottom>
 												<template #activator='{ on, attrs }'>
-													<v-btn icon small v-bind='attrs' v-on='on' @click='openPaidForm(item)'>
+													<v-btn icon small v-bind='attrs' v-on='on' @click='openPaidForm(item.id)'>
 														<v-icon size='18'>
 															{{ icons.mdiPencilOutline }}
 														</v-icon>
@@ -235,11 +235,6 @@ export default {
 		PaymentPaidForm,
 		DialogConfirm,
 	},
-	filters: {
-		date: value => moment(value).format('D MMMM YYYY'),
-		summa: value => numeral(value).format('0,0'),
-		feed: value => value[1] + '/' + value[2] + '/' + value[3],
-	},
 	setup(props, { emit }) {
 		const MODULE_NAME = 'paymentPaid'
 		const BASE_URL = envParams.BASE_URL
@@ -259,12 +254,12 @@ export default {
 		// Modal
 		const show = ref(false)
 		const group_id = ref(null)
-		const open = (item = null) => {
+		const open = (payment = null) => {
 			show.value = true
-			filter.value.group_id = item.group_id
-			filter.value.student_id = item.student_id
-			filter.value.year = item.year
-			filter.value.month = item.month ? parseInt(item.month) : null
+			filter.value.group_id = payment.group_id
+			filter.value.student_id = payment.student_id
+			filter.value.payment_year = payment.year
+			filter.value.payment_month = payment.month ? parseInt(payment.month) : null
 
 			fetchDatas(true)
 		}
@@ -303,7 +298,7 @@ export default {
 
 		// Form
 		const PaymentPaidForm = ref(null)
-		const openPaidForm = item => {
+		const openPaidForm = (id = null) => {
 			const data = {
 				// subject_id: filter.value.subject_id ? filter.value.subject_id.id : null,
 				student_id: filter.value.student_id ? filter.value.student_id : null,
@@ -313,7 +308,7 @@ export default {
 				month: filter.value.month ? filter.value.month : null,
 			}
 
-			PaymentPaidForm.value.open(item, data)
+			PaymentPaidForm.value.open(id, data)
 		}
 
 		//Delete Confirm Dialog
@@ -365,6 +360,7 @@ export default {
 			{ value: '2020', text: '2020' },
 			{ value: '2021', text: '2021' },
 			{ value: '2022', text: '2022' },
+			{ value: '2023', text: '2023' },
 		])
 
 		const months = [

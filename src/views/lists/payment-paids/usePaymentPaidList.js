@@ -34,6 +34,8 @@ export default function useGroupList(MODULE_NAME) {
     payment_id: null,
     year: null,
     month: null,
+		payment_year: null,
+		payment_month: null,
     day: null,
   })
   const loading = ref(false)
