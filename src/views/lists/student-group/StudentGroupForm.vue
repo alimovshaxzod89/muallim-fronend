@@ -342,20 +342,7 @@ export default {
 			loadGroups()
 		})
 
-		// const students = computed(() => store.getters['student/getFilteredList'](filter.value))
-		const studentsList = computed(() => store.state['student'].list)
-
-		watch(() => formData.value.group_id, val => {
-			filterStudents(val)
-		})
-		watch(studentsList, () => {
-			filterStudents(formData.value.group_id)
-		})
-
-		const students = ref(studentsList.value)
-		const filterStudents = (group_id) => {
-			students.value = store.getters['student/getFilteredList']({group_id})
-		}
+		const students = computed(() => store.state['student'].list)
 
 		//
 		const teachers = ref()
