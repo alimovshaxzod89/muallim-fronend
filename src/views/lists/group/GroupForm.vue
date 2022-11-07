@@ -113,7 +113,6 @@
 									:rules='[required]'
 									outlined
 									dense
-									required
 								></v-text-field>
 							</v-col>
 
