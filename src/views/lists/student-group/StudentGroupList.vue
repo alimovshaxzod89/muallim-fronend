@@ -11,7 +11,7 @@
 
 				<div v-if='state.rows.length > 0' class='mx-2'>
 					<v-btn class='success exportXlsx' color='white' outlined
-								 @click='ExportExcel()'>Jadvalni yuklab olish
+								 @click='ExportExcel2()'>Jadvalni yuklab olish
 					</v-btn>
 				</div>
 				<v-btn class='primary' @click='openForm()'>Qo'shish</v-btn>
@@ -108,7 +108,6 @@
 
 <script>
 import store from '@/store'
-import axios from '@axios'
 import envParams from '@envParams'
 import {
 	mdiDeleteOutline,
@@ -119,7 +118,7 @@ import {
 	mdiPlus,
 	mdiTrendingUp,
 } from '@mdi/js'
-import { ref, watch } from '@vue/composition-api'
+import { ref } from '@vue/composition-api'
 import moment from 'moment'
 import numeral from 'numeral'
 import XLSX from 'xlsx'
@@ -215,6 +214,23 @@ export default {
 				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
 		}
 
+		const clearParams = (params) => {
+			return Object.keys(params)
+				.filter((key) => params[key] !== null && params[key] !== '')
+				.reduce((obj, key) => {
+					return Object.assign(obj, {
+						[key]: params[key],
+					})
+				}, {})
+		}
+
+		const ExportExcel2 = () => {
+
+			const params = new URLSearchParams(clearParams(filter.value)).toString()
+
+			window.open(envParams.BACKEND_URL + `/export/student-groups?${params}`, '_blank')
+		}
+
 		// Return
 		return {
 			BASE_URL,
@@ -222,6 +238,7 @@ export default {
 
 			excel,
 			ExportExcel,
+			ExportExcel2,
 
 			tableColumns,
 			searchQuery,
