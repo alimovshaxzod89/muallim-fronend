@@ -48,6 +48,20 @@
 		</v-autocomplete>
 
 		<v-autocomplete
+			v-model='filter.status_id'
+			:items='STATUS'
+			item-text='name'
+			item-value='id'
+			label='STATUS'
+			class='data-list-search me-3'
+			dense
+			outlined
+			hide-details
+			clearable
+		>
+		</v-autocomplete>
+
+		<v-autocomplete
 			v-if='BRANCH_ID == null'
 			v-model='filter.place_id'
 			:items='places'
@@ -89,6 +103,7 @@ export default {
 			teacher_id: '',
 			number: '',
 			subject_id: '',
+			status_id: '',
 			place_id: branch_id.value ?? '',
 		}, props.value)
 
@@ -137,6 +152,22 @@ export default {
 		}
 		loadSubjects()
 
+		// Status
+		const STATUS = ref([
+			{
+				id: 0,
+				name: 'Kutilmoqda'
+			},
+			{
+				id: 1,
+				name: 'Aktiv'
+			},
+			{
+				id: -1,
+				name: 'Arxiv'
+			}
+		])
+
 		return {
 			filter,
 
@@ -146,6 +177,7 @@ export default {
 			places,
 			teachers,
 			subjects,
+			STATUS,
 
 			icons: {
 				mdiFilterOutline,

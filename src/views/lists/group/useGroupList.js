@@ -23,7 +23,7 @@ export default function useGroupList(MODULE_NAME) {
     { text: 'BOSQICH', value: 'stage_id', align: 'center' },
     { text: 'ULUSH', value: 'teacher_share', align: 'center' },
     { text: "MAKS O'QUVCHI SONI", value: 'max_students', align: 'center' },
-    { text: "AKTIV", value: 'status' },
+    { text: "STATUS", value: 'status' },
   ]
 
   const filter = ref({})

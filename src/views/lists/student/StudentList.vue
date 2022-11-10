@@ -146,6 +146,23 @@
 					</v-col>
 				</v-row>
 			</v-row>
+			<v-row>
+				<v-col>
+					<v-autocomplete
+						v-model='filter.status_id'
+						:items='STATUS'
+						item-text='name'
+						item-value='id'
+						label='STATUS'
+						class='data-list-search me-3'
+						dense
+						outlined
+						hide-details
+						clearable
+					>
+					</v-autocomplete>
+				</v-col>
+			</v-row>
 
 
 			<v-spacer></v-spacer>
@@ -253,6 +270,10 @@
 
 			<template #[`item.sale`]='{ item }'>
 				{{ item.sale ? 'Ha' : 'Yo\'q' }}
+			</template>
+			
+			<template #[`item.status`]="{ item }">
+				{{item.status == 0 ? 'Kutilmoqda': (item.status == 1 ? 'Aktiv' : (item.status == -1 ? 'Arxiv' : '') )}}
 			</template>
 		</v-data-table>
 
@@ -410,6 +431,22 @@ export default {
 			})
 		}
 
+		// Status
+		const STATUS = ref([
+			{
+				id: 0,
+				name: 'Kutilmoqda'
+			},
+			{
+				id: 1,
+				name: 'Aktiv'
+			},
+			{
+				id: -1,
+				name: 'Arxiv'
+			}
+		])
+
 		// export xlsx
 		const excel = ref(null)
 		const ExportExcel = (type, fn, dl) => {
@@ -467,6 +504,7 @@ export default {
 
 			// LoadApis
 			regions,
+			STATUS,
 
 			icons: {
 				mdiTrendingUp,

@@ -75,7 +75,7 @@
       </template>
 
       <template #[`item.status`]="{ item }">
-          {{item.status ? 'ha' : 'yo\'q'}}
+          {{item.status == 0 ? 'Kutilmoqda': (item.status == 1 ? 'Aktiv' : (item.status == -1 ? 'Arxiv' : '') )}}
       </template>
 
 			<template #[`item.begin_date`]="{ item }">

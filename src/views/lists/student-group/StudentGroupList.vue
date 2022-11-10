@@ -92,8 +92,8 @@
 				</div>
 			</template>
 
-			<template #[`item.status`]='{ item }'>
-				{{ item.status ? 'ha' : 'yo\'q' }}
+			<template #[`item.status`]="{ item }">
+				{{item.status == 0 ? 'Kutilmoqda': (item.status == 1 ? 'Aktiv' : (item.status == -1 ? 'Arxiv' : '') )}}
 			</template>
 		</v-data-table>
 

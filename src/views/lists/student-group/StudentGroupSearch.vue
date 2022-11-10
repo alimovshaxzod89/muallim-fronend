@@ -121,6 +121,21 @@
 					></v-date-picker>
 				</v-menu>
 			</v-col>
+			<v-col cols="3">
+				<v-autocomplete
+					v-model='filter.status_id'
+					:items='STATUS'
+					item-text='name'
+					item-value='id'
+					label='STATUS'
+					class='data-list-search me-3'
+					dense
+					outlined
+					hide-details
+					clearable
+				>
+				</v-autocomplete>
+			</v-col>
 
 		</v-row>
 
@@ -201,6 +216,22 @@ export default {
 		}
 		loadGroups()
 
+		// Status
+		const STATUS = ref([
+			{
+				id: 0,
+				name: 'Kutilmoqda'
+			},
+			{
+				id: 1,
+				name: 'Aktiv'
+			},
+			{
+				id: -1,
+				name: 'Arxiv'
+			}
+		])
+
 		watch(
 			() => filter.value.teacher_id,
 			() => {
@@ -242,6 +273,7 @@ export default {
 			teachers,
 			groups,
 			students,
+			STATUS,
 
 			picker,
 

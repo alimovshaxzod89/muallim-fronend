@@ -24,6 +24,7 @@ export default function useStudentList(MODULE_NAME) {
 		{ text: 'TUG\'ILGAN SANA', value: 'birth_date' },
 		{ text: 'CHEGIRMA', value: 'sale' },
 		{ text: 'CHEGIRMA SABABI', value: 'sale_cause' },
+		{ text: "STATUS", value: 'status' },
 	]
 
 	const branch_id = computed(() => store.state.branch_id)
@@ -44,6 +45,7 @@ export default function useStudentList(MODULE_NAME) {
 		birth_date: '',
 		sale: '',
 		sale_cause: '',
+		status_id: '',
 	})
 	const options = ref({
 		sortBy: ['id'],
