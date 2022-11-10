@@ -155,8 +155,8 @@
 
 			<template slot='body.append'>
 				<tr>
-					<th colspan='1' class='text-end'>Jami:</th>
-					<th colspan='5' class='text-end'>{{ totalDebt | summa }}</th>
+					<th colspan='5' class='text-end'>Jami:</th>
+					<th colspan='1' class='text-end'>{{ totalDebt | summa }}</th>
 					<th colspan='1' class='text-center'>{{ totalPayment | summa }}</th>
 				</tr>
 			</template>
