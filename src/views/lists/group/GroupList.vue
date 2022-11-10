@@ -71,6 +71,42 @@
             </template>
             <span>Guruh vaqtlarini tahrirlash</span>
           </v-tooltip>
+
+          <!-- Others -->
+          <div class="demo-space-x">
+						<v-menu
+							bottom
+							:offset-x="offset"
+						>
+						<template #activator='{ on, attrs }'>
+							<v-btn icon small v-bind='attrs' v-on='on'>
+								<v-icon size='20' >
+									{{ icons.mdiDotsVertical }}
+								</v-icon>
+							</v-btn>
+						</template>
+
+						<v-list>
+							<v-list-item>
+								<v-list-item-title>
+
+									<!-- Archive -->
+									<v-tooltip bottom>
+										<template #activator='{ on, attrs }'>
+											<v-btn color="warning" icon small v-bind='attrs' v-on='on' @click="archived(item)">
+												<v-icon size='20'>
+													{{ icons.mdiArchiveArrowDown }}
+												</v-icon>
+											</v-btn>
+										</template>
+										<span>Arxivlash</span>
+									</v-tooltip>
+								</v-list-item-title>
+							</v-list-item>
+							
+						</v-list>
+						</v-menu>
+					</div>
         </div>
       </template>
 
@@ -135,6 +171,7 @@ import {
   mdiImageEditOutline,
   mdiFilterOutline,
   mdiClockTimeThreeOutline,
+  mdiArchiveArrowDown,
 } from '@mdi/js'
 
 import { onUnmounted, ref } from '@vue/composition-api'
@@ -252,6 +289,25 @@ export default {
       return result[0].name
     }
 
+    const offset = ref(true)
+
+		const archived = (group) =>{
+			group.status = -1;
+			store
+				.dispatch(`${MODULE_NAME}/updateRow`, group)
+				.then(({ data, message }) => {
+					close()
+					// emit('notify', { type: 'success', text: message })
+					return data
+				})
+				.catch(error => {
+					console.log(error)
+					emit('notify', { type: 'error', text: error.message })
+
+					return false
+				})
+		}
+
     // export xlsx
 		const excel = ref(null)
 		const ExportExcel = (type, fn, dl) => {
@@ -300,6 +356,9 @@ export default {
 
       getDay,
 
+      offset,
+      archived,
+
       icons: {
         mdiTrendingUp,
         mdiPlus,
@@ -311,6 +370,7 @@ export default {
         mdiImageEditOutline,
         mdiFilterOutline,
         mdiClockTimeThreeOutline,
+        mdiArchiveArrowDown,
       },
     }
   },

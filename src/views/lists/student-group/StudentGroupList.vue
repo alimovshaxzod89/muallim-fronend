@@ -63,6 +63,42 @@
 						</template>
 						<span>Edit</span>
 					</v-tooltip>
+
+					<!-- Others -->
+          			<div class="demo-space-x">
+						<v-menu
+							bottom
+							offset-x
+						>
+						<template #activator='{ on, attrs }'>
+							<v-btn icon small v-bind='attrs' v-on='on'>
+								<v-icon size='20' >
+									{{ icons.mdiDotsVertical }}
+								</v-icon>
+							</v-btn>
+						</template>
+
+						<v-list>
+							<v-list-item>
+								<v-list-item-title>
+
+									<!-- Archive -->
+									<v-tooltip bottom>
+										<template #activator='{ on, attrs }'>
+											<v-btn color="warning" icon small v-bind='attrs' v-on='on' @click="archived(item)">
+												<v-icon size='20'>
+													{{ icons.mdiArchiveArrowDown }}
+												</v-icon>
+											</v-btn>
+										</template>
+										<span>Arxivlash</span>
+									</v-tooltip>
+								</v-list-item-title>
+							</v-list-item>
+							
+						</v-list>
+						</v-menu>
+					</div>
 				</div>
 			</template>
 
@@ -117,6 +153,7 @@ import {
 	mdiPencilOutline,
 	mdiPlus,
 	mdiTrendingUp,
+	mdiArchiveArrowDown,
 } from '@mdi/js'
 import { ref } from '@vue/composition-api'
 import moment from 'moment'
@@ -198,6 +235,23 @@ export default {
 				})
 		}
 
+		const archived = (studentGroup) =>{
+			studentGroup.status = -1;
+			store
+				.dispatch(`${MODULE_NAME}/updateRow`, studentGroup)
+				.then(({ data, message }) => {
+					close()
+					// emit('notify', { type: 'success', text: message })
+					return data
+				})
+				.catch(error => {
+					console.log(error)
+					emit('notify', { type: 'error', text: error.message })
+
+					return false
+				})
+		}
+
 		const BASE_URL = envParams.BASE_URL
 
 		// export xlsx
@@ -256,6 +310,8 @@ export default {
 			dialogConfirm,
 			confirmDelete,
 
+			archived,
+			
 			studentGroupForm,
 			openForm,
 
@@ -269,6 +325,7 @@ export default {
 				mdiDotsVertical,
 				mdiEyeOutline,
 				mdiFilterOutline,
+				mdiArchiveArrowDown,
 			},
 		}
 	},

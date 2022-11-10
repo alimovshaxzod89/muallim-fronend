@@ -124,8 +124,8 @@
 						<span>Ro'xsat</span>
 					</v-tooltip>
 
-					<!-- Others -->
 
+					<!-- Others -->
 					<div class="demo-space-x">
 						<v-menu
 							bottom

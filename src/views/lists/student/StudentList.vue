@@ -251,6 +251,42 @@
 						<span>Ro'xsat</span>
 					</v-tooltip>
 
+					<!-- Others -->
+         			<div class="demo-space-x">
+						<v-menu
+							bottom
+							offset-x
+						>
+						<template #activator='{ on, attrs }'>
+							<v-btn icon small v-bind='attrs' v-on='on'>
+								<v-icon size='20' >
+									{{ icons.mdiDotsVertical }}
+								</v-icon>
+							</v-btn>
+						</template>
+
+						<v-list>
+							<v-list-item>
+								<v-list-item-title>
+
+									<!-- Archive -->
+									<v-tooltip bottom>
+										<template #activator='{ on, attrs }'>
+											<v-btn color="warning" icon small v-bind='attrs' v-on='on' @click="archived(item)">
+												<v-icon size='20'>
+													{{ icons.mdiArchiveArrowDown }}
+												</v-icon>
+											</v-btn>
+										</template>
+										<span>Arxivlash</span>
+									</v-tooltip>
+								</v-list-item-title>
+							</v-list-item>
+							
+						</v-list>
+						</v-menu>
+					</div>
+
 				</div>
 			</template>
 
@@ -311,6 +347,7 @@ import {
 	mdiLockOutline,
 	mdiLock,
 	mdiLockOpenVariant,
+	mdiArchiveArrowDown,
 } from '@mdi/js'
 
 import store from '@/store'
@@ -447,6 +484,23 @@ export default {
 			}
 		])
 
+		const archived = (student) =>{
+			student.status = -1;
+			store
+				.dispatch(`${MODULE_NAME}/updateRow`, student)
+				.then(({ data, message }) => {
+					close()
+					// emit('notify', { type: 'success', text: message })
+					return data
+				})
+				.catch(error => {
+					console.log(error)
+					emit('notify', { type: 'error', text: error.message })
+
+					return false
+				})
+		}
+
 		// export xlsx
 		const excel = ref(null)
 		const ExportExcel = (type, fn, dl) => {
@@ -505,6 +559,7 @@ export default {
 			// LoadApis
 			regions,
 			STATUS,
+			archived,
 
 			icons: {
 				mdiTrendingUp,
@@ -519,6 +574,7 @@ export default {
 				mdiLockOutline,
 				mdiLock,
 				mdiLockOpenVariant,
+				mdiArchiveArrowDown,
 			},
 		}
 	},
