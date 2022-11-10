@@ -123,7 +123,7 @@
 			</v-col>
 			<v-col cols="3">
 				<v-autocomplete
-					v-model='filter.status_id'
+					v-model='filter.status'
 					:items='STATUS'
 					item-text='name'
 					item-value='id'
