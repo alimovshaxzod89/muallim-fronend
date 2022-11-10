@@ -103,7 +103,7 @@ export default {
 			teacher_id: '',
 			number: '',
 			subject_id: '',
-			status_id: '',
+			status: '',
 			place_id: branch_id.value ?? '',
 		}, props.value)
 

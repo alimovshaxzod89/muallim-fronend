@@ -169,7 +169,7 @@ export default {
 			place_id: branch_id.value ?? '',
 			teacher_id: '',
 			group_id: '',
-			student_id: '',
+			student: '',
 			status: '',
 			begin_date: '',
 			end_date: '',

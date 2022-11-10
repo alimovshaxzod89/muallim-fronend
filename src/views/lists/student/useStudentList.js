@@ -45,7 +45,7 @@ export default function useStudentList(MODULE_NAME) {
 		birth_date: '',
 		sale: '',
 		sale_cause: '',
-		status_id: '',
+		status: '',
 	})
 	const options = ref({
 		sortBy: ['id'],
