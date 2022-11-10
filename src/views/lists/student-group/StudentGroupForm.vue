@@ -201,13 +201,18 @@
 						</v-row>
 
 						<v-row>
-
-							<v-col cols='6' class='mt-0'>
-								<v-checkbox
+							<v-col cols='3'>
+								<v-autocomplete
 									v-model='formData.status'
-									hide-details
-									label='AKTIV'
-								></v-checkbox>
+									:items='STATUS'
+									item-text='name'
+									item-value='id'
+									label='STATUS'
+									dense
+									outlined
+									clearable
+									class='align-start'
+								></v-autocomplete>
 							</v-col>
 						</v-row>
 					</v-container>
@@ -299,7 +304,7 @@ export default {
 			sale: null,
 			sale_cause: null,
 
-			status: '1',
+			status: null,
 		}
 
 		//validation
@@ -323,6 +328,22 @@ export default {
 				formData.value.sale_cause = null
 			}
 		})
+
+		// Status
+		const STATUS = ref([
+			{
+				id: 0,
+				name: 'Kutilmoqda'
+			},
+			{
+				id: 1,
+				name: 'Aktiv'
+			},
+			{
+				id: -1,
+				name: 'Arxiv'
+			}
+		])
 
 
 		const clearParams = (params) => {
@@ -485,6 +506,7 @@ export default {
 			close,
 
 			teachers,
+			STATUS,
 
 			studentForm,
 			addStudent,
