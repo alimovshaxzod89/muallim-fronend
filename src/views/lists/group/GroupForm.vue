@@ -203,13 +203,18 @@
 								></v-textarea>
 							</v-col>
 
-							<v-col cols='6'>
-								<v-checkbox
+							<v-col cols='3'>
+								<v-autocomplete
 									v-model='formData.status'
-									label='AKTIV'
-									true-value='1'
-									false-value='0'
-								></v-checkbox>
+									:items='STATUS'
+									item-text='name'
+									item-value='id'
+									label='STATUS'
+									dense
+									outlined
+									clearable
+									class='align-start'
+								></v-autocomplete>
 							</v-col>
 						</v-row>
 					</v-container>
@@ -265,7 +270,7 @@ export default {
 			max_students: null,
 			begin_date: null,
 			end_date: null,
-			status: '1',
+			status: null,
 		}
 
 		const formData = ref({ ...emptyFormData })
@@ -338,6 +343,23 @@ export default {
 				}, {})
 		}
 
+		// Status
+		const STATUS = ref([
+			{
+				id: 0,
+				name: 'Kutilmoqda'
+			},
+			{
+				id: 1,
+				name: 'Aktiv'
+			},
+			{
+				id: -1,
+				name: 'Arxiv'
+			}
+		])
+
+	
 		// Load subjects
 		const subjects = ref()
 		const loadSubjects = () => {
@@ -347,6 +369,7 @@ export default {
 				}
 			})
 		}
+		
 		// Load subjects
 		const stages = ref()
 		const loadStages = () => {
@@ -428,6 +451,7 @@ export default {
 			subjects,
 			stages,
 			rooms,
+			STATUS,
 			teachers,
 			isDate2,
 
