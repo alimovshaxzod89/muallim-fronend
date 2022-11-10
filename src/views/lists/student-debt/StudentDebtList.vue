@@ -123,6 +123,56 @@
 						</template>
 						<span>Ro'xsat</span>
 					</v-tooltip>
+
+					<!-- Others -->
+
+					<div class="demo-space-x">
+						<v-menu
+							bottom
+							:offset-x="offset"
+						>
+						<template #activator='{ on, attrs }'>
+							<v-btn icon small v-bind='attrs' v-on='on'>
+								<v-icon size='20' >
+									{{ icons.mdiDotsVertical }}
+								</v-icon>
+							</v-btn>
+						</template>
+
+						<v-list>
+							<v-list-item>
+								<v-list-item-title>
+
+									<!-- Delete -->
+									<v-tooltip bottom>
+										<template #activator='{ on, attrs }'>
+											<v-btn color="error" icon small v-bind='attrs' v-on='on' @click='confirmDelete(item.id)'>
+												<v-icon size='20'>
+													{{ icons.mdiDeleteOutline }}
+												</v-icon>
+											</v-btn>
+										</template>
+										<span>O'chirish</span>
+									</v-tooltip>
+
+									<!-- Archive -->
+									<v-tooltip bottom>
+										<template #activator='{ on, attrs }'>
+											<v-btn color="warning" icon small v-bind='attrs' v-on='on' @click="archived(item.student)">
+												<v-icon size='20'>
+													{{ icons.mdiArchiveArrowDown }}
+												</v-icon>
+											</v-btn>
+										</template>
+										<span>Arxivlash</span>
+									</v-tooltip>
+								</v-list-item-title>
+							</v-list-item>
+							
+						</v-list>
+						</v-menu>
+					</div>
+
 				</div>
 			</template>
 
@@ -185,7 +235,8 @@ import {
 	mdiFilterOutline,
 	mdiCalendar,
 	mdiLockOpenVariant,
-	mdiLock,
+	mdiLock, 
+	mdiArchiveArrowDown,
 } from '@mdi/js'
 
 import { computed, ref, watch } from '@vue/composition-api'
@@ -245,6 +296,27 @@ export default {
 			options,
 			notify,
 		} = useStudentDebtList(MODULE_NAME)
+
+		const offset = ref(true)
+
+		// const defaultStatus = ref(null)
+		const archived = (student) =>{
+			student.status = -1;
+			store
+				.dispatch(`student/updateRow`, student)
+				.then(({ data, message }) => {
+					close()
+					// emit('notify', { type: 'success', text: message })
+					return data
+				})
+				.catch(error => {
+					console.log(error)
+					emit('notify', { type: 'error', text: error.message })
+
+					return false
+				})
+
+		}
 
 		//interface additional elements
 		const footerProps = ref({ 'items-per-page-options': [10, 20, 50, 100, -1] })
@@ -354,6 +426,9 @@ export default {
 			openTurniket,
 			isTurniketAccepted,
 
+			offset,
+			archived,
+
 
 			icons: {
 				mdiTrendingUp,
@@ -366,6 +441,7 @@ export default {
 				mdiCalendar,
 				mdiLockOpenVariant,
 				mdiLock,
+				mdiArchiveArrowDown,
 			},
 		}
 	},

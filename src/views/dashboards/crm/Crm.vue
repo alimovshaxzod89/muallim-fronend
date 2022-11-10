@@ -9,8 +9,8 @@
 				class='align-self-end'
 			>
 				<statistics-card-with-images
-					:avatar='ratingsOptions.avatar'
-					:avatar-width='ratingsOptions.avatarWidth'
+					:avatar='sessionsOptions.avatar'
+					:avatar-width='sessionsOptions.avatarWidth'
 					:chip-color='ratingsOptions.chipColor'
 					:chip-text='ratingsOptions.chipText'
 					:statistics='selectsDatas.student'
@@ -43,8 +43,8 @@
 				class='align-self-end'
 			>
 				<statistics-card-with-images
-					:avatar='sessionsOptions2.avatar'
-					:avatar-width='sessionsOptions2.avatarWidth'
+					:avatar='sessionsOptions.avatar'
+					:avatar-width='sessionsOptions.avatarWidth'
 					:chip-color='sessionsOptions2.chipColor'
 					:chip-text='sessionsOptions2.chipText'
 					:statistics='selectsDatas.lead'
@@ -60,8 +60,8 @@
 				class='align-self-end'
 			>
 				<statistics-card-with-images
-					:avatar='ratingsOptions2.avatar'
-					:avatar-width='ratingsOptions2.avatarWidth'
+					:avatar='sessionsOptions.avatar'
+					:avatar-width='sessionsOptions.avatarWidth'
 					:chip-color='ratingsOptions2.chipColor'
 					:chip-text='ratingsOptions2.chipText'
 					:statistics='selectsDatas.teacher'
