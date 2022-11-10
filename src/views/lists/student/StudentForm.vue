@@ -192,6 +192,19 @@
 									class='mt-0'
 								></v-textarea>
 							</v-col>
+							<v-col cols='3'>
+								<v-autocomplete
+									v-model='formData.status'
+									:items='STATUS'
+									item-text='name'
+									item-value='id'
+									label='STATUS'
+									dense
+									outlined
+									clearable
+									class='align-start'
+								></v-autocomplete>
+							</v-col>
 						</v-row>
 					</v-container>
 				</v-card-text>
@@ -258,6 +271,7 @@ export default {
 			gender: 2,
 			sale: false,
 			sale_cause: null,
+			status: null,
 		}
 		const formData = ref({ ...emptyFormData })
 
@@ -330,6 +344,23 @@ export default {
 				}
 			}
 		}
+
+		// Status
+		const STATUS = ref([
+			{
+				id: 0,
+				name: 'Kutilmoqda'
+			},
+			{
+				id: 1,
+				name: 'Aktiv'
+			},
+			{
+				id: -1,
+				name: 'Arxiv'
+			}
+		])
+
 		// Load regions
 		const regions = ref()
 		const loadRegions = () => {
@@ -374,6 +405,7 @@ export default {
 			close,
 			changeSale,
 			selectRule,
+			STATUS,
 
 			regions,
 			places,

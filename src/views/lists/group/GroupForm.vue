@@ -343,7 +343,7 @@ export default {
 				}, {})
 		}
 
-		// Statuses
+		// Status
 		const STATUS = ref([
 			{
 				id: 0,
@@ -451,10 +451,9 @@ export default {
 			subjects,
 			stages,
 			rooms,
+			STATUS,
 			teachers,
 			isDate2,
-
-			STATUS,
 
 			place_id: branch_id,
 			// addPlaceToOptions,
