@@ -79,22 +79,12 @@
 				{{ item.student.phone }}
 			</template>
 
-			<template v-slot:footer>
-				<table class='my-table-footer'>
-					<tbody>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td rowspan='5' class='text-end'>Jami:</td>
-						<!--							<td rowspan="1" class="text-end">{{totalAmount()}}</td>-->
-						<!--							<td rowspan="1" class="text-end">{{totalPaid()}}</td>-->
-						<!--							<td rowspan="1" class="text-end">{{totalDebt()}}</td>-->
-						<td></td>
-					</tr>
-					</tbody>
-				</table>
+			<template slot='body.append'>
+				<tr>
+					<th colspan='5' class='text-end'>Jami:</th>
+					<th colspan='1' class='text-center'>{{ totalPayment | summa }}</th>
+					<th colspan='1' class='text-center'>{{ totalDebt | summa }}</th>
+				</tr>
 			</template>
 
 		</v-data-table>
@@ -128,7 +118,7 @@ import {
 	mdiFilterOutline,
 } from '@mdi/js'
 
-import { onMounted, ref, reduce } from '@vue/composition-api'
+import { onMounted, ref, reduce, computed } from '@vue/composition-api'
 
 import store from '@/store'
 import axios from '@axios'
@@ -305,6 +295,22 @@ export default {
 			return result[0].text
 		}
 
+
+		const totalPayment = computed(() => {
+			let total = 0
+			if (state.value.rows !== undefined && state.value.rows.length > 0)
+				total = state.value.rows.reduce((prev, item) => prev + item.paid, 0)
+			return total
+		})
+
+		const totalDebt = computed(() => {
+			let total = 0
+			if (state.value.rows !== undefined && state.value.rows.length > 0)
+				total = state.value.rows.reduce((prev, item) => prev + (item.amount - item.paid), 0)
+			return total
+		})
+		
+
 		// const selectsDatas = ref({
 		//   amount: null,
 		//   paid: null,
@@ -323,9 +329,6 @@ export default {
 		// }
 		// const totalPaid = () => {
 		//   return selectsDatas.value.paid.reduce((a, c) => a + c.paid, 0)
-		// }
-		// const totalDebt = () => {
-		//   return totalAmount() - totalPaid()
 		// }
 
 		// eport xlsx
@@ -355,8 +358,6 @@ export default {
 			ExportExcel,
 			excel,
 			// totalAmount,
-			// totalPaid,
-			// totalDebt,
 			paymentPaidList,
 			openPaymentPaidList,
 			fetchDatas,
@@ -384,6 +385,9 @@ export default {
 			getMonth,
 
 			updateAmount,
+
+			totalDebt,
+			totalPayment,
 
 			icons: {
 				mdiTrendingUp,

@@ -141,6 +141,14 @@
 
       <template #[`item.price`]="{ item }"> {{ item.price | summa }}</template>
 
+      <template slot='body.append'>
+				<tr>
+					<th colspan='7' class='text-end'>Jami:</th>
+					<th colspan='1' class='text-center'>{{ totalPrice | summa }}</th>
+          <th colspan="1"></th>
+        </tr>
+			</template>
+    
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
@@ -174,7 +182,7 @@ import {
   mdiArchiveArrowDown,
 } from '@mdi/js'
 
-import { onUnmounted, ref } from '@vue/composition-api'
+import { onUnmounted, ref, computed } from '@vue/composition-api'
 import store from '@/store'
 import axios from '@axios'
 import moment from 'moment'
@@ -322,6 +330,13 @@ export default {
 				: XLSX.writeFile(wb, fn || 'Jadval.' + 'xlsx')
 		}
 
+    const totalPrice = computed(() => {
+			let total = 0
+			if (state.value.rows !== undefined && state.value.rows.length > 0)
+				total = state.value.rows.reduce((prev, item) => prev + item.price, 0)
+			return total
+		})
+
     // Return
     return {
       BASE_URL,
@@ -358,6 +373,8 @@ export default {
 
       offset,
       archived,
+
+      totalPrice,
 
       icons: {
         mdiTrendingUp,

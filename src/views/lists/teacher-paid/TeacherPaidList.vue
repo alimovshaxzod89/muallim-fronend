@@ -212,6 +212,13 @@
       <template #[`item.date`]="{ item }"> {{ item.date | date }}</template>
 
       <template #[`item.amount`]="{ item }"> {{ item.amount | summa }}</template>
+    
+      <template slot='body.append'>
+				<tr>
+					<th colspan='3' class='text-center'>Jami:</th>
+					<th colspan='3' class='text-start'>{{ totalPrice | summa }}</th>
+				</tr>
+			</template>
     </v-data-table>
 
     <dialog-confirm ref="dialogConfirm" />
@@ -234,7 +241,7 @@ import {
   mdiPencilOutline,
 } from '@mdi/js'
 
-import { onMounted, ref } from '@vue/composition-api'
+import { onMounted, ref, computed } from '@vue/composition-api'
 import store from '@/store'
 
 import envParams from '@envParams'
@@ -344,6 +351,13 @@ export default {
         .catch(() => {})
     }
 
+    const totalPrice = computed(() => {
+			let total = 0
+			if (state.value.rows !== undefined && state.value.rows.length > 0)
+				total = state.value.rows.reduce((prev, item) => prev + item.amount, 0)
+			return total
+		})
+
     // const years = ref([
     //   { id: 1, number: '2020' },
     //   { id: 2, number: '2021' },
@@ -431,6 +445,8 @@ export default {
 
       teacherPaidForm,
       openForm,
+
+      totalPrice,
 
       // years,
       // months,
