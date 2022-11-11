@@ -126,6 +126,7 @@
 
 
 					<!-- turniket -->
+
 					<v-tooltip bottom>
 						<template #activator='{ on, attrs }'>
 							<v-btn icon small v-bind='attrs' v-on='on' @click='openTurniket(item.payment.student)'
@@ -144,6 +145,14 @@
 					</v-tooltip>
 
 				</div>
+			</template>
+
+			<template #[`item.photo`]='{ item }'>
+				<img
+					class='img-user'
+					:src='item.payment.student.photo_link ? BACKEND_URL + item.payment.student.photo_link : require(`@/assets/images/user-image.png`)'
+					alt='Avatar'
+				/>
 			</template>
 
 			<template #[`item.month_year`]='{ item }'>
@@ -185,7 +194,7 @@
 
 			<template slot='body.append'>
 				<tr>
-					<th colspan='5' class='text-end'>Jami:</th>
+					<th colspan='6' class='text-end'>Jami:</th>
 					<th colspan='1' class='text-center mr-4'>{{ totalWasPaid | summa }}</th>
 					<th colspan='2'></th>
 					<th colspan='1' class='text-center'>{{ totalPayment | summa }}</th>
@@ -344,19 +353,6 @@ export default {
 				})
 		}
 
-		// const selectsDatas = ref({
-		//   amount: null,
-		// })
-		//
-		// const totalAmount = () => {
-		//   return selectsDatas.value.amount.reduce((a, c) => a + c.amount, 0)
-		// }
-		// axios.get('/api/payment-paids').then(response => {
-		//   if (response.data.success) {
-		//     selectsDatas.value.amount = response.data.data
-		//   }
-		// })
-
 		const today = new Date().toISOString().slice(0, 10)
 
 		const totalWasPaid = computed(() => {
@@ -420,6 +416,7 @@ export default {
 
 		// Return
 		return {
+			BACKEND_URL,
 			BASE_URL,
 			state,
 
@@ -427,9 +424,6 @@ export default {
 			ExportExcel,
 			ExportExcel2,
 			date,
-
-			// totalAmount,
-			// selectsDatas,
 
 			tableColumns,
 			searchQuery,
@@ -497,6 +491,11 @@ export default {
 	.data-list-search {
 		max-width: 10.625rem;
 	}
+}
+.img-user {
+	width: 50px;
+	height: 50px;
+	object-fit: cover;
 }
 
 .totalAmount {

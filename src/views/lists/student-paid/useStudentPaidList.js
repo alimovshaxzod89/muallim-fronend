@@ -15,6 +15,7 @@ export default function useStudentPaidList(MODULE_NAME) {
         align: 'center',
         sortable: false,
     },
+    { text: 'SURAT', value: 'photo' },
     // { text: 'KURS', value: 'payment.group.subject.name' },
     { text: 'GURUH', value: 'group' },
     { text: 'TALABA', value: 'student_id' },
