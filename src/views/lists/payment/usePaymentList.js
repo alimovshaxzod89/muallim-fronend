@@ -9,6 +9,7 @@ export default function usePaymentList(MODULE_NAME) {
 		{ text: '#', sortable: false, value: 'index' },
 		{ text: 'GURUH', value: 'group.number' },
 		// { text: 'USTOZ', value: 'group.teacher.full_name' },
+		{ text: 'SURAT', value: 'photo' },
 		{ text: 'TALABA', value: 'student.full_name' },
 		// { text: 'TELEFON', value: 'student.phone' },
 		{ text: "OYLIK TO'LOV", value: 'amount' },

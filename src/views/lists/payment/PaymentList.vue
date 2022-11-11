@@ -59,6 +59,14 @@
 				<span style='color: rgb(239 32 42);'>{{ item.amount - item.paid | summa }}</span>
 			</template>
 
+			<template #[`item.photo`]='{ item }'>
+				<img
+					class='img-user'
+					:src='item.student.photo_link ? BACKEND_URL + item.student.photo_link : require(`@/assets/images/user-image.png`)'
+					alt='Avatar'
+				/>
+			</template>
+
 			<template #[`item.sale`]='{ item }'>
 				<div v-if='item.student.student_groups[0].sale'>
 					{{ item.student.student_groups[0].sale | summa }}
