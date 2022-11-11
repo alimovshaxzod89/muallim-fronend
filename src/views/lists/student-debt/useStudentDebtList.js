@@ -15,6 +15,7 @@ export default function useStudentDebtList(MODULE_NAME) {
 			align: 'center',
 			sortable: false,
 		},
+		{ text: 'SURAT', value: 'photo' },
 		{ text: 'GURUH', value: 'group.number' },
 		// { text: 'USTOZ', value: 'group.teacher.full_name' },
 		{ text: 'TALABA', value: 'student.full_name' },

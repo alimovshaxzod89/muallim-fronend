@@ -176,6 +176,14 @@
 				</div>
 			</template>
 
+			<template #[`item.photo`]='{ item }'>
+				<img
+					class='img-user'
+					:src='item.student.photo_link ? BACKEND_URL + item.student.photo_link : require(`@/assets/images/user-image.png`)'
+					alt='Avatar'
+				/>
+			</template>
+
 			<template #[`item.group.number`]='{ item }'>
 				{{ item.group.number }}
 				<br>
@@ -214,7 +222,7 @@
 
 			<template slot='body.append'>
 				<tr>
-					<th colspan='5' class='text-end'>Jami:</th>
+					<th colspan='6' class='text-end'>Jami:</th>
 					<th colspan='1' class='text-end'>{{ totalDebt | summa }}</th>
 					<th colspan='1' class='text-center'>{{ totalPayment | summa }}</th>
 				</tr>
@@ -291,6 +299,8 @@ export default {
 		feed: value => value[1] + '/' + value[2] + '/' + value[3],
 	},
 	setup() {
+
+		const BACKEND_URL = envParams.BACKEND_URL;
 		// Register module
 		if (!store.hasModule(MODULE_NAME)) {
 			store.registerModule(MODULE_NAME, StudentDebtStoreModule)
@@ -416,9 +426,11 @@ export default {
 		const openPaymentPaidList = item => {
 			paymentPaidList.value.open(item)
 		}
+		
 
 		// Return
 		return {
+			BACKEND_URL,
 			BASE_URL,
 			state,
 
@@ -491,5 +503,11 @@ export default {
 	.data-list-search {
 		max-width: 10.625rem;
 	}
+}
+.img-user {
+	width: 50px;
+	height: 50px;
+	overflow: hidden;
+	object-fit: cover;
 }
 </style>
