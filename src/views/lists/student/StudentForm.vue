@@ -271,7 +271,7 @@ export default {
 			gender: 2,
 			sale: false,
 			sale_cause: null,
-			status: null,
+			status: 1,
 		}
 		const formData = ref({ ...emptyFormData })
 

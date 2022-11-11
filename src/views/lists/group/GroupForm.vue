@@ -270,7 +270,7 @@ export default {
 			max_students: null,
 			begin_date: null,
 			end_date: null,
-			status: null,
+			status: 1,
 		}
 
 		const formData = ref({ ...emptyFormData })

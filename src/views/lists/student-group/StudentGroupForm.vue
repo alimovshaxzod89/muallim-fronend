@@ -304,7 +304,7 @@ export default {
 			sale: null,
 			sale_cause: null,
 
-			status: null,
+			status: 1,
 		}
 
 		//validation
