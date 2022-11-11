@@ -201,7 +201,16 @@
 
 			<template #[`item.dept`]='{ item }'>
 				{{ (item.amount - item.paid) | summa }}
+
+				<v-icon
+					color="success"
+					title="To'lov amalga oshirish uchun bosing"
+					@click='openPaymentPaidList(item)'
+				>{{ icons.mdiCash }}
+				</v-icon>
+
 			</template>
+			
 
 			<template slot='body.append'>
 				<tr>
@@ -221,6 +230,13 @@
 			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
 		/>
 
+		<payment-paid-list
+			ref='paymentPaidList'
+			v-on:refresh-list='fetchDatas(true)'
+			v-on:delete-row='fetchDatas(true)'
+			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
+		/>
+
 	</v-card>
 </template>
 
@@ -237,6 +253,7 @@ import {
 	mdiLockOpenVariant,
 	mdiLock, 
 	mdiArchiveArrowDown,
+	mdiCash,
 } from '@mdi/js'
 
 import { computed, ref, watch } from '@vue/composition-api'
@@ -256,6 +273,7 @@ import useStudentDebtList from './useStudentDebtList'
 import DialogConfirm from '../../components/DialogConfirm.vue'
 import StudentDebtSearch from '@/views/lists/student-debt/StudentDebtSearch'
 import StudentTurniket from './../student/StudentTurniket.vue'
+import PaymentPaidList from '@/views/lists/payment-paids/PaymentPaidList.vue'
 import moment from 'moment/moment'
 
 const MODULE_NAME = 'studentDebt'
@@ -265,6 +283,7 @@ export default {
 		StudentDebtSearch,
 		DialogConfirm,
 		StudentTurniket,
+		PaymentPaidList,
 	},
 	filters: {
 		date: value => moment(value).format('D MMMM YYYY'),
@@ -392,6 +411,12 @@ export default {
 		}
 		//turniket end
 
+		// Paids
+		const paymentPaidList = ref(null)
+		const openPaymentPaidList = item => {
+			paymentPaidList.value.open(item)
+		}
+
 		// Return
 		return {
 			BASE_URL,
@@ -399,6 +424,9 @@ export default {
 
 			excel,
 			ExportExcel,
+
+			paymentPaidList,
+			openPaymentPaidList,
 
 			tableColumns,
 			searchQuery,
@@ -442,6 +470,7 @@ export default {
 				mdiLockOpenVariant,
 				mdiLock,
 				mdiArchiveArrowDown,
+				mdiCash,
 			},
 		}
 	},
