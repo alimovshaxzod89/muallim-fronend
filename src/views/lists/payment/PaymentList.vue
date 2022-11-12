@@ -471,9 +471,9 @@ export default {
 	object-fit: cover;
 }
 .zoomTheImg{
-	position: absolute;
+	position: fixed;
 	top: 50%;
-	left: 50%;
+	left: 58%;
 	transform: translate(-50%, -50%);
 	border: 1px solid rgba(255, 3, 3, 0.828);
 }
