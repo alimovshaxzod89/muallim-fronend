@@ -13,9 +13,9 @@ export default function usePaymentList(MODULE_NAME) {
 		{ text: 'TALABA', value: 'student.full_name' },
 		// { text: 'TELEFON', value: 'student.phone' },
 		{ text: "OYLIK TO'LOV", value: 'amount' },
-		{ text: 'CHEGIRMA', value: 'sale' },
 		{ text: "TO'LADI", value: 'paid' },
 		{ text: 'QARZ', value: 'debt' },
+		{ text: 'CHEGIRMA', value: 'sale' },
 		// { text: 'OY', value: 'month', align: 'center' },
 	]
 
