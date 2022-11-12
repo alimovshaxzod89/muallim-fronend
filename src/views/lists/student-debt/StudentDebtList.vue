@@ -178,6 +178,7 @@
 
 			<template #[`item.photo`]='{ item }'>
 				<img
+					@click="zoomTheImg(item)"
 					class='img-user'
 					:src='item.student.photo_link ? BACKEND_URL + item.student.photo_link : require(`@/assets/images/user-image.png`)'
 					alt='Avatar'
@@ -244,6 +245,27 @@
 			v-on:delete-row='fetchDatas(true)'
 			v-on:notify='notify = { type: $event.type, text: $event.text, time: Date.now() }'
 		/>
+
+		<v-card 
+			v-if="isImgActive" 
+			class="zoomTheImg"
+		>
+			<v-card-text>
+				<h3 class="my-4">Talabaning surati</h3>
+				<img
+					style="width: 400px; height: 400px; object-fit: cover;"
+					:src='imgLink ? BACKEND_URL + imgLink : require(`@/assets/images/user-image.png`)'
+					alt='Avatar'
+				/>
+			</v-card-text>
+
+			<v-card-actions>
+				<v-spacer />
+				<v-btn color="error" @click="isImgActive = false">
+					Yopish
+				</v-btn>
+			</v-card-actions>
+		</v-card>
 
 	</v-card>
 </template>
@@ -366,6 +388,14 @@ export default {
 				})
 		}
 
+		// zoom in on the image
+		const isImgActive = ref(false)
+		const imgLink = ref(null)
+		const zoomTheImg = (item) =>{
+			isImgActive.value = true;
+			imgLink.value = item.student.photo_link;
+		}
+
 		// export xlsx
 		const excel = ref(null)
 		const ExportExcel = (type, fn, dl) => {
@@ -469,6 +499,10 @@ export default {
 			offset,
 			archived,
 
+			zoomTheImg,
+			isImgActive,
+			imgLink,
+
 
 			icons: {
 				mdiTrendingUp,
@@ -509,5 +543,13 @@ export default {
 	height: 50px;
 	overflow: hidden;
 	object-fit: cover;
+	cursor: pointer;
+}
+.zoomTheImg{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border: 1px solid rgba(255, 3, 3, 0.828);
 }
 </style>
