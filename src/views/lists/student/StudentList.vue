@@ -26,7 +26,7 @@
 						></v-text-field>
 					</v-col>
 
-					<v-col>
+					<!-- <v-col>
 						<v-autocomplete
 							v-model='filter.region_id'
 							:items='regions'
@@ -39,9 +39,9 @@
 							class='mx-auto'
 							clearable
 						></v-autocomplete>
-					</v-col>
+					</v-col> -->
 
-					<v-col>
+					<!-- <v-col>
 						<v-text-field
 							v-model='filter.address'
 							dense
@@ -50,9 +50,9 @@
 							label='Manzil'
 							class='mx-auto'
 						></v-text-field>
-					</v-col>
+					</v-col> -->
 
-					<v-col>
+					<!-- <v-col>
 						<v-autocomplete
 							v-model='filter.permanent_region_id'
 							:items='regions'
@@ -65,12 +65,22 @@
 							class='mx-auto'
 							clearable
 						></v-autocomplete>
+					</v-col> -->
+					<v-col>
+						<v-text-field
+							v-model='filter.sale_cause'
+							dense
+							outlined
+							hide-details
+							label='Chegirma sababi'
+							class='mx-auto'
+						></v-text-field>
 					</v-col>
 				</v-row>
 
 
 				<v-row>
-					<v-col>
+					<!-- <v-col>
 						<v-text-field
 							v-model='filter.permanent_address'
 							dense
@@ -79,6 +89,21 @@
 							label='D.Y. Manzil'
 							class='mx-auto'
 						></v-text-field>
+					</v-col> -->
+
+					<v-col>
+						<v-autocomplete
+							v-model='filter.sale'
+							:items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
+							item-text='name'
+							item-value='value'
+							dense
+							outlined
+							hide-details
+							label='Chegirma'
+							class='mx-auto'
+							clearable
+						></v-autocomplete>
 					</v-col>
 
 					<v-col>
@@ -95,30 +120,7 @@
 							clearable
 						></v-autocomplete>
 					</v-col>
-					<v-col>
-						<v-autocomplete
-							v-model='filter.sale'
-							:items="[{value: 1, name: 'Ha'}, {value: 0, name: 'Yo\'q'}]"
-							item-text='name'
-							item-value='value'
-							dense
-							outlined
-							hide-details
-							label='Chegirma'
-							class='mx-auto'
-							clearable
-						></v-autocomplete>
-					</v-col>
-					<v-col>
-						<v-text-field
-							v-model='filter.sale_cause'
-							dense
-							outlined
-							hide-details
-							label='Chegirma sababi'
-							class='mx-auto'
-						></v-text-field>
-					</v-col>
+					
 					<v-col>
 						<v-menu v-model='isDate' :close-on-content-click='false' offset-y>
 							<template v-slot:activator='{ on, attrs }'>

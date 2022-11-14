@@ -201,7 +201,6 @@
 									label='STATUS'
 									dense
 									outlined
-									clearable
 									class='align-start'
 								></v-autocomplete>
 							</v-col>
