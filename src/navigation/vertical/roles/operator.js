@@ -4,6 +4,7 @@ import {
 	mdiPercent,
 	mdiHumanCapacityDecrease,
 	mdiHome,
+  mdiHumanMaleFemale
 } from '@mdi/js'
 
 export default [
@@ -41,6 +42,13 @@ export default [
     bageColor: 'success',
     resource: 'Public',
     action: 'read',
+  },
+  {
+    title: "Ustozlar ro'yxati",
+    to: 'teachers',
+    resource: 'Teacher',
+    action: 'read',
+    icon: mdiHumanMaleFemale,
   },
 	{
 		title: 'Guruh vaqtlari',
